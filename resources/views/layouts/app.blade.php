@@ -17,7 +17,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
-    
+
 </head>
 
 <body class="bg-dark">
@@ -39,21 +39,29 @@
                         <a class="nav-link active" href="{{ route('endings') }}">Endings</a>
 
                         @auth
-                        <a class="nav-link active" href="{{ route('favorites') }}">My Favorites</a>
-                        <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
-                        @if (Auth::user()->type == 'admin')
-                        <a class="nav-link active" aria-current="page" href="{{ route('admin.post.index') }}">Post index</a>
-                        <a class="nav-link active" aria-current="page" href="{{ route('admin.tags.index') }}">Tags index</a>
-                        
-                        <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
-                        @endif
-                        
+                            <a class="nav-link active" href="{{ route('favorites') }}">My Favorites</a>
+                            <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
+                            @if (Auth::user()->type == 'admin')
+                                <a class="nav-link active" aria-current="page" href="{{ route('admin.post.index') }}">Post
+                                    index</a>
+                                <a class="nav-link active" aria-current="page" href="{{ route('admin.tags.index') }}">Tags
+                                    index</a>
+
+                                <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
+                            @endif
+
                         @endauth
 
-                        
+
+
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                        {{-- search form --}}
+                        <form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                          </form>
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -68,7 +76,7 @@
                                 </li>
                             @endif
                         @else
-                        <!-- AUTH USER -->
+                            <!-- AUTH USER -->
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -97,6 +105,14 @@
             @yield('content')
         </main>
     </div>
+    <footer class="bg-dark text-center text-lg-start shadow-lg">
+        <!-- Copyright -->
+        <div class="text-center p-3 bg-dark text-light">
+            © 2022 Copyright:
+            <a class="no-deco " href="#">{{ config('app.name', 'Laravel') }}</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
 </body>
 
 </html>
