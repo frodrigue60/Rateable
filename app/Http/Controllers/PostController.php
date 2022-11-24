@@ -252,9 +252,8 @@ class PostController extends Controller
             ->where('title', 'LIKE', "%{$request->input('search')}%")
             ->get();
 
-        $slugged = $request->input('search');
-        $tagsSearch = Post::withAnyTags($slugged)->get();
+        
 
-        return view('fromTags', compact('posts','tagsSearch'));
+        return view('fromTags', compact('posts'));
     }
 }
