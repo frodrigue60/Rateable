@@ -228,14 +228,10 @@ class PostController extends Controller
             $userId = Auth::id();
             $post = Post::find($id);
             $post->like($userId);
-            //$post->save();
-            //$post = Post::find($id);
-            //$post->like();
-            return Redirect::back();
-            return redirect()->route('/')->with('status', 'Post Like successfully!');
+            
+            return Redirect::back()->with('status', 'Post Like successfully!');
         }
         return redirect()->route('/')->with('status', 'Please login');
-        //return redirect()->route('post.list');
     }
 
     public function unlikePost($id)
@@ -243,14 +239,12 @@ class PostController extends Controller
         if (Auth::check()) {
             $userId = Auth::id();
             $post = Post::find($id);
-            //$post->unlike();
+            
             $post->unlike($userId);
-            //$post->save();
-            return Redirect::back();
-            return redirect()->route('/')->with('status', 'Post Like undo successfully!');
+            
+            return Redirect::back()->with('status', 'Post Like undo successfully!');
         }
         return redirect()->route('/')->with('status', 'Please login');
-        //return redirect()->route('post.list');
     }
 
     public function search(Request $request){
@@ -258,6 +252,9 @@ class PostController extends Controller
             ->where('title', 'LIKE', "%{$request->input('search')}%")
             ->get();
 
-        return view('fromTags', compact('posts'));
+        $slugged = $request->input('search');
+        $tagsSearch = Post::withAnyTags($slugged)->get();
+
+        return view('fromTags', compact('posts','tagsSearch'));
     }
 }
