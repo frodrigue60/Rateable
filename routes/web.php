@@ -21,6 +21,9 @@ use App\Http\Controllers\CurrentSeasonController;
 Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 
+Route::get('',[PostController::class,'search'])->name('search');
+
+
 //Route::resource('posts', PostController::class);
 
 Route::prefix('admin')->group(function () {

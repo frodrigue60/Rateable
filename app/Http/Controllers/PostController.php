@@ -190,7 +190,7 @@ class PostController extends Controller
         if (Auth::check()) {
             $post = Post::find($id);
             $score = $request->score;
-            //dd($score);
+            
             if (blank($score)) {
                 return redirect()->back()->with('status', 'Score has not been null');
             } else {
@@ -251,5 +251,13 @@ class PostController extends Controller
         }
         return redirect()->route('/')->with('status', 'Please login');
         //return redirect()->route('post.list');
+    }
+
+    public function search(Request $request){
+        $posts = Post::query()
+            ->where('title', 'LIKE', "%{$request->input('search')}%")
+            ->get();
+
+        return view('fromTags', compact('posts'));
     }
 }
