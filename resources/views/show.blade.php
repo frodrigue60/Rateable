@@ -3,9 +3,10 @@
 @section('content')
     <div class="container">
         @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> {{ session('status') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
         @endif
         <div class="row">
             <div class="col-8">
@@ -14,7 +15,6 @@
                         <div class="row justify-content-between">
                             <div class="col-10">
                                 <h6>{{ $post->title }}</h6>
-
                             </div>
                             <div class="col-2">
                                 @auth

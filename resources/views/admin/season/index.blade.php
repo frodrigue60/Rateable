@@ -10,9 +10,10 @@
 
 
         @if (session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> {{ session('status') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
         @endif
 
         <a class="btn btn-primary" href="{{ route('admin.season.create') }}" role="button">Nuevo item</a>

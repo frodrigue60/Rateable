@@ -71,9 +71,11 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
+
         $tags = $post->tagged;
         return view('show', compact('post', 'tags'));
+        
     }
 
     /**
@@ -161,8 +163,6 @@ class PostController extends Controller
             //dd('doesnt exist current season');
             $posts = Post::all()->where('type','ed');
 
-            //dd($posts);
-
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
                 ->take(5)
@@ -192,7 +192,7 @@ class PostController extends Controller
             $score = $request->score;
             //dd($score);
             if (blank($score)) {
-                return redirect()->back()->with('message', 'Score has not been null');
+                return redirect()->back()->with('status', 'Score has not been null');
             } else {
                 if ($score <= 100) {
                     $post->rateOnce($score);
