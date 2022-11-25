@@ -7,6 +7,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
+use App\Models\Post;
+use Conner\Tagging\Taggable;
 
 class PostSeeder extends Seeder
 {
@@ -35,14 +37,29 @@ class PostSeeder extends Seeder
             'ed'
         ];
 
+        $tags = [
+            'fall 2022',
+            'winter 2023',
+        ];
+
         for ($i = 0; $i < 10; $i++) {
-            DB::table('posts')->insert([
+            /*DB::table('posts')->insert([
                 'title' => Str::random(12),
                 'type' => Arr::random($randomtype),
                 'imagesrc' => Arr::random($collection),
                 'ytlink' => 'https://www.youtube.com/embed/dlSbEP4V-gI',
-                
-            ]);
+
+            ]);*/
+
+            $post = new Post;
+            $post->title = Str::random(12);
+            $post->type = Arr::random($randomtype);
+            $post->imagesrc = Arr::random($collection);
+            $post->ytlink = 'https://www.youtube.com/embed/dlSbEP4V-gI';
+            
+            $post->save();
+            
+            $post->tag($tags); // attach the tags
         }
     }
 }

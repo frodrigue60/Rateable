@@ -17,13 +17,13 @@ class TagSeeder extends Seeder
     public function run()
     {
         for ($i = 0; $i < 10; $i++) {
-            $name=Str::random(6).' '.Str::random(4);
-            $slug=Str::slug($name);
+            $name = Str::random(6) . ' ' . Str::random(4);
+            $slug = Str::slug($name);
             DB::table('tagging_tags')->insert([
-                
+
                 'name' => $name,
                 'slug' => $slug,
-                
+
             ]);
         }
     }
