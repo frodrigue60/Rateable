@@ -21,7 +21,7 @@ use App\Http\Controllers\CurrentSeasonController;
 Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 
-Route::get('',[PostController::class,'search'])->name('search');
+Route::get('/search',[PostController::class,'search'])->name('search');
 
 
 //Route::resource('posts', PostController::class);
@@ -53,6 +53,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/season/{id}/edit',       [CurrentSeasonController::class, 'edit'])->name('admin.season.edit');
     Route::post('/season/{id}/update',    [CurrentSeasonController::class, 'update'])->name('admin.season.update');
 });
+
 //TAGS PUBLIC 
 Route::get('/tags',          [TagController::class, 'alltags'])->name('tags');
 Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromtag');
@@ -60,6 +61,7 @@ Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromt
 //POST PUBLIC
 Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
 
+//AUTH ROUTES
 Auth::routes();
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
 
@@ -67,6 +69,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::post('/like-post/{id}', [PostController::class, 'likePost'])->name('like.post');
 Route::post('/unlike-post/{id}', [PostController::class, 'unlikePost'])->name('unlike.post');
-
-//Route::get('/post/{id}/rate', [PostController::class, 'rate'])->name('post.rate');
 Route::post('/post/{id}/ratepost', [PostController::class, 'ratePost'])->name('post.addrate');

@@ -59,7 +59,6 @@
                     <ul class="navbar-nav ms-auto">
                         {{-- search form --}}
                         <form class="d-flex" action="{{ route('search') }}" method="GET">
-                            @csrf
                             <input class="form-control me-2" type="text" name="search" placeholder="Search" required />
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>

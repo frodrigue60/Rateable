@@ -4,56 +4,61 @@
 
 @section('content')
     <div class="container">
-        <h1>
-            tags index, current user:
-        </h1>
-
-
         @if (session('status'))
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> {{ session('status') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
+            </div>
         @endif
+        <div class="card bg-dark">
+            {{-- CARD HEADER --}}
+            <div class="card-header">
+                <a class="btn btn-primary btn-sm" href="{{ route('admin.tags.create') }}" role="button">New item</a>
+            </div>
+            {{-- CARD BODY --}}
+            <div class="card-body">
+                <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Slug</th>
+                            <th scope="col">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-        <a class="btn btn-primary" href="{{ route('admin.tags.create') }}" role="button">Nuevo item</a>
-        <br><br>
+                        @foreach ($tags as $tag)
+                            <tr>
 
-        <table class="table table-dark">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Slug</th>
-                    <th scope="col">Options</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($tags as $tag)
-                    <tr>
-                        
-                        <td>{{ $tag->id }}</td>
-                        <td>{{ $tag->name }}</td>
-                        <td>{{ $tag->slug }}</td>
-                        <td>
-                            @auth
-                                <a class="btn btn-danger" href="/admin/tags/{{ $tag->id }}/destroy" role="button">Delete</a>
-                                <a class="btn btn-success" href="/admin/tags/{{ $tag->id }}/edit" role="button">Edit</a>
-                            @endauth
+                                <td>{{ $tag->id }}</td>
+                                <td><a href="{{ route('fromtag', $tag->slug) }}" class="no-deco">{{ $tag->name }}</a></td>
+                                <td>{{ $tag->slug }}</td>
+                                <td>
+                                    @auth
+                                        <a class="btn btn-danger btn-sm" href="/admin/tags/{{ $tag->id }}/destroy"
+                                            role="button">Delete</a>
+                                        <a class="btn btn-success btn-sm" href="/admin/tags/{{ $tag->id }}/edit"
+                                            role="button">Edit</a>
+                                    @endauth
 
-                            @guest
-                                <a class="btn btn-danger disabled" href="#"
-                                    role="button">Delete</a>
-                                <a class="btn btn-success disabled" href="#"
-                                    role="button">Edit</a>
+                                    @guest
+                                        <a class="btn btn-danger disabled" href="#" role="button">Delete</a>
+                                        <a class="btn btn-success disabled" href="#" role="button">Edit</a>
 
-                            @endguest
-                        </td>
-                @endforeach
+                                    @endguest
+                                </td>
+                        @endforeach
 
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+            {{-- CARD FOOTER --}}
+            <div class="card-footer">
+                <div class="d-flex justify-content-center">
+                    {!! $tags->links() !!}
+                </div>
+            </div>
+        </div>
     </div>
-
 @endsection

@@ -6,17 +6,18 @@
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> {{ session('status') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
+            </div>
         @endif
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">Index.blade.php <a class="btn btn-sm btn-primary"
-                            href="{{ route('admin.post.create') }}">CREATE</a></div>
-
+                <div class="card bg-dark">
+                    {{-- CARD HEADER --}}
+                    <div class="card-header">
+                        <a class="btn btn-sm btn-primary" href="{{ route('admin.post.create') }}">CREATE</a>
+                    </div>
+                    {{-- CARD BODY --}}
                     <div class="card-body">
-
-                        <table class="table">
+                        <table class="table table-dark">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -32,17 +33,18 @@
                                     <tr>
 
                                         <th scope="row">{{ $post->id }}</th>
-                                        <td><a href="{{ route('admin.post.show', $post->id) }}" class="no-deco text-dark">{{ $post->title }}</a></td>
+                                        <td>
+                                            <a href="{{ route('admin.post.show', $post->id) }}"
+                                                class="no-deco">{{ $post->title }}</a>
+                                        </td>
                                         <td>
                                             @foreach ($post->tags as $tag)
-                                                
-                                            <span class="badge rounded-pill text-bg-dark">{{ $tag->name }}</span>
-                                                
+                                                <span class="badge rounded-pill text-bg-dark">{{ $tag->name }}</span>
                                             @endforeach
-                                            
+
                                         </td>
                                         <td>{{ $post->type }}</td>
-                                        <td>{{ $post->averageRating/10 }}</td>
+                                        <td>{{ $post->averageRating / 10 }}</td>
                                         <td>
                                             <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"
                                                     class="btn btn-success btn-sm">Edit {{ $post->id }}</button></a>
@@ -54,9 +56,15 @@
 
                             </tbody>
                         </table>
-
+                    </div>
+                    {{-- CARD FOOTER --}}
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-center">
+                            {!! $posts->links() !!}
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

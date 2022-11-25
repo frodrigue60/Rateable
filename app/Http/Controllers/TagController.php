@@ -21,7 +21,7 @@ class TagController extends Controller
     public function index()
     {
         //$tags = Tag::all();
-        $tags = DB::table('tagging_tags')->get();
+        $tags = DB::table('tagging_tags')->paginate(10);
         //dd($tags);
 
         return view('admin.tags.index', compact('tags'));
