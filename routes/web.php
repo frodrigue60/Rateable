@@ -21,41 +21,45 @@ use App\Http\Controllers\CurrentSeasonController;
 Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 
-Route::get('/search',[PostController::class,'search'])->name('search');
-Route::get('/searchpost',[PostController::class,'searchPost'])->name('searchpost');
-Route::get('/searchtag',[TagController::class,'searchTag'])->name('searchtag');
+Route::get('/search', [PostController::class, 'search'])->name('search');
+Route::get('/searchpost', [PostController::class, 'searchPost'])->name('searchpost');
+Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('/post/index',       [PostController::class, 'index'])->name('admin.post.index');
+        Route::get('/post/create',      [PostController::class, 'create'])->name('admin.post.create');
+        Route::get('/post/{id}/edit',   [PostController::class, 'edit'])->name('admin.post.edit');
+        Route::put('/post/{id}/update', [PostController::class, 'update'])->name('admin.post.update');
+        Route::get('/post/{id}/destroy', [PostController::class, 'destroy'])->name('admin.post.destroy');
+        Route::post('/post/store',      [PostController::class, 'store'])->name('admin.post.store');
+        Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('admin.post.show');
+
+
+        //TAGS
+        Route::get('/tags/create',          [TagController::class, 'create'])->name('admin.tags.create');
+        Route::post('/tags/store',          [TagController::class, 'store'])->name('admin.tags.store');
+        Route::get('/tags/index',           [TagController::class, 'index'])->name('admin.tags.index');
+        Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy');
+        Route::get('/tags/{id}/edit',       [TagController::class, 'edit'])->name('admin.tags.edit');
+        Route::put('/tags/{id}/update',    [TagController::class, 'update'])->name('admin.tags.update');
+        //END TAGS
+
+        //CURRENT SEASON OP
+        Route::get('/season/create',          [CurrentSeasonController::class, 'create'])->name('admin.season.create');
+        Route::post('/season/store',          [CurrentSeasonController::class, 'store'])->name('admin.season.store');
+        Route::get('/season/index',           [CurrentSeasonController::class, 'index'])->name('admin.season.index');
+        Route::get('/season/{id}/destroy',    [CurrentSeasonController::class, 'destroy'])->name('admin.season.destroy');
+        Route::get('/season/{id}/edit',       [CurrentSeasonController::class, 'edit'])->name('admin.season.edit');
+        Route::put('/season/{id}/update',    [CurrentSeasonController::class, 'update'])->name('admin.season.update');
+    });
+});
 
 
 
 //Route::resource('posts', PostController::class);
 
-Route::prefix('admin')->group(function () {
-    Route::get('/post/index',       [PostController::class, 'index'])->name('admin.post.index');
-    Route::get('/post/create',      [PostController::class, 'create'])->name('admin.post.create');
-    Route::get('/post/{id}/edit',   [PostController::class, 'edit'])->name('admin.post.edit');
-    Route::put('/post/{id}/update', [PostController::class, 'update'])->name('admin.post.update');
-    Route::get('/post/{id}/destroy', [PostController::class, 'destroy'])->name('admin.post.destroy');
-    Route::post('/post/store',      [PostController::class, 'store'])->name('admin.post.store');
-    Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('admin.post.show');
 
-
-    //TAGS
-    Route::get('/tags/create',          [TagController::class, 'create'])->name('admin.tags.create');
-    Route::post('/tags/store',          [TagController::class, 'store'])->name('admin.tags.store');
-    Route::get('/tags/index',           [TagController::class, 'index'])->name('admin.tags.index');
-    Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy');
-    Route::get('/tags/{id}/edit',       [TagController::class, 'edit'])->name('admin.tags.edit');
-    Route::post('/tags/{id}/update',    [TagController::class, 'update'])->name('admin.tags.update');
-    //END TAGS
-
-    //CURRENT SEASON OP
-    Route::get('/season/create',          [CurrentSeasonController::class, 'create'])->name('admin.season.create');
-    Route::post('/season/store',          [CurrentSeasonController::class, 'store'])->name('admin.season.store');
-    Route::get('/season/index',           [CurrentSeasonController::class, 'index'])->name('admin.season.index');
-    Route::get('/season/{id}/destroy',    [CurrentSeasonController::class, 'destroy'])->name('admin.season.destroy');
-    Route::get('/season/{id}/edit',       [CurrentSeasonController::class, 'edit'])->name('admin.season.edit');
-    Route::post('/season/{id}/update',    [CurrentSeasonController::class, 'update'])->name('admin.season.update');
-});
 
 //TAGS PUBLIC 
 Route::get('/tags',          [TagController::class, 'alltags'])->name('tags');
@@ -66,6 +70,7 @@ Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
 
 //AUTH ROUTES
 Auth::routes();
+
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

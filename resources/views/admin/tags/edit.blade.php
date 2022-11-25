@@ -8,7 +8,7 @@
         <h1>Edit tag with ID {{ $tag -> id }}</h1>
         
             <form name="update-form" id="update-form" method="POST" action="{{ route('admin.tags.update', $tag->id) }}">
-                @method('POST')
+                @method('PUT')
                 @csrf
                 <div class="form-group">
                     <label for="exampleInputEmail1">Name</label>
