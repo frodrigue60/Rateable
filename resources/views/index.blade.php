@@ -1,9 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session('status'))
+        <div class="container">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> {{ session('status') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
     <div class="contenedor">
         <div class="contenedor-tarjetas">
-
             @foreach ($posts as $post)
                 <div class="tarjeta" style="background-image: url('{{ $post->imagesrc }}')">
                     <div class="textos">
@@ -99,7 +106,7 @@
                         </tr>
                     </table>
                 </div>
-                
+
 
             </div>
         </div>

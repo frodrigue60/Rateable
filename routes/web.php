@@ -22,8 +22,15 @@ Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 
 Route::get('/search', [PostController::class, 'search'])->name('search');
-Route::get('/searchpost', [PostController::class, 'searchPost'])->name('searchpost');
-Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
+
+
+//TAGS PUBLIC 
+Route::get('/tags',          [TagController::class, 'alltags'])->name('tags');
+Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromtag');
+
+//POST PUBLIC
+Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::prefix('admin')->group(function () {
@@ -55,21 +62,11 @@ Route::group(['middleware' => 'auth'], function () {
     });
 });
 
-
-
-//Route::resource('posts', PostController::class);
-
-
-
-//TAGS PUBLIC 
-Route::get('/tags',          [TagController::class, 'alltags'])->name('tags');
-Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromtag');
-
-//POST PUBLIC
-Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
-
 //AUTH ROUTES
 Auth::routes();
+
+Route::get('/searchpost', [PostController::class, 'searchPost'])->name('searchpost');
+Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
 
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
 

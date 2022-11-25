@@ -32,9 +32,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        $types =['op','ed'];
+        $types = ['op', 'ed'];
         $tags = Tag::all();
-        return view('admin.posts.create', compact('tags','types'));
+        return view('admin.posts.create', compact('tags', 'types'));
     }
 
     /**
@@ -83,11 +83,11 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $types =['op','ed'];
+        $types = ['op', 'ed'];
         $post = Post::find($id);
         $tags = Tag::all();
 
-        return view('admin.posts.edit', compact('post', 'tags','types'));
+        return view('admin.posts.edit', compact('post', 'tags', 'types'));
     }
 
     /**
@@ -130,8 +130,8 @@ class PostController extends Controller
     public function home()
     {
         if ($currentSeason = DB::table('current_season')->first() === null) {
-            
-            $posts = Post::all()->where('type','op');
+
+            $posts = Post::all()->where('type', 'op');
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -142,7 +142,7 @@ class PostController extends Controller
         } else {
             $currentSeason = DB::table('current_season')->first();
 
-            $posts = Post::withAllTags($currentSeason->name)->where('type','op')->get();
+            $posts = Post::withAllTags($currentSeason->name)->where('type', 'op')->get();
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -157,7 +157,7 @@ class PostController extends Controller
     {
         if ($currentSeason = DB::table('current_season')->first() === null) {
             //dd('doesnt exist current season');
-            $posts = Post::all()->where('type','ed');
+            $posts = Post::all()->where('type', 'ed');
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -169,8 +169,8 @@ class PostController extends Controller
             $currentSeason = DB::table('current_season')->first();
 
             $posts = Post::withAllTags($currentSeason->name)
-            ->where('type','ed')
-            ->get();
+                ->where('type', 'ed')
+                ->get();
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -186,7 +186,7 @@ class PostController extends Controller
         if (Auth::check()) {
             $post = Post::find($id);
             $score = $request->score;
-            
+
             if (blank($score)) {
                 return redirect()->back()->with('status', 'Score has not been null');
             } else {
@@ -194,7 +194,7 @@ class PostController extends Controller
                     $post->rateOnce($score);
                     return redirect('/')->with('status', 'Post rated Successfully');
                 } else {
-                    return redirect('/')->with('status', 'Only values between 1 and 10');
+                    return redirect('/')->with('status', 'Only values between 1 and 100');
                 }
             }
             return redirect('/');
@@ -210,7 +210,7 @@ class PostController extends Controller
             $posts = Post::whereLikedBy($userId) // find only articles where user liked them
                 ->with('likeCounter') // highly suggested to allow eager load
                 ->get();
-            
+
             return view('favorites', compact('posts'));
         } else {
             return redirect()->route('login');
@@ -223,7 +223,7 @@ class PostController extends Controller
             $userId = Auth::id();
             $post = Post::find($id);
             $post->like($userId);
-            
+
             return Redirect::back()->with('status', 'Post Like successfully!');
         }
         return redirect()->route('/')->with('status', 'Please login');
@@ -234,15 +234,16 @@ class PostController extends Controller
         if (Auth::check()) {
             $userId = Auth::id();
             $post = Post::find($id);
-            
+
             $post->unlike($userId);
-            
+
             return Redirect::back()->with('status', 'Post Like undo successfully!');
         }
         return redirect()->route('/')->with('status', 'Please login');
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $posts = Post::query()
             ->where('title', 'LIKE', "%{$request->input('search')}%")
             ->get();
@@ -250,13 +251,19 @@ class PostController extends Controller
         return view('fromTags', compact('posts'));
     }
 
-    public function searchPost(Request $request){
-        $posts = Post::query()
-            ->where('title', 'LIKE', "%{$request->input('search')}%")
-            ->paginate(10);
-        
-        return view('admin.posts.index', compact('posts'));
-        
-    }
+    public function searchPost(Request $request)
+    {
+        if (Auth::check()) {
+            if (Auth::user()->type == 'admin') {
+                $posts = Post::query()
+                    ->where('title', 'LIKE', "%{$request->input('search')}%")
+                    ->paginate(10);
 
+                return view('admin.posts.index', compact('posts'));
+            }
+            return redirect()->route('/')->with('status', 'Only admins');
+        } else {
+            return redirect()->route('/')->with('status', 'Please login');
+        }
+    }
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -131,10 +132,17 @@ class TagController extends Controller
 
     public function searchTag(Request $request)
     {
-        $tags = DB::table('tagging_tags')
-            ->where('name', 'LIKE', "%{$request->input('search')}%")
-            ->paginate(10);
+        if (Auth::check()) {
+            if (Auth::user()->type == 'admin') {
+                $tags = DB::table('tagging_tags')
+                    ->where('name', 'LIKE', "%{$request->input('search')}%")
+                    ->paginate(10);
 
-        return view('admin.tags.index', compact('tags'));
+                return view('admin.tags.index', compact('tags'));
+            }
+            return redirect()->route('/')->with('status', 'Only admins');
+        } else {
+            return redirect()->route('/')->with('status', 'Please login');
+        }
     }
 }
