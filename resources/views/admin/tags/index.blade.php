@@ -51,7 +51,6 @@
                                     @guest
                                         <a class="btn btn-danger disabled" href="#" role="button">Delete</a>
                                         <a class="btn btn-success disabled" href="#" role="button">Edit</a>
-
                                     @endguest
                                 </td>
                         @endforeach

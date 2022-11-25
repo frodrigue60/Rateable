@@ -130,7 +130,7 @@ class PostController extends Controller
     public function home()
     {
         if ($currentSeason = DB::table('current_season')->first() === null) {
-            //dd('doesnt exist current season');
+            
             $posts = Post::all()->where('type','op');
 
             $tags = DB::table('tagging_tags')
