@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         @if (session('status'))
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> {{ session('status') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -17,10 +17,15 @@
                     </div>
                     {{-- CARD BODY --}}
                     <div class="card-body">
+                        {{-- search form --}}
+                        <form class="d-flex" action="{{ route('searchpost') }}" method="GET">
+                            <input class="form-control me-2" type="text" name="search" placeholder="Search" required />
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
                         <table class="table table-dark">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
+                                    <th scope="col">ID</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Tags</th>
                                     <th scope="col">Type</th>

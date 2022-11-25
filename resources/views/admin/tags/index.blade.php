@@ -13,10 +13,15 @@
         <div class="card bg-dark">
             {{-- CARD HEADER --}}
             <div class="card-header">
-                <a class="btn btn-primary btn-sm" href="{{ route('admin.tags.create') }}" role="button">New item</a>
+                <a class="btn btn-primary btn-sm" href="{{ route('admin.tags.create') }}" role="button">CREATE</a>
             </div>
             {{-- CARD BODY --}}
             <div class="card-body">
+                {{-- search form --}}
+                <form class="d-flex" action="{{ route('searchtag') }}" method="GET">
+                    <input class="form-control me-2" type="text" name="search" placeholder="Search" required />
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
                 <table class="table table-dark">
                     <thead>
                         <tr>
@@ -32,7 +37,8 @@
                             <tr>
 
                                 <td>{{ $tag->id }}</td>
-                                <td><a href="{{ route('fromtag', $tag->slug) }}" class="no-deco">{{ $tag->name }}</a></td>
+                                <td><a href="{{ route('fromtag', $tag->slug) }}" class="no-deco">{{ $tag->name }}</a>
+                                </td>
                                 <td>{{ $tag->slug }}</td>
                                 <td>
                                     @auth

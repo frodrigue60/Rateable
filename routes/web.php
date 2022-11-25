@@ -22,6 +22,9 @@ Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 
 Route::get('/search',[PostController::class,'search'])->name('search');
+Route::get('/searchpost',[PostController::class,'searchPost'])->name('searchpost');
+Route::get('/searchtag',[TagController::class,'searchTag'])->name('searchtag');
+
 
 
 //Route::resource('posts', PostController::class);

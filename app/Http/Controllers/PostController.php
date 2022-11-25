@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 use willvincent\Rateable\Rateable;
 use Illuminate\Support\Facades\Redirect;
 
-
-
 class PostController extends Controller
 {
     /**
@@ -75,7 +73,6 @@ class PostController extends Controller
 
         $tags = $post->tagged;
         return view('show', compact('post', 'tags'));
-        
     }
 
     /**
@@ -113,8 +110,7 @@ class PostController extends Controller
         //$tags = explode(',', $request->tag);
         $post->retag($tags); // delete current tags and save new tags
 
-        $posts = Post::all();
-        return view('admin.posts.index', compact('posts'));
+        return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully');
     }
 
     /**
@@ -214,8 +210,7 @@ class PostController extends Controller
             $posts = Post::whereLikedBy($userId) // find only articles where user liked them
                 ->with('likeCounter') // highly suggested to allow eager load
                 ->get();
-            //dd($likeds);
-
+            
             return view('favorites', compact('posts'));
         } else {
             return redirect()->route('login');
@@ -252,8 +247,16 @@ class PostController extends Controller
             ->where('title', 'LIKE', "%{$request->input('search')}%")
             ->get();
 
-        
-
         return view('fromTags', compact('posts'));
     }
+
+    public function searchPost(Request $request){
+        $posts = Post::query()
+            ->where('title', 'LIKE', "%{$request->input('search')}%")
+            ->paginate(10);
+        
+        return view('admin.posts.index', compact('posts'));
+        
+    }
+
 }

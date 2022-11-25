@@ -91,11 +91,11 @@ class TagController extends Controller
     {
         $name = $request->name;
         $slug = Str::slug($request->name);
-        
+
         DB::table('tagging_tags')
-              ->where('id', $id)
-              ->update(['name' => $name, 'slug' => $slug]);
-              
+            ->where('id', $id)
+            ->update(['name' => $name, 'slug' => $slug]);
+
 
         return redirect(route('admin.tags.index'))->with('status', 'Data has been updated');
     }
@@ -109,23 +109,32 @@ class TagController extends Controller
     public function destroy($id)
     {
         DB::table('tagging_tags')->where('id', '=', $id)->delete();
-        
+
         return redirect(route('admin.tags.index'))->with('status', 'Data deleted');
     }
 
-    public function slug($name){
+    public function slug($name)
+    {
         $posts = Post::withAnyTag([$name])->get(); // fetch articles with any tag listed
 
         $tags = DB::table('tagging_tags')->get();
 
-        return view('fromTags', compact('posts','tags'));
-
+        return view('fromTags', compact('posts', 'tags'));
     }
 
-    public function alltags(){
+    public function alltags()
+    {
         $tags = DB::table('tagging_tags')->get();
-        //dd($tags);
 
         return view('tags', compact('tags'));
+    }
+
+    public function searchTag(Request $request)
+    {
+        $tags = DB::table('tagging_tags')
+            ->where('name', 'LIKE', "%{$request->input('search')}%")
+            ->paginate(10);
+
+        return view('admin.tags.index', compact('tags'));
     }
 }
