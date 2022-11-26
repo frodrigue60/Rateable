@@ -14,6 +14,8 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('support.png') }}">
+    {{--<link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">--}}
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
@@ -25,6 +27,7 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-lg">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
+                    <img src="{{ asset('support.png') }}" alt="Bootstrap" width="25" height="25">
                     {{ config('app.name', 'Laravel') }} - {{ str_replace('_', '-', app()->getLocale()) }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
