@@ -15,46 +15,35 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="row justify-content-between">
-                                <div class="col-10">
-                                    <h6>{{ $post->title }}</h6>
+                                <div class="col-9">
+                                    <h5>{{ $post->title }}</h5>
+                                    
                                 </div>
-                                <div class="col-2">
+                                <div class="col-3">
                                     @auth
                                         @if ($post->liked())
                                             <form action="{{ route('unlike.post', $post->id) }}" method="post">
                                                 @csrf
-                                                <button class="btn btn-sm btn-danger" id="like">Favorite
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                                                        fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd"
-                                                            d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-                                                    </svg>
-                                                </button>
+                                                <button class="btn btn-sm btn-danger" id="like">Favorite <i class="fa fa-heart"></i></button>
                                             </form>
                                         @else
                                             <form action="{{ route('like.post', $post->id) }}" method="post">
                                                 @csrf
-                                                <button class="btn btn-sm btn-success" id="like">Favorite
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                                                        fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd"
-                                                            d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
-                                                    </svg>
-                                                </button>
+                                                <button class="btn btn-sm btn-success" id="like">Favorite <i class="fa fa-heart"></i></button>
                                             </form>
                                         @endif
                                     @endauth
                                 </div>
                             </div>
-
-                            <div class="card-body ratio ratio-16x9">
-                                <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture muted;"
-                                    allowfullscreen>
-                                </iframe>
+                            <div class="card-body">
+                                <div class="card-body ratio ratio-16x9">
+                                    <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture muted;"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>  
                             </div>
                             <div class="card-footer">
-
                             </div>
                         </div>
                     </div>

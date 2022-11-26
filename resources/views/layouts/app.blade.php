@@ -24,11 +24,11 @@
 
 <body class="bg-dark">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-lg">
+        <nav class="navbar navbar-expand-md navbar-dark shadow-lg">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('support.png') }}" alt="Bootstrap" width="25" height="25">
-                    {{ config('app.name', 'Laravel') }} - {{ str_replace('_', '-', app()->getLocale()) }}
+                    {{ config('app.name', 'Laravel') }} {{--   - {{ str_replace('_', '-', app()->getLocale()) }} --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -64,45 +64,33 @@
                         <form class="d-flex" action="{{ route('search') }}" method="GET">
                             <input class="form-control me-2" type="text" name="search" placeholder="Search"
                                 required />
-                            <button class="btn btn-outline-success" type="submit">Search</button>
+                            <button class="btn btn-success" type="submit">Search</button>
                         </form>
-
 
                         <!-- Authentication Links -->
                         @guest
-                        {{--  
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        GUEST
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @if (Route::has('login'))
+                                            <li class="dropdown-item">
+                                                <a class="nav-link text-dark"
+                                                    href="{{ route('login') }}">{{ __('Login') }}</a>
+                                            </li>
+                                        @endif
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                        @if (Route::has('register'))
+                                            <li class="dropdown-item">
+                                                <a class="nav-link text-dark"
+                                                    href="{{ route('register') }}">{{ __('Register') }}</a>
+                                            </li>
+                                        @endif
+                                    </ul>
                                 </li>
-                            @endif 
-                        --}}
-                            <li class="nav-item dropdown">
-                                
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    GUEST
-                                </a>
-                                <ul class="dropdown-menu">
-                                    @if (Route::has('login'))
-                                        <li class="dropdown-item">
-                                            <a class="nav-link text-dark" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                        </li>
-                                    @endif
-
-                                    @if (Route::has('register'))
-                                        <li class="dropdown-item">
-                                            <a class="nav-link text-dark" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
+                            
                         @else
                             <!-- AUTH USER -->
                             <li class="nav-item dropdown">
@@ -118,8 +106,7 @@
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>

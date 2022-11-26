@@ -75,7 +75,7 @@ class PostController extends Controller
 
         //$userid = Auth::user()->id;
         
-        return view('show', compact('post', 'tags','userid'));
+        return view('show', compact('post', 'tags'));
     }
 
     /**
