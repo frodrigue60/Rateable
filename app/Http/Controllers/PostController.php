@@ -72,7 +72,10 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
 
         $tags = $post->tagged;
-        return view('show', compact('post', 'tags'));
+
+        $userid = Auth::user()->id;
+        //dd($userid);
+        return view('show', compact('post', 'tags','userid'));
     }
 
     /**
@@ -194,7 +197,7 @@ class PostController extends Controller
                     $post->rateOnce($score);
                     return redirect('/')->with('status', 'Post rated Successfully');
                 } else {
-                    return redirect('/')->with('status', 'Only values between 1 and 100');
+                    return redirect()->back()->with('status', 'Only values between 1 and 100');
                 }
             }
             return redirect('/');
