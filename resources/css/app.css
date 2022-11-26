@@ -19,9 +19,10 @@
 }
 
 .text-shadow {
-	background: #00000056;
+	background: #0000007a;
 	border-radius: 3px;
-	padding: 1px 3px;
+	padding: 3px 3px;
+	width: 100%;
 }
 
 .contenedor {
@@ -40,6 +41,11 @@
 	grid-template-columns: repeat(4, 1fr);
 	gap: 15px;
 }
+.contenedor-favoritos {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 15px;
+}
 
 .tarjeta {
 	border-radius: 8px;
@@ -53,7 +59,6 @@
 	min-height: 300px;
 	max-height: 300px;
 	max-width: 185px;
-
 }
 
 .tarjeta .textos {
@@ -136,10 +141,15 @@
 		flex-direction: column;
 	}
 
-	.contenedor-conciertos {
+	.contenedor-tarjetas {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
 		gap: 20px;
+	}
+	.contenedor-favoritos {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 15px;
 	}
 
 	.contenedor-banner {
@@ -178,6 +188,11 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 20px;
+	}
+	.contenedor-favoritos {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 15px;
 	}
 	
 	.tarjeta {
@@ -237,6 +252,12 @@
 	.contenedor-tarjetas {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.contenedor-favoritos {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 15px;
 	}
 
 	.tarjeta {
