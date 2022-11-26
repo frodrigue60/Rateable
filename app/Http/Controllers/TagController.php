@@ -116,11 +116,17 @@ class TagController extends Controller
 
     public function slug($name)
     {
-        $posts = Post::withAnyTag([$name])->get(); // fetch articles with any tag listed
+        $openings = Post::withAnyTag([$name])
+        ->where('type', 'op')
+        ->get();; // fetch articles with any tag listed
 
-        $tags = DB::table('tagging_tags')->get();
+        //$tags = DB::table('tagging_tags')->get();
+        $endings = Post::withAnyTag([$name])
+        ->where('type', 'ed')
+        ->get();
 
-        return view('fromTags', compact('posts', 'tags'));
+        //dd($endings,$openings);
+        return view('fromTags', compact('openings','endings'));
     }
 
     public function alltags()

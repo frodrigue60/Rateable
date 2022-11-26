@@ -22,9 +22,9 @@
 
 </head>
 
-<body class="bg-dark">
+<body style="background-color: #08263b;">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark shadow-lg">
+        <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #0e3d5f;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('support.png') }}" alt="Bootstrap" width="25" height="25">
@@ -116,10 +116,10 @@
             @yield('content')
         </main>
     </div>
-    <footer class="bg-dark text-center text-lg-start shadow-lg">
-        <div class="text-center p-3 bg-dark text-light">
+    <footer class="text-center text-lg-start" style="background-color: #0e3d5f;">
+        <div class="text-center p-3 text-light">
             © 2022 Copyright:
-            <a class="no-deco " href="#">{{ config('app.name', 'Laravel') }}</a>
+            <a class="no-deco text-light" href="#">{{ config('app.name', 'Laravel') }}</a>
         </div>
     </footer>
 </body>

@@ -47,7 +47,7 @@
         <div>
             <div class="contenedor-banner">
                 <div class="banner text-white"
-                    style="background-image: url('{{ asset('banner-background.webp') }}')">
+                    style="background-image: url('{{ asset('banner-background.webp') }}');">
                     <table>
                         <tr>
                             <div class="row">
@@ -78,7 +78,7 @@
                     <a href="{{ route('tags') }}" class="btn btn-primary">All Tags</a>
                 </div>
                 <div class="banner text-white"
-                    style="background-image: url('{{ asset('banner-background.webp') }}')">
+                    style="background-image: url('{{ asset('banner-background.webp') }}');">
                     <table>
                         <tr>
                             <h3>TOP 10</h3>
