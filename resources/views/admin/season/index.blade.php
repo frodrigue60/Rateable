@@ -37,10 +37,11 @@
                                 <td>{{ $season->name }}</td>
                                 <td>
                                     @auth
-                                        <a class="btn btn-danger" href="/admin/season/{{ $season->id }}/destroy"
-                                            role="button">Delete</a>
                                         <a class="btn btn-success" href="/admin/season/{{ $season->id }}/edit"
-                                            role="button">Edit</a>
+                                            role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit {{ $season->id }}</a>
+                                        <a class="btn btn-danger" href="/admin/season/{{ $season->id }}/destroy"
+                                            role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete {{ $season->id }}</a>
+
                                     @endauth
                                     @guest
                                         <a class="btn btn-danger disabled" href="#" role="button">Delete</a>

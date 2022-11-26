@@ -40,7 +40,6 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <a class="nav-link active" href="{{ route('endings') }}">Endings</a>
-
                         @auth
                             <a class="nav-link active" href="{{ route('favorites') }}">My Favorites</a>
                             <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
@@ -49,14 +48,9 @@
                                     index</a>
                                 <a class="nav-link active" aria-current="page" href="{{ route('admin.tags.index') }}">Tags
                                     index</a>
-
                                 <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
                             @endif
-
                         @endauth
-
-
-
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -64,14 +58,14 @@
                         <form class="d-flex" action="{{ route('search') }}" method="GET">
                             <input class="form-control me-2" type="text" name="search" placeholder="Search"
                                 required />
-                            <button class="btn btn-success" type="submit">Search</button>
+                            <button class="btn btn-success" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                         </form>
 
                         <!-- Authentication Links -->
                         @guest
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i>
                                         GUEST
                                     </a>
                                     <ul class="dropdown-menu">
@@ -96,6 +90,7 @@
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                                     {{ Auth::user()->name }}
                                 </a>
 

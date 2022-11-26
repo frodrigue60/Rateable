@@ -119,6 +119,13 @@
 }
 
 @media screen and (max-width: 1150px) {
+	.ellipsis {
+		text-align: left;
+		max-width: 15ch;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
 	.contenedor {
 		width: 90%;
 		max-width: 1200px;

@@ -43,9 +43,9 @@
                                 <td>
                                     @auth
                                         <a class="btn btn-danger btn-sm" href="/admin/tags/{{ $tag->id }}/destroy"
-                                            role="button">Delete</a>
+                                            role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete {{$tag->id}}</a>
                                         <a class="btn btn-success btn-sm" href="/admin/tags/{{ $tag->id }}/edit"
-                                            role="button">Edit</a>
+                                            role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit {{$tag->id}}</a>
                                     @endauth
 
                                     @guest
