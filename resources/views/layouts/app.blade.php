@@ -70,6 +70,7 @@
 
                         <!-- Authentication Links -->
                         @guest
+                        {{--  
                             @if (Route::has('login'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -80,7 +81,28 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
-                            @endif
+                            @endif 
+                        --}}
+                            <li class="nav-item dropdown">
+                                
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    GUEST
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @if (Route::has('login'))
+                                        <li class="dropdown-item">
+                                            <a class="nav-link text-dark" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                        </li>
+                                    @endif
+
+                                    @if (Route::has('register'))
+                                        <li class="dropdown-item">
+                                            <a class="nav-link text-dark" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </li>
                         @else
                             <!-- AUTH USER -->
                             <li class="nav-item dropdown">
@@ -96,7 +118,8 @@
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -112,12 +135,10 @@
         </main>
     </div>
     <footer class="bg-dark text-center text-lg-start shadow-lg">
-        <!-- Copyright -->
         <div class="text-center p-3 bg-dark text-light">
             © 2022 Copyright:
             <a class="no-deco " href="#">{{ config('app.name', 'Laravel') }}</a>
         </div>
-        <!-- Copyright -->
     </footer>
 </body>
 
