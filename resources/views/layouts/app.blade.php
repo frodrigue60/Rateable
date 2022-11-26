@@ -15,7 +15,7 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" type="image/png" href="{{ asset('support.png') }}">
-    {{--<link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">--}}
+    {{-- <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}"> --}}
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
@@ -62,9 +62,12 @@
                     <ul class="navbar-nav ms-auto">
                         {{-- search form --}}
                         <form class="d-flex" action="{{ route('search') }}" method="GET">
-                            <input class="form-control me-2" type="text" name="search" placeholder="Search" required />
+                            <input class="form-control me-2" type="text" name="search" placeholder="Search"
+                                required />
                             <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
+
+
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))

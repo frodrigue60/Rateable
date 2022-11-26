@@ -23,7 +23,7 @@
                                         @if ($post->liked())
                                             <form action="{{ route('unlike.post', $post->id) }}" method="post">
                                                 @csrf
-                                                <button class="btn btn-sm btn-danger">Favorite
+                                                <button class="btn btn-sm btn-danger" id="like">Favorite
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                                                         fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                                         <path fill-rule="evenodd"
@@ -34,7 +34,7 @@
                                         @else
                                             <form action="{{ route('like.post', $post->id) }}" method="post">
                                                 @csrf
-                                                <button class="btn btn-sm btn-success">Favorite
+                                                <button class="btn btn-sm btn-success" id="like">Favorite
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
                                                         fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
                                                         <path fill-rule="evenodd"
@@ -75,7 +75,7 @@
                             <div class="row text-center">
                                 <h2>Average Score</h2>
                                 <br>
-                                <h3>{{ $post->averageRating/1 }}</h3>
+                                <h3>{{ $post->averageRating / 1 }}</h3>
                             </div>
                             <form name="add-blog-post-form" id="add-blog-post-form" method="post"
                                 action="{{ route('post.addrate', $post->id) }}" enctype="multipart/form-data">

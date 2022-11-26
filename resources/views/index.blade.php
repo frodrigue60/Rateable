@@ -9,7 +9,7 @@
             </div>
         </div>
     @endif
-    <div class="contenedor">
+    <div class="contenedor"> 
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)
                 <div class="tarjeta" style="background-image: url('{{ $post->imagesrc }}')">
@@ -58,6 +58,14 @@
 
         <div>
             <div class="contenedor-banner">
+                <div class="banner">
+                    {{-- KOFI WIDGET --}}
+                        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+                        <script type='text/javascript'>
+                            kofiwidget2.init('Support Me on Ko-fi', '#517db3', 'F1F4GMOPH');
+                            kofiwidget2.draw();
+                        </script>
+                </div>
                 <div class="banner text-white"
                     style="background-image: url('http://papers.co/wallpaper/papers.co-sc38-sub-glow-blur-41-iphone-wallpaper.jpg')">
                     <table>

@@ -73,8 +73,8 @@ class PostController extends Controller
 
         $tags = $post->tagged;
 
-        $userid = Auth::user()->id;
-        //dd($userid);
+        //$userid = Auth::user()->id;
+        
         return view('show', compact('post', 'tags','userid'));
     }
 
