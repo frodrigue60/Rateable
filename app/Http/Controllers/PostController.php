@@ -267,9 +267,11 @@ class PostController extends Controller
                 ->get();
             
                 return view('fromTags', compact('openings', 'endings'));
-        }return redirect()->route('/')->with('status', 'Search a value');
+        }
+        return redirect()->route('/')->with('status', 'Search a value');
     }
 
+    //seach posts in admin pannel
     public function searchPost(Request $request)
     {
         if (Auth::check()) {

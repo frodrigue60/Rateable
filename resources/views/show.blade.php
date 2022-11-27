@@ -8,75 +8,101 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        {{-- IF AUTH USER --}}
-        @auth
-            <div class="row row-cols-1 row-cols-md-2 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <div class="row justify-content-between">
-                                <div class="col-9">
-                                    <h5 class="card-title">{{ $post->title }}</h5>
-                                </div>
-                                <div class="col-3">
-                                    @if ($post->liked())
-                                        <form action="{{ route('unlike.post', $post->id) }}" method="post">
-                                            @csrf
-                                            <button class="btn btn-sm btn-danger" id="like">Favorite <i
-                                                    class="fa fa-heart"></i></button>
-                                        </form>
-                                    @else
-                                        <form action="{{ route('like.post', $post->id) }}" method="post">
-                                            @csrf
-                                            <button class="btn btn-sm btn-success" id="like">Favorite <i
-                                                    class="fa fa-heart"></i></button>
-                                        </form>
-                                    @endif
-                                </div>
-                            </div>
+        {{-- IF GUEST --}}
+        @guest
+            <div class="col-10 mx-auto">
+                <div class="card">
+                    <div class="card-header row justify-content-between">
+                        <div class="col-12">
+                            <h5 class="card-title">{{ $post->title }}</h5>
                         </div>
-                        <div class="card-body ratio ratio-16x9">
-                            <iframe width="1424" height="620" src="{{ $post->ytlink }}" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen></iframe>
+                    </div>
+                    <div class="card-body ratio ratio-16x9">
+                        <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture muted;"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="card-footer row justify-content-between">
+                        <div class="col-9">
+                            <a name="" id="" class="btn btn-success" href="#" role="button">Spotify</a>
+                            <a name="" id="" class="btn btn-success" href="#" role="button">Apple
+                                Music</a>
                         </div>
-                        <div class="card-footer">
+                        <div class="col-md-auto">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop">
+                                More
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    {{-- RIGHT PANNEL --}}
-                    <div class="card">
-                        {{-- CARD HEADER --}}
-                        <div class="card-header">
-                            @foreach ($post->tags as $tag)
-                                <span class="badge rounded-pill text-bg-dark">{{ $tag->name }}</span>
-                            @endforeach
-                        </div>
+            </div>
+        @endguest
 
-                        {{-- CARD BODY --}}
-                        <div class="card-body">
+        {{-- IF AUTH USER --}}
+        @auth
+            <div class="col-10 mx-auto">
+                <div class="card">
+                    <div class="card-header row justify-content-between">
+                        <div class="col-9">
+                            <h5 class="card-title">{{ $post->title }}</h5>
+                        </div>
+                        <div class="col-md-auto">
+                            @if ($post->liked())
+                                <form action="{{ route('unlike.post', $post->id) }}" method="post">
+                                    @csrf
+                                    <button class="btn btn-danger" id="like">Favorite <i
+                                            class="fa fa-heart"></i></button>
+                                </form>
+                            @else
+                                <form action="{{ route('like.post', $post->id) }}" method="post">
+                                    @csrf
+                                    <button class="btn btn-success" id="like">Favorite <i
+                                            class="fa fa-heart"></i></button>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="card-body ratio ratio-16x9">
+                        <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; muted;"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="card-footer row justify-content-between">
+                        <div class="col-9">
+                            <a name="" id="" class="btn btn-success" href="#" role="button">Spotify</a>
+                            <a name="" id="" class="btn btn-success" href="#" role="button">Apple
+                                Music</a>
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop">
+                                More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endauth
+
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ $post->title }}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
                             <div class="row text-center text-dark">
                                 <h2>Average Score: <strong> {{ $post->averageRating / 1 }} </strong></h2>
                                 <h4>Song title: <strong>a song title</strong></h4>
                                 <h4>Song artist: <strong>a artist</strong></h4>
                             </div>
-                            {{--  
-                            <form name="add-blog-post-form" id="add-blog-post-form" method="post"
-                                action="{{ route('post.addrate', $post->id) }}" enctype="multipart/form-data">
-                                @csrf
-                                <div class="form-floating">
-                                    <input name="score" max="100" min="0" type="number" class="form-control"
-                                        id="floatingScore" placeholder="{{ $post->userAverageRating / 1 }}">
-                                    <label for="floatingScore">Score</label>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <button type="submit" class="btn btn-primary">Rate</button>
-                                </div>
-                            </form> --}}
 
-
+                            @auth
                             <div class="d-flex justify-content-center">
                                 <div class="cont">
                                     <div class="stars">
@@ -104,54 +130,16 @@
                                             </div>
                                         </form>
                                     </div>
-                                    
                                 </div>
-
                             </div>
-
-                            <hr>
-                            <div class="row">
-                                <a name="" id="" class="btn btn-success" href="#"
-                                    role="button">Spotify</a>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <a name="" id="" class="btn btn-success" href="#"
-                                    role="button">Apple
-                                    Music</a>
-                            </div>
-
+                            @endauth
                         </div>
-                        {{-- CARD FOOTER --}}
-                        <div class="card-footer">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            {{-- comment <button type="button" class="btn btn-primary">Save</button>--}}
                         </div>
                     </div>
                 </div>
-
             </div>
-
-        @endauth
-
-        {{-- IF GUEST --}}
-        @guest
-            <div class="col-9 mx-auto">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">{{ $post->title }}</h5>
-                    </div>
-                    <div class="card-body ratio ratio-16x9">
-                        <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture muted;"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="card-footer">
-                        <a name="" id="" class="btn btn-success" href="#" role="button">Spotify</a>
-                        <a name="" id="" class="btn btn-success" href="#" role="button">Apple
-                            Music</a>
-                    </div>
-                </div>
-            </div>
-        @endguest
     </div>
 @endsection
