@@ -36,11 +36,9 @@
                             </div>
                         </div>
                         <div class="card-body ratio ratio-16x9">
-                            <iframe width="560" height="315" src="{{ $post->ytlink }}" title="YouTube video player"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                            </iframe>
+                            <iframe width="1424" height="620" src="{{$post->ytlink}}" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
                         </div>
                         <div class="card-footer">
                         </div>

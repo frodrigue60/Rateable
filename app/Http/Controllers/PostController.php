@@ -130,11 +130,15 @@ class PostController extends Controller
         return redirect(route('admin.post.index'))->with('status', 'Data deleted Successfully');
     }
 
+    //return index view with all openings
     public function home()
     {
+        //if exist current season setted
         if ($currentSeason = DB::table('current_season')->first() === null) {
 
-            $posts = Post::all()->where('type', 'op');
+            $posts = Post::all()
+            ->where('type', 'op')
+            ->orderBy('title','asc');
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -143,9 +147,13 @@ class PostController extends Controller
 
             return view('index', compact('posts', 'tags'));
         } else {
+            //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
 
-            $posts = Post::withAllTags($currentSeason->name)->where('type', 'op')->get();
+            $posts = Post::withAllTags($currentSeason->name)
+            ->where('type', 'op')
+            ->orderBy('title','asc')
+            ->get();
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -159,20 +167,22 @@ class PostController extends Controller
     public function endings()
     {
         if ($currentSeason = DB::table('current_season')->first() === null) {
-            //dd('doesnt exist current season');
-            $posts = Post::all()->where('type', 'ed');
+            $posts = Post::all()
+            ->where('type', 'ed')
+            ->orderBy('title','asc');
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('endings', compact('posts', 'tags'));
         } else {
             $currentSeason = DB::table('current_season')->first();
 
             $posts = Post::withAllTags($currentSeason->name)
                 ->where('type', 'ed')
+                ->orderBy('title','asc')
                 ->get();
 
             $tags = DB::table('tagging_tags')
@@ -180,7 +190,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('endings', compact('posts', 'tags'));
         }
     }
 
@@ -193,7 +203,7 @@ class PostController extends Controller
             if (blank($score)) {
                 return redirect()->back()->with('status', 'Score has not been null');
             } else {
-                if ($score <= 100) {
+                if (($score >= 1)&&($score <= 100)) {
                     $post->rateOnce($score);
                     return redirect('/')->with('status', 'Post rated Successfully');
                 } else {
