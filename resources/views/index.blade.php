@@ -100,7 +100,9 @@
                         </tr>
                         @endforeach
                         </tr>
+                        
                     </table>
+                    <button class="btn btn-primary">All places</button>
                 </div>
             </div>
         </div>
