@@ -8,18 +8,22 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}: Rank anime openings & endings.</title>
+    <meta title="Search, play, and rate the openings and endings of your favorite animes.">
+    <meta name="description"
+        content="The site you were looking for to rate openings and endings of your favorite animes.">
+    <meta name="keywords" content="anime, openings, endings, ranking, rate" />
+    <meta name="robots" content="index,nofollow" />
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" type="image/png" href="{{ asset('support.png') }}">
-    {{-- <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}"> --}}
+    <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
-
 </head>
 
 <body style="background-color: #08263b;">
@@ -58,33 +62,33 @@
                         <form class="d-flex" action="{{ route('search') }}" method="GET">
                             <input class="form-control me-2" type="text" name="search" placeholder="Search"
                                 required />
-                            <button class="btn btn-success" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            <button class="btn btn-success" type="submit"><i class="fa fa-search"
+                                    aria-hidden="true"></i></button>
                         </form>
 
                         <!-- Authentication Links -->
                         @guest
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                                        GUEST
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @if (Route::has('login'))
-                                            <li class="dropdown-item">
-                                                <a class="nav-link text-dark"
-                                                    href="{{ route('login') }}">{{ __('Login') }}</a>
-                                            </li>
-                                        @endif
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                                    GUEST
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @if (Route::has('login'))
+                                        <li class="dropdown-item">
+                                            <a class="nav-link text-dark"
+                                                href="{{ route('login') }}">{{ __('Login') }}</a>
+                                        </li>
+                                    @endif
 
-                                        @if (Route::has('register'))
-                                            <li class="dropdown-item">
-                                                <a class="nav-link text-dark"
-                                                    href="{{ route('register') }}">{{ __('Register') }}</a>
-                                            </li>
-                                        @endif
-                                    </ul>
-                                </li>
-                            
+                                    @if (Route::has('register'))
+                                        <li class="dropdown-item">
+                                            <a class="nav-link text-dark"
+                                                href="{{ route('register') }}">{{ __('Register') }}</a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </li>
                         @else
                             <!-- AUTH USER -->
                             <li class="nav-item dropdown">
@@ -101,7 +105,8 @@
                                         {{ __('Logout') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
                                         @csrf
                                     </form>
                                 </div>
@@ -115,13 +120,14 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <footer class="text-center text-lg-start" style="background-color: #0e3d5f;">
+            <div class="text-center p-3 text-light">
+                © 2022 Copyright:
+                <a class="no-deco text-light" href="#">{{ config('app.name', 'Laravel') }}</a>
+            </div>
+        </footer>
     </div>
-    <footer class="text-center text-lg-start" style="background-color: #0e3d5f;">
-        <div class="text-center p-3 text-light">
-            © 2022 Copyright:
-            <a class="no-deco text-light" href="#">{{ config('app.name', 'Laravel') }}</a>
-        </div>
-    </footer>
+
 </body>
 
 </html>
