@@ -75,7 +75,7 @@
 
                     </table>
                     <br>
-                    <a href="{{ route('tags') }}" class="btn btn-primary">All Tags</a>
+                    <a href="{{ route('tags') }}" class="btn btn-primary">All Seasons</a>
                 </div>
                 <div class="banner text-white"
                     style="background-image: url('{{ asset('banner-background.webp') }}');">

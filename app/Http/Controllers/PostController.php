@@ -74,7 +74,7 @@ class PostController extends Controller
         $tags = $post->tagged;
 
         //$userid = Auth::user()->id;
-        
+
         return view('show', compact('post', 'tags'));
     }
 
@@ -137,8 +137,8 @@ class PostController extends Controller
         if ($currentSeason = DB::table('current_season')->first() === null) {
 
             $posts = Post::all()
-            ->where('type', 'op')
-            ->orderBy('title','asc');
+                ->where('type', 'op')
+                ->orderBy('title', 'asc');
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -151,9 +151,9 @@ class PostController extends Controller
             $currentSeason = DB::table('current_season')->first();
 
             $posts = Post::withAllTags($currentSeason->name)
-            ->where('type', 'op')
-            ->orderBy('title','asc')
-            ->get();
+                ->where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -168,8 +168,8 @@ class PostController extends Controller
     {
         if ($currentSeason = DB::table('current_season')->first() === null) {
             $posts = Post::all()
-            ->where('type', 'ed')
-            ->orderBy('title','asc');
+                ->where('type', 'ed')
+                ->orderBy('title', 'asc');
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
@@ -182,7 +182,7 @@ class PostController extends Controller
 
             $posts = Post::withAllTags($currentSeason->name)
                 ->where('type', 'ed')
-                ->orderBy('title','asc')
+                ->orderBy('title', 'asc')
                 ->get();
 
             $tags = DB::table('tagging_tags')
@@ -203,7 +203,7 @@ class PostController extends Controller
             if (blank($score)) {
                 return redirect()->back()->with('status', 'Score has not been null');
             } else {
-                if (($score >= 1)&&($score <= 100)) {
+                if (($score >= 1) && ($score <= 100)) {
                     $post->rateOnce($score);
                     return redirect('/')->with('status', 'Post rated Successfully');
                 } else {
@@ -257,11 +257,17 @@ class PostController extends Controller
 
     public function search(Request $request)
     {
-        $posts = Post::query()
-            ->where('title', 'LIKE', "%{$request->input('search')}%")
-            ->get();
+        if ($request->input('search') != null) {
+            $openings = Post::query()
+                ->where('title', 'LIKE', "%{$request->input('search')}%")
+                ->get();
 
-        return view('fromTags', compact('posts'));
+            $endings = Post::query()
+                ->where('title', 'LIKE', "%{$request->input('search')}%")
+                ->get();
+            
+                return view('fromTags', compact('openings', 'endings'));
+        }return redirect()->route('/')->with('status', 'Search a value');
     }
 
     public function searchPost(Request $request)
@@ -279,5 +285,4 @@ class PostController extends Controller
             return redirect()->route('/')->with('status', 'Please login');
         }
     }
-
 }

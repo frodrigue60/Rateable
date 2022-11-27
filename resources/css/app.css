@@ -6,16 +6,16 @@
 }
 
 
-.no-deco{
+.no-deco {
 	text-decoration: none;
 }
 
 .ellipsis {
 	text-align: left;
-    max-width: 10ch;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+	max-width: 10ch;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .text-shadow {
@@ -41,6 +41,7 @@
 	grid-template-columns: repeat(4, 1fr);
 	gap: 15px;
 }
+
 .contenedor-favoritos {
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
@@ -49,7 +50,7 @@
 
 .tarjeta {
 	border-radius: 8px;
-	
+
 	font-weight: bold;
 	padding: 5px;
 	position: relative;
@@ -131,6 +132,7 @@
 		overflow: hidden;
 		white-space: nowrap;
 	}
+
 	.contenedor {
 		width: 90%;
 		max-width: 1200px;
@@ -146,6 +148,7 @@
 		grid-template-columns: repeat(4, 1fr);
 		gap: 20px;
 	}
+
 	.contenedor-favoritos {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
@@ -189,15 +192,16 @@
 		grid-template-columns: repeat(3, 1fr);
 		gap: 20px;
 	}
+
 	.contenedor-favoritos {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 15px;
 	}
-	
+
 	.tarjeta {
 		border-radius: 8px;
-		
+
 		font-weight: bold;
 		padding: 5px;
 		position: relative;
@@ -206,7 +210,7 @@
 		background-position: center center;
 		min-height: 300px;
 		max-width: 185px;
-	
+
 	}
 
 	.contenedor-banner {

@@ -44,9 +44,9 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <a class="nav-link active" href="{{ route('endings') }}">Endings</a>
+                        
                         @auth
                             <a class="nav-link active" href="{{ route('favorites') }}">My Favorites</a>
-                            <a class="nav-link active" aria-current="page" href="{{ route('home') }}">Home</a>
                             @if (Auth::user()->type == 'admin')
                                 <a class="nav-link active" aria-current="page" href="{{ route('admin.post.index') }}">Post
                                     index</a>
@@ -55,6 +55,9 @@
                                 <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
                             @endif
                         @endauth
+                        
+                        
+                        
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -73,6 +76,7 @@
                                     aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i>
                                     GUEST
                                 </a>
+
                                 <ul class="dropdown-menu">
                                     @if (Route::has('login'))
                                         <li class="dropdown-item">
@@ -99,6 +103,10 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('home') }}">
+                                        Profile
+                                    </a>
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -110,6 +118,8 @@
                                         @csrf
                                     </form>
                                 </div>
+
+                                
                             </li>
                         @endguest
                     </ul>
