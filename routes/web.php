@@ -23,7 +23,6 @@ Route::get('/endings',       [PostController::class, 'endings'])->name('endings'
 
 Route::get('/search', [PostController::class, 'search'])->name('search');
 
-
 //TAGS PUBLIC 
 Route::get('/tags',          [TagController::class, 'alltags'])->name('tags');
 Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromtag');

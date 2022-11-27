@@ -279,4 +279,5 @@ class PostController extends Controller
             return redirect()->route('/')->with('status', 'Please login');
         }
     }
+
 }
