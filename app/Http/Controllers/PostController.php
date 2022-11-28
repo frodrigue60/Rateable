@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use willvincent\Rateable\Rateable;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -132,6 +133,9 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
+        $file = $post->thumbnail;
+
+        Storage::disk('public')->delete('/thumbnails/' . $file);
         $post->delete();
 
         return Redirect::back()->with('status', 'Post Deleted successfully!');
