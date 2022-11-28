@@ -4,7 +4,7 @@
     <div class="container">
         <div class="contenedor-favoritos">
             @foreach ($posts as $post)
-                <div class="tarjeta" style="background-image: url('{{ $post->imagesrc }}')">
+                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/'.$post->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h4 class="text-shadow text-uppercase">{{ $post->title }}</h4>

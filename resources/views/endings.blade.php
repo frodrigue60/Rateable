@@ -12,7 +12,7 @@
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)
-                <div class="tarjeta" style="background-image: url('{{ $post->imagesrc }}')">
+                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/'.$post->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h5 class="text-shadow text-uppercase">{{ $post->title }}</h5>

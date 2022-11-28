@@ -7,7 +7,7 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($openings as $opening)
-                <div class="tarjeta" style="background-image: url('{{ $opening->imagesrc }}')">
+                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/'.$opening->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h4 class="text-shadow text-uppercase">{{ $opening->title }}</h4>
@@ -40,7 +40,7 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($endings as $ending)
-                <div class="tarjeta" style="background-image: url('{{ $ending->imagesrc }}')">
+                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/'.$ending->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h4 class="text-shadow text-uppercase">{{ $ending->title }}</h4>

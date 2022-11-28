@@ -322,10 +322,12 @@ class PostController extends Controller
         if ($request->input('search') != null) {
             $openings = Post::query()
                 ->where('title', 'LIKE', "%{$request->input('search')}%")
+                ->where('type', '=', 'op')
                 ->get();
 
             $endings = Post::query()
                 ->where('title', 'LIKE', "%{$request->input('search')}%")
+                ->where('type', '=', 'ed')
                 ->get();
 
             return view('fromTags', compact('openings', 'endings'));
