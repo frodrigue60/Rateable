@@ -234,8 +234,8 @@ class PostController extends Controller
     {
         if (Auth::check()) {
             $userId = Auth::id();
-            $post = Post::find($id);
-            $post->like($userId);
+            Post::find($id)->like($userId);
+            //$post->like($userId);
 
             return Redirect::back()->with('status', 'Post Like successfully!');
         }
@@ -246,9 +246,9 @@ class PostController extends Controller
     {
         if (Auth::check()) {
             $userId = Auth::id();
-            $post = Post::find($id);
+            Post::find($id)->unlike($userId);
 
-            $post->unlike($userId);
+            //$post->unlike($userId);
 
             return Redirect::back()->with('status', 'Post Like undo successfully!');
         }

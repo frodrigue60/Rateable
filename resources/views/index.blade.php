@@ -46,8 +46,7 @@
 
         <div>
             <div class="contenedor-banner">
-                <div class="banner text-white"
-                    style="background-image: url('{{ asset('banner-background.webp') }}');">
+                <div class="banner text-white" style="background-image: url('{{ asset('banner-background.webp') }}');">
                     <table>
                         <tr>
                             <div class="row">
@@ -77,8 +76,7 @@
                     <br>
                     <a href="{{ route('tags') }}" class="btn btn-primary">All Seasons</a>
                 </div>
-                <div class="banner text-white"
-                    style="background-image: url('{{ asset('banner-background.webp') }}');">
+                <div class="banner text-white" style="background-image: url('{{ asset('banner-background.webp') }}');">
                     <table>
                         <tr>
                             <h3>TOP 10</h3>
@@ -100,7 +98,7 @@
                         </tr>
                         @endforeach
                         </tr>
-                        
+
                     </table>
                     <button class="btn btn-primary">All places</button>
                 </div>
