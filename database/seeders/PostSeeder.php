@@ -42,7 +42,7 @@ class PostSeeder extends Seeder
             'winter 2023',
         ];
 
-        $thumbnail = 'null';
+        $thumbnail = null;
 
         for ($i = 0; $i < 10; $i++) {
             /*DB::table('posts')->insert([
