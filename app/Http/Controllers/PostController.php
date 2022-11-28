@@ -317,6 +317,7 @@ class PostController extends Controller
         return redirect()->route('/')->with('status', 'Please login');
     }
 
+    //public seasrch posts
     public function search(Request $request)
     {
         if ($request->input('search') != null) {
@@ -338,17 +339,14 @@ class PostController extends Controller
     //seach posts in admin pannel
     public function searchPost(Request $request)
     {
-        if (Auth::check()) {
-            if (Auth::user()->type == 'admin') {
+        if (Auth::check() && Auth::user()->type == 'admin') {
                 $posts = Post::query()
                     ->where('title', 'LIKE', "%{$request->input('search')}%")
                     ->paginate(10);
 
                 return view('admin.posts.index', compact('posts'));
-            }
-            return redirect()->route('/')->with('status', 'Only admins');
         } else {
-            return redirect()->route('/')->with('status', 'Please login');
+            return redirect()->route('/')->with('status', 'Only admins');
         }
     }
 }
