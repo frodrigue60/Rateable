@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Conner\Tagging\Model\Tag;
+
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use willvincent\Rateable\Rateable;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -51,22 +50,46 @@ class PostController extends Controller
             $post = new Post;
             $post->title = $request->title;
             $post->type = $request->type;
-            $post->imagesrc = $request->imagesrc;
+            $post->imagesrc = null;
             $post->ytlink = $request->ytlink;
 
             $file_extension = $request->file->extension();
             $file_mime_type = $request->file->getClientMimeType();
-            $file_name = 'thumbnail' . '_' . time() . '.' . $file_extension;
+            if ($file_mime_type != 'mimes:jpeg,jpg,png,webp') {
+                return Redirect::back()->with('status', 'File type not valid');
+            }
+            $file_name = 'thumbnail_' . time() . '.' . $file_extension;
 
             $post->thumbnail = $file_name;
-            
+
             $request->file->storeAs('thumbnails', $file_name, 'public');
-            //dd($post);
+
+            $post->save();
+
+            $tags = $request->tags;
+            $post->tag($tags);
+            return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has file');
+        } else {
+
+            $post = new Post;
+            $post->title = $request->title;
+            $post->type = $request->type;
+            $post->imagesrc = $request->imagesrc;
+            $post->ytlink = $request->ytlink;
+            if ($post->imagesrc === null) {
+                return redirect(route('admin.post.index'))->with('status', 'Post not created, images not founds');
+            }
+            $image_file_data = file_get_contents($request->imagesrc);
+            $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $file_name = 'thumbnail_' . time() . '.' . $ext;
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+            $post->thumbnail = $file_name;
             $post->save();
             $tags = $request->tags;
             $post->tag($tags);
-            return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully');
+            return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has url image');
         }
+        return redirect(route('admin.post.index'))->with('status', 'Post not created, image not found');
     }
 
     /**
@@ -115,6 +138,33 @@ class PostController extends Controller
         $post->type = $request->type;
         $post->imagesrc = $request->imagesrc;
         $post->ytlink = $request->ytlink;
+
+        $old_thumbnail = $post->thumbnail;
+
+        $image_file_data = file_get_contents($request->imagesrc);
+        $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+
+
+        $headers = implode("\n", $http_response_header);
+        if (preg_match_all("/^content-type\s*:\s*(.*)$/mi", $headers, $matches)) {
+            $mime_type = end($matches[1]);
+            //dd($mime_type);
+        }
+
+        Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
+
+        $file_name = 'thumbnail' . '_' . time() . '.' . $ext;
+
+        Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+
+        //$file_extension = $request->file->extension();
+        //$file_mime_type = $request->file->getClientMimeType();
+        //$file_name = 'thumbnail' . '_' . time() . '.' . $file_extension;
+
+        $post->thumbnail = $file_name;
+
+        //$request->file->storeAs('thumbnails', $file_name, 'public');
+
         $post->save();
 
         $tags = $request->tags;
@@ -139,7 +189,6 @@ class PostController extends Controller
         $post->delete();
 
         return Redirect::back()->with('status', 'Post Deleted successfully!');
-        //return redirect(route('admin.post.index'))->with('status', 'Data deleted Successfully');
     }
 
     //return index view with all openings
@@ -156,7 +205,7 @@ class PostController extends Controller
                 ->orderBy('name', 'desc')
                 ->take(5)
                 ->get();
-            
+
 
             return view('index', compact('posts', 'tags'));
         } else {

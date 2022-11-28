@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->enum('type', ['op', 'ed'])->nullable();
-            $table->text('imagesrc');
-            $table->text('ytlink');
-            $table->string('thumbnail')->default('thumbnail.png');
+            $table->text('imagesrc')->nullable();
+            $table->text('ytlink')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
     }

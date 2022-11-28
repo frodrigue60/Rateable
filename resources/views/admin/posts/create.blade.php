@@ -4,6 +4,12 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
+                @if (session('status'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Holy guacamole!</strong> {{ session('status') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
                 <div class="card">
                     <div class="card-header">Create.blade.php</div>
 
@@ -12,17 +18,17 @@
                             action="{{ route('admin.post.store') }}" enctype="multipart/form-data">
                             @csrf
                             <label for="TitleInput" class="form-label">Title</label>
-                            <input type="text" class="form-control" placeholder="Title" id="title"
-                                name="title" required>
+                            <input type="text" class="form-control" placeholder="Title" id="title" name="title"
+                                required>
                             <br>
 
-                            <label for="TitleInput" class="form-label">Type</label>
-                            <br>
+                            <label for="TitleInput" class="form-label">Type:</label>
                             <select class="chzn-select" name="type" id="type" style="width:200px;">
-                                    @foreach ($types as $type)
+                                @foreach ($types as $type)
                                     <option value="{{ $type }}">{{ $type }}</option>
-                                    @endforeach
+                                @endforeach
                             </select>
+                            <br>
                             <br>
 
 
@@ -33,15 +39,15 @@
                             <div class="mb-3">
                                 <label for="formFile" class="form-label">Default file input example</label>
                                 <input class="form-control" type="file" id="formFile" name="file">
-                              </div>
+                            </div>
                             <br>
                             <label for="TitleInput" class="form-label">Youtube Embed</label>
                             <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink"
                                 name="ytlink">
                             <br>
                             <!-- <label for="TagInput" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="TagInput" placeholder="Tag" id="tag"
-                                name="tag"> -->
+                                <input type="text" class="form-control" id="TagInput" placeholder="Tag" id="tag"
+                                    name="tag"> -->
                             <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:200px;">
                                 @foreach ($tags as $tag)
                                     <option value="{{ $tag->name }}">{{ $tag->name }}</option>
