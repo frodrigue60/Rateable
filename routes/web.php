@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\CurrentSeasonController;
 
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Routes;
+use App\User;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +78,8 @@ Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag')
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');
+Route::post('/upthumbnail', [App\Http\Controllers\PostController::class, 'upload'])->name('upthumbnail');
 
 Route::post('/like-post/{id}', [PostController::class, 'likePost'])->name('like.post');
 Route::post('/unlike-post/{id}', [PostController::class, 'unlikePost'])->name('unlike.post');

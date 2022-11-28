@@ -20,5 +20,6 @@ class Post extends Model
         'imagesrc',
         'ytlink',
         'type',
+        'thumbnail',
     ];
 }

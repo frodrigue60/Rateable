@@ -46,29 +46,26 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = new Post;
-        $post->title = $request->title;
-        $post->type = $request->type;
-        $post->imagesrc = $request->imagesrc;
-        $post->ytlink = $request->ytlink;
+        if ($request->hasFile('file')) {
+            $post = new Post;
+            $post->title = $request->title;
+            $post->type = $request->type;
+            $post->imagesrc = $request->imagesrc;
+            $post->ytlink = $request->ytlink;
 
-        $file = $request->file;
+            $file_extension = $request->file->extension();
+            $file_mime_type = $request->file->getClientMimeType();
+            $file_name = 'thumbnail' . '_' . time() . '.' . $file_extension;
 
-        $file_extension = $file->extension();
-        //$file_mime_type = $request->file->getClientMimeType();
-        $file_name = 'thumbnail'.'_'.time().'.'.$file_extension;
-
-        $path = $request->file->storeAs('thumbnails', $file_name);
-
-        return redirect(url('/'.$path));
-        //$post->save();
-
-        $tags = $request->tags;
-
-        //$post->tag($tags);
-
-
-        return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully');
+            $post->thumbnail = $file_name;
+            
+            $request->file->storeAs('thumbnails', $file_name, 'public');
+            dd($post);
+            //$post->save();
+            $tags = $request->tags;
+            //$post->tag($tags);
+            return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully');
+        }
     }
 
     /**

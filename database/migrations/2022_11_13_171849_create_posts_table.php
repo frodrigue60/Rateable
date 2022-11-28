@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('type', ['op', 'ed'])->nullable();
             $table->text('imagesrc');
             $table->text('ytlink');
+            $table->string('thumbnail')->default('thumbnail.png');
             $table->timestamps();
         });
     }
