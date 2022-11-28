@@ -42,6 +42,8 @@ class PostSeeder extends Seeder
             'winter 2023',
         ];
 
+        $thumbnail = 'thumbnail.png';
+
         for ($i = 0; $i < 10; $i++) {
             /*DB::table('posts')->insert([
                 'title' => Str::random(12),
@@ -56,6 +58,7 @@ class PostSeeder extends Seeder
             $post->type = Arr::random($randomtype);
             $post->imagesrc = Arr::random($collection);
             $post->ytlink = 'https://www.youtube.com/embed/dlSbEP4V-gI';
+            $post->thumbnail = $thumbnail;
             
             $post->save();
             

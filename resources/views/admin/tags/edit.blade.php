@@ -5,7 +5,7 @@
 @section('content')
 
     <div class="container">
-        <h1>Edit tag with ID {{ $tag -> id }}</h1>
+        <h1 class="text-light">Edit tag with ID {{ $tag -> id }}</h1>
         
             <form name="update-form" id="update-form" method="POST" action="{{ route('admin.tags.update', $tag->id) }}">
                 @method('PUT')

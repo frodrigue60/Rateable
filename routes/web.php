@@ -33,6 +33,7 @@ Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromt
 
 //POST PUBLIC
 Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
+
 Route::get('/ajax',   [PostController::class, 'ajax_index'])->name('ajax');
 Route::get('/posts',   [PostController::class, 'fetch_posts'])->name('posts');
 

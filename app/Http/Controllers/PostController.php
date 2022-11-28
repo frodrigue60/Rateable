@@ -60,10 +60,10 @@ class PostController extends Controller
             $post->thumbnail = $file_name;
             
             $request->file->storeAs('thumbnails', $file_name, 'public');
-            dd($post);
-            //$post->save();
+            //dd($post);
+            $post->save();
             $tags = $request->tags;
-            //$post->tag($tags);
+            $post->tag($tags);
             return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully');
         }
     }
@@ -152,6 +152,7 @@ class PostController extends Controller
                 ->orderBy('name', 'desc')
                 ->take(5)
                 ->get();
+            
 
             return view('index', compact('posts', 'tags'));
         } else {

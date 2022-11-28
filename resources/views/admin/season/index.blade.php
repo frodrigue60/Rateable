@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container">
-        <h1>
+        <h1 class="text-light">
             seasons index, current user:
         </h1>
 
