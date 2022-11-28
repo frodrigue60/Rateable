@@ -30,6 +30,11 @@
                             <input type="text" class="form-control" placeholder="Image link" id="imagesrc"
                                 name="imagesrc">
                             <br>
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">Default file input example</label>
+                                <input class="form-control" type="file" id="formFile" name="file">
+                              </div>
+                            <br>
                             <label for="TitleInput" class="form-label">Youtube Embed</label>
                             <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink"
                                 name="ytlink">

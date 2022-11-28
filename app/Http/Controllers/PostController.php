@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use willvincent\Rateable\Rateable;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -50,12 +51,21 @@ class PostController extends Controller
         $post->type = $request->type;
         $post->imagesrc = $request->imagesrc;
         $post->ytlink = $request->ytlink;
-        //dd($request->all());
-        $post->save();
+
+        $file = $request->file;
+
+        $file_extension = $file->extension();
+        //$file_mime_type = $request->file->getClientMimeType();
+        $file_name = 'thumbnail'.'_'.time().'.'.$file_extension;
+
+        $path = $request->file->storeAs('thumbnails', $file_name);
+
+        return redirect(url('/'.$path));
+        //$post->save();
 
         $tags = $request->tags;
-        //$tags = explode(',', $request->tag);
-        $post->tag($tags); // attach the tag
+
+        //$post->tag($tags);
 
 
         return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully');
@@ -127,7 +137,8 @@ class PostController extends Controller
         $post = Post::find($id);
         $post->delete();
 
-        return redirect(route('admin.post.index'))->with('status', 'Data deleted Successfully');
+        return Redirect::back()->with('status', 'Post Deleted successfully!');
+        //return redirect(route('admin.post.index'))->with('status', 'Data deleted Successfully');
     }
 
     //return index view with all openings
@@ -265,8 +276,8 @@ class PostController extends Controller
             $endings = Post::query()
                 ->where('title', 'LIKE', "%{$request->input('search')}%")
                 ->get();
-            
-                return view('fromTags', compact('openings', 'endings'));
+
+            return view('fromTags', compact('openings', 'endings'));
         }
         return redirect()->route('/')->with('status', 'Search a value');
     }

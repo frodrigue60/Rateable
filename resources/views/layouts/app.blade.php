@@ -23,7 +23,7 @@
     <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css', 'resources/css/fivestars.css','resources/js/jquery-3.6.1.min.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css', 'resources/css/fivestars.css'])
 </head>
 
 <body style="background-color: #08263b;">
