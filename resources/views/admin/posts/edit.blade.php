@@ -4,6 +4,12 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
+                @if (session('status'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Holy guacamole!</strong> {{ session('status') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
                 <div class="card">
                     <div class="card-header">Edit.blade.php</div>
 
@@ -19,15 +25,19 @@
                             <label for="TitleInput" class="form-label">Type</label>
                             <br>
                             <select class="chzn-select" name="type" id="type" style="width:200px;">
-                                    @foreach ($types as $type)
+                                @foreach ($types as $type)
                                     <option value="{{ $type }}">{{ $type }}</option>
-                                    @endforeach
+                                @endforeach
                             </select>
                             <br>
                             <label for="TitleInput" class="form-label">Image Source</label>
                             <input type="text" class="form-control" placeholder="Image link" id="imagesrc"
                                 name="imagesrc" value="{{ $post->imagesrc }}">
                             <br>
+                            <div class="mb-3">
+                                <label for="formFile" class="form-label">file input</label>
+                                <input class="form-control" type="file" id="formFile" name="file">
+                            </div>
                             <label for="TitleInput" class="form-label">Youtube Embed</label>
                             <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink"
                                 name="ytlink" value="{{ $post->ytlink }}">

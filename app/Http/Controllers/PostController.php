@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\File;
 
 class PostController extends Controller
 {
@@ -47,6 +49,10 @@ class PostController extends Controller
     public function store(Request $request)
     {
         if ($request->hasFile('file')) {
+            $request->validate([
+                'file' => 'required|mimes:png,jpg,jpeg,webp|max:2048'
+            ]);
+
             $post = new Post;
             $post->title = $request->title;
             $post->type = $request->type;
@@ -54,10 +60,8 @@ class PostController extends Controller
             $post->ytlink = $request->ytlink;
 
             $file_extension = $request->file->extension();
-            $file_mime_type = $request->file->getClientMimeType();
-            if ($file_mime_type != 'mimes:jpeg,jpg,png,webp') {
-                return Redirect::back()->with('status', 'File type not valid');
-            }
+            //$file_mime_type = $request->file->getClientMimeType();
+
             $file_name = 'thumbnail_' . time() . '.' . $file_extension;
 
             $post->thumbnail = $file_name;
@@ -68,6 +72,7 @@ class PostController extends Controller
 
             $tags = $request->tags;
             $post->tag($tags);
+
             return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has file');
         } else {
 
@@ -76,6 +81,7 @@ class PostController extends Controller
             $post->type = $request->type;
             $post->imagesrc = $request->imagesrc;
             $post->ytlink = $request->ytlink;
+            
             if ($post->imagesrc === null) {
                 return redirect(route('admin.post.index'))->with('status', 'Post not created, images not founds');
             }
@@ -133,45 +139,59 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $post = Post::find($id);
-        $post->title = $request->title;
-        $post->type = $request->type;
-        $post->imagesrc = $request->imagesrc;
-        $post->ytlink = $request->ytlink;
+        if ($request->hasFile('file')) {
+            $request->validate([
+                'file' => 'required|mimes:png,jpg,jpeg,webp|max:2048'
+            ]);
 
-        $old_thumbnail = $post->thumbnail;
+            $post = Post::find($id);
+            $old_thumbnail = $post->thumbnail;
 
-        $image_file_data = file_get_contents($request->imagesrc);
-        $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $post->title = $request->title;
+            $post->type = $request->type;
+            $post->imagesrc = null;
+            $post->ytlink = $request->ytlink;
+
+            $file_extension = $request->file->extension();
+            //$file_mime_type = $request->file->getClientMimeType();
 
 
-        $headers = implode("\n", $http_response_header);
-        if (preg_match_all("/^content-type\s*:\s*(.*)$/mi", $headers, $matches)) {
-            $mime_type = end($matches[1]);
-            //dd($mime_type);
+            Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
+
+            $file_name = 'thumbnail_' . time() . '.' . $file_extension;
+
+            $post->thumbnail = $file_name;
+
+            $request->file->storeAs('thumbnails', $file_name, 'public');
+
+            $post->save();
+
+            $tags = $request->tags;
+            $post->tag($tags);
+            return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully, has file image');
+        } else {
+            $post = Post::find($id);
+            $old_thumbnail = $post->thumbnail;
+
+            $post->title = $request->title;
+            $post->type = $request->type;
+            $post->imagesrc = $request->imagesrc;
+            $post->ytlink = $request->ytlink;
+            if ($post->imagesrc === null) {
+                return redirect(route('admin.post.index'))->with('status', 'Post not created, images not founds');
+            }
+            Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
+            $image_file_data = file_get_contents($request->imagesrc);
+            $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $file_name = 'thumbnail_' . time() . '.' . $ext;
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+            $post->thumbnail = $file_name;
+            $post->save();
+            $tags = $request->tags;
+            $post->tag($tags);
+            return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has url image');
         }
-
-        Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
-
-        $file_name = 'thumbnail' . '_' . time() . '.' . $ext;
-
-        Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
-
-        //$file_extension = $request->file->extension();
-        //$file_mime_type = $request->file->getClientMimeType();
-        //$file_name = 'thumbnail' . '_' . time() . '.' . $file_extension;
-
-        $post->thumbnail = $file_name;
-
-        //$request->file->storeAs('thumbnails', $file_name, 'public');
-
-        $post->save();
-
-        $tags = $request->tags;
-        //$tags = explode(',', $request->tag);
-        $post->retag($tags); // delete current tags and save new tags
-
-        return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully');
+        return redirect(route('admin.post.index'))->with('status', 'Post not created, image not found');
     }
 
     /**
@@ -263,7 +283,7 @@ class PostController extends Controller
             $score = $request->score;
 
             if (blank($score)) {
-                return redirect()->back()->with('status', 'Score has not been null');
+                return redirect()->back()->with('status', 'Score can not be null');
             } else {
                 if (($score >= 1) && ($score <= 100)) {
                     $post->rateOnce($score);
@@ -297,7 +317,6 @@ class PostController extends Controller
         if (Auth::check()) {
             $userId = Auth::id();
             Post::find($id)->like($userId);
-            //$post->like($userId);
 
             return Redirect::back()->with('status', 'Post Like successfully!');
         }
@@ -309,8 +328,6 @@ class PostController extends Controller
         if (Auth::check()) {
             $userId = Auth::id();
             Post::find($id)->unlike($userId);
-
-            //$post->unlike($userId);
 
             return Redirect::back()->with('status', 'Post Like undo successfully!');
         }
@@ -340,11 +357,11 @@ class PostController extends Controller
     public function searchPost(Request $request)
     {
         if (Auth::check() && Auth::user()->type == 'admin') {
-                $posts = Post::query()
-                    ->where('title', 'LIKE', "%{$request->input('search')}%")
-                    ->paginate(10);
+            $posts = Post::query()
+                ->where('title', 'LIKE', "%{$request->input('search')}%")
+                ->paginate(10);
 
-                return view('admin.posts.index', compact('posts'));
+            return view('admin.posts.index', compact('posts'));
         } else {
             return redirect()->route('/')->with('status', 'Only admins');
         }
