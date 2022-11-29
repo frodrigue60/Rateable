@@ -1,7 +1,12 @@
 @extends('layouts.app')
+<!doctype html>
+<head>
+    @vite(['resources/css/fivestars.css'])
+</head>
 
 @section('content')
     <div class="container">
+        
         @if (session('status'))
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> {{ session('status') }}
@@ -46,7 +51,7 @@
                 <div class="card">
                     <div class="card-header row justify-content-between">
                         <div class="col-9">
-                            <h5 class="card-title">{{ $post->title }}</h5>
+                            <h5 class="card-title">{{ $post->title }} - {{ $post->averageRating/20 }} <i class="fa fa-star"></i></h5>
                         </div>
                         <div class="col-md-auto">
                             @if ($post->liked())
@@ -97,40 +102,46 @@
                         </div>
                         <div class="modal-body">
                             <div class="row text-center text-dark">
-                                <h2>Average Score: <strong> {{ $post->averageRating / 1 }} </strong></h2>
+                                <h2>Average Score: <strong> {{ $post->averageRating/20 }}/5 <i class="fa fa-star"></i> </strong></h2>
                                 <h4>Song title: <strong>a song title</strong></h4>
                                 <h4>Song artist: <strong>a artist</strong></h4>
                             </div>
 
                             @auth
                             <div class="d-flex justify-content-center">
-                                <div class="cont">
+                                
                                     <div class="stars">
                                         <form action="{{ route('post.addrate', $post->id) }}" method="post"
                                             enctype="multipart/form-data">
                                             @csrf
+
                                             <input class="star star-5" id="star-5" type="radio" name="score"
                                                 value="100" />
                                             <label class="star star-5" for="star-5"></label>
+
                                             <input class="star star-4" id="star-4" type="radio" name="score"
                                                 value="80" />
                                             <label class="star star-4" for="star-4"></label>
+
                                             <input class="star star-3" id="star-3" type="radio" name="score"
                                                 value="60" />
                                             <label class="star star-3" for="star-3"></label>
+
                                             <input class="star star-2" id="star-2" type="radio" name="score"
                                                 value="40" />
                                             <label class="star star-2" for="star-2"></label>
+                                            
                                             <input class="star star-1" id="star-1" type="radio" name="score"
                                                 value="20" />
                                             <label class="star star-1" for="star-1"></label>
+                                            
                                             <div class="row">
-                                                <p>click the stars</p>
+                                                <p class="text-center">click the stars</p>
                                                 <button type="submit" class="btn btn-primary">Send</button>
                                             </div>
                                         </form>
                                     </div>
-                                </div>
+                                
                             </div>
                             @endauth
                         </div>
