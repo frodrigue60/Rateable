@@ -17,20 +17,22 @@
                     <div class="card-body">
                         You are logged in!
                     </div>
-                    <div class="card-body">
+                    <div class="card-body d-flex justify-content-center">
                         @if (Auth::user()->image)
                             <img class="image rounded-circle" src="{{ asset('/storage/profile/' . Auth::user()->image) }}"
                                 alt="profile_image" style="width: 95px;height: 95px; padding: 5px; margin: 0px; ">
                         @endif
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body d-flex justify-content-center">
                         <div col>
                             <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
                                 @method('post')
                                 @csrf
-                                <input type="file" name="image">
-                                <input type="submit" value="Upload">
+                                <label for="formFile" class="form-label">Select profile picture</label>
+                                <input class="form-control" type="file" id="formFile" name="image">
+                                <br>
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                         </div>
 

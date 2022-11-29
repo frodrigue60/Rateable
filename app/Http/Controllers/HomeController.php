@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -32,12 +33,29 @@ class HomeController extends Controller
     public function upload(Request $request)
     {
         if ($request->hasFile('image')) {
+            //$request->validate([
+              //  'image' => 'required|mimes:png,jpg,jpeg,webp|max:2048',
+            //]);
+
+            $validator = Validator::make($request->all(), [
+                'image' => 'mimes:png,jpg,jpeg,webp|max:2048'
+            ]);
+     
+            if ($validator->fails()) {
+                
+                $errors = $validator->getMessageBag();
+                //dd($errors);
+                
+                return redirect(route('home'))->with('status', $errors);
+            }
+
             $user_email = Auth::user()->email;
             $user_id = Auth::user()->id;
-            $user_image = Auth::user()->image;
+            $old_user_image = Auth::user()->image;
 
             $file_type = $request->image->extension();
             $file_name = $user_email . '.' . $file_type;
+            Storage::disk('public')->delete('/profile/' . $old_user_image);
             $request->image->storeAs('profile', $file_name, 'public');
 
             DB::table('users')
@@ -46,6 +64,6 @@ class HomeController extends Controller
 
             return redirect(route('home'))->with('status', 'Image uploaded successfully!');
         }
-        return redirect()->back();
+        return redirect(route('home'))->with('status', 'File not found');
     }
 }

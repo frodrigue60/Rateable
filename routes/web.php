@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\CurrentSeasonController;
 
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Routes;
-use App\User;
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,11 +28,6 @@ Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromt
 
 //POST PUBLIC
 Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
-
-Route::get('/ajax',   [PostController::class, 'ajax_index'])->name('ajax');
-Route::get('/posts',   [PostController::class, 'fetch_posts'])->name('posts');
-
-
 
 
 Route::group(['middleware' => 'auth'], function () {

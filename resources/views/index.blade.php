@@ -18,32 +18,26 @@
                             <h5 class="text-shadow text-uppercase">{{ $post->title }}</h5>
                         </div>
                         <div class="tarjeta-footer">
-                            <a href="{{ route('show', $post->id) }}" class="btn btn-primary">Show</a>
+                            <a href="{{ route('show', $post->id) }}" class="btn btn-sm btn-primary">Show</a>
                             @auth
                                 @if ($post->liked())
                                     <form action="{{ route('unlike.post', $post->id) }}" method="post">
                                         @csrf
-                                        <button class="btn btn-danger"><i class="fa fa-heart" aria-hidden="true"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="fa fa-heart" aria-hidden="true"></i></button>
                                     </form>
                                 @else
                                     <form action="{{ route('like.post', $post->id) }}" method="post">
                                         @csrf
-                                        <button class="btn btn-success"><i class="fa fa-heart" aria-hidden="true"></i></button>
+                                        <button class="btn btn-sm btn-success"><i class="fa fa-heart" aria-hidden="true"></i></button>
                                     </form>
                                 @endif
                             @endauth
-                            <button class="btn btn-warning">{{ $post->averageRating / 10 }} <span
-                                    class="fa fa-star"></span></button>
+                            <button class="btn btn-sm btn-warning">{{ $post->averageRating / 20 }} <i class="fa fa-star"></i></button>
                         </div>
-
-
                     </div>
                 </div>
             @endforeach
-
-
         </div>
-
         <div>
             <div class="contenedor-banner">
                 <div class="banner text-white" style="background-image: url('{{ asset('banner-background.webp') }}');">
@@ -93,7 +87,7 @@
                                         class="badge text-bg-dark no-deco">{{ $post->title }}</a></h5>
                             </td>
                             <td>
-                                <h5><span class="badge bg-primary">{{ $post->averageRating / 10 }}</span></h5>
+                                <h5><span class="badge bg-primary">{{ $post->averageRating / 20 }} <i class="fa fa-star"></i></span></h5>
                             </td>
                         </tr>
                         @endforeach
