@@ -49,9 +49,14 @@ class PostController extends Controller
     public function store(Request $request)
     {
         if ($request->hasFile('file')) {
-            $request->validate([
-                'file' => 'required|mimes:png,jpg,jpeg,webp|max:2048'
+            $validator = Validator::make($request->all(), [
+                'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
             ]);
+     
+            if ($validator->fails()) {
+                $errors = $validator->getMessageBag();
+                return Redirect::back()->with('status', $errors);
+            }
 
             $post = new Post;
             $post->title = $request->title;
@@ -83,7 +88,7 @@ class PostController extends Controller
             $post->ytlink = $request->ytlink;
             
             if ($post->imagesrc === null) {
-                return redirect(route('admin.post.index'))->with('status', 'Post not created, images not founds');
+                return Redirect::back()->with('status', 'Post not created, images not founds');
             }
             $image_file_data = file_get_contents($request->imagesrc);
             $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
@@ -140,9 +145,14 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->hasFile('file')) {
-            $request->validate([
-                'file' => 'required|mimes:png,jpg,jpeg,webp|max:2048'
+            $validator = Validator::make($request->all(), [
+                'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
             ]);
+     
+            if ($validator->fails()) {
+                $errors = $validator->getMessageBag();
+                return Redirect::back()->with('status', $errors);
+            }
 
             $post = Post::find($id);
             $old_thumbnail = $post->thumbnail;
