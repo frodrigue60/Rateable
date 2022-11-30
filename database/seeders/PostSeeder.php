@@ -33,13 +33,13 @@ class PostSeeder extends Seeder
         ];
 
         $randomtype = [
-            'op',
+            //'op',
             'ed'
         ];
 
         $tags = [
             'fall 2022',
-            'winter 2023',
+            //'winter 2023',
         ];
 
         $thumbnail = null;

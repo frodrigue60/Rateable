@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Conner\Tagging\Model\Tag;
-
-use Illuminate\Support\Facades\App;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\File;
 
 class PostController extends Controller
 {
@@ -52,7 +50,7 @@ class PostController extends Controller
             $validator = Validator::make($request->all(), [
                 'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
             ]);
-     
+
             if ($validator->fails()) {
                 $errors = $validator->getMessageBag();
                 return Redirect::back()->with('status', $errors);
@@ -86,7 +84,7 @@ class PostController extends Controller
             $post->type = $request->type;
             $post->imagesrc = $request->imagesrc;
             $post->ytlink = $request->ytlink;
-            
+
             if ($post->imagesrc === null) {
                 return Redirect::back()->with('status', 'Post not created, images not founds');
             }
@@ -148,7 +146,7 @@ class PostController extends Controller
             $validator = Validator::make($request->all(), [
                 'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
             ]);
-     
+
             if ($validator->fails()) {
                 $errors = $validator->getMessageBag();
                 return Redirect::back()->with('status', $errors);
@@ -225,17 +223,20 @@ class PostController extends Controller
     public function home()
     {
         //if exist current season setted
-        if ($currentSeason = DB::table('current_season')->first() === null) {
+        $currentSeason = DB::table('current_season')->first();
 
-            $posts = Post::all()
-                ->where('type', 'op')
-                ->orderBy('title', 'asc');
+        if ($currentSeason  == null) {
+
+            $posts = Post::where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+            //->where('type', 'op')
+            //->orderBy('title', 'asc');
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
                 ->take(5)
                 ->get();
-
 
             return view('index', compact('posts', 'tags'));
         } else {
@@ -258,17 +259,19 @@ class PostController extends Controller
 
     public function endings()
     {
-        if ($currentSeason = DB::table('current_season')->first() === null) {
-            $posts = Post::all()
-                ->where('type', 'ed')
-                ->orderBy('title', 'asc');
+        $currentSeason = DB::table('current_season')->first();
+        if ($currentSeason == null) {
+
+            $posts = Post::where('type', 'ed')
+                ->orderBy('title', 'asc')
+                ->get();
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
                 ->take(5)
                 ->get();
 
-            return view('endings', compact('posts', 'tags'));
+            return view('index', compact('posts', 'tags'));
         } else {
             $currentSeason = DB::table('current_season')->first();
 
@@ -282,7 +285,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('endings', compact('posts', 'tags'));
+            return view('index', compact('posts', 'tags'));
         }
     }
 
@@ -294,18 +297,16 @@ class PostController extends Controller
 
             if (blank($score)) {
                 return redirect()->back()->with('status', 'Score can not be null');
-            } else {
-                if (($score >= 1) && ($score <= 100)) {
-                    $post->rateOnce($score);
-                    return redirect('/')->with('status', 'Post rated Successfully');
-                } else {
-                    return redirect()->back()->with('status', 'Only values between 1 and 100');
-                }
             }
-            return redirect('/');
-        } else {
-            return redirect()->route('login');
+
+            if (($score >= 1) && ($score <= 100)) {
+                $post->rateOnce($score);
+                return redirect()->back()->with('status', 'Post rated Successfully');
+            } else {
+                return redirect()->back()->with('status', 'Only values between 1 and 100');
+            }
         }
+        return redirect()->route('login');
     }
 
     public function favorites()
@@ -374,6 +375,52 @@ class PostController extends Controller
             return view('admin.posts.index', compact('posts'));
         } else {
             return redirect()->route('/')->with('status', 'Only admins');
+        }
+    }
+
+    public function ranking()
+    {
+        //if current season doesnt exist
+        $currentSeason = DB::table('current_season')->first();
+        //dd($currentSeason);
+        if ($currentSeason == null) {
+            $op_count = Post::where('type', 'op')->count();
+            $ed_count = Post::where('type', 'ed')->count();
+
+            $openings = Post::where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+
+            $endings = Post::where('type', 'ed')
+                ->orderBy('title', 'asc')
+                ->get();
+
+            return view('ranking', compact('openings', 'endings','op_count', 'ed_count'));
+        } else {
+            //search the current season and the posts
+            $currentSeason = DB::table('current_season')->first();
+
+            $op_count = Post::withAllTags($currentSeason->name)
+                ->where('type', 'op')
+                ->count();
+
+            $ed_count = Post::withAllTags($currentSeason->name)
+                ->where('type', 'ed')
+                ->count();
+
+            $openings = Post::withAllTags($currentSeason->name)
+                ->where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+
+            $endings = Post::withAllTags($currentSeason->name)
+                ->where('type', 'ed')
+                ->orderBy('title', 'asc')
+                ->get();
+
+            //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
+
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count'));
         }
     }
 }

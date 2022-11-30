@@ -19,6 +19,7 @@ use App\Http\Controllers\CurrentSeasonController;
 
 Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
+Route::get('/ranking',       [PostController::class, 'ranking'])->name('ranking');
 
 Route::get('/search', [PostController::class, 'search'])->name('search');
 

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\CurrentSeason;
 use Conner\Tagging\Model\Tag;
 use Illuminate\Support\Facades\DB;
 
