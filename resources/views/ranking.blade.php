@@ -5,7 +5,7 @@
         <div class="row">
             {{-- openings columm --}}
             <div class="col">
-                <h2 class="text-center text-light">OPENINGS</h2>
+                <h2 class="text-center text-light">OPENINGS - </h2>
                 <table class="table table-dark">
                     <thead>
                         <tr>

@@ -313,11 +313,19 @@ class PostController extends Controller
     {
         if (Auth::check()) {
             $userId = Auth::id();
-            $posts = Post::whereLikedBy($userId) // find only articles where user liked them
+            $openings = Post::whereLikedBy($userId) // find only articles where user liked them
                 ->with('likeCounter') // highly suggested to allow eager load
+                ->where('type', 'op')
                 ->get();
 
-            return view('favorites', compact('posts'));
+            $endings = Post::whereLikedBy($userId) // find only articles where user liked them
+                ->with('likeCounter') // highly suggested to allow eager load
+                ->where('type', 'ed')
+                ->get();
+
+            //dd($openings,$endings);
+
+            return view('favorites', compact('openings', 'endings'));
         } else {
             return redirect()->route('login');
         }
@@ -395,7 +403,7 @@ class PostController extends Controller
                 ->orderBy('title', 'asc')
                 ->get();
 
-            return view('ranking', compact('openings', 'endings','op_count', 'ed_count'));
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count'));
         } else {
             //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
