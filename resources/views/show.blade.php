@@ -51,7 +51,7 @@
                 <div class="card">
                     <div class="card-header row justify-content-between">
                         <div class="col-9">
-                            <h5 class="card-title">{{ $post->title }} - {{ $post->averageRating/20 }} <i class="fa fa-star"></i></h5>
+                            <h5 class="card-title">{{ $post->title }}</i></h5>
                         </div>
                         <div class="col-md-auto">
                             @if ($post->liked())

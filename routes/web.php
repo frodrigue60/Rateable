@@ -64,13 +64,17 @@ Route::group(['middleware' => 'auth'], function () {
 //AUTH ROUTES
 Auth::routes();
 
+//USER
+Route::post('/score-method', [App\Http\Controllers\HomeController::class, 'scoreMethod'])->name('scoremethod');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');
+
 Route::get('/searchpost', [PostController::class, 'searchPost'])->name('searchpost');
 Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
 
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');
+
 Route::post('/upthumbnail', [App\Http\Controllers\PostController::class, 'upload'])->name('upthumbnail');
 
 Route::post('/like-post/{id}', [PostController::class, 'likePost'])->name('like.post');

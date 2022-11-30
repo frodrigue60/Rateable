@@ -61,4 +61,10 @@ class HomeController extends Controller
         }
         return redirect(route('home'))->with('status', 'File not found');
     }
+
+    public function scoreMethod (Request $request){
+        $scoremethod = $request->scoremethod;
+        
+        return redirect (route('home'))->with('status', 'score method: '.$scoremethod);
+    }
 }

@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    
+
     <meta title="Search, play, and rate the openings and endings of your favorite animes.">
     <meta name="description"
         content="The site you were looking for to rate openings and endings of your favorite animes.">
@@ -23,7 +23,7 @@
     <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css',])
 </head>
 
 <body style="background-color: #08263b;">
@@ -44,7 +44,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <a class="nav-link active" href="{{ route('endings') }}">Endings</a>
-                        
+
                         @auth
                             <a class="nav-link active" href="{{ route('favorites') }}">My Favorites</a>
                             @if (Auth::user()->type == 'admin')
@@ -55,9 +55,9 @@
                                 <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
                             @endif
                         @endauth
-                        
-                        
-                        
+
+
+
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -103,13 +103,17 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('home') }}">
+                                    <a class="dropdown-item" href="{{ route('home') }}"><i class="fa fa-user-circle-o"
+                                            aria-hidden="true"></i>
+
                                         Profile
                                     </a>
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();"><i
+                                            class="fa fa-sign-out" aria-hidden="true"></i>
+
                                         {{ __('Logout') }}
                                     </a>
 
@@ -119,7 +123,7 @@
                                     </form>
                                 </div>
 
-                                
+
                             </li>
                         @endguest
                     </ul>
@@ -128,6 +132,7 @@
         </nav>
 
         <main class="py-4">
+
             @yield('content')
         </main>
         <footer class="text-center text-lg-start" style="background-color: #0e3d5f;">
