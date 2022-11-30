@@ -428,7 +428,7 @@ class PostController extends Controller
 
             //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count'));
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason'));
         }
     }
 }

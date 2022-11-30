@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+<!doctype html>
+<head>
+    <title>{{ config('app.name', 'Laravel') }}: Ranking anime openings & endings.</title>
+</head>
+
+
 @section('content')
     @if (session('status'))
         <div class="container">

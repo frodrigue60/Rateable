@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}: Rank anime openings & endings.</title>
+    
     <meta title="Search, play, and rate the openings and endings of your favorite animes.">
     <meta name="description"
         content="The site you were looking for to rate openings and endings of your favorite animes.">

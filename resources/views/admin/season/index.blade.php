@@ -18,7 +18,7 @@
 
         <div class="card bg-dark text-light">
             <div class="card-header">
-                <a class="btn btn-primary" href="{{ route('admin.season.create') }}" role="button">Nuevo item</a>
+                <a class="btn btn-sm btn-primary" href="{{ route('admin.season.create') }}" role="button">CREATE</a>
             </div>
 
             <div class="card-body">
@@ -37,9 +37,9 @@
                                 <td>{{ $season->name }}</td>
                                 <td>
                                     @auth
-                                        <a class="btn btn-success" href="/admin/season/{{ $season->id }}/edit"
+                                        <a class="btn btn-sm btn-success" href="/admin/season/{{ $season->id }}/edit"
                                             role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit {{ $season->id }}</a>
-                                        <a class="btn btn-danger" href="/admin/season/{{ $season->id }}/destroy"
+                                        <a class="btn btn-sm btn-danger" href="/admin/season/{{ $season->id }}/destroy"
                                             role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete {{ $season->id }}</a>
 
                                     @endauth

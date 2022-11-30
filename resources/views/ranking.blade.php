@@ -5,7 +5,7 @@
         <div class="row">
             {{-- openings columm --}}
             <div class="col">
-                <h2 class="text-center text-light">OPENINGS - </h2>
+                <h2 class="text-center text-light">TOP OPENINGS - {{ $currentSeason->name }}</h2>
                 <table class="table table-dark">
                     <thead>
                         <tr>
@@ -29,7 +29,7 @@
             </div>
             {{-- endings columm --}}
             <div class="col">
-                <h2 class="text-center text-light">ENDINGS</h2>
+                <h2 class="text-center text-light">TOP ENDINGS - {{ $currentSeason->name }}</h2>
                 <table class="table table-dark">
                     <thead>
                         <tr>

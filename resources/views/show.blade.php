@@ -2,6 +2,7 @@
 <!doctype html>
 <head>
     @vite(['resources/css/fivestars.css'])
+    <title>{{ $post->title }}</title>
 </head>
 
 @section('content')
@@ -31,8 +32,7 @@
                     <div class="card-footer row justify-content-between">
                         <div class="col-9">
                             <a name="" id="" class="btn btn-success" href="#" role="button">Spotify</a>
-                            <a name="" id="" class="btn btn-success" href="#" role="button">Apple
-                                Music</a>
+                            <a name="" id="" class="btn btn-success" href="#" role="button">Apple Music</a>
                         </div>
                         <div class="col-md-auto">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
