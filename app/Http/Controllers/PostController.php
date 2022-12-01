@@ -108,12 +108,22 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::findOrFail($id);
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+            //dd($score_format);
+            $post = Post::findOrFail($id);
+            $tags = $post->tagged;
 
-        $tags = $post->tagged;
+            return view('show', compact('post', 'tags','score_format'));
+        } else {
+            $post = Post::findOrFail($id);
 
-        //$userid = Auth::user()->id;
+            $tags = $post->tagged;
 
+            //$userid = Auth::user()->id;
+
+            return view('show', compact('post', 'tags'));
+        }
         return view('show', compact('post', 'tags'));
     }
 
@@ -258,7 +268,7 @@ class PostController extends Controller
         }
         //if exist current season setted
         $currentSeason = DB::table('current_season')->first();
-        
+
 
         if ($currentSeason  == null) {
 
@@ -307,7 +317,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags','score_format'));
+            return view('index', compact('posts', 'tags', 'score_format'));
         } else {
             $currentSeason = DB::table('current_season')->first();
 
@@ -321,7 +331,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags','score_format'));
+            return view('index', compact('posts', 'tags', 'score_format'));
         }
     }
 
@@ -362,7 +372,7 @@ class PostController extends Controller
 
             //dd($openings,$endings);
 
-            return view('favorites', compact('openings', 'endings','score_format'));
+            return view('favorites', compact('openings', 'endings', 'score_format'));
         } else {
             return redirect()->route('login');
         }
@@ -441,7 +451,7 @@ class PostController extends Controller
                 ->orderBy('title', 'asc')
                 ->get();
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count','score_format'));
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
         } else {
             //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
@@ -466,7 +476,7 @@ class PostController extends Controller
 
             //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason','score_format'));
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason', 'score_format'));
         }
     }
 }

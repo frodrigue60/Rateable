@@ -44,26 +44,26 @@
                                 @if (isset($score_format))
                                     @switch($score_format)
                                         @case('POINT_100')
-                                            {{ round($post->averageRating) }}
+                                            <strong>{{ round($post->averageRating) }}</strong>
                                         @break
 
                                         @case('POINT_10_DECIMAL')
-                                            {{ round($post->averageRating / 10, 1) }} <i class="fa fa-star"></i>
+                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i class="fa fa-star"></i>
                                         @break
 
                                         @case('POINT_10')
-                                            {{ round($post->averageRating / 10) }} <i class="fa fa-star"></i>
+                                        <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
                                         @break
 
                                         @case('POINT_5')
-                                            {{ round($post->averageRating / 20) }} <i class="fa fa-star"></i>
+                                        <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
                                         @break
 
                                         @default
-                                            {{ round($post->averageRating) }}
+                                        <strong>{{ round($post->averageRating) }}</strong>
                                     @endswitch
                                 @else
-                                    {{ round($post->averageRating) }}
+                                    <strong>{{ round($post->averageRating) }}</strong>
                                 @endif
                             </button>
                         </div>
