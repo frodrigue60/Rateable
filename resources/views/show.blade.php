@@ -127,7 +127,8 @@
                                                 <strong>{{ round($post->averageRating) }}</strong>
                                         @endswitch
                                     @else
-                                        <strong>{{ round($post->averageRating) }}</strong>
+                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                    class="fa fa-star"></i>
                                     @endif
                                 </strong>
                             </h2>
