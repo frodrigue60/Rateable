@@ -48,11 +48,11 @@
                                         @break
 
                                         @case('POINT_10_DECIMAL')
-                                            {{ round($post->averageRating / 10, 1) }}
+                                            {{ round($post->averageRating / 10, 1) }} <i class="fa fa-star"></i>
                                         @break
 
                                         @case('POINT_10')
-                                            {{ round($post->averageRating / 10) }}
+                                            {{ round($post->averageRating / 10) }} <i class="fa fa-star"></i>
                                         @break
 
                                         @case('POINT_5')
