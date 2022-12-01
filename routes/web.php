@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 Auth::routes();
 
 //USER
-Route::post('/score-method', [App\Http\Controllers\HomeController::class, 'scoreMethod'])->name('scoremethod');
+Route::post('/scoreformat', [App\Http\Controllers\HomeController::class, 'scoreFormat'])->name('scoreformat');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');
 

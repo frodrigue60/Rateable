@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Conner\Tagging\Model\Tag;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -59,7 +58,7 @@ class PostController extends Controller
             $post = new Post;
             $post->title = $request->title;
             $post->type = $request->type;
-            $post->imagesrc = null;
+
             $post->ytlink = $request->ytlink;
 
             $file_extension = $request->file->extension();
@@ -82,10 +81,10 @@ class PostController extends Controller
             $post = new Post;
             $post->title = $request->title;
             $post->type = $request->type;
-            $post->imagesrc = $request->imagesrc;
+
             $post->ytlink = $request->ytlink;
 
-            if ($post->imagesrc === null) {
+            if ($request->imagesrc == null) {
                 return Redirect::back()->with('status', 'Post not created, images not founds');
             }
             $image_file_data = file_get_contents($request->imagesrc);
@@ -157,7 +156,7 @@ class PostController extends Controller
 
             $post->title = $request->title;
             $post->type = $request->type;
-            $post->imagesrc = null;
+
             $post->ytlink = $request->ytlink;
 
             $file_extension = $request->file->extension();
@@ -183,9 +182,9 @@ class PostController extends Controller
 
             $post->title = $request->title;
             $post->type = $request->type;
-            $post->imagesrc = $request->imagesrc;
+
             $post->ytlink = $request->ytlink;
-            if ($post->imagesrc === null) {
+            if ($request->imagesrc == null) {
                 return redirect(route('admin.post.index'))->with('status', 'Post not created, images not founds');
             }
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
@@ -222,8 +221,44 @@ class PostController extends Controller
     //return index view with all openings
     public function home()
     {
+        if (Auth::check()) {
+            $currentSeason = DB::table('current_season')->first();
+            $score_format = Auth::user()->score_format;
+
+            if ($currentSeason  == null) {
+
+                $posts = Post::where('type', 'op')
+                    ->orderBy('title', 'asc')
+                    ->get();
+                //->where('type', 'op')
+                //->orderBy('title', 'asc');
+
+                $tags = DB::table('tagging_tags')
+                    ->orderBy('name', 'desc')
+                    ->take(5)
+                    ->get();
+
+                return view('index', compact('posts', 'tags', 'score_format'));
+            } else {
+                //search the current season and the posts
+                $currentSeason = DB::table('current_season')->first();
+
+                $posts = Post::withAllTags($currentSeason->name)
+                    ->where('type', 'op')
+                    ->orderBy('title', 'asc')
+                    ->get();
+
+                $tags = DB::table('tagging_tags')
+                    ->orderBy('name', 'desc')
+                    ->take(5)
+                    ->get();
+
+                return view('index', compact('posts', 'tags', 'score_format'));
+            }
+        }
         //if exist current season setted
         $currentSeason = DB::table('current_season')->first();
+        
 
         if ($currentSeason  == null) {
 

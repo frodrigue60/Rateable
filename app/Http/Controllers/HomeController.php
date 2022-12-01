@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+
 
 class HomeController extends Controller
 {
@@ -27,7 +30,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $score_formats = ['POINT_100', 'POINT_10_DECIMAL', 'POINT_10', 'POINT_5'];
+        return view('home', compact('score_formats'));
     }
 
     public function upload(Request $request)
@@ -37,7 +41,7 @@ class HomeController extends Controller
             $validator = Validator::make($request->all(), [
                 'image' => 'mimes:png,jpg,jpeg,webp|max:2048'
             ]);
-     
+
             if ($validator->fails()) {
                 $errors = $validator->getMessageBag();
                 return redirect(route('home'))->with('status', $errors);
@@ -48,8 +52,8 @@ class HomeController extends Controller
             $old_user_image = Auth::user()->image;
 
             $file_type = $request->image->extension();
-            $file_name = 'profile_'.time() . '.' . $file_type;
-            
+            $file_name = 'profile_' . time() . '.' . $file_type;
+
             Storage::disk('public')->delete('/profile/' . $old_user_image);
             $request->image->storeAs('profile', $file_name, 'public');
 
@@ -62,9 +66,28 @@ class HomeController extends Controller
         return redirect(route('home'))->with('status', 'File not found');
     }
 
-    public function scoreMethod (Request $request){
-        $scoremethod = $request->scoremethod;
-        
-        return redirect (route('home'))->with('status', 'score method: '.$scoremethod);
+    public function scoreFormat(Request $request)
+    {
+        if ($request->score_format == 'null') {
+            return redirect()->back()->with('status', 'score method not changed');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'score_format' => 'required|in:POINT_100,POINT_10_DECIMAL,POINT_10,POINT_5'
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::back()->with('status', '¡Ooops!');
+        }
+
+        $user_id = Auth::user()->id;
+        if ($user_id == Auth::user()->id) {
+            $user = User::find($user_id);
+            $user->score_format = $request->score_format;
+            $user->save();
+
+            return redirect()->back()->with('status', 'score method changed successfully');
+        }
+        return Redirect::back()->with('status', '¡Ooops!');
     }
 }

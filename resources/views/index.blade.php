@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 <!doctype html>
+
 <head>
     <title>{{ config('app.name', 'Laravel') }}: Ranking anime openings & endings.</title>
 </head>
-
 
 @section('content')
     @if (session('status'))
@@ -40,8 +40,33 @@
                                     </form>
                                 @endif
                             @endauth
-                            <button class="btn btn-sm btn-warning">{{ $post->averageRating / 20 }} <i
-                                    class="fa fa-star"></i></button>
+                            <button class="btn btn-sm btn-warning">
+                                @if (isset($score_format))
+                                    @switch($score_format)
+                                        @case('POINT_100')
+                                            {{ round($post->averageRating) }}
+                                        @break
+
+                                        @case('POINT_10_DECIMAL')
+                                            {{ round($post->averageRating / 10, 1) }}
+                                        @break
+
+                                        @case('POINT_10')
+                                            {{ round($post->averageRating / 10) }}
+                                        @break
+
+                                        @case('POINT_5')
+                                            {{ round($post->averageRating / 20) }} <i class="fa fa-star"></i>
+                                        @break
+
+                                        @default
+                                            {{ round($post->averageRating) }}
+                                    @endswitch
+                                @else
+                                    {{ round($post->averageRating) }}
+                                @endif
+
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -68,7 +93,8 @@
                         @foreach ($tags as $tag)
                             <tr>
                                 <td>
-                                    <h5><a href="{{route('fromtag',$tag->slug)}}" class="badge text-bg-dark no-deco">{{ $tag->name }}</a></h5>
+                                    <h5><a href="{{ route('fromtag', $tag->slug) }}"
+                                            class="badge text-bg-dark no-deco">{{ $tag->name }}</a></h5>
                                 </td>
                             </tr>
                         @endforeach
@@ -86,11 +112,42 @@
                             <h3>TOP 10</h3>
                         </tr>
                         <tr>
-                        @foreach ($posts->sortByDesc('averageRating')->take(10) as $post)  
+                            @foreach ($posts->sortByDesc('averageRating')->take(10) as $post)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td class="ellipsis"><h5><a href="{{ route('show', $post->id) }}" class="badge text-bg-dark no-deco">{{ $post->title }}</a></h5></td>
-                            <td><h5><span class="badge bg-primary">{{ $post->averageRating / 20 }} <i class="fa fa-star"></i></span></h5></td>
+                            <td class="ellipsis">
+                                <h5><a href="{{ route('show', $post->id) }}"
+                                        class="badge text-bg-dark no-deco">{{ $post->title }}</a></h5>
+                            </td>
+                            <td>
+                                <h5><span class="badge bg-primary">
+                                        @if (isset($score_format))
+                                            @switch($score_format)
+                                                @case('POINT_100')
+                                                    {{ round($post->averageRating) }}
+                                                @break
+
+                                                @case('POINT_10_DECIMAL')
+                                                    {{ round($post->averageRating / 10, 1) }}
+                                                @break
+
+                                                @case('POINT_10')
+                                                    {{ round($post->averageRating / 10) }}
+                                                @break
+
+                                                @case('POINT_5')
+                                                    {{ round($post->averageRating / 20) }} <i class="fa fa-star"></i>
+                                                @break
+
+                                                @default
+                                                    {{ round($post->averageRating) }}
+                                            @endswitch
+                                        @else
+                                            {{ round($post->averageRating) }}
+                                        @endif
+
+                                    </span></h5>
+                            </td>
                         </tr>
                         @endforeach
                         </tr>

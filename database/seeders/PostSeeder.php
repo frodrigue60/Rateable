@@ -56,7 +56,7 @@ class PostSeeder extends Seeder
             $post = new Post;
             $post->title = Str::random(12);
             $post->type = Arr::random($randomtype);
-            $post->imagesrc = Arr::random($collection);
+            //$post->imagesrc = Arr::random($collection);
             $post->ytlink = 'https://www.youtube.com/embed/dlSbEP4V-gI';
             $post->thumbnail = $thumbnail;
             
