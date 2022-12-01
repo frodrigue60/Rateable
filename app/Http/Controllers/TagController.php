@@ -115,7 +115,11 @@ class TagController extends Controller
 
     public function slug($name)
     {
-        $score_format = Auth::user()->score_format;
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
         $openings = Post::withAnyTag([$name])
             ->where('type', 'op')
             ->orderby('title', 'asc')

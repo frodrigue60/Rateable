@@ -15,6 +15,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        
         {{-- IF GUEST --}}
         @guest
             <div class="col-10 mx-auto">
@@ -144,28 +145,31 @@
                                             @case('POINT_100')
                                                 <label for="inputNumber" class="form-label">Score</label>
                                                 <input name="score" type="number" id="inputNumber" class="form-control"
-                                                    aria-describedby="" min="1" max="100" step="1">
+                                                    aria-describedby="" min="1" max="100" step="1" placeholder="Your score: {{round($post->userAverageRating)}}">
                                                 <div id="passwordHelpBlock" class="form-text">
                                                     Your score must be 1-100 values
                                                 </div>
+                                                <input type="hidden" name="score_format" value="{{$score_format}}">
                                             @break
 
                                             @case('POINT_10_DECIMAL')
                                                 <label for="inputNumber" class="form-label">Score</label>
                                                 <input name="score" type="number" id="inputNumber" class="form-control"
-                                                    aria-describedby="" min="1" max="10" step=".1">
+                                                    aria-describedby="" min="1" max="10" step=".1" placeholder="Your score: {{ round($post->userAverageRating/10, 1) }}">
                                                 <div id="passwordHelpBlock" class="form-text">
                                                     Your score must be 1-10 values (can use decimals)
                                                 </div>
+                                                <input type="hidden" name="score_format" value="{{$score_format}}">
                                             @break
 
                                             @case('POINT_10')
                                                 <label for="inputNumber" class="form-label">Score</label>
                                                 <input name="score" type="number" id="inputNumber" class="form-control"
-                                                    aria-describedby="" min="1" max="10" step="1">
+                                                    aria-describedby="" min="1" max="10" step="1" placeholder="Your score: {{round($post->userAverageRating/10)}}">
                                                 <div id="passwordHelpBlock" class="form-text">
                                                     Your score must be 1-10 values (only integer values)
                                                 </div>
+                                                <input type="hidden" name="score_format" value="{{$score_format}}">
                                             @break
 
                                             @case('POINT_5')

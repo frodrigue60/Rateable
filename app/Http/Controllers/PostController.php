@@ -114,7 +114,7 @@ class PostController extends Controller
             $post = Post::findOrFail($id);
             $tags = $post->tagged;
 
-            return view('show', compact('post', 'tags','score_format'));
+            return view('show', compact('post', 'tags', 'score_format'));
         } else {
             $post = Post::findOrFail($id);
 
@@ -304,8 +304,13 @@ class PostController extends Controller
 
     public function endings()
     {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
         $currentSeason = DB::table('current_season')->first();
-        $score_format = Auth::user()->score_format;
+
         if ($currentSeason == null) {
 
             $posts = Post::where('type', 'ed')
@@ -340,16 +345,78 @@ class PostController extends Controller
         if (Auth::check()) {
             $post = Post::find($id);
             $score = $request->score;
+            $score_format = $request->score_format;
 
             if (blank($score)) {
                 return redirect()->back()->with('status', 'Score can not be null');
             }
+            switch ($score_format) {
+                case 'POINT_100':
+                    settype($score, "integer");
+                    if (($score >= 1) && ($score <= 100)) {
+                        $post->rateOnce($score);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                    }
+                    break;
 
-            if (($score >= 1) && ($score <= 100)) {
-                $post->rateOnce($score);
-                return redirect()->back()->with('status', 'Post rated Successfully');
-            } else {
-                return redirect()->back()->with('status', 'Only values between 1 and 100');
+                case 'POINT_10_DECIMAL':
+                    settype($score, "float");
+                    if (($score >= 1) && ($score <= 10)) {
+                        $int = intval($score * 10);
+                        $post->rateOnce($int);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 10 (can use decimals)');
+                    }
+                    break;
+                case 'POINT_10':
+                    settype($score, "integer");
+                    if (($score >= 1) && ($score <= 10)) {
+                        $int = intval($score * 10);
+                        $post->rateOnce($int);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 10 (only integer numbers)');
+                    }
+                    break;
+                case 'POINT_5':
+                    settype($score, "integer");
+
+                    if (($score >= 1) && ($score <= 100)) {
+                        if ($score <= 20) {
+                            $score = 20;
+                        }
+                        if (($score > 20) && ($score <= 40)) {
+                            $score = 40;
+                        }
+                        if (($score > 40) && ($score <= 60)) {
+                            $score = 60;
+                        }
+                        if (($score > 60) && ($score <= 80)) {
+                            $score = 80;
+                        }
+                        if ($score > 80) {
+                            $score = 100;
+                        }
+                        $post->rateOnce($score);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                    }
+                    break;
+                    break;
+
+                default:
+                    settype($score, "integer");
+                    if (($score >= 1) && ($score <= 100)) {
+                        $post->rateOnce($score);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                    }
+                    break;
             }
         }
         return redirect()->route('login');
@@ -438,7 +505,15 @@ class PostController extends Controller
         //if current season doesnt exist
         $currentSeason = DB::table('current_season')->first();
         //dd($currentSeason);
-        $score_format = Auth::user()->score_format;
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+
+
+
+
         if ($currentSeason == null) {
             $op_count = Post::where('type', 'op')->count();
             $ed_count = Post::where('type', 'ed')->count();

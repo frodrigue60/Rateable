@@ -46,7 +46,8 @@
                                                 {{ round($opening->averageRating) }}
                                         @endswitch
                                     @else
-                                        {{ round($opening->averageRating) }}
+                                    {{ round($opening->averageRating / 10, 1) }}
+                                    <i class="fa fa-star"></i>
                                     @endif
                                 </td>
                             </tr>
@@ -95,7 +96,8 @@
                                                 {{ round($ending->averageRating) }}
                                         @endswitch
                                     @else
-                                        {{ round($ending->averageRating) }}
+                                    {{ round($opening->averageRating / 10, 1) }}
+                                    <i class="fa fa-star"></i>
                                     @endif
                                 </td>
                             </tr>

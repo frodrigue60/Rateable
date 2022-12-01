@@ -63,7 +63,7 @@
                                         <strong>{{ round($post->averageRating) }}</strong>
                                     @endswitch
                                 @else
-                                    <strong>{{ round($post->averageRating) }}</strong>
+                                <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i class="fa fa-star"></i>
                                 @endif
                             </button>
                         </div>
@@ -108,7 +108,7 @@
                     @endfor
                     <table>
                         <tr>
-                            <h3><i class="fa fa-trophy" aria-hidden="true"></i> TOP 10 <i class="fa fa-trophy" aria-hidden="true"></i></h3>
+                            <h3> TOP 10 </h3>
                         </tr>
                         <tr>
                             @foreach ($posts->sortByDesc('averageRating')->take(10) as $post)
@@ -142,7 +142,7 @@
                                                     {{ round($post->averageRating) }}
                                             @endswitch
                                         @else
-                                            {{ round($post->averageRating) }}
+                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i class="fa fa-star"></i>
                                         @endif
 
                                     </span></h5>
