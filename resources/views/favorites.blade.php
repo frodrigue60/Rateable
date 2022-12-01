@@ -28,7 +28,33 @@
                                     </form>
                                 @endif
                             @endauth
-                            <button class="btn btn-sm btn-warning">{{ $opening->averageRating / 20 }} <i class="fa fa-star"></i></button>
+                            <button class="btn btn-sm btn-warning">
+                                @if (isset($score_format))
+                                        @switch($score_format)
+                                            @case('POINT_100')
+                                                {{ round($opening->averageRating) }}
+                                            @break
+
+                                            @case('POINT_10_DECIMAL')
+                                                {{ round($opening->averageRating / 10, 1) }}
+                                                <i class="fa fa-star"></i>
+                                            @break
+
+                                            @case('POINT_10')
+                                                {{ round($opening->averageRating / 10) }} <i class="fa fa-star"></i>
+                                            @break
+
+                                            @case('POINT_5')
+                                                {{ round($opening->averageRating / 20) }} <i class="fa fa-star"></i>
+                                            @break
+
+                                            @default
+                                                {{ round($opening->averageRating) }}
+                                        @endswitch
+                                    @else
+                                        {{ round($opening->averageRating) }}
+                                    @endif
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -63,7 +89,32 @@
                                     </form>
                                 @endif
                             @endauth
-                            <button class="btn btn-sm btn-warning">{{ $ending->averageRating / 20 }} <i class="fa fa-star"></i></button>
+                            <button class="btn btn-sm btn-warning">
+                                @if (isset($score_format))
+                                        @switch($score_format)
+                                            @case('POINT_100')
+                                                {{ round($ending->averageRating) }}
+                                            @break
+
+                                            @case('POINT_10_DECIMAL')
+                                                {{ round($ending->averageRating / 10, 1) }} <i class="fa fa-star"></i>
+                                            @break
+
+                                            @case('POINT_10')
+                                                {{ round($ending->averageRating / 10) }} <i class="fa fa-star"></i>
+                                            @break
+
+                                            @case('POINT_5')
+                                                {{ round($ending->averageRating / 20) }} <i class="fa fa-star"></i>
+                                            @break
+
+                                            @default
+                                                {{ round($ending->averageRating) }}
+                                        @endswitch
+                                    @else
+                                        {{ round($ending->averageRating) }}
+                                    @endif
+                            </button>
                         </div>
                     </div>
                 </div>

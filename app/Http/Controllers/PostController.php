@@ -295,6 +295,7 @@ class PostController extends Controller
     public function endings()
     {
         $currentSeason = DB::table('current_season')->first();
+        $score_format = Auth::user()->score_format;
         if ($currentSeason == null) {
 
             $posts = Post::where('type', 'ed')
@@ -306,7 +307,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('index', compact('posts', 'tags','score_format'));
         } else {
             $currentSeason = DB::table('current_season')->first();
 
@@ -320,7 +321,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('index', compact('posts', 'tags','score_format'));
         }
     }
 
@@ -347,6 +348,7 @@ class PostController extends Controller
     public function favorites()
     {
         if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
             $userId = Auth::id();
             $openings = Post::whereLikedBy($userId) // find only articles where user liked them
                 ->with('likeCounter') // highly suggested to allow eager load
@@ -360,7 +362,7 @@ class PostController extends Controller
 
             //dd($openings,$endings);
 
-            return view('favorites', compact('openings', 'endings'));
+            return view('favorites', compact('openings', 'endings','score_format'));
         } else {
             return redirect()->route('login');
         }
@@ -426,6 +428,7 @@ class PostController extends Controller
         //if current season doesnt exist
         $currentSeason = DB::table('current_season')->first();
         //dd($currentSeason);
+        $score_format = Auth::user()->score_format;
         if ($currentSeason == null) {
             $op_count = Post::where('type', 'op')->count();
             $ed_count = Post::where('type', 'ed')->count();
@@ -438,7 +441,7 @@ class PostController extends Controller
                 ->orderBy('title', 'asc')
                 ->get();
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count'));
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count','score_format'));
         } else {
             //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
@@ -463,7 +466,7 @@ class PostController extends Controller
 
             //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason'));
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason','score_format'));
         }
     }
 }

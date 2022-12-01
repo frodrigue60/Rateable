@@ -115,17 +115,20 @@ class TagController extends Controller
 
     public function slug($name)
     {
+        $score_format = Auth::user()->score_format;
         $openings = Post::withAnyTag([$name])
-        ->where('type', 'op')
-        ->get();; // fetch articles with any tag listed
+            ->where('type', 'op')
+            ->orderby('title', 'asc')
+            ->get();; // fetch articles with any tag listed
 
         //$tags = DB::table('tagging_tags')->get();
         $endings = Post::withAnyTag([$name])
-        ->where('type', 'ed')
-        ->get();
+            ->where('type', 'ed')
+            ->orderby('title', 'asc')
+            ->get();
 
         //dd($endings,$openings);
-        return view('fromTags', compact('openings','endings'));
+        return view('fromTags', compact('openings', 'endings', 'score_format'));
     }
 
     public function alltags()
@@ -137,17 +140,14 @@ class TagController extends Controller
 
     public function searchTag(Request $request)
     {
-        if (Auth::check()) {
-            if (Auth::user()->type == 'admin') {
-                $tags = DB::table('tagging_tags')
-                    ->where('name', 'LIKE', "%{$request->input('search')}%")
-                    ->paginate(10);
+        if (Auth::check() && (Auth::user()->type == 'admin')) {
+            $tags = DB::table('tagging_tags')
+                ->where('name', 'LIKE', "%{$request->input('search')}%")
+                ->paginate(10);
 
-                return view('admin.tags.index', compact('tags'));
-            }
-            return redirect()->route('/')->with('status', 'Only admins');
+            return view('admin.tags.index', compact('tags'));
         } else {
-            return redirect()->route('/')->with('status', 'Please login');
+            return redirect()->route('/')->with('status', 'Only admins');
         }
     }
 }

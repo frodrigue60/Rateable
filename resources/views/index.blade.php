@@ -65,7 +65,6 @@
                                 @else
                                     {{ round($post->averageRating) }}
                                 @endif
-
                             </button>
                         </div>
                     </div>
@@ -109,7 +108,7 @@
                     @endfor
                     <table>
                         <tr>
-                            <h3>TOP 10</h3>
+                            <h3><i class="fa fa-trophy" aria-hidden="true"></i> TOP 10 <i class="fa fa-trophy" aria-hidden="true"></i></h3>
                         </tr>
                         <tr>
                             @foreach ($posts->sortByDesc('averageRating')->take(10) as $post)
