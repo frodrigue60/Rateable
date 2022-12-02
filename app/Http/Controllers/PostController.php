@@ -58,7 +58,6 @@ class PostController extends Controller
             $post = new Post;
             $post->title = $request->title;
             $post->type = $request->type;
-
             $post->ytlink = $request->ytlink;
 
             $file_extension = $request->file->extension();
