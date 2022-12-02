@@ -34,6 +34,14 @@
                             <input type="text" class="form-control" placeholder="Title" id="song_en" name="song_en"
                                 required>
                             <br>
+                            <label for="TitleInput" class="form-label">Artist</label>
+                            <select class="chzn-select" name="artist_id" id="artist_id" style="width:200px;">
+                                <option value="null">Select a artist</option>
+                                @foreach ($artists as $artist)
+                                    <option value="{{ $artist->id }}">{{ $artist->name }}</option>
+                                @endforeach
+                            </select>
+                            <br>
 
                             <label for="TitleInput" class="form-label">Type:</label>
                             <select class="chzn-select" name="type" id="type" style="width:200px;">
@@ -43,8 +51,6 @@
                             </select>
                             <br>
                             <br>
-
-
                             <label for="TitleInput" class="form-label">Image Source</label>
                             <input type="text" class="form-control" placeholder="Image link" id="imagesrc"
                                 name="imagesrc">
@@ -62,9 +68,6 @@
                             <input type="text" class="form-control" placeholder="Second Embed (optional)" id="scndlink"
                                 name="scndlink">
                             <br>
-                            <!-- <label for="TagInput" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="TagInput" placeholder="Tag" id="tag"
-                                    name="tag"> -->
                             <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:200px;">
                                 @foreach ($tags as $tag)
                                     <option value="{{ $tag->name }}">{{ $tag->name }}</option>

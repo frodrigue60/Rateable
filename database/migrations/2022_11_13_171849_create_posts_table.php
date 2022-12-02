@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('song_romaji')->nullable();
             $table->string('song_jp')->nullable();
             $table->string('song_en')->nullable();
-            $table->unsignedInteger('artist_id')->nullable();
+            $table->unsignedBigInteger('artist_id')->nullable();
             $table->enum('type', ['op', 'ed'])->nullable();
             $table->text('ytlink')->nullable();
             $table->text('scndlink')->nullable();

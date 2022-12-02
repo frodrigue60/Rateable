@@ -27,7 +27,7 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Slug</th>
+                            <th scope="col">Name JP</th>
                             <th scope="col">Options</th>
                         </tr>
                     </thead>
@@ -39,7 +39,7 @@
                                 <td>{{ $artist->id }}</td>
                                 <td><a href="{{ $artist->name }}" class="no-deco">{{ $artist->name }}</a>
                                 </td>
-                                <td>{{ $artist->slug }}</td>
+                                <td>{{ $artist->name_jp }}</td>
                                 <td>
                                     @auth
                                         <a class="btn btn-danger btn-sm" href="/admin/artist/{{ $artist->id }}/destroy"

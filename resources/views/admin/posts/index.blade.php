@@ -29,8 +29,8 @@
                                     <th scope="col">Title</th>
                                     <th scope="col">Tags</th>
                                     <th scope="col">Type</th>
-                                    <th scope="col">AvgScore</th>
-                                    <th scope="col">Tmb</th>
+                                    <th scope="col">Song</th>
+                                    <th scope="col">Artist</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -50,8 +50,8 @@
 
                                         </td>
                                         <td>{{ $post->type }}</td>
-                                        <td>{{ $post->averageRating / 10 }}</td>
-                                        <td>{{ asset('/storage/thumbnails/'.$post->thumbnail) }}</td>
+                                        <td>{{ $post->song_romaji}}</td>
+                                        <td>{{ $post->artist->name }}</td>
                                         <td>
                                             <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"
                                                     class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit {{ $post->id }}</button></a>

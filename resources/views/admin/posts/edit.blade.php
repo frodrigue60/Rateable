@@ -19,30 +19,57 @@
                             @method('PUT')
                             @csrf
                             <label for="TitleInput" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="TitleInput" placeholder="Nuevo valor"
-                                id="title" value="{{ $post->title }}" name="title">
+                            <input type="text" class="form-control" value="{{$post->title}}" id="title" name="title"
+                                required>
                             <br>
-                            <label for="TitleInput" class="form-label">Type</label>
+
+                            <label for="TitleInput" class="form-label">Song name (romaji)</label>
+                            <input type="text" class="form-control" value="{{$post->song_romaji}}" id="song_romaji" name="song_romaji"
+                                required>
                             <br>
+                            <label for="TitleInput" class="form-label">Song name (JP)</label>
+                            <input type="text" class="form-control" value="{{$post->song_jp}}" id="song_jp" name="song_jp"
+                                required>
+                            <br>
+                            <label for="TitleInput" class="form-label">Song name (EN)</label>
+                            <input type="text" class="form-control" value="{{$post->song_en}}" id="song_en" name="song_en"
+                                required>
+                            <br>
+                            <label for="TitleInput" class="form-label">Artist</label>
+                            <select class="chzn-select" name="artist_id" id="artist_id" style="width:200px;">
+                                <option value="null">Select a artist</option>
+                                @foreach ($artists as $artist)
+                                    <option value="{{ $artist->id }}">{{ $artist->name }}</option>
+                                @endforeach
+                            </select>
+                            <br>
+
+                            <label for="TitleInput" class="form-label">Type:</label>
                             <select class="chzn-select" name="type" id="type" style="width:200px;">
                                 @foreach ($types as $type)
                                     <option value="{{ $type }}">{{ $type }}</option>
                                 @endforeach
                             </select>
                             <br>
+                            <br>
                             <label for="TitleInput" class="form-label">Image Source</label>
                             <input type="text" class="form-control" placeholder="Image link" id="imagesrc"
-                                name="imagesrc" value="{{ $post->imagesrc }}">
+                                name="imagesrc">
                             <br>
                             <div class="mb-3">
-                                <label for="formFile" class="form-label">file input</label>
+                                <label for="formFile" class="form-label">Default file input example</label>
                                 <input class="form-control" type="file" id="formFile" name="file">
                             </div>
-                            <label for="TitleInput" class="form-label">Youtube Embed</label>
-                            <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink"
-                                name="ytlink" value="{{ $post->ytlink }}">
                             <br>
-                            <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:50%;">
+                            <label for="TitleInput" class="form-label">Youtube Embed</label>
+                            <input type="text" class="form-control" value="{{$post->ytlink}}" id="ytlink"
+                                name="ytlink">
+                            <br>
+                            <label for="TitleInput" class="form-label">Second Embed (optional)</label>
+                            <input type="text" class="form-control" value="{{$post->scndlink}}" placeholder="Second Embed (optional)" id="scndlink"
+                                name="scndlink">
+                            <br>
+                            <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:200px;">
                                 @foreach ($tags as $tag)
                                     <option value="{{ $tag->name }}">{{ $tag->name }}</option>
                                 @endforeach
@@ -50,6 +77,7 @@
                             <br>
                             <br>
                             <button class="btn btn-primary" type="submit">Submit</button>
+                            <br>
                     </div>
                 </div>
             </div>

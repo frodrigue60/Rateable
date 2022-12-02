@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use Conner\Tagging\Model\Tag;
@@ -34,7 +35,8 @@ class PostController extends Controller
     {
         $types = ['op', 'ed'];
         $tags = Tag::all();
-        return view('admin.posts.create', compact('tags', 'types'));
+        $artists = Artist::all();
+        return view('admin.posts.create', compact('tags', 'types','artists'));
     }
 
     /**
@@ -57,8 +59,13 @@ class PostController extends Controller
 
             $post = new Post;
             $post->title = $request->title;
+            $post->song_romaji = $request ->song_romaji;
+            $post->song_jp = $request->song_jp;
+            $post->song_en = $request->song_en;
+            $post->artist_id = $request->artist_id;
             $post->type = $request->type;
             $post->ytlink = $request->ytlink;
+            $post->scndlink = $request->scndlink;
 
             $file_extension = $request->file->extension();
             //$file_mime_type = $request->file->getClientMimeType();
@@ -84,6 +91,7 @@ class PostController extends Controller
             $post->song_romaji = $request->song_romaji;
             $post->song_jp = $request->song_jp;
             $post->song_en = $request->song_en;
+            $post->artist_id = $request->artist_id;
 
 
             $post->ytlink = $request->ytlink;
@@ -115,8 +123,9 @@ class PostController extends Controller
     {
         if (Auth::check() && Auth::user()->type == 'admin') {
             $score_format = Auth::user()->score_format;
-            //dd($score_format);
+            
             $post = Post::findOrFail($id);
+            $artist = $post->artist;
             $tags = $post->tagged;
             dd($post);
             return view('show', compact('post', 'tags', 'score_format'));
@@ -126,12 +135,14 @@ class PostController extends Controller
             //dd($score_format);
             $post = Post::findOrFail($id);
             $tags = $post->tagged;
+            $artist = $post->artist;
             //dd($post);
             return view('show', compact('post', 'tags', 'score_format'));
         }else {
             $post = Post::findOrFail($id);
 
             $tags = $post->tagged;
+            $artist = $post->artist;
 
             //$userid = Auth::user()->id;
 
@@ -151,8 +162,9 @@ class PostController extends Controller
         $types = ['op', 'ed'];
         $post = Post::find($id);
         $tags = Tag::all();
+        $artists = Artist::all();
 
-        return view('admin.posts.edit', compact('post', 'tags', 'types'));
+        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists'));
     }
 
     /**
@@ -178,9 +190,14 @@ class PostController extends Controller
             $old_thumbnail = $post->thumbnail;
 
             $post->title = $request->title;
+            $post->song_romaji = $request ->song_romaji;
+            $post->song_jp = $request->song_jp;
+            $post->song_en = $request->song_en;
+            $post->artist_id = $request->artist_id;
             $post->type = $request->type;
 
             $post->ytlink = $request->ytlink;
+            $post->scndlink = $request->scndlink;
 
             $file_extension = $request->file->extension();
             //$file_mime_type = $request->file->getClientMimeType();
@@ -204,9 +221,14 @@ class PostController extends Controller
             $old_thumbnail = $post->thumbnail;
 
             $post->title = $request->title;
+            $post->song_romaji = $request ->song_romaji;
+            $post->song_jp = $request->song_jp;
+            $post->song_en = $request->song_en;
+            $post->artist_id = $request->artist_id;
             $post->type = $request->type;
 
             $post->ytlink = $request->ytlink;
+            $post->scndlink = $request->scndlink;
             if ($request->imagesrc == null) {
                 return redirect(route('admin.post.index'))->with('status', 'Post not created, images not founds');
             }

@@ -20,6 +20,7 @@ class Post extends Model
         'song_romaji',
         'song_jp',
         'song_en',
+        'artist_id',
         'imagesrc',
         'ytlink',
         'scndlink',
@@ -29,6 +30,6 @@ class Post extends Model
 
     public function artist()
     {
-        return $this->belongsTo(Artist::class);
+        return $this->belongsTo('App\Models\Artist');
     }
 }

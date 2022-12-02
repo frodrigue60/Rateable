@@ -145,10 +145,10 @@
                                     <div id="collapseTwo" class="accordion-collapse collapse"
                                         aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <h4>Song title: <strong>{{ $post->song_romaji }}</strong></h4>
-                                            <h4>Song title: <strong>{{ $post->song_jp }}</strong></h4>
-                                            <h4>Song title: <strong>{{ $post->song_en }}</strong></h4>
-                                            <h4>Song artist: <strong>a artist</strong></h4>
+                                            <h4>Song title (romaji): <strong>{{ $post->song_romaji }}</strong></h4>
+                                            <h4>Song title (JP): <strong>{{ $post->song_jp }}</strong></h4>
+                                            <h4>Song title (EN):<strong>{{ $post->song_en }}</strong></h4>
+                                            <h4>Song artist: <strong>{{ $post->artist->name }} ({{$post->artist->name_jp}})</strong></h4>
                                         </div>
                                     </div>
                                 </div>
