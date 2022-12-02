@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\CurrentSeasonController;
+use App\Http\Controllers\ArtistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/season/{id}/destroy',    [CurrentSeasonController::class, 'destroy'])->name('admin.season.destroy');
         Route::get('/season/{id}/edit',       [CurrentSeasonController::class, 'edit'])->name('admin.season.edit');
         Route::put('/season/{id}/update',    [CurrentSeasonController::class, 'update'])->name('admin.season.update');
+
+        //ARTISTS
+        Route::get('/artist/create',          [ArtistController::class, 'create'])->name('admin.artist.create');
+        Route::post('/artist/store',          [ArtistController::class, 'store'])->name('admin.artist.store');
+        Route::get('/artist/index',           [ArtistController::class, 'index'])->name('admin.artist.index');
+        Route::get('/artist/{id}/destroy',    [ArtistController::class, 'destroy'])->name('admin.artist.destroy');
+        Route::get('/artist/{id}/edit',       [ArtistController::class, 'edit'])->name('admin.artist.edit');
+        Route::put('/artist/{id}/update',    [ArtistController::class, 'update'])->name('admin.artist.update');
+        //END ARTISTS 
     });
 });
 

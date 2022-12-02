@@ -76,12 +76,18 @@ class PostController extends Controller
 
             return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has file');
         } else {
-
+            //dd($request->all());
             $post = new Post;
             $post->title = $request->title;
             $post->type = $request->type;
 
+            $post->song_romaji = $request->song_romaji;
+            $post->song_jp = $request->song_jp;
+            $post->song_en = $request->song_en;
+
+
             $post->ytlink = $request->ytlink;
+            $post->scndlink = $request->scndlink;
 
             if ($request->imagesrc == null) {
                 return Redirect::back()->with('status', 'Post not created, images not founds');
@@ -107,14 +113,22 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        if (Auth::check()) {
+        if (Auth::check() && Auth::user()->type == 'admin') {
             $score_format = Auth::user()->score_format;
             //dd($score_format);
             $post = Post::findOrFail($id);
             $tags = $post->tagged;
-
+            dd($post);
             return view('show', compact('post', 'tags', 'score_format'));
-        } else {
+        } 
+        if(Auth::check()){
+            $score_format = Auth::user()->score_format;
+            //dd($score_format);
+            $post = Post::findOrFail($id);
+            $tags = $post->tagged;
+            //dd($post);
+            return view('show', compact('post', 'tags', 'score_format'));
+        }else {
             $post = Post::findOrFail($id);
 
             $tags = $post->tagged;

@@ -22,6 +22,19 @@
                                 required>
                             <br>
 
+                            <label for="TitleInput" class="form-label">Song name (romaji)</label>
+                            <input type="text" class="form-control" placeholder="Title" id="song_romaji" name="song_romaji"
+                                required>
+                            <br>
+                            <label for="TitleInput" class="form-label">Song name (JP)</label>
+                            <input type="text" class="form-control" placeholder="Title" id="song_jp" name="song_jp"
+                                required>
+                            <br>
+                            <label for="TitleInput" class="form-label">Song name (EN)</label>
+                            <input type="text" class="form-control" placeholder="Title" id="song_en" name="song_en"
+                                required>
+                            <br>
+
                             <label for="TitleInput" class="form-label">Type:</label>
                             <select class="chzn-select" name="type" id="type" style="width:200px;">
                                 @foreach ($types as $type)
@@ -44,6 +57,10 @@
                             <label for="TitleInput" class="form-label">Youtube Embed</label>
                             <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink"
                                 name="ytlink">
+                            <br>
+                            <label for="TitleInput" class="form-label">Second Embed (optional)</label>
+                            <input type="text" class="form-control" placeholder="Second Embed (optional)" id="scndlink"
+                                name="scndlink">
                             <br>
                             <!-- <label for="TagInput" class="form-label">Title</label>
                                 <input type="text" class="form-control" id="TagInput" placeholder="Tag" id="tag"

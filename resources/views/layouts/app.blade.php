@@ -18,12 +18,14 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="shortcut icon" type="image/png" href="{{ asset('support.png') }}">
     <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css',])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
 <body style="background-color: #08263b;">
@@ -51,6 +53,8 @@
                                 <a class="nav-link active" aria-current="page" href="{{ route('admin.post.index') }}">Post
                                     index</a>
                                 <a class="nav-link active" aria-current="page" href="{{ route('admin.tags.index') }}">Tags
+                                    index</a>
+                                <a class="nav-link active" aria-current="page" href="{{ route('admin.artist.index') }}">Artist
                                     index</a>
                                 <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
                             @endif

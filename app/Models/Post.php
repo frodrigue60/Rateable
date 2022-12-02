@@ -17,9 +17,18 @@ class Post extends Model
 
     protected $fillable = [
         'title',
+        'song_romaji',
+        'song_jp',
+        'song_en',
         'imagesrc',
         'ytlink',
+        'scndlink',
         'type',
         'thumbnail',
     ];
+
+    public function artist()
+    {
+        return $this->belongsTo(Artist::class);
+    }
 }

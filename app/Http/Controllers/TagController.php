@@ -96,7 +96,6 @@ class TagController extends Controller
             ->where('id', $id)
             ->update(['name' => $name, 'slug' => $slug]);
 
-
         return redirect(route('admin.tags.index'))->with('status', 'Data has been updated');
     }
 
