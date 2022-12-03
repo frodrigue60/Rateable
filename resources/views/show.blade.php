@@ -15,49 +15,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-
-        {{-- IF GUEST --}}
-        @guest
-            <div class="col-10 mx-auto">
-                <div class="card">
-                    <div class="card-header row justify-content-between">
-                        <div class="col-12">
-                            <h5 class="card-title">{{ $post->title }}</h5>
-                        </div>
-                    </div>
-                    <div class="card-body ratio ratio-16x9">
-                        <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture muted;"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div class="card-footer row justify-content-between">
-                        <div class="col-9">
-                            <a name="" id="" class="btn btn-success" href="#" role="button">Spotify</a>
-                            <a name="" id="" class="btn btn-success" href="#" role="button">Apple
-                                Music</a>
-                        </div>
-                        <div class="col-md-auto">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop">
-                                More
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endguest
-
-        {{-- IF AUTH USER --}}
-        @auth
-            <div class="col-10 mx-auto">
+        
+            <div class="col-9 mx-auto">
                 <div class="card">
                     <div class="card-header row justify-content-between">
                         <div class="col-9">
                             <h5 class="card-title">{{ $post->title }}</i></h5>
                         </div>
                         <div class="col-md-auto">
-                            @if ($post->liked())
+                            @auth
+                                @if ($post->liked())
                                 <form action="{{ route('unlike.post', $post->id) }}" method="post">
                                     @csrf
                                     <button class="btn btn-danger" id="like">Favorite <i class="fa fa-heart"></i></button>
@@ -68,6 +35,8 @@
                                     <button class="btn btn-success" id="like">Favorite <i class="fa fa-heart"></i></button>
                                 </form>
                             @endif
+                            @endauth
+                            
                         </div>
                     </div>
                     <div class="card-body ratio ratio-16x9">
@@ -91,7 +60,6 @@
                     </div>
                 </div>
             </div>
-        @endauth
 
         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -154,16 +122,17 @@
                                             @isset($post->song_en)
                                                 <h4>Song title (EN): <strong>{{ $post->song_en }}</strong></h4>
                                             @endisset
+                                            @isset($post->artist->name)
+                                                <h4>Song artist: <strong><a href="{{route('fromartist',$artist->name_slug)}}" class="no-deco">{{ $post->artist->name }}</a></strong></h4>
+                                            @endisset
+                                            @isset($post->artist->name_jp)
+                                                <h4>Song artist (JP): <strong><a href="{{route('fromartist',$artist->name_slug)}}" class="no-deco">{{$post->artist->name_jp}}</a></strong></h4>
+                                            @endisset
                                             
-                                            
-                                            
-                                            <h4>Song artist: <strong><a href="{{route('fromartist',$artist->name_slug)}}">{{ $post->artist->name }} ({{$post->artist->name_jp}})</a></strong></h4>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
 
                         @auth
@@ -256,12 +225,52 @@
                         @endauth
                     </div>
                     <div class="modal-footer">
-                        
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         {{-- comment <button type="button" class="btn btn-primary">Save</button> --}}
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="container">
+        <section style="background-color: #5f71ad00;">
+            <div class="container my-5 py-5">
+              <div class="row d-flex justify-content-center">
+                <div class="col-md-12 col-lg-10">
+                  <div class="card text-dark">
+                    <div class="card-body p-4">
+                      <h4 class="mb-0">Recent comments</h4>
+                      {{--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>--}}
+                      <hr/>
+                      <div class="d-flex flex-start">
+                        <img class="rounded-circle shadow-1-strong me-3"
+                          src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
+                          height="60" />
+                        <div>
+                          <h6 class="fw-bold mb-1">Maggie Marsh</h6>
+                          <div class="d-flex align-items-center mb-3">
+                            <p class="mb-0">
+                              March 07, 2021
+                              <span class="badge bg-primary">Pending</span>
+                            </p>
+                            <a href="#!" class="link-muted"><i class="fa fa-pencil ms-2"></i></a>
+                            <a href="#!" class="link-muted"><i class="fa fa-repeat ms-2"></i></a>
+                            <a href="#!" class="link-muted"><i class="fa fa-heart ms-2"></i></a>
+                          </div>
+                          <p class="mb-0">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting
+                            industry. Lorem Ipsum has been the industry's standard dummy text ever
+                            since the 1500s, when an unknown printer took a galley of type and
+                            scrambled it.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <hr class="my-0" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
     </div>
 @endsection

@@ -8,23 +8,28 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
     <meta title="Search, play, and rate the openings and endings of your favorite animes.">
     <meta name="description"
         content="The site you were looking for to rate openings and endings of your favorite animes.">
-    <meta name="keywords" content="anime, openings, endings, ranking, rate" />
+    <meta name="keywords" content="anime, openings, endings, ranking, rating" />
     <meta name="robots" content="index,nofollow" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('support.png') }}">
+    <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('support.png') }}">
-    <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">
+    <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/app.css'])
+    {{-- comm@vite(['resources/sass/app.scss', 'resources/js/app.js']) ent --}}
 </head>
 
 <body style="background-color: #08263b;">
