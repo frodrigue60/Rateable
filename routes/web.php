@@ -17,19 +17,20 @@ use App\Http\Controllers\ArtistController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//POST PUBLIC
 Route::get('/',       [PostController::class, 'home'])->name('/');
+Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/ranking',       [PostController::class, 'ranking'])->name('ranking');
-
 Route::get('/search', [PostController::class, 'search'])->name('search');
 
 //TAGS PUBLIC 
 Route::get('/tags',          [TagController::class, 'alltags'])->name('tags');
 Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromtag');
 
-//POST PUBLIC
-Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
+//ARTIST PUBLIC
+Route::get('/artist/{slug}',    [ArtistController::class, 'artist_slug'])->name('fromartist');
+
 
 
 Route::group(['middleware' => 'auth'], function () {

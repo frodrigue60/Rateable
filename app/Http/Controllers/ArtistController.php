@@ -3,7 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use willvincent\Rateable\Rateable;
 
 class ArtistController extends Controller
 {
@@ -38,10 +43,12 @@ class ArtistController extends Controller
     {
         $name = $request->name;
         $name_jp = $request->name_jp;
+        $name_slug = Str::slug($name);
 
         $artist = new Artist();
         $artist->name = $name;
         $artist->name_jp = $name_jp;
+        $artist->name_slug = $name_slug;
         $artist->save();
         return redirect(route('admin.artist.index'))->with('status', 'Data Has Been Inserted Successfully');
     }
@@ -81,9 +88,11 @@ class ArtistController extends Controller
         $artist = Artist::find($id);
         $name = $request->name;
         $name_jp = $request->name_jp;
+        $name_slug = Str::slug($name);
 
         $artist->name = $name;
         $artist->name_jp = $name_jp;
+        $artist->name_slug = $name_slug;
         
         $artist->update();
         //$artist->update($request->all());
@@ -101,5 +110,25 @@ class ArtistController extends Controller
         $artist = Artist::find($id);
         $artist->delete();
         return redirect(route('admin.artist.index'))->with('status', 'Data deleted');
+    }
+
+    public function artist_slug($name_slug){
+        $artist = Artist::where('name_slug', $name_slug)->first();
+
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+        
+        $openings = Post::where('artist_id', '=', $artist->id)
+        ->where('type', '=', 'op')
+        ->get();
+
+        $endings = Post::where('artist_id', '=', $artist->id)
+        ->where('type', '=', 'ed')
+        ->get();
+        
+        return view('fromartist', compact('openings', 'endings', 'score_format','artist'));
     }
 }

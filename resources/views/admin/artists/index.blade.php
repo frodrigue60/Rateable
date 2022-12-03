@@ -37,7 +37,7 @@
                             <tr>
 
                                 <td>{{ $artist->id }}</td>
-                                <td><a href="{{ $artist->name }}" class="no-deco">{{ $artist->name }}</a>
+                                <td><a href="{{ route('fromartist',$artist->name_slug) }}" class="no-deco">{{ $artist->name }}</a>
                                 </td>
                                 <td>{{ $artist->name_jp }}</td>
                                 <td>

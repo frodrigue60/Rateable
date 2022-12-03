@@ -28,12 +28,10 @@
                                 required>
                             <br>
                             <label for="TitleInput" class="form-label">Song name (JP)</label>
-                            <input type="text" class="form-control" value="{{$post->song_jp}}" id="song_jp" name="song_jp"
-                                required>
+                            <input type="text" class="form-control" value="{{$post->song_jp}}" id="song_jp" name="song_jp">
                             <br>
                             <label for="TitleInput" class="form-label">Song name (EN)</label>
-                            <input type="text" class="form-control" value="{{$post->song_en}}" id="song_en" name="song_en"
-                                required>
+                            <input type="text" class="form-control" value="{{$post->song_en}}" id="song_en" name="song_en">
                             <br>
                             <label for="TitleInput" class="form-label">Artist</label>
                             <select class="chzn-select" name="artist_id" id="artist_id" style="width:200px;">

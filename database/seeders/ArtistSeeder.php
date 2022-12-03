@@ -17,12 +17,15 @@ class ArtistSeeder extends Seeder
     public function run()
     {
         for ($i = 0; $i < 10; $i++) {
-            $name = Str::random(6);
+            $name = Str::random(5).' '.Str::random(5);
             $name_jp = Str::random(6);
+            $name_slug = Str::slug($name);
+
             DB::table('artists')->insert([
 
                 'name' => $name,
                 'name_jp' => $name_jp,
+                'name_slug' => $name_slug
 
             ]);
         }

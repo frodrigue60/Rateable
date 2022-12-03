@@ -51,7 +51,7 @@
                                         </td>
                                         <td>{{ $post->type }}</td>
                                         <td>{{ $post->song_romaji}}</td>
-                                        <td>{{ $post->artist->name }}</td>
+                                        <td><a href="{{ route('fromartist',$post->artist->name_slug) }}">{{ $post->artist->name }}</a></td>
                                         <td>
                                             <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"
                                                     class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit {{ $post->id }}</button></a>
