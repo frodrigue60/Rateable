@@ -145,10 +145,19 @@
                                     <div id="collapseTwo" class="accordion-collapse collapse"
                                         aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            <h4>Song title (romaji): <strong>{{ $post->song_romaji }}</strong></h4>
-                                            <h4>Song title (JP): <strong>{{ $post->song_jp }}</strong></h4>
-                                            <h4>Song title (EN):<strong>{{ $post->song_en }}</strong></h4>
-                                            <h4>Song artist: <strong>{{ $post->artist->name }} ({{$post->artist->name_jp}})</strong></h4>
+                                            @isset($post->song_romaji)
+                                                <h4>Song title (romaji): <strong>{{ $post->song_romaji }}</strong></h4>
+                                            @endisset
+                                            @isset($post->song_jp)
+                                                <h4>Song title (JP): <strong>{{ $post->song_jp }}</strong></h4>
+                                            @endisset
+                                            @isset($post->song_en)
+                                                <h4>Song title (EN): <strong>{{ $post->song_en }}</strong></h4>
+                                            @endisset
+                                            
+                                            
+                                            
+                                            <h4>Song artist: <strong><a href="{{route('fromartist',$artist->name_slug)}}">{{ $post->artist->name }} ({{$post->artist->name_jp}})</a></strong></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -247,6 +256,7 @@
                         @endauth
                     </div>
                     <div class="modal-footer">
+                        
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         {{-- comment <button type="button" class="btn btn-primary">Save</button> --}}
                     </div>

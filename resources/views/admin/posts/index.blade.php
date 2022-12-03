@@ -50,13 +50,24 @@
 
                                         </td>
                                         <td>{{ $post->type }}</td>
-                                        <td>{{ $post->song_romaji}}</td>
-                                        <td><a href="{{ route('fromartist',$post->artist->name_slug) }}">{{ $post->artist->name }}</a></td>
+                                        <td>
+                                            @isset($post->song_romaji)
+                                                {{ $post->song_romaji }}
+                                            @endisset
+                                            @isset($post->song_en)
+                                                ({{ $post->song_en }})
+                                            @endisset
+                                        </td>
+                                        <td><a
+                                                href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
+                                        </td>
                                         <td>
                                             <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"
-                                                    class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit {{ $post->id }}</button></a>
+                                                    class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o"
+                                                        aria-hidden="true"></i> Edit {{ $post->id }}</button></a>
                                             <a href="{{ route('admin.post.destroy', $post->id) }}"><button type="button"
-                                                    class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Delete {{ $post->id }}</button></a>
+                                                    class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                                                        aria-hidden="true"></i> Delete {{ $post->id }}</button></a>
                                         </td>
                                     </tr>
                                 @endforeach

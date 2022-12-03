@@ -127,8 +127,8 @@ class PostController extends Controller
             $post = Post::findOrFail($id);
             $artist = $post->artist;
             $tags = $post->tagged;
-            dd($post);
-            return view('show', compact('post', 'tags', 'score_format'));
+            //dd($post);
+            return view('show', compact('post', 'tags', 'score_format','artist'));
         } 
         if(Auth::check()){
             $score_format = Auth::user()->score_format;
@@ -137,7 +137,7 @@ class PostController extends Controller
             $tags = $post->tagged;
             $artist = $post->artist;
             //dd($post);
-            return view('show', compact('post', 'tags', 'score_format'));
+            return view('show', compact('post', 'tags', 'score_format','artist'));
         }else {
             $post = Post::findOrFail($id);
 
@@ -146,7 +146,7 @@ class PostController extends Controller
 
             //$userid = Auth::user()->id;
 
-            return view('show', compact('post', 'tags'));
+            return view('show', compact('post', 'tags','artist'));
         }
         return view('show', compact('post', 'tags'));
     }

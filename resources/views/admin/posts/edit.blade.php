@@ -24,8 +24,7 @@
                             <br>
 
                             <label for="TitleInput" class="form-label">Song name (romaji)</label>
-                            <input type="text" class="form-control" value="{{$post->song_romaji}}" id="song_romaji" name="song_romaji"
-                                required>
+                            <input type="text" class="form-control" value="{{$post->song_romaji}}" id="song_romaji" name="song_romaji">
                             <br>
                             <label for="TitleInput" class="form-label">Song name (JP)</label>
                             <input type="text" class="form-control" value="{{$post->song_jp}}" id="song_jp" name="song_jp">
