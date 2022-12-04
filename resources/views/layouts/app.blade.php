@@ -2,17 +2,19 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <title>Anirank</title>
+    <!-- -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{-- comment <meta title="Search, play, and rate the openings and endings of your favorite animes."> --}}
+    <meta name="description" content="The site you were looking for to rate openings and endings of your favorite animes.">
+    <meta name="keywords" content="anime, openings, endings, ranking, rating" />
+    <meta name="robots" content="index, nofollow" />
+    <meta name="Author" lang="es" content="Luis Rodz" />
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <meta title="Search, play, and rate the openings and endings of your favorite animes.">
-    <meta name="description"
-        content="The site you were looking for to rate openings and endings of your favorite animes.">
-    <meta name="keywords" content="anime, openings, endings, ranking, rating" />
-    <meta name="robots" content="index,nofollow" />
     <link rel="shortcut icon" type="image/png" href="{{ asset('support.png') }}">
     <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">
 
@@ -22,14 +24,14 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    {{-- comment <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.css"> --}}
 
     <!-- JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- comment <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.js"></script>--}}
 
     <!-- Scripts -->
-    {{-- comm@vite(['resources/sass/app.scss', 'resources/js/app.js']) ent --}}
+    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/app.css'])
 </head>
 
 <body style="background-color: #08263b;">
@@ -37,7 +39,7 @@
         <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #0e3d5f;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('support.png') }}" alt="Bootstrap" width="25" height="25">
+                    <img src="{{ asset('ar.svg') }}" alt="Logo" width="50" height="25">
                     {{ config('app.name', 'Laravel') }} {{--   - {{ str_replace('_', '-', app()->getLocale()) }} --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -58,7 +60,8 @@
                                     index</a>
                                 <a class="nav-link active" aria-current="page" href="{{ route('admin.tags.index') }}">Tags
                                     index</a>
-                                <a class="nav-link active" aria-current="page" href="{{ route('admin.artist.index') }}">Artist
+                                <a class="nav-link active" aria-current="page"
+                                    href="{{ route('admin.artist.index') }}">Artist
                                     index</a>
                                 <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
                             @endif
