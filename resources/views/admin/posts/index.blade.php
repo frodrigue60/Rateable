@@ -13,7 +13,7 @@
                 <div class="card bg-dark">
                     {{-- CARD HEADER --}}
                     <div class="card-header">
-                        <a class="btn btn-sm btn-primary" href="{{ route('admin.post.create') }}">CREATE</a>
+                        <a class="btn btn-sm btn-primary" href="{{ route('admin.post.create') }}">CREATE POST</a>
                     </div>
                     {{-- CARD BODY --}}
                     <div class="card-body">

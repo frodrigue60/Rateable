@@ -34,7 +34,7 @@
                             <br>
                             <label for="TitleInput" class="form-label">Artist</label>
                             <select class="chzn-select" name="artist_id" id="artist_id" style="width:200px;">
-                                <option value="null">Select a artist</option>
+                                <option value="{{$post->artist->id}}">{{$post->artist->name}}</option>
                                 @foreach ($artists as $artist)
                                     <option value="{{ $artist->id }}">{{ $artist->name }}</option>
                                 @endforeach
@@ -68,7 +68,7 @@
                             <br>
                             <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:200px;">
                                 @foreach ($tags as $tag)
-                                    <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                    <option selected value="{{ $tag->name }}">{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                             <br>

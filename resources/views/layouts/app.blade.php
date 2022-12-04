@@ -15,7 +15,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="shortcut icon" type="image/png" href="{{ asset('support.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('support.png') }}">
     <link rel="shortcut icon" sizes="192x192" href="{{ asset('support.png') }}">
 
     <!-- Fonts -->

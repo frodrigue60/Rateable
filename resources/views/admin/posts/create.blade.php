@@ -11,7 +11,7 @@
                     </div>
                 @endif
                 <div class="card">
-                    <div class="card-header">Create.blade.php</div>
+                    <div class="card-header">Create Post</div>
 
                     <div class="card-body">
                         <form name="add-blog-post-form" id="add-blog-post-form" method="post"
@@ -23,7 +23,8 @@
                             <br>
 
                             <label for="TitleInput" class="form-label">Song name (romaji)</label>
-                            <input type="text" class="form-control" placeholder="Title" id="song_romaji" name="song_romaji">
+                            <input type="text" class="form-control" placeholder="Title" id="song_romaji"
+                                name="song_romaji">
                             <br>
                             <label for="TitleInput" class="form-label">Song name (JP)</label>
                             <input type="text" class="form-control" placeholder="Title" id="song_jp" name="song_jp">
@@ -31,22 +32,25 @@
                             <label for="TitleInput" class="form-label">Song name (EN)</label>
                             <input type="text" class="form-control" placeholder="Title" id="song_en" name="song_en">
                             <br>
-                            <label for="TitleInput" class="form-label">Artist</label>
-                            <select class="chzn-select" name="artist_id" id="artist_id" style="width:200px;">
-                                <option value="null">Select a artist</option>
-                                @foreach ($artists as $artist)
-                                    <option value="{{ $artist->id }}">{{ $artist->name }}</option>
-                                @endforeach
-                            </select>
-                            <br>
-
-                            <label for="TitleInput" class="form-label">Type:</label>
-                            <select class="chzn-select" name="type" id="type" style="width:200px;">
-                                @foreach ($types as $type)
-                                    <option value="{{ $type }}">{{ $type }}</option>
-                                @endforeach
-                            </select>
-                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="TitleInput" class="form-label">Artist</label>
+                                    <select class="chzn-select" name="artist_id" id="artist_id" style="width:100%;">
+                                        <option value="null">Select a artist</option>
+                                        @foreach ($artists as $artist)
+                                            <option value="{{ $artist->id }}">{{ $artist->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="TitleInput" class="form-label">Type:</label>
+                                    <select class="chzn-select" name="type" id="type" style="width:100%;">
+                                        @foreach ($types as $type)
+                                            <option value="{{ $type }}">{{ $type }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <br>
                             <label for="TitleInput" class="form-label">Image Source</label>
                             <input type="text" class="form-control" placeholder="Image link" id="imagesrc"
@@ -65,7 +69,8 @@
                             <input type="text" class="form-control" placeholder="Second Embed (optional)" id="scndlink"
                                 name="scndlink">
                             <br>
-                            <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:200px;">
+                            <label for="tags">Select season</label>
+                            <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:100%;">
                                 @foreach ($tags as $tag)
                                     <option value="{{ $tag->name }}">{{ $tag->name }}</option>
                                 @endforeach
@@ -73,8 +78,6 @@
                             <br>
                             <br>
                             <button class="btn btn-primary" type="submit">Submit</button>
-                            <br>
-
                     </div>
                     </form>
                 </div>

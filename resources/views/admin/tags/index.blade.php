@@ -13,7 +13,7 @@
         <div class="card bg-dark">
             {{-- CARD HEADER --}}
             <div class="card-header">
-                <a class="btn btn-primary btn-sm" href="{{ route('admin.tags.create') }}" role="button">CREATE</a>
+                <a class="btn btn-primary btn-sm" href="{{ route('admin.tags.create') }}" role="button">CREATE TAG</a>
             </div>
             {{-- CARD BODY --}}
             <div class="card-body">
@@ -35,23 +35,19 @@
 
                         @foreach ($tags as $tag)
                             <tr>
-
                                 <td>{{ $tag->id }}</td>
                                 <td><a href="{{ route('fromtag', $tag->slug) }}" class="no-deco">{{ $tag->name }}</a>
                                 </td>
                                 <td>{{ $tag->slug }}</td>
                                 <td>
                                     @auth
-                                        <a class="btn btn-danger btn-sm" href="/admin/tags/{{ $tag->id }}/destroy"
-                                            role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete {{$tag->id}}</a>
                                         <a class="btn btn-success btn-sm" href="/admin/tags/{{ $tag->id }}/edit"
-                                            role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit {{$tag->id}}</a>
+                                            role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
+                                            {{ $tag->id }}</a>
+                                        <a class="btn btn-danger btn-sm" href="/admin/tags/{{ $tag->id }}/destroy"
+                                            role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                            {{ $tag->id }}</a>
                                     @endauth
-
-                                    @guest
-                                        <a class="btn btn-danger disabled" href="#" role="button">Delete</a>
-                                        <a class="btn btn-success disabled" href="#" role="button">Edit</a>
-                                    @endguest
                                 </td>
                         @endforeach
 
