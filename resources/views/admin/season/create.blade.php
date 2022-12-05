@@ -8,12 +8,12 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        Create current season
+                        Create the current season
                     </div>
                     <div class="card-body">
-                        <form name="add-blog-post-form" id="add-blog-post-form" method="post"
-                            action="{{ route('admin.season.store') }}" enctype="multipart/form-data">
+                        <form method="post" action="{{ route('admin.season.store') }}" enctype="multipart/form-data">
                             @csrf
+                            <label for="season">Select Season</label>
                             <select class="chzn-select" name="season" id="season" style="width:100%;">
                                 @foreach ($seasons as $season)
                                     <option value="{{ $season->name }}">{{ $season->name }}</option>

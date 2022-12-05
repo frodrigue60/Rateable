@@ -51,7 +51,7 @@
                                 <div class="input-group">
                                     <select name="score_format" class="form-select" id="inputGroupSelect04"
                                         aria-label="Example select with button addon">
-                                        <option value="null" selected>Select Scoring System</option>
+                                        <option value="" selected>Select Scoring System</option>
                                         <option value="POINT_100">100 Point (55/100)</option>
                                         <option value="POINT_10_DECIMAL">10 Point Decimal (5.5/10)</option>
                                         <option value="POINT_10">10 Point (5/10)</option>

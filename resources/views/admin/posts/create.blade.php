@@ -14,28 +14,28 @@
                     <div class="card-header">Create Post</div>
 
                     <div class="card-body">
-                        <form name="add-blog-post-form" id="add-blog-post-form" method="post"
+                        <form method="post"
                             action="{{ route('admin.post.store') }}" enctype="multipart/form-data">
                             @csrf
-                            <label for="TitleInput" class="form-label">Title</label>
-                            <input type="text" class="form-control" placeholder="Title" id="title" name="title"
+                            <label for="titleAnime" class="form-label">Title</label>
+                            <input type="text" class="form-control" placeholder="Anime Title" id="titleAnime" name="title"
                                 required>
                             <br>
 
-                            <label for="TitleInput" class="form-label">Song name (romaji)</label>
-                            <input type="text" class="form-control" placeholder="Title" id="song_romaji"
+                            <label for="songRomaji" class="form-label">Song name (romaji)</label>
+                            <input type="text" class="form-control" placeholder="Song Name Romaji" id="songRomaji"
                                 name="song_romaji">
                             <br>
-                            <label for="TitleInput" class="form-label">Song name (JP)</label>
-                            <input type="text" class="form-control" placeholder="Title" id="song_jp" name="song_jp">
+                            <label for="songJp" class="form-label">Song name (JP)</label>
+                            <input type="text" class="form-control" placeholder="Song Name JP" id="songJp" name="song_jp">
                             <br>
-                            <label for="TitleInput" class="form-label">Song name (EN)</label>
-                            <input type="text" class="form-control" placeholder="Title" id="song_en" name="song_en">
+                            <label for="songEn" class="form-label">Song name (EN)</label>
+                            <input type="text" class="form-control" placeholder="Song Name EN" id="songEn" name="song_en">
                             <br>
                             <div class="row">
                                 <div class="col">
-                                    <label for="TitleInput" class="form-label">Artist</label>
-                                    <select class="chzn-select" name="artist_id" id="artist_id" style="width:100%;">
+                                    <label for="ArtistId" class="form-label">Artist</label>
+                                    <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
                                         <option value="null">Select a artist</option>
                                         @foreach ($artists as $artist)
                                             <option value="{{ $artist->id }}">{{ $artist->name }}</option>
@@ -43,7 +43,7 @@
                                     </select>
                                 </div>
                                 <div class="col">
-                                    <label for="TitleInput" class="form-label">Type:</label>
+                                    <label for="type" class="form-label">Type:</label>
                                     <select class="chzn-select" name="type" id="type" style="width:100%;">
                                         @foreach ($types as $type)
                                             <option value="{{ $type }}">{{ $type }}</option>
@@ -52,20 +52,20 @@
                                 </div>
                             </div>
                             <br>
-                            <label for="TitleInput" class="form-label">Image Source</label>
-                            <input type="text" class="form-control" placeholder="Image link" id="imagesrc"
+                            <label for="imageSrc" class="form-label">Image Source Url</label>
+                            <input type="text" class="form-control" placeholder="Image link" id="imageSrc"
                                 name="imagesrc">
                             <br>
                             <div class="mb-3">
-                                <label for="formFile" class="form-label">Default file input example</label>
+                                <label for="formFile" class="form-label">Upload Image Thumbnail</label>
                                 <input class="form-control" type="file" id="formFile" name="file">
                             </div>
                             <br>
-                            <label for="TitleInput" class="form-label">Youtube Embed</label>
+                            <label for="ytlink" class="form-label">Youtube Embed</label>
                             <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink"
                                 name="ytlink">
                             <br>
-                            <label for="TitleInput" class="form-label">Second Embed (optional)</label>
+                            <label for="scndlink" class="form-label">Second Embed (optional)</label>
                             <input type="text" class="form-control" placeholder="Second Embed (optional)" id="scndlink"
                                 name="scndlink">
                             <br>

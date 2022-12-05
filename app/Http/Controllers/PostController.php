@@ -132,23 +132,17 @@ class PostController extends Controller
         } 
         if(Auth::check()){
             $score_format = Auth::user()->score_format;
-            //dd($score_format);
             $post = Post::findOrFail($id);
             $tags = $post->tagged;
             $artist = $post->artist;
-            //dd($post);
             return view('show', compact('post', 'tags', 'score_format','artist'));
         }else {
             $post = Post::findOrFail($id);
-
             $tags = $post->tagged;
             $artist = $post->artist;
 
-            //$userid = Auth::user()->id;
-
             return view('show', compact('post', 'tags','artist'));
         }
-        return view('show', compact('post', 'tags'));
     }
 
     /**
@@ -210,7 +204,6 @@ class PostController extends Controller
             $post->thumbnail = $file_name;
 
             $request->file->storeAs('thumbnails', $file_name, 'public');
-
             $post->save();
 
             $tags = $request->tags;
@@ -441,7 +434,7 @@ class PostController extends Controller
                         return redirect()->back()->with('status', 'Only values between 1 and 100');
                     }
                     break;
-                    break;
+                    
 
                 default:
                     settype($score, "integer");

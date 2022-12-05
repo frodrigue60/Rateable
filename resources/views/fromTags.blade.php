@@ -2,6 +2,9 @@
 
 @section('content')
     <div class="container">
+        <div class="container text-center text-light">
+            <h1>{{$tagName->name}}</h1>
+        </div>
         <div>
             <h2 class="text-light" style="background-color: #0e3d5f">OPENINGS</h2>
         </div>

@@ -13,7 +13,7 @@
         <div class="card bg-dark">
             {{-- CARD HEADER --}}
             <div class="card-header">
-                <a class="btn btn-primary btn-sm" href="{{ route('admin.artist.create') }}" role="button">CREATE</a>
+                <a class="btn btn-primary btn-sm" href="{{ route('admin.artist.create') }}" role="button">CREATE ARTIST</a>
             </div>
             {{-- CARD BODY --}}
             <div class="card-body">

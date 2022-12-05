@@ -8,16 +8,17 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-footer">
-                        Edit Current Season
+                        Edit the Current Season
                     </div>
                     <div class="card-body">
-                        <form name="add-blog-post-form" id="add-blog-post-form" method="post"
+                        <form method="post"
                             action="{{ route('admin.season.update', $season->id) }}" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
+                            <label for="season">Select Season</label>
                             <select class="chzn-select" name="season" id="season" style="width:50%;">
                                 @foreach ($seasons as $season)
-                                    <option value="{{ $season->name }}">{{ $season->name }}</option>
+                                    <option selected value="{{ $season->name }}">{{ $season->name }}</option>
                                 @endforeach
                             </select>
                             <br>

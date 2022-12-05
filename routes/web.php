@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\CurrentSeasonController;
 use App\Http\Controllers\ArtistController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ use App\Http\Controllers\ArtistController;
 */
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'home'])->name('/');
+Route::get('/welcome',       [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/ranking',       [PostController::class, 'ranking'])->name('ranking');
@@ -26,7 +28,7 @@ Route::get('/search', [PostController::class, 'search'])->name('search');
 
 //TAGS PUBLIC 
 Route::get('/tags',          [TagController::class, 'alltags'])->name('tags');
-Route::get('/tag/{slug}',           [TagController::class, 'slug'])->name('fromtag');
+Route::get('/tag/{slug}',           [TagController::class, 'tag_slug'])->name('fromtag');
 
 //ARTIST PUBLIC
 Route::get('/artist/{slug}',    [ArtistController::class, 'artist_slug'])->name('fromartist');

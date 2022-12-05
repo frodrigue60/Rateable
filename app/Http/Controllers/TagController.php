@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -112,26 +113,28 @@ class TagController extends Controller
         return redirect(route('admin.tags.index'))->with('status', 'Data deleted');
     }
 
-    public function slug($name)
+    public function tag_slug($slug)
     {
+        $tagName = DB::table('tagging_tags')->where('slug','=', $slug)->first();
+        //dd($tagName);
+
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {
             $score_format = null;
         }
-        $openings = Post::withAnyTag([$name])
+        $openings = Post::withAnyTag([$slug])
             ->where('type', 'op')
             ->orderby('title', 'asc')
-            ->get();; // fetch articles with any tag listed
+            ->get();
 
-        //$tags = DB::table('tagging_tags')->get();
-        $endings = Post::withAnyTag([$name])
+        $endings = Post::withAnyTag([$slug])
             ->where('type', 'ed')
             ->orderby('title', 'asc')
             ->get();
 
-        //dd($endings,$openings);
-        return view('fromTags', compact('openings', 'endings', 'score_format'));
+        
+        return view('fromTags', compact('openings', 'endings', 'score_format', 'tagName'));
     }
 
     public function alltags()

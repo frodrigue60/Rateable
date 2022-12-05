@@ -11,24 +11,25 @@
                         Edit Artist
                     </div>
                     <div class="card-body">
-                        <form name="add-blog-post-form" id="add-blog-post-form" method="post"
-            action="{{ route('admin.artist.update', $artist->id) }}" enctype="multipart/form-data">
-            @method('PUT')
-            @csrf
+                        <form method="post" action="{{ route('admin.artist.update', $artist->id) }}"
+                            enctype="multipart/form-data">
+                            @method('PUT')
+                            @csrf
 
-            <div class="form-group">
-                <label for="exampleInputEmail1">Artist Name</label>
-                <input type="text" id="name" name="name" class="form-control" required=""
-                    value="{{ $artist->name }}">
-            </div>
-            <br>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Artist Name (JP)</label>
-                <input type="text" id="name_jp" name="name_jp" class="form-control" value="{{ $artist->name_jp }}">
-            </div>
-            <br>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+                            <div class="form-group">
+                                <label for="nameArtist">Artist Name</label>
+                                <input type="text" id="nameArtist" name="name" class="form-control" required=""
+                                    value="{{ $artist->name }}">
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <label for="nameArtistJp">Artist Name (JP)</label>
+                                <input type="text" id="nameArtistJp" name="name_jp" class="form-control"
+                                    value="{{ $artist->name_jp }}">
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
                     </div>
                     <div class="card-footer">
 

@@ -39,8 +39,8 @@
         <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #0e3d5f;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('ar.svg') }}" alt="Logo" width="50" height="25">
-                    {{ config('app.name', 'Laravel') }} {{--   - {{ str_replace('_', '-', app()->getLocale()) }} --}}
+                    <img src="{{ asset('text4491.png') }}" alt="Logo" width="157" height="25">
+                    {{-- {{ config('app.name', 'Laravel') }}    - {{ str_replace('_', '-', app()->getLocale()) }} --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -51,6 +51,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
+                        <a class="nav-link active" href="{{ route('/') }}">Openings</a>
                         <a class="nav-link active" href="{{ route('endings') }}">Endings</a>
 
                         @auth

@@ -17,8 +17,8 @@
                             @method('PUT')
                             @csrf
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Name</label>
-                                <input type="text" id="name" name="name" class="form-control" required=""
+                                <label for="seasonName">Season Name</label>
+                                <input type="text" id="seasonName" name="name" class="form-control" required=""
                                     value="{{ $tag->name }}">
                             </div>
 

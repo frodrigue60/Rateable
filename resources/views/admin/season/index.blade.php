@@ -18,7 +18,7 @@
 
         <div class="card bg-dark text-light">
             <div class="card-header">
-                <a class="btn btn-sm btn-primary" href="{{ route('admin.season.create') }}" role="button">CREATE</a>
+                <a class="btn btn-sm btn-primary" href="{{ route('admin.season.create') }}" role="button">CREATE SEASON</a>
             </div>
 
             <div class="card-body">
