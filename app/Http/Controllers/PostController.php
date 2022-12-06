@@ -36,7 +36,7 @@ class PostController extends Controller
         $types = ['op', 'ed'];
         $tags = Tag::all();
         $artists = Artist::all();
-        return view('admin.posts.create', compact('tags', 'types','artists'));
+        return view('admin.posts.create', compact('tags', 'types', 'artists'));
     }
 
     /**
@@ -59,7 +59,7 @@ class PostController extends Controller
 
             $post = new Post;
             $post->title = $request->title;
-            $post->song_romaji = $request ->song_romaji;
+            $post->song_romaji = $request->song_romaji;
             $post->song_jp = $request->song_jp;
             $post->song_en = $request->song_en;
             $post->artist_id = $request->artist_id;
@@ -123,25 +123,25 @@ class PostController extends Controller
     {
         if (Auth::check() && Auth::user()->type == 'admin') {
             $score_format = Auth::user()->score_format;
-            
+
             $post = Post::findOrFail($id);
             $artist = $post->artist;
             $tags = $post->tagged;
             //dd($post);
-            return view('show', compact('post', 'tags', 'score_format','artist'));
-        } 
-        if(Auth::check()){
+            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+        }
+        if (Auth::check()) {
             $score_format = Auth::user()->score_format;
             $post = Post::findOrFail($id);
             $tags = $post->tagged;
             $artist = $post->artist;
-            return view('show', compact('post', 'tags', 'score_format','artist'));
-        }else {
+            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+        } else {
             $post = Post::findOrFail($id);
             $tags = $post->tagged;
             $artist = $post->artist;
 
-            return view('show', compact('post', 'tags','artist'));
+            return view('show', compact('post', 'tags', 'artist'));
         }
     }
 
@@ -184,7 +184,7 @@ class PostController extends Controller
             $old_thumbnail = $post->thumbnail;
 
             $post->title = $request->title;
-            $post->song_romaji = $request ->song_romaji;
+            $post->song_romaji = $request->song_romaji;
             $post->song_jp = $request->song_jp;
             $post->song_en = $request->song_en;
             $post->artist_id = $request->artist_id;
@@ -214,7 +214,7 @@ class PostController extends Controller
             $old_thumbnail = $post->thumbnail;
 
             $post->title = $request->title;
-            $post->song_romaji = $request ->song_romaji;
+            $post->song_romaji = $request->song_romaji;
             $post->song_jp = $request->song_jp;
             $post->song_en = $request->song_en;
             $post->artist_id = $request->artist_id;
@@ -434,7 +434,7 @@ class PostController extends Controller
                         return redirect()->back()->with('status', 'Only values between 1 and 100');
                     }
                     break;
-                    
+
 
                 default:
                     settype($score, "integer");
@@ -499,17 +499,61 @@ class PostController extends Controller
     public function search(Request $request)
     {
         if ($request->input('search') != null) {
-            $openings = Post::query()
-                ->where('title', 'LIKE', "%{$request->input('search')}%")
-                ->where('type', '=', 'op')
-                ->get();
 
-            $endings = Post::query()
-                ->where('title', 'LIKE', "%{$request->input('search')}%")
-                ->where('type', '=', 'ed')
-                ->get();
+            $type_search = $request->search_type;
+            switch ($type_search) {
+                case 'op':
+                    $openings = Post::query()
+                        ->where('title', 'LIKE', "%{$request->input('search')}%")
+                        ->where('type', '=', 'op')
+                        ->get();
+                    return view('fromTags', compact('openings'));
+                    break;
 
-            return view('fromTags', compact('openings', 'endings'));
+                case 'ed':
+                    $endings = Post::query()
+                        ->where('title', 'LIKE', "%{$request->input('search')}%")
+                        ->where('type', '=', 'ed')
+                        ->get();
+                    return view('fromTags', compact('endings'));
+                    break;
+
+                case 'artist':
+                    $artist = Artist::where('name', 'LIKE', "%{$request->input('search')}%")
+                        ->first();
+                    if ($artist === null) {
+                        return view('fromTags');
+                    }
+
+                    $openings = Post::query()
+                        ->where('artist_id', '=', $artist->id)
+                        ->where('type', '=', 'op')
+                        ->get();
+
+                    $endings = Post::query()
+                        ->where('artist_id', '=', $artist->id)
+                        ->where('type', '=', 'ed')
+                        ->get();
+                    return view('fromTags', compact('openings', 'endings', 'artist'));
+                    break;
+
+                default:
+                    $openings = Post::query()
+                        ->where('title', 'LIKE', "%{$request->input('search')}%")
+                        ->where('type', '=', 'op')
+                        ->get()
+                        ->take(20);
+
+                    $endings = Post::query()
+                        ->where('title', 'LIKE', "%{$request->input('search')}%")
+                        ->where('type', '=', 'ed')
+                        ->get()
+                        ->take(20);
+
+                    return view('fromTags', compact('openings', 'endings'));
+
+                    break;
+            }
         }
         return redirect()->route('/')->with('status', 'Search a value');
     }
@@ -530,18 +574,12 @@ class PostController extends Controller
 
     public function ranking()
     {
-        //if current season doesnt exist
         $currentSeason = DB::table('current_season')->first();
-        //dd($currentSeason);
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {
             $score_format = null;
         }
-
-
-
-
         if ($currentSeason == null) {
             $op_count = Post::where('type', 'op')->count();
             $ed_count = Post::where('type', 'ed')->count();

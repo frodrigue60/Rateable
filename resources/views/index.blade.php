@@ -8,7 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
-    @endif
+    @endif          
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)

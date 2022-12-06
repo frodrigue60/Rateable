@@ -7,7 +7,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- comment <meta title="Search, play, and rate the openings and endings of your favorite animes."> --}}
-    <meta name="description" content="The site you were looking for to rate openings and endings of your favorite animes.">
+    <meta name="description"
+        content="The site you were looking for to rate openings and endings of your favorite animes.">
     <meta name="keywords" content="anime, openings, endings, ranking, rating" />
     <meta name="robots" content="index, nofollow" />
     <meta name="Author" lang="es" content="Luis Rodz" />
@@ -28,15 +29,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.css"> --}}
 
     <!-- JS -->
-    {{-- comment <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.js"></script>--}}
+    {{-- comment <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.js"></script> --}}
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/css/app.css'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
 </head>
 
 <body style="background-color: #08263b;">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #0e3d5f;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0e3d5f;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('text4491.png') }}" alt="Logo" width="157" height="25">
@@ -73,20 +74,35 @@
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
-                        {{-- search form --}}
+                        {{--search form
                         <form class="d-flex" action="{{ route('search') }}" method="GET">
                             <input class="form-control me-2" type="text" name="search" placeholder="Search"
                                 required />
                             <button class="btn btn-success" type="submit"><i class="fa fa-search"
                                     aria-hidden="true"></i></button>
+                        </form>--}} 
+                        <form class="nav-item d-flex" action="{{ route('search') }}" method="GET">
+                            <div class="input-group mb-3">
+                                <select class="btn btn-primary dropdown-toggle" name="search_type">
+                                    <option value="op_ed">OP & ED</option>
+                                    <option value="op">Only Openings</option>
+                                    <option value="ed">Only Endings</option>
+                                    <option value="artist">By Artist</option>
+                                </select>
+                                <input type="text" name="search" class="form-control"
+                                    aria-label="Text input with dropdown button" placeholder="Type an anime title">
+
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
                         </form>
+                        
 
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                     aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                                    GUEST
+
                                 </a>
 
                                 <ul class="dropdown-menu">
@@ -105,7 +121,8 @@
                                     @endif
                                 </ul>
                             </li>
-                        @else
+                        @endguest
+                        @auth
                             <!-- AUTH USER -->
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -113,31 +130,24 @@
                                     <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                                     {{ Auth::user()->name }}
                                 </a>
-
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('home') }}"><i class="fa fa-user-circle-o"
                                             aria-hidden="true"></i>
-
                                         Profile
                                     </a>
-
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><i
                                             class="fa fa-sign-out" aria-hidden="true"></i>
-
                                         {{ __('Logout') }}
                                     </a>
-
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                         class="d-none">
                                         @csrf
                                     </form>
                                 </div>
-
-
                             </li>
-                        @endguest
+                        @endauth
                     </ul>
                 </div>
             </div>
