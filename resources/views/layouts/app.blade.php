@@ -54,13 +54,13 @@
                     <ul class="navbar-nav me-auto">
                         <a class="nav-link active" href="{{ route('/') }}">Openings</a>
                         <a class="nav-link active" href="{{ route('endings') }}">Endings</a>
-
                         @auth
                             <a class="nav-link active" href="{{ route('favorites') }}">My Favorites</a>
                             @if (Auth::user()->type == 'admin')
                                 <a class="nav-link active" aria-current="page" href="{{ route('admin.post.index') }}">Post
                                     index</a>
-                                <a class="nav-link active" aria-current="page" href="{{ route('admin.tags.index') }}">Tags
+                                <a class="nav-link active" aria-current="page"
+                                    href="{{ route('admin.tags.index') }}">Tags
                                     index</a>
                                 <a class="nav-link active" aria-current="page"
                                     href="{{ route('admin.artist.index') }}">Artist
@@ -68,59 +68,46 @@
                                 <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
                             @endif
                         @endauth
-
-
-
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
-                        {{--search form
+                        {{-- search form
                         <form class="d-flex" action="{{ route('search') }}" method="GET">
                             <input class="form-control me-2" type="text" name="search" placeholder="Search"
                                 required />
                             <button class="btn btn-success" type="submit"><i class="fa fa-search"
                                     aria-hidden="true"></i></button>
-                        </form>--}} 
-                        <form class="nav-item d-flex" action="{{ route('search') }}" method="GET">
-                            <div class="input-group mb-3">
-                                <select class="btn btn-primary dropdown-toggle" name="search_type">
-                                    <option value="op_ed">OP & ED</option>
-                                    <option value="op">Only Openings</option>
-                                    <option value="ed">Only Endings</option>
-                                    <option value="artist">By Artist</option>
-                                </select>
-                                <input type="text" name="search" class="form-control"
-                                    aria-label="Text input with dropdown button" placeholder="Type an anime title">
+                        </form> --}}
+                        <form class="d-flex" role="search" action="{{ route('search') }}" method="GET">
+                            <select class="btn btn-primary dropdown-toggle" name="search_type">
+                                <option value="op_ed">OP & ED</option>
+                                <option value="op">Only Openings</option>
+                                <option value="ed">Only Endings</option>
+                                <option value="artist">By Artist</option>
+                            </select>
+                            <input type="text" name="search" class="form-control" aria-label="search"
+                                placeholder="Type an anime title">
 
-                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-                            </div>
+                            <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+
                         </form>
-                        
+
 
                         <!-- Authentication Links -->
                         @guest
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false"><i class="fa fa-user-circle-o" aria-hidden="true"></i>
-
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                                
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('login') }}">{{ __('Login') }}
                                 </a>
-
-                                <ul class="dropdown-menu">
-                                    @if (Route::has('login'))
-                                        <li class="dropdown-item">
-                                            <a class="nav-link text-dark"
-                                                href="{{ route('login') }}">{{ __('Login') }}</a>
-                                        </li>
-                                    @endif
-
-                                    @if (Route::has('register'))
-                                        <li class="dropdown-item">
-                                            <a class="nav-link text-dark"
-                                                href="{{ route('register') }}">{{ __('Register') }}</a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
+                                <a class="dropdown-item" href="{{ route('register') }}">{{ __('Register') }}
+                                </a>
+                            </div>
+                        </li>
                         @endguest
                         @auth
                             <!-- AUTH USER -->
