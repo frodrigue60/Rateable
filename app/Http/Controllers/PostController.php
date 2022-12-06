@@ -522,7 +522,7 @@ class PostController extends Controller
                     $artist = Artist::where('name', 'LIKE', "%{$request->input('search')}%")
                         ->first();
                     if ($artist === null) {
-                        return view('fromTags');
+                        return redirect()->route('/')->with('status', 'Does not exist '.$request->input('search').' artist');
                     }
 
                     $openings = Post::query()

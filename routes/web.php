@@ -47,12 +47,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         //TAGS
-        Route::get('/tags/create',          [TagController::class, 'create'])->name('admin.tags.create');
-        Route::post('/tags/store',          [TagController::class, 'store'])->name('admin.tags.store');
         Route::get('/tags/index',           [TagController::class, 'index'])->name('admin.tags.index');
-        Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy');
+        Route::get('/tags/create',          [TagController::class, 'create'])->name('admin.tags.create');
         Route::get('/tags/{id}/edit',       [TagController::class, 'edit'])->name('admin.tags.edit');
         Route::put('/tags/{id}/update',    [TagController::class, 'update'])->name('admin.tags.update');
+        Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy');
+        Route::post('/tags/store',          [TagController::class, 'store'])->name('admin.tags.store');
         //END TAGS
 
         //CURRENT SEASON OP
