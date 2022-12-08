@@ -8,6 +8,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card bg-dark">
@@ -58,8 +59,12 @@
                                                 ({{ $post->song_en }})
                                             @endisset
                                         </td>
-                                        <td><a
-                                                href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
+                                        <td>
+                                            @isset($post->artist->name)
+                                                <a
+                                                    href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
+                                            @endisset
+
                                         </td>
                                         <td>
                                             <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"

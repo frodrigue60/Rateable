@@ -35,9 +35,7 @@ Route::get('/tag/{slug}',           [TagController::class, 'tag_slug'])->name('f
 //ARTIST PUBLIC
 Route::get('/artist/{slug}',    [ArtistController::class, 'artist_slug'])->name('fromartist');
 
-
-
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'admin.routes'], function () {
     Route::prefix('admin')->group(function () {
         Route::get('/post/index',       [PostController::class, 'index'])->name('admin.post.index');
         Route::get('/post/create',      [PostController::class, 'create'])->name('admin.post.create');
@@ -79,7 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
 //AUTH ROUTES
 Auth::routes();
 
-//USER
+//USER ROUTES
 Route::post('/scoreformat', [App\Http\Controllers\HomeController::class, 'scoreFormat'])->name('scoreformat');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');

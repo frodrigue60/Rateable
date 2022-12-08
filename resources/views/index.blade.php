@@ -8,11 +8,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
-    @endif          
+    @endif
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)
-                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}')">
+                <div class="tarjeta"
+                    style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h5 class="text-shadow text-uppercase">{{ $post->title }}</h5>
@@ -42,22 +43,22 @@
                                         @break
 
                                         @case('POINT_10_DECIMAL')
-                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i class="fa fa-star"></i>
+                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i class="fa fa-star"></i>
                                         @break
 
                                         @case('POINT_10')
-                                        <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
+                                            <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
                                         @break
 
                                         @case('POINT_5')
-                                        <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
+                                            <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
                                         @break
 
                                         @default
-                                        <strong>{{ round($post->averageRating) }}</strong>
+                                            <strong>{{ round($post->averageRating) }}</strong>
                                     @endswitch
                                 @else
-                                <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i class="fa fa-star"></i>
+                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i class="fa fa-star"></i>
                                 @endif
                             </button>
                         </div>
@@ -136,7 +137,8 @@
                                                     {{ round($post->averageRating) }}
                                             @endswitch
                                         @else
-                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i class="fa fa-star"></i>
+                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                class="fa fa-star"></i>
                                         @endif
 
                                     </span></h5>
