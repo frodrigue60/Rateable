@@ -2,7 +2,7 @@
 <!doctype html>
 
 <head>
-    @vite(['resources/css/fivestars.css'])
+    <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
     <title>{{ $post->title }}</title>
 </head>
 
@@ -22,9 +22,11 @@
             <div class="card">
                 <div class="card-header row justify-content-between">
                     <div id="button-group" class="col-9">
-                        <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option
-                            1</button>
-                        <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button>
+                        <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option1</button>
+                        @if ($post->scndlink != null)
+                           <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button> 
+                        @endif
+                        
                     </div>
                     <div class="col-md-auto">
                         @auth

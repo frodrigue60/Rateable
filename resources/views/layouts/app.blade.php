@@ -25,14 +25,17 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    {{-- comment <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.css"> --}}
+    <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
     <!-- JS -->
-    {{-- comment <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.js"></script> --}}
+    {{-- comment @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css']) --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
 </head>
 
 <body style="background-color: #08263b;">
@@ -59,8 +62,7 @@
                             @if (Auth::user()->type == 'admin')
                                 <a class="nav-link active" aria-current="page" href="{{ route('admin.post.index') }}">Post
                                     index</a>
-                                <a class="nav-link active" aria-current="page"
-                                    href="{{ route('admin.tags.index') }}">Tags
+                                <a class="nav-link active" aria-current="page" href="{{ route('admin.tags.index') }}">Tags
                                     index</a>
                                 <a class="nav-link active" aria-current="page"
                                     href="{{ route('admin.artist.index') }}">Artist
@@ -95,19 +97,19 @@
 
                         <!-- Authentication Links -->
                         @guest
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-                                
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('login') }}">{{ __('Login') }}
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+
                                 </a>
-                                <a class="dropdown-item" href="{{ route('register') }}">{{ __('Register') }}
-                                </a>
-                            </div>
-                        </li>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('login') }}">{{ __('Login') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('register') }}">{{ __('Register') }}
+                                    </a>
+                                </div>
+                            </li>
                         @endguest
                         @auth
                             <!-- AUTH USER -->

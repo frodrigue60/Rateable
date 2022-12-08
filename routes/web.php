@@ -18,6 +18,8 @@ use App\Http\Controllers\HomeController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/welcome',       [HomeController::class, 'welcome'])->name('welcome');

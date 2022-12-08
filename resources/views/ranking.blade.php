@@ -4,9 +4,9 @@
     <div class="container">
         <div class="row">
             {{-- openings columm --}}
-            <div class="col">
+            <div class="col-lg">
                 <h2 class="text-center text-light">TOP OPENINGS - {{ $currentSeason->name }}</h2>
-                <table class="table table-dark text-center">
+                <table class="table text-center text-light" style="background-color: #0e3d5f">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -20,7 +20,7 @@
                         @foreach ($openings->sortByDesc('averageRating') as $opening)
                             <tr>
                                 <th scope="row">{{ $i++ }}</th>
-                                <td scope="row">{{ $opening->title }}</td>
+                                <td scope="row"><a href="{{route('show',$opening->id)  }}" class="no-deco text-light">{{ $opening->title }}</a></td>
                                 <td scope="row">
 
                                     @if (isset($score_format))
@@ -56,9 +56,9 @@
                 </table>
             </div>
             {{-- endings columm --}}
-            <div class="col">
+            <div class="col-lg">
                 <h2 class="text-center text-light">TOP ENDINGS - {{ $currentSeason->name }}</h2>
-                <table class="table table-dark text-center">
+                <table class="table text-center text-light" style="background-color: #0e3d5f">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -72,7 +72,7 @@
                         @foreach ($endings->sortByDesc('averageRating') as $ending)
                             <tr>
                                 <th scope="row">{{ $i++ }}</th>
-                                <td scope="row">{{ $ending->title }}</td>
+                                <td scope="row"><a href="{{route('show',$ending->id)  }}" class="no-deco text-light">{{ $ending->title }}</a></td>
                                 <td scope="row">
                                     @if (isset($score_format))
                                         @switch($score_format)
