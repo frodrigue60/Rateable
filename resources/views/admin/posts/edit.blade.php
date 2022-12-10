@@ -19,34 +19,48 @@
                             @method('PUT')
                             @csrf
                             <label for="titleAnime" class="form-label">Title</label>
-                            <input type="text" class="form-control" value="{{$post->title}}" id="titleAnime" name="title"
-                                required>
+                            <input type="text" class="form-control" value="{{ $post->title }}" id="titleAnime"
+                                name="title" required>
                             <br>
 
                             <label for="songRomaji" class="form-label">Song name (romaji)</label>
-                            <input type="text" class="form-control" value="{{$post->song_romaji}}" id="songRomaji" name="song_romaji">
+                            <input type="text" class="form-control" value="{{ $post->song->song_romaji }}"
+                                id="songRomaji" name="song_romaji">
                             <br>
                             <label for="songJp" class="form-label">Song name (JP)</label>
-                            <input type="text" class="form-control" value="{{$post->song_jp}}" id="songJp" name="song_jp">
+                            <input type="text" class="form-control" value="{{ $post->song->song_jp }}" id="songJp"
+                                name="song_jp">
                             <br>
                             <label for="songEn" class="form-label">Song name (EN)</label>
-                            <input type="text" class="form-control" value="{{$post->song_en}}" id="songEn" name="song_en">
+                            <input type="text" class="form-control" value="{{ $post->song->song_en }}" id="songEn"
+                                name="song_en">
                             <br>
-                            <label for="ArtistId" class="form-label">Artist</label>
-                            <select class="chzn-select" name="artist_id" id="ArtistId" style="width:200px;">
-                                <option value="{{$post->artist->id}}">{{$post->artist->name}}</option>
-                                @foreach ($artists as $artist)
-                                    <option value="{{ $artist->id }}">{{ $artist->name }}</option>
-                                @endforeach
-                            </select>
-                            <br>
-
-                            <label for="type" class="form-label">Type:</label>
-                            <select class="chzn-select" name="type" id="type" style="width:200px;">
-                                @foreach ($types as $type)
-                                    <option selected value="{{ $type }}">{{ $type }}</option>
-                                @endforeach
-                            </select>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="ArtistId" class="form-label">Artist</label>
+                                    <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
+                                        <option value="">Select a artist</option>
+                                        @if (isset($post->artist_id))
+                                            @foreach ($artists as $artist)
+                                                <option selected value="{{ $post->artist_id }}">{{ $post->artist->name }}
+                                                </option>
+                                            @endforeach
+                                        @else
+                                            @foreach ($artists as $artist)
+                                                <option value="{{ $artist->id }}">{{ $artist->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="type" class="form-label">Type:</label>
+                                    <select class="chzn-select" name="type" id="type" style="width:100%;">
+                                        @foreach ($types as $type)
+                                            <option value="{{ $type }}">{{ $type }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <br>
                             <br>
                             <label for="imageSrc" class="form-label">Image Source</label>
@@ -59,12 +73,12 @@
                             </div>
                             <br>
                             <label for="ytlink" class="form-label">Youtube Embed</label>
-                            <input type="text" class="form-control" value="{{$post->ytlink}}" id="ytlink"
+                            <input type="text" class="form-control" value="{{ $post->ytlink }}" id="ytlink"
                                 name="ytlink">
                             <br>
                             <label for="scndlink" class="form-label">Second Embed (optional)</label>
-                            <input type="text" class="form-control" value="{{$post->scndlink}}" placeholder="Second Embed (optional)" id="scndlink"
-                                name="scndlink">
+                            <input type="text" class="form-control" value="{{ $post->scndlink }}"
+                                placeholder="Second Embed (optional)" id="scndlink" name="scndlink">
                             <br>
                             <label for="tags">Select season</label>
                             <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:200px;">

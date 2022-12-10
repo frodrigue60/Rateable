@@ -51,12 +51,13 @@
 
                                         </td>
                                         <td>{{ $post->type }}</td>
-                                        <td>
-                                            @isset($post->song_romaji)
-                                                {{ $post->song_romaji }}
-                                            @endisset
-                                            @isset($post->song_en)
-                                                ({{ $post->song_en }})
+                                        <td>@isset($post->song_id)
+                                                @isset($post->song->song_romaji)
+                                                    {{$post->song->song_romaji}}
+                                                @endisset
+                                                @isset($post->song->song_en)
+                                                    {{$post->song->song_en}}
+                                                @endisset
                                             @endisset
                                         </td>
                                         <td>

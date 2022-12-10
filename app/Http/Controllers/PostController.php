@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Artist;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Song;
 use Conner\Tagging\Model\Tag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -57,12 +58,16 @@ class PostController extends Controller
                 return Redirect::back()->with('status', $errors);
             }
 
+
             $post = new Post;
             $post->title = $request->title;
-            $post->song_romaji = $request->song_romaji;
-            $post->song_jp = $request->song_jp;
-            $post->song_en = $request->song_en;
-            $post->artist_id = $request->artist_id;
+
+            if ($request->artist_id != true) {
+                $post->artist_id = null;
+            } else {
+                $post->artist_id = $request->artist_id;
+            }
+
             $post->type = $request->type;
             $post->ytlink = $request->ytlink;
             $post->scndlink = $request->scndlink;
@@ -75,6 +80,13 @@ class PostController extends Controller
             $post->thumbnail = $file_name;
 
             $request->file->storeAs('thumbnails', $file_name, 'public');
+            $song = new Song;
+            $song->song_romaji = $request->song_romaji;
+            $song->song_jp = $request->song_jp;
+            $song->song_en = $request->song_en;
+            $song->save();
+
+            $post->song_id = $song->id;
 
             $post->save();
 
@@ -87,12 +99,11 @@ class PostController extends Controller
             $post = new Post;
             $post->title = $request->title;
             $post->type = $request->type;
-
-            $post->song_romaji = $request->song_romaji;
-            $post->song_jp = $request->song_jp;
-            $post->song_en = $request->song_en;
-            $post->artist_id = $request->artist_id;
-
+            if ($request->artist_id != true) {
+                $post->artist_id = null;
+            } else {
+                $post->artist_id = $request->artist_id;
+            }
 
             $post->ytlink = $request->ytlink;
             $post->scndlink = $request->scndlink;
@@ -100,11 +111,22 @@ class PostController extends Controller
             if ($request->imagesrc == null) {
                 return Redirect::back()->with('status', 'Post not created, images not founds');
             }
+
             $image_file_data = file_get_contents($request->imagesrc);
             $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
             $file_name = 'thumbnail_' . time() . '.' . $ext;
             Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
+
+
+            $song = new Song;
+            $song->song_romaji = $request->song_romaji;
+            $song->song_jp = $request->song_jp;
+            $song->song_en = $request->song_en;
+            $song->save();
+
+            $post->song_id = $song->id;
+
             $post->save();
             $tags = $request->tags;
             $post->tag($tags);
@@ -155,10 +177,11 @@ class PostController extends Controller
     {
         $types = ['op', 'ed'];
         $post = Post::find($id);
+        $song = Song::find($post->song_id);
         $tags = Tag::all();
         $artists = Artist::all();
 
-        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists'));
+        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists','song'));
     }
 
     /**
@@ -182,12 +205,14 @@ class PostController extends Controller
 
             $post = Post::find($id);
             $old_thumbnail = $post->thumbnail;
-
             $post->title = $request->title;
-            $post->song_romaji = $request->song_romaji;
-            $post->song_jp = $request->song_jp;
-            $post->song_en = $request->song_en;
-            $post->artist_id = $request->artist_id;
+
+            if ($request->artist_id != true) {
+                $post->artist_id = null;
+            } else {
+                $post->artist_id = $request->artist_id;
+            }
+
             $post->type = $request->type;
 
             $post->ytlink = $request->ytlink;
@@ -204,6 +229,12 @@ class PostController extends Controller
             $post->thumbnail = $file_name;
 
             $request->file->storeAs('thumbnails', $file_name, 'public');
+            $song = new Song;
+            $song->song_romaji = $request->song_romaji;
+            $song->song_jp = $request->song_jp;
+            $song->song_en = $request->song_en;
+            $song->save();
+            $post->song_id = $song->id;
             $post->save();
 
             $tags = $request->tags;
@@ -214,10 +245,12 @@ class PostController extends Controller
             $old_thumbnail = $post->thumbnail;
 
             $post->title = $request->title;
-            $post->song_romaji = $request->song_romaji;
-            $post->song_jp = $request->song_jp;
-            $post->song_en = $request->song_en;
-            $post->artist_id = $request->artist_id;
+            if ($request->artist_id != true) {
+                $post->artist_id = null;
+            } else {
+                $post->artist_id = $request->artist_id;
+            }
+
             $post->type = $request->type;
 
             $post->ytlink = $request->ytlink;
@@ -231,6 +264,13 @@ class PostController extends Controller
             $file_name = 'thumbnail_' . time() . '.' . $ext;
             Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
+            $song = new Song;
+            $song->song_romaji = $request->song_romaji;
+            $song->song_jp = $request->song_jp;
+            $song->song_en = $request->song_en;
+            $song->save();
+
+            $post->song_id = $song->id;
             $post->save();
             $tags = $request->tags;
             $post->tag($tags);
@@ -522,7 +562,7 @@ class PostController extends Controller
                     $artist = Artist::where('name', 'LIKE', "%{$request->input('search')}%")
                         ->first();
                     if ($artist === null) {
-                        return redirect()->route('/')->with('status', 'Does not exist '.$request->input('search').' artist');
+                        return redirect()->route('/')->with('status', 'Does not exist ' . $request->input('search') . ' artist');
                     }
 
                     $openings = Post::query()

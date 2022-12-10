@@ -36,7 +36,7 @@
                                 <div class="col">
                                     <label for="ArtistId" class="form-label">Artist</label>
                                     <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
-                                        <option value="null">Select a artist</option>
+                                        <option value="">Select a artist</option>
                                         @foreach ($artists as $artist)
                                             <option value="{{ $artist->id }}">{{ $artist->name }}</option>
                                         @endforeach

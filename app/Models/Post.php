@@ -17,11 +17,8 @@ class Post extends Model
 
     protected $fillable = [
         'title',
-        'song_romaji',
-        'song_jp',
-        'song_en',
+        'song_id',
         'artist_id',
-        'imagesrc',
         'ytlink',
         'scndlink',
         'type',
@@ -31,5 +28,10 @@ class Post extends Model
     public function artist()
     {
         return $this->belongsTo('App\Models\Artist');
+    }
+
+    public function song()
+    {
+        return $this->belongsTo('App\Models\Song');
     }
 }
