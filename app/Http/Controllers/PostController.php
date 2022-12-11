@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Song;
 use Conner\Tagging\Model\Tag;
+use Conner\Tagging\Model\Tagged;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -273,7 +274,7 @@ class PostController extends Controller
             $post->song_id = $song->id;
             $post->save();
             $tags = $request->tags;
-            $post->tag($tags);
+            $post->retag($tags);
             return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has url image');
         }
         return redirect(route('admin.post.index'))->with('status', 'Post not created, image not found');
@@ -288,6 +289,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
+        $post->untag;
         $file = $post->thumbnail;
 
         Storage::disk('public')->delete('/thumbnails/' . $file);

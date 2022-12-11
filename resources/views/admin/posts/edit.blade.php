@@ -39,24 +39,20 @@
                                 <div class="col">
                                     <label for="ArtistId" class="form-label">Artist</label>
                                     <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
-                                        <option value="">Select a artist</option>
-                                        @if (isset($post->artist_id))
-                                            @foreach ($artists as $artist)
-                                                <option selected value="{{ $post->artist_id }}">{{ $post->artist->name }}
-                                                </option>
-                                            @endforeach
-                                        @else
-                                            @foreach ($artists as $artist)
-                                                <option value="{{ $artist->id }}">{{ $artist->name }}</option>
-                                            @endforeach
-                                        @endif
+                                        @foreach ($artists as $artist)
+                                            <option value="{{ $artist->id }}"
+                                                {{ $artist->id == $post->artist_id ? 'selected' : '' }}>
+                                                {{ $artist->name }} </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col">
                                     <label for="type" class="form-label">Type:</label>
                                     <select class="chzn-select" name="type" id="type" style="width:100%;">
                                         @foreach ($types as $type)
-                                            <option value="{{ $type }}">{{ $type }}</option>
+                                            <option value="{{ $type }}"
+                                                {{ $type == $post->type ? 'selected' : '' }}>
+                                                {{ $type }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -81,9 +77,12 @@
                                 placeholder="Second Embed (optional)" id="scndlink" name="scndlink">
                             <br>
                             <label for="tags">Select season</label>
-                            <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:200px;">
-                                @foreach ($tags as $tag)
+                            <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:100%;">
+                                @foreach ($post->tags as $tag)
                                     <option selected value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                @endforeach
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->name }}">{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                             <br>

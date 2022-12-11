@@ -5,7 +5,10 @@
         <div class="row">
             {{-- openings columm --}}
             <div class="col-lg">
-                <h2 class="text-center text-light">TOP OPENINGS - {{ $currentSeason->name }}</h2>
+                <h2 class="text-center text-light">TOP OPENINGS @isset($currentSeason->name)
+                        - {{ $currentSeason->name }}
+                    @endisset
+                </h2>
                 <table class="table text-center text-light" style="background-color: #0e3d5f">
                     <thead>
                         <tr>
@@ -20,7 +23,8 @@
                         @foreach ($openings->sortByDesc('averageRating') as $opening)
                             <tr>
                                 <th scope="row">{{ $i++ }}</th>
-                                <td scope="row"><a href="{{route('show',$opening->id)  }}" class="no-deco text-light">{{ $opening->title }}</a></td>
+                                <td scope="row"><a href="{{ route('show', $opening->id) }}"
+                                        class="no-deco text-light">{{ $opening->title }}</a></td>
                                 <td scope="row">
 
                                     @if (isset($score_format))
@@ -46,8 +50,8 @@
                                                 {{ round($opening->averageRating) }}
                                         @endswitch
                                     @else
-                                    {{ round($opening->averageRating / 10, 1) }}
-                                    <i class="fa fa-star"></i>
+                                        {{ round($opening->averageRating / 10, 1) }}
+                                        <i class="fa fa-star"></i>
                                     @endif
                                 </td>
                             </tr>
@@ -57,7 +61,10 @@
             </div>
             {{-- endings columm --}}
             <div class="col-lg">
-                <h2 class="text-center text-light">TOP ENDINGS - {{ $currentSeason->name }}</h2>
+                <h2 class="text-center text-light">TOP ENDINGS @isset($currentSeason->name)
+                    - {{ $currentSeason->name }}
+                    @endisset
+                </h2>
                 <table class="table text-center text-light" style="background-color: #0e3d5f">
                     <thead>
                         <tr>
@@ -72,7 +79,8 @@
                         @foreach ($endings->sortByDesc('averageRating') as $ending)
                             <tr>
                                 <th scope="row">{{ $i++ }}</th>
-                                <td scope="row"><a href="{{route('show',$ending->id)  }}" class="no-deco text-light">{{ $ending->title }}</a></td>
+                                <td scope="row"><a href="{{ route('show', $ending->id) }}"
+                                        class="no-deco text-light">{{ $ending->title }}</a></td>
                                 <td scope="row">
                                     @if (isset($score_format))
                                         @switch($score_format)
@@ -96,8 +104,8 @@
                                                 {{ round($ending->averageRating) }}
                                         @endswitch
                                     @else
-                                    {{ round($opening->averageRating / 10, 1) }}
-                                    <i class="fa fa-star"></i>
+                                        {{ round($opening->averageRating / 10, 1) }}
+                                        <i class="fa fa-star"></i>
                                     @endif
                                 </td>
                             </tr>
