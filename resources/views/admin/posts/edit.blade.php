@@ -39,6 +39,7 @@
                                 <div class="col">
                                     <label for="ArtistId" class="form-label">Artist</label>
                                     <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
+                                        <option value="">Selecte an artist</option>
                                         @foreach ($artists as $artist)
                                             <option value="{{ $artist->id }}"
                                                 {{ $artist->id == $post->artist_id ? 'selected' : '' }}>
@@ -49,6 +50,7 @@
                                 <div class="col">
                                     <label for="type" class="form-label">Type:</label>
                                     <select class="chzn-select" name="type" id="type" style="width:100%;">
+                                        <option value="">Selecte a type</option>
                                         @foreach ($types as $type)
                                             <option value="{{ $type }}"
                                                 {{ $type == $post->type ? 'selected' : '' }}>

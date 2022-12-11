@@ -49,7 +49,7 @@
                                     @if (isset($score_format))
                                         @switch($score_format)
                                             @case('POINT_100')
-                                                {{ round($opening->averageRating) }}
+                                                {{ round($opening->averageRating) }} 
                                             @break
 
                                             @case('POINT_10_DECIMAL')
@@ -93,21 +93,21 @@
                                 <h4 class="text-shadow text-uppercase">{{ $ending->title }}</h4>
                             </div>
                             <div class="tarjeta-footer">
-                                <a href="{{ route('show', $ending->id) }}" class="btn btn-sm btn-primary"> Ver</a>
+                                <a href="{{ route('show', $ending->id) }}" class="btn btn-primary"> Ver</a>
                                 @auth
                                     @if ($ending->liked())
                                         <form action="{{ route('unlike.post', $ending->id) }}" method="post">
                                             @csrf
-                                            <button class="btn btn-sm btn-danger"><i class="fa fa-heart"></i></button>
+                                            <button class="btn btn-danger"><i class="fa fa-heart"></i></button>
                                         </form>
                                     @else
                                         <form action="{{ route('like.post', $ending->id) }}" method="post">
                                             @csrf
-                                            <button class="btn btn-sm btn-success"><i class="fa fa-heart"></i></button>
+                                            <button class="btn btn-success"><i class="fa fa-heart"></i></button>
                                         </form>
                                     @endif
                                 @endauth
-                                <button class="btn btn-sm btn-warning">
+                                <button class="btn btn-primary">
                                     @if (isset($score_format))
                                         @switch($score_format)
                                             @case('POINT_100')

@@ -289,7 +289,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
-        $post->untag;
+        
         $file = $post->thumbnail;
 
         Storage::disk('public')->delete('/thumbnails/' . $file);
@@ -614,7 +614,7 @@ class PostController extends Controller
         }
     }
 
-    public function ranking()
+    public function seasonalranking()
     {
         $currentSeason = DB::table('current_season')->first();
         if (Auth::check()) {
@@ -639,27 +639,45 @@ class PostController extends Controller
             //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
 
-            $op_count = Post::withAllTags($currentSeason->name)
-                ->where('type', 'op')
-                ->count();
-
-            $ed_count = Post::withAllTags($currentSeason->name)
-                ->where('type', 'ed')
-                ->count();
-
             $openings = Post::withAllTags($currentSeason->name)
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
+                $op_count = $openings->count();
 
             $endings = Post::withAllTags($currentSeason->name)
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
+                $ed_count = $endings->count();
+
 
             //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
 
             return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason', 'score_format'));
         }
+    }
+    public function globalrank(){   
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+            $getOpenings = Post::where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+            $op_count = $getOpenings->count();
+
+            $openings = $getOpenings->sortByDesc('averageRating')->take(100);
+        
+            $getEndings = Post::where('type', 'ed')
+                ->orderBy('title', 'asc')
+                ->get();
+            $ed_count = $getEndings->count();
+
+            $endings = $getEndings->sortByDesc('averageRating')->take(100);
+
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
+        
     }
 }

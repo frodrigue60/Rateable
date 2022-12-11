@@ -147,7 +147,7 @@
                         @endforeach
                         </tr>
                     </table>
-                    <a href="{{ route('ranking') }}" class="btn btn-primary">All Places</a>
+                    <a href="{{ route('seasonalranking') }}" class="btn btn-primary">All Places</a>
                 </div>
             </div>
         </div>

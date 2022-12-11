@@ -55,19 +55,28 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <a class="nav-link active" href="{{ route('/') }}">Openings</a>
-                        <a class="nav-link active" href="{{ route('endings') }}">Endings</a>
+                        <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="{{ route('/') }}">Openings</a>
+                        <a class="nav-link {{ Request::is('endings') ? 'active' : '' }}" href="{{ route('endings') }}">Endings</a>
+                        <a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}" href="{{ route('globalranking') }}">Global Ranking</a>
                         @auth
-                            <a class="nav-link active" href="{{ route('favorites') }}">My Favorites</a>
+                            <a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}" href="{{ route('favorites') }}">My Favorites</a>
                             @if (Auth::user()->type == 'admin')
-                                <a class="nav-link active" aria-current="page" href="{{ route('admin.post.index') }}">Post
-                                    index</a>
-                                <a class="nav-link active" aria-current="page" href="{{ route('admin.tags.index') }}">Tags
-                                    index</a>
-                                <a class="nav-link active" aria-current="page"
-                                    href="{{ route('admin.artist.index') }}">Artist
-                                    index</a>
-                                <a class="nav-link active" href="{{ route('admin.season.index') }}">Current Season</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  ADMIN
+                                </a>
+                                <ul class="dropdown-menu">
+                                  <li><a class="dropdown-item" href="{{ route('admin.post.index') }}">Post
+                                    index</a></li>
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item" href="{{ route('admin.tags.index') }}">Tags
+                                    index</a></li>
+                                  <li><a class="dropdown-item" href="{{ route('admin.artist.index') }}">Artist
+                                    index</a></li>
+                                    <li> <a class="dropdown-item" href="{{ route('admin.season.index') }}">Current Season</a></li>
+                                </ul>
+                              </li>
+                                
                             @endif
                         @endauth
                     </ul>
