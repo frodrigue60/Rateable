@@ -1,3 +1,28 @@
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+	background: #00000034; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+	background: #3877a3; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+	background: #0e3d5f; 
+  }
+
+.card{
+	background-color: #0e3d5f;
+	border: 0%;
+	border-radius: 5px;
+}
 
 * {
 	padding: 0;
@@ -123,6 +148,9 @@
 	cursor: pointer;
 }
 @media screen and (max-width: 1920px) {
+	.card{
+		width: 80%;
+	}
 	.ellipsis {
 		text-align: left;
 		max-width: 10ch;
@@ -281,6 +309,9 @@
 }
 
 @media screen and (max-width: 1280px) {
+	.card{
+		width: 100%;
+	}
 	.ellipsis {
 		text-align: left;
 		max-width: 15ch;
@@ -293,7 +324,7 @@
 		width: 90%;
 		max-width: 1150px;
 		margin: auto;
-		padding: 40px 0;
+		padding: 0px 0;
 
 		display: flex;
 		flex-direction: column;
@@ -333,11 +364,14 @@
 }
 
 @media screen and (max-width: 800px) {
+	.card{
+		width: 100%;
+	}
 	.contenedor {
 		width: 90%;
 		max-width: 1200px;
 		margin: auto;
-		padding: 40px 0;
+		padding: 0px 0;
 
 		display: flex;
 		flex-direction: column;
@@ -392,18 +426,14 @@
 }
 
 @media screen and (max-width: 600px) {
-	body {
-		background: #1D202B;
-		color: #fff;
-		font-family: 'Roboto', sans-serif;
-		min-height: 100vh;
+	.card{
+		width: 100%;
 	}
-
 	.contenedor {
 		width: 90%;
 		max-width: 1200px;
 		margin: auto;
-		padding: 40px 0;
+		padding: 0px 0;
 
 		display: flex;
 		flex-direction: column;

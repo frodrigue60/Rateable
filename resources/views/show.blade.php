@@ -8,56 +8,53 @@
 
 @section('content')
     <div class="container">
-        <div class="text-center text-light">
-            <h1>{{ $post->title }}</h1>
-        </div>
         @if (session('status'))
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> {{ session('status') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-
-        <div class="col-9 mx-auto">
+        <h1 class="text-light text-center">{{$post->title}}</h1>
+        <div class="row justify-content-center">
             <div class="card">
-                <div class="card-header row justify-content-between">
-                    <div id="button-group" class="col-9">
+                <div class="card-header d-flex justify-content-between align-items-start mb-3">
+                    <div id="button-group">
                         <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option1</button>
                         @if ($post->scndlink != null)
                            <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button> 
                         @endif
-                        
                     </div>
-                    <div class="col-md-auto">
+                    <div>
                         @auth
                             @if ($post->liked())
+                            
                                 <form action="{{ route('unlike.post', $post->id) }}" method="post">
                                     @csrf
                                     <button class="btn btn-danger" id="like">Favorite <i class="fa fa-heart"></i></button>
                                 </form>
                             @else
-                                <form action="{{ route('like.post', $post->id) }}" method="post">
+                            <form action="{{ route('like.post', $post->id) }}" method="post">
                                     @csrf
                                     <button class="btn btn-success" id="like">Favorite <i class="fa fa-heart"></i></button>
                                 </form>
                             @endif
                         @endauth
-
                     </div>
                 </div>
-                <div class="card-body ratio ratio-16x9">
-                    <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
+                <div class="card-body ratio ratio-16x9" id="id_iframe">
+                    {{-- comment <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
                         allowfullscreen>
-                    </iframe>
+                    </iframe>--}}
+                    {!!$post->ytlink!!}
                 </div>
-                <div class="card-footer row justify-content-between">
-                    <div class="col-9">
+                <div class="card-footer d-flex justify-content-between align-items-start mb-3">
+                    <div class="">
                         <a name="" id="" class="btn btn-success" href="#" role="button">Spotify</a>
                         <a name="" id="" class="btn btn-success" href="#" role="button">Apple
                             Music</a>
                     </div>
-                    <div class="col-md-auto">
+                    <div class="">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#staticBackdrop">
                             More
@@ -244,8 +241,6 @@
                 </div>
             </div>
         </div>
-
-        <div id="result"></div>
         <script>
             const buttonGroup = document.getElementById("button-group");
             const buttonGroupPressed = e => {
@@ -260,7 +255,8 @@
                 var link = option.getAttribute('value');
                 
                 const id_iframe = document.getElementById("id_iframe");
-                id_iframe.setAttribute("src", link);
+                //id_iframe.setAttribute("src", link);
+                id_iframe.innerHTML = link;
 
                 console.log(e.target.id);
                 console.log(link);

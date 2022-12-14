@@ -2,7 +2,7 @@
 
 @section('content')
     @if (session('status'))
-        <div class="container">
+        <div class="contioner">
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> {{ session('status') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -12,8 +12,7 @@
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)
-                <div class="tarjeta"
-                    style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}')">
+                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h5 class="text-shadow text-uppercase">{{ $post->title }}</h5>
