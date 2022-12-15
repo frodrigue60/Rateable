@@ -86,6 +86,7 @@
 	min-height: 270px;
 	max-height: 300px;
 	max-width: 170px;
+	cursor: pointer;
 }
 
 .tarjeta .textos {

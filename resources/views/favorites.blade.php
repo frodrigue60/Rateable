@@ -7,13 +7,13 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($openings as $opening)
-                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}')">
+                <div onclick="location.href='{{ route('showbyslug', [$opening->id, $opening->slug]) }}';" class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h4 class="text-shadow text-uppercase">{{ $opening->title }}</h4>
                         </div>
                         <div class="tarjeta-footer">
-                            <a href="{{ route('show', $opening->id) }}" class="btn btn-sm btn-primary"> Ver</a>
+                            {{-- <a href="{{ route('show', $opening->id) }}" class="btn btn-sm btn-primary">Show</a> --}}
                             @auth
                                 @if ($opening->liked())
                                     <form action="{{ route('unlike.post', $opening->id) }}" method="post">

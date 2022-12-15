@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\CurrentSeasonController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\HomeController;
+use App\Models\Post;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +19,11 @@ use App\Http\Controllers\HomeController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/welcome',       [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
-Route::get('/{id}/{slug}',   [PostController::class, 'showBySlug'])->name('showbyslug');
+Route::get('/show/{id}/{slug}',   [PostController::class, 'showBySlug'])->name('showbyslug');
 
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalranking'])->name('seasonalranking');
