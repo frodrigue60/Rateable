@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center text-dark">
-            <div class="col-md-10">
+        <div class="row justify-content-center">
+            
                 @if (session('status'))
                     <div class="container">
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -12,7 +12,7 @@
                         </div>
                     </div>
                 @endif
-                <div class="card">
+                <div class="card text-light">
                     <div class="card-header"><strong>{{ Auth::user()->name }}</strong>'s Dashboard</div>
                     <div class="card-body">
                         <div>
@@ -38,7 +38,7 @@
                                 <div class="input-group">
                                     <input type="file" class="form-control" id="inputGroupFile04"
                                         aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image">
-                                    <button class="btn btn-outline-secondary" type="submit"
+                                    <button class="btn btn-primary" type="submit"
                                         id="inputGroupFileAddon04">Submit profile pic</button>
                                 </div>
                             </form>
@@ -57,14 +57,14 @@
                                         <option value="POINT_10">10 Point (5/10)</option>
                                         <option value="POINT_5">5 Star (3/5)</option>
                                     </select>
-                                    <button type="submit" class="btn btn-outline-secondary" type="button">Save
+                                    <button type="submit" class="btn btn-primary" type="button">Save
                                         setting</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-            </div>
+            
         </div>
     </div>
 @endsection

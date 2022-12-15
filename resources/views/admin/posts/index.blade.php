@@ -10,7 +10,7 @@
         @endif
         
         <div class="row justify-content-center">
-            <div class="col-md-12">
+            
                 <div class="card bg-dark">
                     {{-- CARD HEADER --}}
                     <div class="card-header">
@@ -89,7 +89,7 @@
                     </div>
                 </div>
 
-            </div>
+            
         </div>
     </div>
 @endsection

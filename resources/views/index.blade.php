@@ -2,7 +2,7 @@
 
 @section('content')
     @if (session('status'))
-        <div class="contioner">
+        <div class="container">
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> {{ session('status') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -18,7 +18,8 @@
                             <h5 class="text-shadow text-uppercase">{{ $post->title }}</h5>
                         </div>
                         <div class="tarjeta-footer">
-                            <a href="{{ route('show', $post->id) }}" class="btn btn-sm btn-primary">Show</a>
+                            <a href="{{ route('show', $post->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-play" aria-hidden="true"></i>
+                            </a>
                             @auth
                                 @if ($post->liked())
                                     <form action="{{ route('unlike.post', $post->id) }}" method="post">

@@ -17,7 +17,7 @@
         <h1 class="text-light text-center">{{$post->title}}</h1>
         <div class="row justify-content-center">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-start mb-3">
+                <div class="card-header d-flex justify-content-between align-items-start">
                     <div id="button-group">
                         <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option1</button>
                         @if ($post->scndlink != null)
@@ -48,7 +48,7 @@
                     </iframe>--}}
                     {!!$post->ytlink!!}
                 </div>
-                <div class="card-footer d-flex justify-content-between align-items-start mb-3">
+                <div class="card-footer d-flex justify-content-between align-items-start">
                     <div class="">
                         <a name="" id="" class="btn btn-success" href="#" role="button">Spotify</a>
                         <a name="" id="" class="btn btn-success" href="#" role="button">Apple
@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -139,6 +139,13 @@
                                     </div>
                                 </div>
                             </div>
+                            @guest
+                            <hr>
+                            <h6>for voting</h6>
+                            <div>
+                                <a name="" id="" class="btn btn-sm btn-primary" href="{{route('login')}}" role="button">Login</a> or <a name="" id="" class="btn btn-sm btn-primary" href="{{route('register')}}" role="button">Register</a>
+                            </div>
+                            @endguest
                         </div>
                         <br>
 

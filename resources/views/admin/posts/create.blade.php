@@ -3,14 +3,14 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            
                 @if (session('status'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <strong>Holy guacamole!</strong> {{ session('status') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-                <div class="card">
+                <div class="card bg-dark text-light">
                     <div class="card-header">Create Post</div>
 
                     <div class="card-body">
@@ -81,7 +81,7 @@
                     </div>
                     </form>
                 </div>
-            </div>
+            
         </div>
 
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">

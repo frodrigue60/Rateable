@@ -28,7 +28,7 @@
                         style="background-image: url('{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}')">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h4 class="text-shadow text-uppercase">{{ $opening->title }}</h4>
+                                <h5 class="text-shadow text-uppercase">{{ $opening->title }}</h5>
                             </div>
                             <div class="tarjeta-footer">
                                 <a href="{{ route('show', $opening->id) }}" class="btn btn-sm btn-primary">Show</a>

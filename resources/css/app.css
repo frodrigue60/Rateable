@@ -18,11 +18,13 @@
 	background: #0e3d5f; 
   }
 
-.card{
+.card {
 	background-color: #0e3d5f;
-	border: 0%;
+	border: 0px;
 	border-radius: 5px;
+	padding: 5px;
 }
+
 
 * {
 	padding: 0;
