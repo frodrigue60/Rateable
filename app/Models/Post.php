@@ -17,6 +17,7 @@ class Post extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'song_id',
         'artist_id',
         'ytlink',

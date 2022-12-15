@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -23,9 +24,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
-        
-
+        $posts = Post::orderByDesc('id')->paginate(10);
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -63,6 +62,7 @@ class PostController extends Controller
 
             $post = new Post;
             $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
 
             if ($request->artist_id != true) {
                 $post->artist_id = null;
@@ -100,6 +100,7 @@ class PostController extends Controller
             //dd($request->all());
             $post = new Post;
             $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
             $post->type = $request->type;
             if ($request->artist_id != true) {
                 $post->artist_id = null;
@@ -146,6 +147,7 @@ class PostController extends Controller
     public function show($id)
     {
         if (Auth::check() && Auth::user()->type == 'admin') {
+
             $score_format = Auth::user()->score_format;
 
             $post = Post::findOrFail($id);
@@ -183,7 +185,7 @@ class PostController extends Controller
         $tags = Tag::all();
         $artists = Artist::all();
 
-        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists','song'));
+        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists', 'song'));
     }
 
     /**
@@ -208,6 +210,7 @@ class PostController extends Controller
             $post = Post::find($id);
             $old_thumbnail = $post->thumbnail;
             $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
 
             if ($request->artist_id != true) {
                 $post->artist_id = null;
@@ -247,6 +250,7 @@ class PostController extends Controller
             $old_thumbnail = $post->thumbnail;
 
             $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
             if ($request->artist_id != true) {
                 $post->artist_id = null;
             } else {
@@ -290,7 +294,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
-        
+
         $file = $post->thumbnail;
 
         Storage::disk('public')->delete('/thumbnails/' . $file);
@@ -644,13 +648,13 @@ class PostController extends Controller
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
-                $op_count = $openings->count();
+            $op_count = $openings->count();
 
             $endings = Post::withAllTags($currentSeason->name)
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
-                $ed_count = $endings->count();
+            $ed_count = $endings->count();
 
 
             //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
@@ -658,27 +662,54 @@ class PostController extends Controller
             return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason', 'score_format'));
         }
     }
-    public function globalrank(){   
+    public function globalrank()
+    {
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {
             $score_format = null;
         }
-            $getOpenings = Post::where('type', 'op')
-                ->orderBy('title', 'asc')
-                ->get();
-            $op_count = $getOpenings->count();
+        $getOpenings = Post::where('type', 'op')
+            ->orderBy('title', 'asc')
+            ->get();
+        $op_count = $getOpenings->count();
 
-            $openings = $getOpenings->sortByDesc('averageRating')->take(100);
-        
-            $getEndings = Post::where('type', 'ed')
-                ->orderBy('title', 'asc')
-                ->get();
-            $ed_count = $getEndings->count();
+        $openings = $getOpenings->sortByDesc('averageRating')->take(100);
 
-            $endings = $getEndings->sortByDesc('averageRating')->take(100);
+        $getEndings = Post::where('type', 'ed')
+            ->orderBy('title', 'asc')
+            ->get();
+        $ed_count = $getEndings->count();
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
-        
+        $endings = $getEndings->sortByDesc('averageRating')->take(100);
+
+        return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
+    }
+
+    public function showBySlug($slug)
+    {
+        if (Auth::check() && Auth::user()->type == 'admin') {
+            $score_format = Auth::user()->score_format;
+
+            $post = Post::where('slug','=',$slug)->first();
+            //dd($post);
+            $artist = $post->artist;
+            $tags = $post->tagged;
+            //dd($post);
+            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+        }
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+            $post = Post::where('slug','=',$slug)->first();
+            $tags = $post->tagged;
+            $artist = $post->artist;
+            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+        } else {
+            $post = Post::where('slug','=',$slug)->first();
+            $tags = $post->tagged;
+            $artist = $post->artist;
+
+            return view('show', compact('post', 'tags', 'artist'));
+        }
     }
 }

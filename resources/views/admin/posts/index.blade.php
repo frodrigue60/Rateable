@@ -84,7 +84,7 @@
                     {{-- CARD FOOTER --}}
                     <div class="card-footer">
                         <div class="d-flex justify-content-center">
-                            {!! $posts->links() !!}
+                            {{ $posts->links() }}
                         </div>
                     </div>
                 </div>

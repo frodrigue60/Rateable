@@ -3,16 +3,13 @@
 @section('title', 'All Tags')
 
 @section('content')
-    <div class="container-fluid" style="width: 90%">
-        <section>
-            <div class="row">
-                <div class="col-12 mt-3 mb-1">
-                    <h2 class="text-uppercase text-light">All Seasons</h2>
-                </div>
+    <div class="container">
+            <div class="col-12 text-center">
+                <h1 class="text-uppercase text-light">All Seasons</h1>
             </div>
-            <div class="row">
+            <div class="row justify-content-center">
                 @foreach ($tags as $tag)
-                    <div class="col-xl-3 col-sm-6 col-12 mb-4">
+                    <div class="col-lg-4 col-md-6 col-sm-6 mb-3">
                         <a href="{{ route('fromtag', $tag->slug) }}" class="text-dark no-deco">
                         <div class="card" style="background-color: #95c4e5">
                             <div class="card-body">
@@ -28,6 +25,5 @@
                     </div>
                 @endforeach
             </div>
-        </section>
     </div>
 @endsection

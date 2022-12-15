@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('slug');
             $table->unsignedBigInteger('song_id')->nullable();
             $table->unsignedBigInteger('artist_id')->nullable();
             $table->enum('type', ['op', 'ed'])->nullable();

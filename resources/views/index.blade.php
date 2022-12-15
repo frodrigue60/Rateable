@@ -18,7 +18,7 @@
                             <h5 class="text-shadow text-uppercase">{{ $post->title }}</h5>
                         </div>
                         <div class="tarjeta-footer">
-                            <a href="{{ route('show', $post->id) }}" class="btn btn-sm btn-primary">Show
+                            <a href="{{ route('showbyslug', $post->slug) }}" class="btn btn-sm btn-primary">Show
                             </a>
                             @auth
                                 @if ($post->liked())
