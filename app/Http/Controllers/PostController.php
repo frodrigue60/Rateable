@@ -686,12 +686,12 @@ class PostController extends Controller
         return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
     }
 
-    public function showBySlug($slug)
+    public function showBySlug($id, $slug)
     {
         if (Auth::check() && Auth::user()->type == 'admin') {
             $score_format = Auth::user()->score_format;
 
-            $post = Post::where('slug','=',$slug)->first();
+            $post = Post::where('id','=',$id)->first();
             //dd($post);
             $artist = $post->artist;
             $tags = $post->tagged;
@@ -700,12 +700,12 @@ class PostController extends Controller
         }
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
-            $post = Post::where('slug','=',$slug)->first();
+            $post = Post::where('id','=',$id)->first();
             $tags = $post->tagged;
             $artist = $post->artist;
             return view('show', compact('post', 'tags', 'score_format', 'artist'));
         } else {
-            $post = Post::where('slug','=',$slug)->first();
+            $post = Post::where('id','=',$id)->first();
             $tags = $post->tagged;
             $artist = $post->artist;
 

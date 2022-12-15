@@ -24,7 +24,7 @@ use App\Http\Controllers\HomeController;
 Route::get('/',       [PostController::class, 'home'])->name('/');
 Route::get('/welcome',       [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
-Route::get('/{slug}/show',   [PostController::class, 'showBySlug'])->name('showbyslug');
+Route::get('/{id}/{slug}',   [PostController::class, 'showBySlug'])->name('showbyslug');
 
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalranking'])->name('seasonalranking');
