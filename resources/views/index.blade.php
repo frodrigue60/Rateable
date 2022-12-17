@@ -9,6 +9,11 @@
             </div>
         </div>
     @endif
+    <div class="container">
+        <span>
+            <h2 class="text-light">Popular this season</h2>
+        </span>
+    </div>
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)
@@ -16,7 +21,7 @@
                     style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
-                            <h5 class="text-shadow text-uppercase">{{ $post->title }}</h5>
+                            <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                         </div>
                         <div class="tarjeta-footer">
                             {{-- comment <a href="{{ route('showbyslug', [$post->id,$post->slug]) }}" class="btn btn-sm btn-primary">Show
@@ -154,6 +159,77 @@
                         </tr>
                     </table>
                     <a href="{{ route('seasonalranking') }}" class="btn btn-primary">All Places</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Flickity HTML init -->
+                <span>
+                    <h2 class="text-light">Latest added</h2>
+                </span>
+                <div class="gallery js-flickity" data-flickity-options='{ "wrapAround": true,"freeScroll": true}'>
+                    @foreach ($posts->sortByDesc('created_at') as $post)
+                        <div class="gallery-cell">
+                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                <div class="tarjeta"
+                                    style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}');">
+                                    <div class="textos">
+                                        <div class="tarjeta-header text-light">
+                                            <h6 class="text-shadow text-uppercase">{{ $post->title }} <span
+                                                    class="badge rounded-pill text-bg-primary">{{ $post->created_at }}</span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+                <span>
+                    <h2 class="text-light">Trending Now</h2>
+                </span>
+                <div class="gallery js-flickity" data-flickity-options='{ "wrapAround": true,"freeScroll": true}'>
+                    @foreach ($posts->sortByDesc('likeCount') as $post)
+                        <div class="gallery-cell">
+                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                <div class="tarjeta"
+                                    style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}');">
+                                    <div class="textos">
+                                        <div class="tarjeta-header text-light">
+                                            <h6 class="text-shadow text-uppercase">{{ $post->title }} <span
+                                                    class="badge rounded-pill text-bg-primary">{{ $post->likeCount }}</span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+                <span>
+                    <h2 class="text-light">Top Rated</h2>
+                </span>
+                <div class="gallery js-flickity" data-flickity-options='{ "wrapAround": true,"freeScroll": true}'>
+                    @foreach ($posts->sortByDesc('averageRating') as $post)
+                        <div class="gallery-cell">
+                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                <div class="tarjeta"
+                                    style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}');">
+                                    <div class="textos">
+                                        <div class="tarjeta-header text-light">
+                                            <h6 class="text-shadow text-uppercase">{{ $post->title }} <span
+                                                    class="badge rounded-pill text-bg-primary">{{ $post->averageRating / 1 }}</span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
             </div>
         </div>

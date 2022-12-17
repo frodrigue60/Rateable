@@ -7,7 +7,6 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\CurrentSeasonController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\HomeController;
-use App\Models\Post;
 
 /*
 |--------------------------------------------------------------------------

@@ -1,3 +1,36 @@
+
+.gallery{
+	margin-bottom: 1%;
+	padding: 1%;
+	background-color: #0e3d5f;
+	
+}
+.gallery-cell .tarjeta {
+	min-height: 270px;
+	max-height: 300px;
+	min-width: 170px;
+	margin-left: 5px;
+	margin-right: 5px;
+  }
+  /* position dots in gallery */
+.flickity-page-dots {
+	bottom: 0px;
+	visibility: hidden;
+  }
+  /* white circles */
+  .flickity-page-dots .dot {
+	width: 12px;
+	height: 12px;
+	opacity: 1;
+	background: transparent;
+	border: 2px solid white;
+	visibility: hidden;
+  }
+  /* fill-in selected dot */
+  .flickity-page-dots .dot.is-selected {
+	background: white;
+	visibility: hidden;
+  }
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -46,7 +79,7 @@
 }
 
 .text-shadow {
-	background: #0000007a;
+	background: #00000091;
 	border-radius: 3px;
 	padding: 3px 3px;
 	width: 100%;
@@ -160,13 +193,6 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;
-	}
-	
-	.text-shadow {
-		background: #0000007a;
-		border-radius: 3px;
-		padding: 3px 3px;
-		width: 100%;
 	}
 	
 	.contenedor {
