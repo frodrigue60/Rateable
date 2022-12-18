@@ -9,11 +9,6 @@
             </div>
         </div>
     @endif
-    <div class="container">
-        <span>
-            <h2 class="text-light">Popular this season</h2>
-        </span>
-    </div>
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)
