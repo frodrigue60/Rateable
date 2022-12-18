@@ -172,7 +172,7 @@
 	.contenedor {
 		max-width: 1450px;
 		display: grid;
-		grid-template-columns: 5fr 1fr;
+		grid-template-columns: 4fr 1fr;
 		gap: 10px;
 		inline-size: fit-content;
 	}
