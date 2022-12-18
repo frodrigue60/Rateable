@@ -36,7 +36,7 @@
                                 @else
                                     <form action="{{ route('like.post', $post->id) }}" method="post">
                                         @csrf
-                                        <button class="btn btn-sm btn-success"><i class="fa fa-heart"
+                                        <button class="btn btn-sm btn-primary"><i class="fa fa-heart"
                                                 aria-hidden="true"></i></button>
                                     </form>
                                 @endif

@@ -28,7 +28,7 @@
                         style="background-image: url('{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}')">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h5 class="text-shadow text-uppercase">{{ $opening->title }}</h5>
+                                <h6 class="text-shadow text-uppercase">{{ $opening->title }}</h6>
                             </div>
                             <div class="tarjeta-footer">
                                 {{-- <a href="{{ route('show', $opening->id) }}" class="btn btn-sm btn-primary">Show</a>--}}
@@ -90,7 +90,7 @@
                         style="background-image: url('{{ asset('/storage/thumbnails/' . $ending->thumbnail) }}')">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h4 class="text-shadow text-uppercase">{{ $ending->title }}</h4>
+                                <h6 class="text-shadow text-uppercase">{{ $ending->title }}</h6>
                             </div>
                             <div class="tarjeta-footer">
                                 {{--<a href="{{ route('show', $ending->id) }}" class="btn btn-primary"> Ver</a>--}}
