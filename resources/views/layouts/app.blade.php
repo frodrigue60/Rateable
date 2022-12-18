@@ -58,8 +58,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-                        <a class="nav-link {{ Request::is('/') ? 'active' : '' }}"
-                            href="{{ route('/') }}">Openings</a>
+                        <a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
+                            href="{{ route('openings') }}">Openings</a>
                         <a class="nav-link {{ Request::is('endings') ? 'active' : '' }}"
                             href="{{ route('endings') }}">Endings</a>
                         <a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"

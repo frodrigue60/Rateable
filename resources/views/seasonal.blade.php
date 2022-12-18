@@ -9,9 +9,6 @@
             </div>
         </div>
     @endif
-    <div class="container">
-        <h1 class="text-light">INDEX</h1>
-    </div>
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)

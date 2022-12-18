@@ -377,6 +377,43 @@ class PostController extends Controller
         }
     }
 
+    public function openings()
+    {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+        $currentSeason = DB::table('current_season')->first();
+
+        if ($currentSeason == null) {
+
+            $posts = Post::where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+
+            $tags = DB::table('tagging_tags')
+                ->orderBy('name', 'desc')
+                ->take(5)
+                ->get();
+
+            return view('seasonal', compact('posts', 'tags', 'score_format'));
+        } else {
+            $currentSeason = DB::table('current_season')->first();
+
+            $posts = Post::withAllTags($currentSeason->name)
+                ->where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+
+            $tags = DB::table('tagging_tags')
+                ->orderBy('name', 'desc')
+                ->take(5)
+                ->get();
+
+            return view('seasonal', compact('posts', 'tags', 'score_format'));
+        }
+    }
     public function endings()
     {
         if (Auth::check()) {

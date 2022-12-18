@@ -24,6 +24,7 @@ Route::get('/welcome',       [HomeController::class, 'welcome'])->name('welcome'
 Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('show');
 Route::get('/show/{id}/{slug}',   [PostController::class, 'showBySlug'])->name('showbyslug');
 
+Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalranking'])->name('seasonalranking');
 Route::get('/global-ranking',       [PostController::class, 'globalrank'])->name('globalranking');
