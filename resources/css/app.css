@@ -1,22 +1,22 @@
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-	background: #00000034; 
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-	background: #3877a3; 
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-	background: #0e3d5f; 
-  }
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #00000034;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #3877a3;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #0e3d5f;
+}
 
 .card {
 	background-color: #0e3d5f;
@@ -64,14 +64,20 @@
 
 .contenedor-tarjetas {
 	display: grid;
-	grid-template-columns: repeat(7, 1fr);
+	/*grid-template-columns: repeat(7, 1fr);*/
+	grid-template-columns: repeat(auto-fill, 150px);
+	grid-template-rows: repeat(auto-fill, 220px);
 	gap: 15px;
+	place-content: center;
 }
 
 .contenedor-favoritos {
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	/*grid-template-columns: repeat(6, 1fr);*/
+	grid-template-columns: repeat(auto-fill, 150px);
+	grid-template-rows: repeat(auto-fill, 220px);
 	gap: 15px;
+	place-content: center;
 }
 
 .tarjeta {
@@ -83,15 +89,14 @@
 	overflow: hidden;
 	background-size: cover;
 	background-position: center center;
-	min-height: 270px;
+	min-height: 220px;
 	max-height: 300px;
-	max-width: 170px;
+	max-width: 150px;
 	cursor: pointer;
 }
 
 .tarjeta .textos {
 	height: 100%;
-
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -150,10 +155,12 @@
 	font-family: 'Roboto', sans-serif;
 	cursor: pointer;
 }
+
 @media screen and (max-width: 1920px) {
-	.card{
+	.card {
 		width: 80%;
 	}
+
 	.ellipsis {
 		text-align: left;
 		max-width: 10ch;
@@ -161,14 +168,14 @@
 		overflow: hidden;
 		white-space: nowrap;
 	}
-	
+
 	.text-shadow {
 		background: #0000007a;
 		border-radius: 3px;
 		padding: 3px 3px;
 		width: 100%;
 	}
-	
+
 	.contenedor {
 		max-width: 1450px;
 		display: grid;
@@ -176,52 +183,44 @@
 		gap: 10px;
 		inline-size: fit-content;
 	}
-	
-	.contenedor-tarjetas {
+
+	/*.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		/*grid-template-columns: repeat(5, 1fr);
 		gap: 15px;
 	}
-	
+
 	.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(7, 1fr);
+		/*grid-template-columns: repeat(7, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
-	}
-	
-	.tarjeta {
-		border-radius: 8px;
-	
-		font-weight: bold;
-		padding: 5px;
-		position: relative;
-		overflow: hidden;
-		background-size: cover;
-		background-position: center center;
-		min-height: 300px;
-		min-width: 200px;
-	}
-	
+		place-content: center;
+	}*/
+
 	.tarjeta .textos {
 		height: 100%;
-	
+
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-	
+
 	}
-	
+
 	.tarjeta .textos .tarjeta-header {
 		display: flex;
 		flex-direction: row;
 	}
-	
+
 	.tarjeta .textos .tarjeta-footer {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 	}
-	
+
 	.contenedor-banner {
 		width: 100%;
 		display: grid;
@@ -229,30 +228,30 @@
 		gap: 10px;
 		align-self: baseline;
 	}
-	
+
 	.banner {
 		border-radius: 8px;
 		text-align: center;
 		padding: 10px;
 		background-size: cover;
 		background-position: center center;
-	
+
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		height: fit-content;
-		
+
 	}
-	
+
 	.banner ul {
 		list-style: none;
 	}
-	
+
 	.banner ul li {
 		margin: 15px;
 		font-weight: bold;
 	}
-	
+
 	.banner .boton {
 		background: #FFD600;
 		display: block;
@@ -268,6 +267,7 @@
 	}
 
 }
+
 @media screen and (max-width: 1440px) {
 	.contenedor {
 		inline-size: fit-content;
@@ -275,30 +275,24 @@
 		grid-template-columns: 4fr 1fr;
 		gap: 10px;
 	}
-	
-	.contenedor-tarjetas {
+
+	/*.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		/*grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
-	
+
 	.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(7, 1fr);
+		/*grid-template-columns: repeat(7, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
-	}
-	
-	.tarjeta {
-		border-radius: 8px;
-		font-weight: bold;
-		padding: 5px;
-		position: relative;
-		overflow: hidden;
-		background-size: cover;
-		background-position: center center;
-		min-height: 300px;
-		min-width: 200px;
-	}
+		place-content: center;
+	}*/
+
 	.contenedor-banner {
 		width: 100%;
 		display: grid;
@@ -306,28 +300,29 @@
 		gap: 10px;
 		align-self: baseline;
 	}
-	
+
 	.banner {
 		border-radius: 8px;
 		text-align: center;
 		padding: 10px;
 		background-size: cover;
 		background-position: center center;
-	
+
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		height: fit-content;
-		
+
 	}
-	
+
 
 }
 
 @media screen and (max-width: 1280px) {
-	.card{
+	.card {
 		width: 100%;
 	}
+
 	.ellipsis {
 		text-align: left;
 		max-width: 15ch;
@@ -346,19 +341,25 @@
 		flex-direction: column;
 	}
 
-	.contenedor-tarjetas {
+	/*.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 20px;
-		align-self: center;
+		/*grid-template-columns: repeat(4, 1fr);
+		/*align-self: center;
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
+		place-content: center;
 
 	}
 
 	.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		/*grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
-	}
+		place-content: center;
+	}*/
 
 	.contenedor-banner {
 
@@ -385,41 +386,35 @@
 }
 
 @media screen and (max-width: 800px) {
-	.card{
+	.card {
 		width: 100%;
 	}
+
 	.contenedor {
 		inline-size: fit-content;
 		display: flex;
 		flex-direction: column;
 	}
 
-	.contenedor-tarjetas {
+	/*.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 20px;
-		align-self: center;
+		/*grid-template-columns: repeat(3, 1fr);
+		/*align-self: center;
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
+
+		place-content: center;
 	}
 
 	.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		/*grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
-	}
-
-	.tarjeta {
-		border-radius: 8px;
-
-		font-weight: bold;
-		padding: 5px;
-		position: relative;
-		overflow: hidden;
-		background-size: cover;
-		background-position: center center;
-		min-height: 300px;
-		max-width: 185px;
-
-	}
+		place-content: center;
+	}*/
 
 	.contenedor-banner {
 		width: 640px;
@@ -444,9 +439,10 @@
 }
 
 @media screen and (max-width: 600px) {
-	.card{
+	.card {
 		width: 100%;
 	}
+
 	.contenedor {
 		max-width: 390px;
 		padding: 0px 0;
@@ -455,30 +451,23 @@
 		flex-direction: column;
 	}
 
-	.contenedor-tarjetas {
+	/*.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		/*grid-template-columns: repeat(2, 1fr);
 		align-self: center;
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		place-content: center;
 	}
 
 	.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		/*grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
-	}
-
-	.tarjeta {
-		border-radius: 8px;
-		font-weight: bold;
-		padding: 5px;
-		position: relative;
-		overflow: hidden;
-		background-size: cover;
-		background-position: center center;
-		min-height: 300px;
-		max-width: 185px;
-
-	}
+		place-content: center;
+	}*/
 
 	.tarjeta .textos {
 

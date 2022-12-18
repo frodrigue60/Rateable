@@ -10,7 +10,7 @@
                 <div onclick="location.href='{{ route('showbyslug', [$opening->id, $opening->slug]) }}';" class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
-                            <h4 class="text-shadow text-uppercase">{{ $opening->title }}</h4>
+                            <h6 class="text-shadow text-uppercase">{{ $opening->title }}</h6>
                         </div>
                         <div class="tarjeta-footer">
                             {{-- <a href="{{ route('show', $opening->id) }}" class="btn btn-sm btn-primary">Show</a> --}}
@@ -67,14 +67,14 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($endings as $ending)
-                <div class="tarjeta"
+                <div onclick="location.href='{{ route('showbyslug', [$ending->id, $ending->slug]) }}';" class="tarjeta"
                     style="background-image: url('{{ asset('/storage/thumbnails/' . $ending->thumbnail) }}')">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
-                            <h4 class="text-shadow text-uppercase">{{ $ending->title }}</h4>
+                            <h6 class="text-shadow text-uppercase">{{ $ending->title }}</h6>
                         </div>
                         <div class="tarjeta-footer">
-                            <a href="{{ route('show', $ending->id) }}" class="btn btn-sm btn-primary"> Ver</a>
+                            {{--<a href="{{ route('show', $ending->id) }}" class="btn btn-sm btn-primary"> Ver</a>--}}
                             @auth
                                 @if ($ending->liked())
                                     <form action="{{ route('unlike.post', $ending->id) }}" method="post">
