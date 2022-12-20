@@ -7,11 +7,12 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($openings as $opening)
-                <div onclick="location.href='{{ route('showbyslug', [$opening->id, $opening->slug]) }}';" class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}')">
+                <div onclick="location.href='{{ route('showbyslug', [$opening->id, $opening->slug]) }}';" class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h6 class="text-shadow text-uppercase">{{ $opening->title }}</h6>
                         </div>
+                        <img src="{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}" alt="">
                         <div class="tarjeta-footer">
                             {{-- <a href="{{ route('show', $opening->id) }}" class="btn btn-sm btn-primary">Show</a> --}}
                             @auth

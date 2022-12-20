@@ -434,7 +434,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags', 'score_format'));
+            return view('seasonal', compact('posts', 'tags', 'score_format'));
         } else {
             $currentSeason = DB::table('current_season')->first();
 
@@ -448,7 +448,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags', 'score_format'));
+            return view('seasonal', compact('posts', 'tags', 'score_format'));
         }
     }
 

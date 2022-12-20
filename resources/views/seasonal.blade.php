@@ -12,18 +12,18 @@
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)
-                <div onclick="location.href='{{ route('showbyslug', [$post->id, $post->slug]) }}';" class="tarjeta"
-                    style="background-image: url('{{ asset('/storage/thumbnails/' . $post->thumbnail) }}')">
+                <div onclick="location.href='{{ route('showbyslug', [$post->id, $post->slug]) }}';" class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                         </div>
+                        <img src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="">
                         <div class="tarjeta-footer">
                             {{-- comment <a href="{{ route('showbyslug', [$post->id,$post->slug]) }}" class="btn btn-sm btn-primary">Show
                             </a>
                             <input class="btn btn-sm btn-primary" type="button" onclick="location.href='{{ route('showbyslug', [$post->id,$post->slug]) }}';" value="Show" /> --}}
                             @guest
-                                <a href="{{ route('login') }}" class="btn btn-danger active" role="button"><i
+                                <a href="{{ route('login') }}" class="btn btn-sm btn-danger active" role="button"><i
                                         class="fa fa-heart" aria-hidden="true"></i></a>
                             @endguest
                             @auth

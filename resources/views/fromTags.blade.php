@@ -24,12 +24,12 @@
         <div class="contenedor-favoritos">
             @isset($openings)
                 @foreach ($openings as $opening)
-                    <div onclick="location.href='{{ route('showbyslug', [$opening->id, $opening->slug]) }}';" class="tarjeta"
-                        style="background-image: url('{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}')">
+                    <div onclick="location.href='{{ route('showbyslug', [$opening->id, $opening->slug]) }}';" class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
                                 <h6 class="text-shadow text-uppercase">{{ $opening->title }}</h6>
                             </div>
+                            <img src="{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}" alt="">
                             <div class="tarjeta-footer">
                                 {{-- <a href="{{ route('show', $opening->id) }}" class="btn btn-sm btn-primary">Show</a>--}}
                                 @auth
@@ -86,12 +86,12 @@
         <div class="contenedor-favoritos">
             @isset($endings)
                 @foreach ($endings as $ending)
-                    <div onclick="location.href='{{ route('showbyslug', [$opening->id, $opening->slug]) }}';" class="tarjeta"
-                        style="background-image: url('{{ asset('/storage/thumbnails/' . $ending->thumbnail) }}')">
+                    <div onclick="location.href='{{ route('showbyslug', [$opening->id, $opening->slug]) }}';" class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
                                 <h6 class="text-shadow text-uppercase">{{ $ending->title }}</h6>
                             </div>
+                            <img src="{{ asset('/storage/thumbnails/' . $ending->thumbnail) }}" alt="">
                             <div class="tarjeta-footer">
                                 {{--<a href="{{ route('show', $ending->id) }}" class="btn btn-primary"> Ver</a>--}}
                                 @auth

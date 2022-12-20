@@ -14,28 +14,27 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($openings as $opening)
-                <div class="tarjeta"
-                    style="background-image: url('{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}')">
+                <div class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
-                            <h4 class="text-shadow text-uppercase">{{ $opening->title }}</h4>
+                            <h6 class="text-shadow text-uppercase">{{ $opening->title }}</h6>
                         </div>
+                        <img src="{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}" alt="">
                         <div class="tarjeta-footer">
-                            <a href="{{ route('show', $opening->id) }}" class="btn btn-primary"> Ver</a>
                             @auth
                                 @if ($opening->liked())
                                     <form action="{{ route('unlike.post', $opening->id) }}" method="post">
                                         @csrf
-                                        <button class="btn btn-danger"><i class="fa fa-heart"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="fa fa-heart"></i></button>
                                     </form>
                                 @else
                                     <form action="{{ route('like.post', $opening->id) }}" method="post">
                                         @csrf
-                                        <button class="btn btn-success"><i class="fa fa-heart"></i></button>
+                                        <button class="btn btn-sm btn-success"><i class="fa fa-heart"></i></button>
                                     </form>
                                 @endif
                             @endauth
-                            <button class="btn btn-primary">
+                            <button class="btn btn-sm btn-warning">
                                 @if (isset($score_format))
                                     @switch($score_format)
                                         @case('POINT_100')
