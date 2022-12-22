@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
 
 class PostController extends Controller
 {
@@ -740,13 +741,23 @@ class PostController extends Controller
             $post = Post::where('id','=',$id)->first();
             $tags = $post->tagged;
             $artist = $post->artist;
+            $this->count_views($id);
             return view('show', compact('post', 'tags', 'score_format', 'artist'));
         } else {
             $post = Post::where('id','=',$id)->first();
             $tags = $post->tagged;
             $artist = $post->artist;
+            $this->count_views($id);
 
             return view('show', compact('post', 'tags', 'artist'));
+        }
+    }
+    public function count_views($id){
+        if (!Session::has('page_visited_' . $id)) {
+            DB::table('posts')
+                ->where('id', $id)
+                ->increment('view_count');
+            Session::put('page_visited_' . $id, true);
         }
     }
 }

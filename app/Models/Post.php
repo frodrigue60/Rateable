@@ -24,6 +24,7 @@ class Post extends Model
         'scndlink',
         'type',
         'thumbnail',
+        'view_count',
     ];
 
     public function artist()

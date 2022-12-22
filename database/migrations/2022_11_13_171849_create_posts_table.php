@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('ytlink')->nullable();
             $table->text('scndlink')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->bigInteger('view_count')->default(0);
             $table->timestamps();
 
             $table->foreign('artist_id')
