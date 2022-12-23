@@ -14,16 +14,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <h1 class="text-light text-center">{{$post->title}}</h1>
+        <h1 class="text-light text-center" hidden>{{$post->title}}</h1>
         <div class="row justify-content-center">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-start">
-                    <div id="button-group">
-                        <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option1</button>
-                        @if ($post->scndlink != null)
-                           <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button> 
-                        @endif
-                    </div>
+                    <h5 class="card-title text-light">{{$post->title}}</h5>
                     <div>
                         @auth
                             @if ($post->liked())
@@ -49,10 +44,11 @@
                     {!!$post->ytlink!!}
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-start">
-                    <div class="">
-                        <a name="" id="" class="btn btn-success" href="#" role="button">Spotify</a>
-                        <a name="" id="" class="btn btn-success" href="#" role="button">Apple
-                            Music</a>
+                    <div id="button-group">
+                        <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option1</button>
+                        @if ($post->scndlink != null)
+                           <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button> 
+                        @endif
                     </div>
                     <div class="">
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"

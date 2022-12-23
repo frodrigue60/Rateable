@@ -1,22 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-	background: #00000034; 
-  }
-   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-	background: #3877a3; 
-  }
-  
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-	background: #0e3d5f; 
-  }
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: #00000034;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #3877a3;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #0e3d5f;
+}
+
+body {
+	font-family: 'Lato','Roboto',Arial, Helvetica, sans-serif;
+}
+
 
 .card {
 	background-color: #0e3d5f;
@@ -24,14 +30,6 @@
 	border-radius: 5px;
 	padding: 5px;
 }
-
-
-* {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
-}
-
 
 .no-deco {
 	text-decoration: none;
@@ -46,14 +44,14 @@
 }
 
 .text-shadow {
-	background: #0000007a;
-	border-radius: 3px;
+	background: #00000091;
+	border-radius: 0px;
 	padding: 3px 3px;
 	width: 100%;
 }
 
 .contenedor {
-	width: 90%;
+	max-width: 1440px;
 	margin: auto;
 	padding: 0px 0;
 
@@ -64,48 +62,77 @@
 
 .contenedor-tarjetas {
 	display: grid;
-	grid-template-columns: repeat(7, 1fr);
+	/*grid-template-columns: repeat(7, 1fr);*/
+	grid-template-columns: repeat(auto-fill, 150px);
+	grid-template-rows: repeat(auto-fill, 220px);
 	gap: 15px;
 }
 
 .contenedor-favoritos {
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	/*grid-template-columns: repeat(6, 1fr);*/
+	grid-template-columns: repeat(auto-fill, 150px);
+	grid-template-rows: repeat(auto-fill, 220px);
 	gap: 15px;
+	place-content: space-around;
 }
 
-.tarjeta {
-	border-radius: 8px;
+div.tarjeta div img {
+	position: absolute;
+	width: 150px;
+	height: 220px;
+	overflow: hidden;
+	background-position: center center;
+	-webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: .2s ease-in-out;
+	transition: .2s ease-in-out;
+}
 
+div.tarjeta {
+	border-radius: 5px;
 	font-weight: bold;
-	padding: 5px;
 	position: relative;
 	overflow: hidden;
+	width: 150px;
+	height: 220px;
+	cursor: pointer;
+}
+
+div.tarjeta img:hover {
 	background-size: cover;
-	background-position: center center;
-	min-height: 270px;
-	max-height: 300px;
-	max-width: 170px;
+	-webkit-transform: scale(1.2);
+	transform: scale(1.2);
 }
 
 .tarjeta .textos {
 	height: 100%;
-
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-
 }
 
 .tarjeta .textos .tarjeta-header {
 	display: flex;
 	flex-direction: row;
+	width: 150px;
+	align-self: center;
+	z-index: 1;
 }
 
 .tarjeta .textos .tarjeta-footer {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	background-color: #00000091;
+	width: 150px;
+	align-self: center;
+	padding-left: 5px;
+	padding-right: 5px;
+	height: 40px;
+	align-items: center;
+	/* margin-bottom: -5px; */
+	z-index: 1;
 }
 
 .contenedor-banner {
@@ -149,10 +176,12 @@
 	font-family: 'Roboto', sans-serif;
 	cursor: pointer;
 }
+
 @media screen and (max-width: 1920px) {
-	.card{
+	.card {
 		width: 80%;
 	}
+
 	.ellipsis {
 		text-align: left;
 		max-width: 10ch;
@@ -160,99 +189,85 @@
 		overflow: hidden;
 		white-space: nowrap;
 	}
-	
-	.text-shadow {
-		background: #0000007a;
-		border-radius: 3px;
-		padding: 3px 3px;
-		width: 100%;
-	}
-	
+
 	.contenedor {
-		width: 90%;
-		max-width: 1920px;
-		margin: auto;
-		padding: 0px 0;
-	
+		max-width: 1250px;
 		display: grid;
-		grid-template-columns: 5fr 1fr;
-		gap: 10px;
+		grid-template-columns: 4fr 1fr;
+		gap: 15px;
+		/*inline-size: fit-content;*/
+		padding-left: 6px;
+		padding-right: 6px;
 	}
-	
-	.contenedor-tarjetas {
+
+	/*.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(6, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		/*grid-template-columns: repeat(5, 1fr);
 		gap: 15px;
 	}
-	
+
 	.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(7, 1fr);
+		/*grid-template-columns: repeat(7, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
-	}
-	
-	.tarjeta {
-		border-radius: 8px;
-	
-		font-weight: bold;
-		padding: 5px;
-		position: relative;
-		overflow: hidden;
-		background-size: cover;
-		background-position: center center;
-		min-height: 270px;
-		max-height: 300px;
-		max-width: 170px;
-	}
-	
+		place-content: center;
+	}*/
+
 	.tarjeta .textos {
 		height: 100%;
-	
+
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-	
+
 	}
-	
+
 	.tarjeta .textos .tarjeta-header {
 		display: flex;
 		flex-direction: row;
 	}
-	
+
 	.tarjeta .textos .tarjeta-footer {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 	}
-	
+
 	.contenedor-banner {
 		width: 100%;
 		display: grid;
 		grid-template-rows: auto;
 		gap: 10px;
+		align-self: baseline;
 	}
-	
+
 	.banner {
 		border-radius: 8px;
 		text-align: center;
 		padding: 10px;
 		background-size: cover;
 		background-position: center center;
-	
+
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		height: fit-content;
+
 	}
-	
+
 	.banner ul {
 		list-style: none;
 	}
-	
+
 	.banner ul li {
 		margin: 15px;
 		font-weight: bold;
 	}
-	
+
 	.banner .boton {
 		background: #FFD600;
 		display: block;
@@ -268,52 +283,65 @@
 	}
 
 }
-@media screen and (max-width: 1700px) {
+
+@media screen and (max-width: 1440px) {
 	.contenedor {
-		width: 90%;
-		max-width: 1700px;
-		margin: auto;
-		padding: 0px 0;
-	
+		width: 1260px;
 		display: grid;
 		grid-template-columns: 4fr 1fr;
-		gap: 10px;
+		gap: 15px;
+		/* padding-left: 12px;
+		padding-right: 12px; */
+
 	}
-	
-	.contenedor-tarjetas {
+
+	/*.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
+		/*grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
-	
+
 	.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(7, 1fr);
+		/*grid-template-columns: repeat(7, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
+		place-content: center;
+	}*/
+
+	.contenedor-banner {
+		width: 100%;
+		display: grid;
+		grid-template-rows: auto;
+		gap: 10px;
+		align-self: baseline;
 	}
-	
-	.tarjeta {
+
+	.banner {
 		border-radius: 8px;
-	
-		font-weight: bold;
-		padding: 5px;
-		position: relative;
-		overflow: hidden;
+		text-align: center;
+		padding: 10px;
 		background-size: cover;
 		background-position: center center;
-		min-height: 270px;
-		max-height: 300px;
-		max-width: 170px;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: fit-content;
+
 	}
-	
-	
+
 
 }
 
 @media screen and (max-width: 1280px) {
-	.card{
+	.card {
 		width: 100%;
 	}
+
 	.ellipsis {
 		text-align: left;
 		max-width: 15ch;
@@ -323,38 +351,161 @@
 	}
 
 	.contenedor {
-		width: 90%;
-		max-width: 1150px;
-		margin: auto;
-		padding: 0px 0;
+		width: 920px;
+		display: grid;
+		grid-template-columns: 5fr 1fr;
+		gap: 15px;
+		padding-left: 12px;
+		padding-right: 12px;
 
-		display: flex;
-		flex-direction: column;
 	}
 
-	.contenedor-tarjetas {
+	/*.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 20px;
+		/*grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
 	}
 
 	.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		/*grid-template-columns: repeat(7, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
+		place-content: center;
+	}*/
+
+	.contenedor-banner {
+		width: 100%;
+		display: grid;
+		grid-template-rows: auto;
+		gap: 10px;
+		align-self: baseline;
+	}
+
+	.banner {
+		border-radius: 8px;
+		text-align: center;
+		padding: 10px;
+		background-size: cover;
+		background-position: center center;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: fit-content;
+
+	}
+
+}
+
+@media screen and (max-width: 960px) {
+	.card {
+		width: 100%;
+	}
+
+	.ellipsis {
+		text-align: left;
+		max-width: 15ch;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	.contenedor {
+		width: 670px;
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+		padding-left: 12px;
+		padding-right: 12px;
+	}
+
+	/*.contenedor-tarjetas {
+		display: grid;
+		/*grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
+
+	.contenedor-favoritos {
+		display: grid;
+		/*grid-template-columns: repeat(7, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
+		place-content: center;
+	}*/
 
 	.contenedor-banner {
 		width: 100%;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 10px;
+		align-self: baseline;
+	}
+
+	.banner {
+		border-radius: 8px;
+		text-align: center;
+		padding: 10px;
+		background-size: cover;
+		background-position: center center;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: fit-content;
+
+	}
+
+}
+
+@media screen and (max-width: 800px) {
+	.card {
+		width: 100%;
+	}
+
+	.contenedor {
+		width: 675px;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.contenedor-tarjetas {
+		display: grid;
+		/*grid-template-columns: repeat(3, 1fr);
+		align-self: center;*/
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
+
+		place-content: center;
+	}
+
+	/*.contenedor-favoritos {
+		display: grid;
+		/*grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
+		place-content: center;
+	}*/
+
+	.contenedor-banner {
+		width: 640px;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 10px;
+		align-self: center;
 	}
 
 	.banner {
 		border-radius: 10px;
 		text-align: center;
-		padding: 20px;
 		background-size: cover;
 		background-position: center center;
 
@@ -363,59 +514,51 @@
 		justify-content: space-between;
 	}
 
+
 }
 
-@media screen and (max-width: 800px) {
-	.card{
+@media screen and (max-width: 768px) {
+	.card {
 		width: 100%;
 	}
-	.contenedor {
-		width: 90%;
-		max-width: 1200px;
-		margin: auto;
-		padding: 0px 0;
 
+	.contenedor {
+		width: 510px;
 		display: flex;
 		flex-direction: column;
 	}
 
 	.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 20px;
-	}
-
-	.contenedor-favoritos {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		/*grid-template-columns: repeat(3, 1fr);
+		align-self: center;*/
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
+
+		place-content: center;
 	}
 
-	.tarjeta {
-		border-radius: 8px;
-
-		font-weight: bold;
-		padding: 5px;
-		position: relative;
-		overflow: hidden;
-		background-size: cover;
-		background-position: center center;
-		min-height: 300px;
-		max-width: 185px;
-
-	}
+	/*.contenedor-favoritos {
+		display: grid;
+		/*grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
+		place-content: center;
+	}*/
 
 	.contenedor-banner {
-		width: 100%;
+		width: 484px;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 10px;
+		align-self: center;
 	}
 
 	.banner {
 		border-radius: 10px;
 		text-align: center;
-		padding: 20px;
 		background-size: cover;
 		background-position: center center;
 
@@ -428,13 +571,12 @@
 }
 
 @media screen and (max-width: 600px) {
-	.card{
+	.card {
 		width: 100%;
 	}
+
 	.contenedor {
-		width: 90%;
-		max-width: 1200px;
-		margin: auto;
+		max-width: 325px;
 		padding: 0px 0;
 
 		display: flex;
@@ -443,27 +585,21 @@
 
 	.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		/*grid-template-columns: repeat(2, 1fr);
+		align-self: center;*/
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		place-content: center;
 	}
 
-	.contenedor-favoritos {
+	/*.contenedor-favoritos {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		/*grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
-	}
-
-	.tarjeta {
-		border-radius: 8px;
-		font-weight: bold;
-		padding: 5px;
-		position: relative;
-		overflow: hidden;
-		background-size: cover;
-		background-position: center center;
-		min-height: 300px;
-		max-width: 185px;
-
-	}
+		place-content: center;
+	}*/
 
 	.tarjeta .textos {
 
@@ -484,6 +620,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+		width: 325px;
 	}
 
 }

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -21,8 +22,14 @@
 .card {
 	background-color: #0e3d5f;
 	border: 0px;
-	border-radius: 5px;
-	padding: 5px;
+	border-radius: 0px;
+	padding: 0px;
+}
+.color1{
+	background-color: #0e3d5f;
+}
+.color2{
+	background: #0c2638;
 }
 
 .no-deco {
@@ -71,7 +78,7 @@
 	place-content: space-around;
 }
 
-div.tarjeta div img{
+div.tarjeta div img {
 	position: absolute;
 	width: 150px;
 	height: 220px;
@@ -185,9 +192,9 @@ div.tarjeta img:hover {
 	}
 
 	.contenedor {
-		max-width: 1400px;
+		max-width: 1250px;
 		display: grid;
-		grid-template-columns: 5fr 1fr;
+		grid-template-columns: 4fr 1fr;
 		gap: 15px;
 		/*inline-size: fit-content;*/
 		padding-left: 6px;
@@ -284,8 +291,8 @@ div.tarjeta img:hover {
 		display: grid;
 		grid-template-columns: 4fr 1fr;
 		gap: 15px;
-		padding-left: 12px;
-		padding-right: 12px;
+		/* padding-left: 12px;
+		padding-right: 12px; */
 
 	}
 
@@ -345,7 +352,7 @@ div.tarjeta img:hover {
 	}
 
 	.contenedor {
-		width: 900px;
+		width: 920px;
 		display: grid;
 		grid-template-columns: 5fr 1fr;
 		gap: 15px;
@@ -409,9 +416,9 @@ div.tarjeta img:hover {
 	}
 
 	.contenedor {
-		width: 735px;
-		display: grid;
-		grid-template-columns: 5fr 1fr;
+		width: 670px;
+		display: flex;
+		flex-direction: column;
 		gap: 15px;
 		padding-left: 12px;
 		padding-right: 12px;
@@ -437,7 +444,7 @@ div.tarjeta img:hover {
 	.contenedor-banner {
 		width: 100%;
 		display: grid;
-		grid-template-rows: auto;
+		grid-template-columns: repeat(2, 1fr);
 		gap: 10px;
 		align-self: baseline;
 	}
@@ -464,7 +471,7 @@ div.tarjeta img:hover {
 	}
 
 	.contenedor {
-		width: 800px;
+		width: 675px;
 		display: flex;
 		flex-direction: column;
 	}
@@ -517,7 +524,7 @@ div.tarjeta img:hover {
 	}
 
 	.contenedor {
-		width: 600px;
+		width: 510px;
 		display: flex;
 		flex-direction: column;
 	}
@@ -543,7 +550,7 @@ div.tarjeta img:hover {
 	}*/
 
 	.contenedor-banner {
-		width: 640px;
+		width: 484px;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		gap: 10px;
@@ -570,7 +577,7 @@ div.tarjeta img:hover {
 	}
 
 	.contenedor {
-		max-width: 390px;
+		max-width: 325px;
 		padding: 0px 0;
 
 		display: flex;
@@ -614,7 +621,7 @@ div.tarjeta img:hover {
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
-		width: 420px;
+		width: 325px;
 	}
 
 }

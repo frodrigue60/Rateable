@@ -22,29 +22,33 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('resources/flickity/flickity.css') }}" media="screen">
 
-    {{--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> 
-
-    <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}">    --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    {{-- <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.css') }}"> --}}
 
     <!-- JS -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
-    {{--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
-    </script>   --}}
-    <script src="{{ asset('resources/flickity/flickity.pkgd.js') }}"></script>
     <script src="{{ asset('resources/js/jquery-3.6.3.js') }}"></script>
+    {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script>
+    <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.js') }}"></script> --}}
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
+
 
 </head>
 
-<body style="background-color: #08263b;">
+<body class="color2">
     <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0e3d5f;">
+        <nav class="navbar navbar-expand-lg navbar-dark color1">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('text4491.png') }}" alt="Logo" width="157" height="25">
@@ -102,10 +106,9 @@
                         </form> --}}
                         <form class="d-flex" role="search" action="{{ route('search') }}" method="GET">
                             <select class="btn btn-primary dropdown-toggle" name="search_type">
-                                <option value="op_ed">OP & ED</option>
-                                <option value="op">Only Openings</option>
-                                <option value="ed">Only Endings</option>
-                                <option value="artist">By Artist</option>
+                                <option value="op_ed">Anime</option>
+                                <option value="artist">Artist</option>
+                                <option value="season">Season</option>
                             </select>
                             <input type="text" name="search" class="form-control" aria-label="search"
                                 placeholder="Type something...">
@@ -137,9 +140,10 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     @if (Auth::user()->image)
-                                    <img src="{{ asset('/storage/profile/' . Auth::user()->image) }}" alt="profile pic" width="25" height="25">
+                                        <img src="{{ asset('/storage/profile/' . Auth::user()->image) }}"
+                                            alt="profile pic" width="25" height="25">
                                     @else
-                                     <i class="fa fa-user-circle-o" aria-hidden="true"></i>   
+                                        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                                     @endif
                                     {{ Auth::user()->name }}
                                 </a>
@@ -169,7 +173,7 @@
         <main class="py-4">
             @yield('content')
         </main>
-        <footer class="text-center text-lg-start py-1 mt-1" style="background-color: #0e3d5f;">
+        <footer class="text-center text-lg-start py-1 mt-1 color1">
             <div class="text-center p-3 text-light">
                 © 2022 Copyright:
                 <a class="no-deco text-light" href="#">{{ config('app.name', 'Laravel') }}</a>
@@ -177,4 +181,5 @@
         </footer>
     </div>
 </body>
+
 </html>
