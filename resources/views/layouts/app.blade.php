@@ -38,6 +38,7 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>   --}}
     <script src="{{ asset('resources/flickity/flickity.pkgd.js') }}"></script>
+    <script src="{{ asset('resources/js/jquery-3.6.3.js') }}"></script>
 
 </head>
 
@@ -168,14 +169,12 @@
         <main class="py-4">
             @yield('content')
         </main>
-        <footer class="text-center text-lg-start" style="background-color: #0e3d5f;">
+        <footer class="text-center text-lg-start py-1 mt-1" style="background-color: #0e3d5f;">
             <div class="text-center p-3 text-light">
                 © 2022 Copyright:
                 <a class="no-deco text-light" href="#">{{ config('app.name', 'Laravel') }}</a>
             </div>
         </footer>
     </div>
-
 </body>
-
 </html>
