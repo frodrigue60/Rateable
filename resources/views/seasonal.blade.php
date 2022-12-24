@@ -12,71 +12,57 @@
     <div class="contenedor">
         <div class="contenedor-tarjetas">
             @foreach ($posts as $post)
-                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                    <div class="tarjeta">
-                        <div class="textos">
-                            <div class="tarjeta-header text-light">
-                                <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
-                            </div>
-                            <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="{{ $post->title }}">
-                            <div class="tarjeta-footer">
-                                {{-- comment <a href="{{ route('showbyslug', [$post->id,$post->slug]) }}" class="btn btn-sm btn-primary">Show
-                            </a>
-                            <input class="btn btn-sm btn-primary" type="button" onclick="location.href='{{ route('showbyslug', [$post->id,$post->slug]) }}';" value="Show" /> --}}
-                                @guest
-                                    <a href="{{ route('login') }}" class="btn btn-sm btn-danger active" role="button"><i
-                                            class="fa fa-heart" aria-hidden="true"></i></a>
-                                @endguest
-                                @auth
-                                    @if ($post->liked())
-                                        <form action="{{ route('unlike.post', $post->id) }}" method="post">
-                                            @csrf
-                                            <button class="btn btn-sm btn-danger"><i class="fa fa-heart"
-                                                    aria-hidden="true"></i></button>
-                                        </form>
-                                    @else
-                                        <form action="{{ route('like.post', $post->id) }}" method="post">
-                                            @csrf
-                                            <button class="btn btn-sm btn-primary"><i class="fa fa-heart"
-                                                    aria-hidden="true"></i></button>
-                                        </form>
-                                    @endif
-                                @endauth
-                                <button class="btn btn-sm btn-warning">
-                                    @if (isset($score_format))
-                                        @switch($score_format)
-                                            @case('POINT_100')
-                                                <strong>{{ round($post->averageRating) }}</strong>
-                                            @break
+                        <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                            <div class="tarjeta">
+                                <div class="textos">
+                                    <div class="tarjeta-header text-light">
+                                        <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
+                                    </div>
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                    <div class="tarjeta-footer text-light">
+                                        <div>
+                                            {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                        </div>
+                                        <div>
+                                            {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                        </div>
+                                        <div>
+                                            @if (isset($score_format))
+                                                @switch($score_format)
+                                                    @case('POINT_100')
+                                                        <strong>{{ round($post->averageRating) }}</strong>
+                                                    @break
 
-                                            @case('POINT_10_DECIMAL')
+                                                    @case('POINT_10_DECIMAL')
+                                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
+
+                                                    @case('POINT_10')
+                                                        <strong>{{ round($post->averageRating / 10) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
+
+                                                    @case('POINT_5')
+                                                        <strong>{{ round($post->averageRating / 20) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
+
+                                                    @default
+                                                        <strong>{{ round($post->averageRating) }}</strong>
+                                                @endswitch
+                                            @else
                                                 <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
                                                     class="fa fa-star"></i>
-                                            @break
-
-                                            @case('POINT_10')
-                                                <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
-                                            @break
-
-                                            @case('POINT_5')
-                                                <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
-                                            @break
-
-                                            @default
-                                                <strong>{{ round($post->averageRating) }}</strong>
-                                        @endswitch
-                                    @else
-                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                            class="fa fa-star"></i>
-                                    @endif
-                                </button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </a>
-            @endforeach
+                        </a>
+                @endforeach
         </div>
-
         <div class="contenedor-banner">
             <div class="banner text-white" style="background-image: url('{{ asset('banner-background.webp') }}');">
                 <table>
@@ -160,6 +146,5 @@
                 <a href="{{ route('seasonalranking') }}" class="btn btn-primary">All Places</a>
             </div>
         </div>
-
     </div>
 @endsection

@@ -18,6 +18,11 @@
 ::-webkit-scrollbar-thumb:hover {
 	background: #0e3d5f;
 }
+.carousel-cell{
+	width: 150px;
+	height: 230px;
+	margin: 0px 7px 0px 7px;
+}
 
 .card{
 	background-color: #0e3d5f;
@@ -92,7 +97,6 @@
 	-webkit-transition: .2s ease-in-out;
 	transition: .2s ease-in-out;
 }
-
 .tarjeta {
 	border-radius: 5px;
 	font-weight: bold;
@@ -172,7 +176,7 @@
 	}
 
 	.contenedor {
-		max-width: 1250px;
+		max-width: 1260px;
 		display: grid;
 		grid-template-columns: 4fr 1fr;
 		gap: 15px;
@@ -239,30 +243,6 @@
 		height: fit-content;
 
 	}
-
-	.banner ul {
-		list-style: none;
-	}
-
-	.banner ul li {
-		margin: 15px;
-		font-weight: bold;
-	}
-
-	.banner .boton {
-		background: #FFD600;
-		display: block;
-		width: 100%;
-		font-weight: bold;
-		font-size: 14px;
-		text-align: center;
-		padding: 10px;
-		border: none;
-		border-radius: 100px;
-		font-family: 'Roboto', sans-serif;
-		cursor: pointer;
-	}
-
 }
 
 @media screen and (max-width: 1440px) {

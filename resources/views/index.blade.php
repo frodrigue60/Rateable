@@ -14,170 +14,176 @@
             <div class="mb-1 mt-1" style="background-color: #0E3D5F">
                 <h2 class="text-light">Top rated</h2>
             </div>
-
-            <div class="contenedor-tarjetas">
-                @foreach ($posts->sortByDesc('averageRating')->take(6) as $post)
-                    <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                        <div class="tarjeta">
-                            <div class="textos">
-                                <div class="tarjeta-header text-light">
-                                    <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
-                                </div>
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
-                                <div class="tarjeta-footer text-light">
-                                    <div>
-                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
+            <div id="carousel1" class="main-carousel">
+                @foreach ($posts->sortByDesc('averageRating')->take(10) as $post)
+                    <div class="carousel-cell">
+                        <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                            <div class="tarjeta">
+                                <div class="textos">
+                                    <div class="tarjeta-header text-light">
+                                        <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                                     </div>
-                                    <div>
-                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                    </div>
-                                    <div>
-                                        @if (isset($score_format))
-                                            @switch($score_format)
-                                                @case('POINT_100')
-                                                    <strong>{{ round($post->averageRating) }}</strong>
-                                                @break
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                    <div class="tarjeta-footer text-light">
+                                        <div>
+                                            {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                        </div>
+                                        <div>
+                                            {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                        </div>
+                                        <div>
+                                            @if (isset($score_format))
+                                                @switch($score_format)
+                                                    @case('POINT_100')
+                                                        <strong>{{ round($post->averageRating) }}</strong>
+                                                    @break
 
-                                                @case('POINT_10_DECIMAL')
-                                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_10_DECIMAL')
+                                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @case('POINT_10')
-                                                    <strong>{{ round($post->averageRating / 10) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_10')
+                                                        <strong>{{ round($post->averageRating / 10) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @case('POINT_5')
-                                                    <strong>{{ round($post->averageRating / 20) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_5')
+                                                        <strong>{{ round($post->averageRating / 20) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @default
-                                                    <strong>{{ round($post->averageRating) }}</strong>
-                                            @endswitch
-                                        @else
-                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                class="fa fa-star"></i>
-                                        @endif
+                                                    @default
+                                                        <strong>{{ round($post->averageRating) }}</strong>
+                                                @endswitch
+                                            @else
+                                                <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                    class="fa fa-star"></i>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 @endforeach
             </div>
+
             <div class="mb-1 mt-2" style="background-color: #0E3D5F">
                 <h2 class="text-light">Top viewed</h2>
             </div>
-            <div class="contenedor-tarjetas">
-                @foreach ($posts->sortByDesc('view_count')->take(6) as $post)
-                    <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                        <div class="tarjeta">
-                            <div class="textos">
-                                <div class="tarjeta-header text-light">
-                                    <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
-                                </div>
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
-                                <div class="tarjeta-footer text-light">
-                                    <div>
-                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
+            <div id="carousel2" class="main-carousel">
+                @foreach ($posts->sortByDesc('view_count')->take(10) as $post)
+                    <div class="carousel-cell">
+                        <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                            <div class="tarjeta">
+                                <div class="textos">
+                                    <div class="tarjeta-header text-light">
+                                        <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                                     </div>
-                                    <div>
-                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                    </div>
-                                    <div>
-                                        @if (isset($score_format))
-                                            @switch($score_format)
-                                                @case('POINT_100')
-                                                    <strong>{{ round($post->averageRating) }}</strong>
-                                                @break
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                    <div class="tarjeta-footer text-light">
+                                        <div>
+                                            {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                        </div>
+                                        <div>
+                                            {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                        </div>
+                                        <div>
+                                            @if (isset($score_format))
+                                                @switch($score_format)
+                                                    @case('POINT_100')
+                                                        <strong>{{ round($post->averageRating) }}</strong>
+                                                    @break
 
-                                                @case('POINT_10_DECIMAL')
-                                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_10_DECIMAL')
+                                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @case('POINT_10')
-                                                    <strong>{{ round($post->averageRating / 10) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_10')
+                                                        <strong>{{ round($post->averageRating / 10) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @case('POINT_5')
-                                                    <strong>{{ round($post->averageRating / 20) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_5')
+                                                        <strong>{{ round($post->averageRating / 20) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @default
-                                                    <strong>{{ round($post->averageRating) }}</strong>
-                                            @endswitch
-                                        @else
-                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                class="fa fa-star"></i>
-                                        @endif
+                                                    @default
+                                                        <strong>{{ round($post->averageRating) }}</strong>
+                                                @endswitch
+                                            @else
+                                                <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                    class="fa fa-star"></i>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 @endforeach
             </div>
             <div class="mb-1 mt-2" style="background-color: #0E3D5F">
                 <h2 class="text-light">Most popular</h2>
             </div>
-            <div class="contenedor-tarjetas">
-                @foreach ($posts->sortByDesc('likeCount')->take(6) as $post)
-                    <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                        <div class="tarjeta">
-                            <div class="textos">
-                                <div class="tarjeta-header text-light">
-                                    <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
-                                </div>
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
-                                <div class="tarjeta-footer text-light">
-                                    <div>
-                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
+            <div id="carousel3" class="main-carousel">
+                @foreach ($posts->sortByDesc('likeCount')->take(10) as $post)
+                    <div class="carousel-cell">
+                        <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                            <div class="tarjeta">
+                                <div class="textos">
+                                    <div class="tarjeta-header text-light">
+                                        <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                                     </div>
-                                    <div>
-                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                    </div>
-                                    <div>
-                                        @if (isset($score_format))
-                                            @switch($score_format)
-                                                @case('POINT_100')
-                                                    <strong>{{ round($post->averageRating) }}</strong>
-                                                @break
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                    <div class="tarjeta-footer text-light">
+                                        <div>
+                                            {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                        </div>
+                                        <div>
+                                            {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                        </div>
+                                        <div>
+                                            @if (isset($score_format))
+                                                @switch($score_format)
+                                                    @case('POINT_100')
+                                                        <strong>{{ round($post->averageRating) }}</strong>
+                                                    @break
 
-                                                @case('POINT_10_DECIMAL')
-                                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_10_DECIMAL')
+                                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @case('POINT_10')
-                                                    <strong>{{ round($post->averageRating / 10) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_10')
+                                                        <strong>{{ round($post->averageRating / 10) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @case('POINT_5')
-                                                    <strong>{{ round($post->averageRating / 20) }}</strong> <i
-                                                        class="fa fa-star"></i>
-                                                @break
+                                                    @case('POINT_5')
+                                                        <strong>{{ round($post->averageRating / 20) }}</strong> <i
+                                                            class="fa fa-star"></i>
+                                                    @break
 
-                                                @default
-                                                    <strong>{{ round($post->averageRating) }}</strong>
-                                            @endswitch
-                                        @else
-                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                class="fa fa-star"></i>
-                                        @endif
+                                                    @default
+                                                        <strong>{{ round($post->averageRating) }}</strong>
+                                                @endswitch
+                                            @else
+                                                <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                    class="fa fa-star"></i>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 @endforeach
             </div>
         </div>
@@ -286,5 +292,41 @@
                 </div>
             </div>
         </div>
+        <script>
+            var elem = document.querySelector('#carousel1');
+            var elem2 = document.querySelector('#carousel2');
+            var elem3 = document.querySelector('#carousel3');
+            
+            var flkty = new Flickity(elem, {
+                // options
+                cellAlign: 'left',
+                contain: true,
+                wrapAround: false,
+                prevNextButtons: true,
+                pageDots: false,
+                initialIndex: 0,
+                freeScroll: false,
+            });
+            var flkty2 = new Flickity(elem2, {
+                // options
+                cellAlign: 'left',
+                contain: true,
+                wrapAround: false,
+                prevNextButtons: true,
+                pageDots: false,
+                initialIndex: 0,
+                freeScroll: false,
+            });
+            var flkty3 = new Flickity(elem3, {
+                // options
+                cellAlign: 'left',
+                contain: true,
+                wrapAround: false,
+                prevNextButtons: true,
+                pageDots: false,
+                initialIndex: 0,
+                freeScroll: false,
+            });
+        </script>
     </div>
 @endsection

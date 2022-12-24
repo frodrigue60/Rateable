@@ -27,58 +27,50 @@
         </div>
         <div class="contenedor-favoritos">
             @isset($openings)
-                @foreach ($openings as $opening)
-                    <a class="no-deco" href="{{ route('showbyslug', [$opening->id, $opening->slug]) }}">
+                @foreach ($openings as $post)
+                    <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
-                                    <h6 class="text-shadow text-uppercase">{{ $opening->title }}</h6>
+                                    <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                                 </div>
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $opening->thumbnail) }}"
-                                    alt="{{ $opening->title }}">
-                                <div class="tarjeta-footer">
-                                    {{-- <a href="{{ route('show', $opening->id) }}" class="btn btn-sm btn-primary">Show</a> --}}
-                                    @auth
-                                        @if ($opening->liked())
-                                            <form action="{{ route('unlike.post', $opening->id) }}" method="post">
-                                                @csrf
-                                                <button class="btn btn-sm btn-danger"><i class="fa fa-heart"></i></button>
-                                            </form>
-                                        @else
-                                            <form action="{{ route('like.post', $opening->id) }}" method="post">
-                                                @csrf
-                                                <button class="btn btn-sm btn-success"><i class="fa fa-heart"></i></button>
-                                            </form>
-                                        @endif
-                                    @endauth
-                                    <button class="btn btn-sm btn-warning">
+                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    alt="{{ $post->title }}">
+                                <div class="tarjeta-footer text-light">
+                                    <div>
+                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                    </div>
+                                    <div>
+                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                    </div>
+                                    <div>
                                         @if (isset($score_format))
                                             @switch($score_format)
                                                 @case('POINT_100')
-                                                    {{ round($opening->averageRating) }}
+                                                    <strong>{{ round($post->averageRating) }}</strong>
                                                 @break
 
                                                 @case('POINT_10_DECIMAL')
-                                                    {{ round($opening->averageRating / 10, 1) }}
-                                                    <i class="fa fa-star"></i>
+                                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                        class="fa fa-star"></i>
                                                 @break
 
                                                 @case('POINT_10')
-                                                    {{ round($opening->averageRating / 10) }} <i class="fa fa-star"></i>
+                                                    <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
                                                 @break
 
                                                 @case('POINT_5')
-                                                    {{ round($opening->averageRating / 20) }} <i class="fa fa-star"></i>
+                                                    <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
                                                 @break
 
                                                 @default
-                                                    {{ round($opening->averageRating) }}
+                                                    <strong>{{ round($post->averageRating) }}</strong>
                                             @endswitch
                                         @else
-                                            {{ round($opening->averageRating / 10, 1) }}
-                                            <i class="fa fa-star"></i>
+                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                class="fa fa-star"></i>
                                         @endif
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -92,56 +84,50 @@
         </div>
         <div class="contenedor-favoritos">
             @isset($endings)
-                @foreach ($endings as $ending)
-                    <a class="no-deco" href="{{ route('showbyslug', [$ending->id, $ending->slug]) }}">
+                @foreach ($endings as $post)
+                    <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
-                                    <h6 class="text-shadow text-uppercase">{{ $ending->title }}</h6>
+                                    <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                                 </div>
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $ending->thumbnail) }}"
-                                    alt="{{ $ending->title }}">
-                                <div class="tarjeta-footer">
-                                    {{-- <a href="{{ route('show', $ending->id) }}" class="btn btn-primary"> Ver</a> --}}
-                                    @auth
-                                        @if ($ending->liked())
-                                            <form action="{{ route('unlike.post', $ending->id) }}" method="post">
-                                                @csrf
-                                                <button class="btn btn-sm btn-danger"><i class="fa fa-heart"></i></button>
-                                            </form>
-                                        @else
-                                            <form action="{{ route('like.post', $ending->id) }}" method="post">
-                                                @csrf
-                                                <button class="btn btn-sm btn-success"><i class="fa fa-heart"></i></button>
-                                            </form>
-                                        @endif
-                                    @endauth
-                                    <button class="btn btn-sm btn-warning">
+                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    alt="{{ $post->title }}">
+                                <div class="tarjeta-footer text-light">
+                                    <div>
+                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                    </div>
+                                    <div>
+                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                    </div>
+                                    <div>
                                         @if (isset($score_format))
                                             @switch($score_format)
                                                 @case('POINT_100')
-                                                    {{ round($ending->averageRating) }}
+                                                    <strong>{{ round($post->averageRating) }}</strong>
                                                 @break
 
                                                 @case('POINT_10_DECIMAL')
-                                                    {{ round($ending->averageRating / 10, 1) }} <i class="fa fa-star"></i>
+                                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                        class="fa fa-star"></i>
                                                 @break
 
                                                 @case('POINT_10')
-                                                    {{ round($ending->averageRating / 10) }} <i class="fa fa-star"></i>
+                                                    <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
                                                 @break
 
                                                 @case('POINT_5')
-                                                    {{ round($ending->averageRating / 20) }} <i class="fa fa-star"></i>
+                                                    <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
                                                 @break
 
                                                 @default
-                                                    {{ round($ending->averageRating) }}
+                                                    <strong>{{ round($post->averageRating) }}</strong>
                                             @endswitch
                                         @else
-                                            {{ round($ending->averageRating) }}
+                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                class="fa fa-star"></i>
                                         @endif
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
