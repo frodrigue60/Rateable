@@ -584,23 +584,28 @@ class PostController extends Controller
     public function search(Request $request)
     {
         if ($request->input('search') != null) {
-
             $type_search = $request->search_type;
+            if (Auth::check()) {
+                $score_format = Auth::user()->score_format;
+            } else {
+                $score_format = null;
+            }
+
             switch ($type_search) {
-                case 'op':
+                case 'anime':
                     $openings = Post::query()
                         ->where('title', 'LIKE', "%{$request->input('search')}%")
                         ->where('type', '=', 'op')
-                        ->get();
-                    return view('fromTags', compact('openings'));
-                    break;
+                        ->get()
+                        ->take(20);
 
-                case 'ed':
                     $endings = Post::query()
                         ->where('title', 'LIKE', "%{$request->input('search')}%")
                         ->where('type', '=', 'ed')
-                        ->get();
-                    return view('fromTags', compact('endings'));
+                        ->get()
+                        ->take(20);
+
+                    return view('fromTags', compact('openings', 'score_format', 'endings'));
                     break;
 
                 case 'artist':
@@ -619,23 +624,23 @@ class PostController extends Controller
                         ->where('artist_id', '=', $artist->id)
                         ->where('type', '=', 'ed')
                         ->get();
-                    return view('fromTags', compact('openings', 'endings', 'artist'));
+                    return view('fromTags', compact('openings', 'endings', 'score_format', 'artist'));
                     break;
+                case 'season':
+                    $slug = Str::slug($request->input('search'));
+                    $tagName = DB::table('tagging_tags')->where('slug', 'LIKE', $slug)->first(['name']);
+                    //dd($tagName);
+                    $openings = Post::withAnyTag([$slug])
+                        ->where('type', 'op')
+                        ->orderby('title', 'asc')
+                        ->get();
 
-                default:
-                    $openings = Post::query()
-                        ->where('title', 'LIKE', "%{$request->input('search')}%")
-                        ->where('type', '=', 'op')
-                        ->get()
-                        ->take(20);
+                    $endings = Post::withAnyTag([$slug])
+                        ->where('type', 'ed')
+                        ->orderby('title', 'asc')
+                        ->get();
 
-                    $endings = Post::query()
-                        ->where('title', 'LIKE', "%{$request->input('search')}%")
-                        ->where('type', '=', 'ed')
-                        ->get()
-                        ->take(20);
-
-                    return view('fromTags', compact('openings', 'endings'));
+                    return view('fromTags', compact('openings', 'endings', 'score_format', 'tagName'));
 
                     break;
             }
@@ -729,7 +734,7 @@ class PostController extends Controller
         if (Auth::check() && Auth::user()->type == 'admin') {
             $score_format = Auth::user()->score_format;
 
-            $post = Post::where('id','=',$id)->first();
+            $post = Post::where('id', '=', $id)->first();
             //dd($post);
             $artist = $post->artist;
             $tags = $post->tagged;
@@ -738,13 +743,13 @@ class PostController extends Controller
         }
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
-            $post = Post::where('id','=',$id)->first();
+            $post = Post::where('id', '=', $id)->first();
             $tags = $post->tagged;
             $artist = $post->artist;
             $this->count_views($id);
             return view('show', compact('post', 'tags', 'score_format', 'artist'));
         } else {
-            $post = Post::where('id','=',$id)->first();
+            $post = Post::where('id', '=', $id)->first();
             $tags = $post->tagged;
             $artist = $post->artist;
             $this->count_views($id);
@@ -752,7 +757,8 @@ class PostController extends Controller
             return view('show', compact('post', 'tags', 'artist'));
         }
     }
-    public function count_views($id){
+    public function count_views($id)
+    {
         if (!Session::has('page_visited_' . $id)) {
             DB::table('posts')
                 ->where('id', $id)

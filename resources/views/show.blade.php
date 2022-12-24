@@ -14,21 +14,23 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <h1 class="text-light text-center" hidden>{{$post->title}}</h1>
+        <h1 class="text-light text-center" hidden>{{ $post->title }}</h1>
         <div class="row justify-content-center">
-            <div class="card">
+            <div class="card card-video">
                 <div class="card-header d-flex justify-content-between align-items-start">
-                    <h5 class="card-title text-light">{{$post->title}}</h5>
+                    <h5 class="card-title text-light">{{ $post->title }}</h5>
                     <div>
+                        @guest
+                            <button class="btn btn-danger" disabled id="like">Favorite <i class="fa fa-heart"></i></button>
+                        @endguest
                         @auth
                             @if ($post->liked())
-                            
                                 <form action="{{ route('unlike.post', $post->id) }}" method="post">
                                     @csrf
                                     <button class="btn btn-danger" id="like">Favorite <i class="fa fa-heart"></i></button>
                                 </form>
                             @else
-                            <form action="{{ route('like.post', $post->id) }}" method="post">
+                                <form action="{{ route('like.post', $post->id) }}" method="post">
                                     @csrf
                                     <button class="btn btn-success" id="like">Favorite <i class="fa fa-heart"></i></button>
                                 </form>
@@ -40,14 +42,14 @@
                     {{-- comment <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
                         allowfullscreen>
-                    </iframe>--}}
-                    {!!$post->ytlink!!}
+                    </iframe> --}}
+                    {!! $post->ytlink !!}
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-start">
                     <div id="button-group">
                         <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option1</button>
                         @if ($post->scndlink != null)
-                           <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button> 
+                            <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button>
                         @endif
                     </div>
                     <div class="">
@@ -136,11 +138,14 @@
                                 </div>
                             </div>
                             @guest
-                            <hr>
-                            <h6>for voting</h6>
-                            <div>
-                                <a name="" id="" class="btn btn-sm btn-primary" href="{{route('login')}}" role="button">Login</a> or <a name="" id="" class="btn btn-sm btn-primary" href="{{route('register')}}" role="button">Register</a>
-                            </div>
+                                <hr>
+                                <h6>for voting</h6>
+                                <div>
+                                    <a name="" id="" class="btn btn-sm btn-primary" href="{{ route('login') }}"
+                                        role="button">Login</a> or <a name="" id=""
+                                        class="btn btn-sm btn-primary" href="{{ route('register') }}"
+                                        role="button">Register</a>
+                                </div>
                             @endguest
                         </div>
                         <br>
@@ -256,7 +261,7 @@
 
                 var option = document.getElementById(e.target.id);
                 var link = option.getAttribute('value');
-                
+
                 const id_iframe = document.getElementById("id_iframe");
                 //id_iframe.setAttribute("src", link);
                 id_iframe.innerHTML = link;

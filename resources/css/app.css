@@ -19,7 +19,10 @@
 	background: #0e3d5f;
 }
 
-.card {
+.card{
+	background-color: #0e3d5f;
+}
+.card-video {
 	background-color: #0e3d5f;
 	border: 0px;
 	border-radius: 0px;
@@ -78,7 +81,7 @@
 	place-content: space-around;
 }
 
-div.tarjeta div img {
+#thumb {
 	position: absolute;
 	width: 150px;
 	height: 220px;
@@ -90,7 +93,7 @@ div.tarjeta div img {
 	transition: .2s ease-in-out;
 }
 
-div.tarjeta {
+.tarjeta {
 	border-radius: 5px;
 	font-weight: bold;
 	position: relative;
@@ -100,7 +103,7 @@ div.tarjeta {
 	cursor: pointer;
 }
 
-div.tarjeta img:hover {
+#thumb:hover {
 	background-size: cover;
 	-webkit-transform: scale(1.2);
 	transform: scale(1.2);
@@ -153,29 +156,6 @@ div.tarjeta img:hover {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-}
-
-.banner ul {
-	list-style: none;
-}
-
-.banner ul li {
-	margin: 15px;
-	font-weight: bold;
-}
-
-.banner .boton {
-	background: #FFD600;
-	display: block;
-	width: 100%;
-	font-weight: bold;
-	font-size: 14px;
-	text-align: center;
-	padding: 10px;
-	border: none;
-	border-radius: 100px;
-	font-family: 'Roboto', sans-serif;
-	cursor: pointer;
 }
 
 @media screen and (max-width: 1920px) {
