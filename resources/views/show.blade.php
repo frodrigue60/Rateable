@@ -47,7 +47,7 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-start">
                     <div id="button-group">
-                        <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option1</button>
+                        <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option 1</button>
                         @if ($post->scndlink != null)
                             <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button>
                         @endif
