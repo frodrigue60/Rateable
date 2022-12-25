@@ -33,6 +33,7 @@
                                             {{ $post->view_count }} <i class="fa fa-eye"></i>
                                         </div>
                                         <div>
+                                            
                                             @if (isset($score_format))
                                                 @switch($score_format)
                                                     @case('POINT_100')
@@ -58,9 +59,10 @@
                                                         <strong>{{ round($post->averageRating) }}</strong>
                                                 @endswitch
                                             @else
-                                                <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
+                                                {{ round($post->averageRating / 10, 1) }} <i
                                                     class="fa fa-star"></i>
                                             @endif
+                                            
                                         </div>
                                     </div>
                                 </div>
