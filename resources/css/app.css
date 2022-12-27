@@ -23,6 +23,9 @@
 	height: 230px;
 	margin: 0px 7px 0px 7px;
 }
+#video-title{
+	margin-top: auto;
+}
 
 .card {
 	background-color: #0e3d5f;
@@ -92,14 +95,13 @@
 	height: 220px;
 	overflow: hidden;
 	background-position: center center;
-	-webkit-transform: scale(1);
 	transform: scale(1);
-	-webkit-transition: .2s ease-in-out;
 	transition: .2s ease-in-out;
+	top: 0;
 }
 .tarjeta {
 	border-radius: 5px;
-	font-weight: bold;
+	/* font-weight: bold; */
 	position: relative;
 	overflow: hidden;
 	width: 150px;
@@ -109,7 +111,6 @@
 
 #thumb:hover {
 	background-size: cover;
-	-webkit-transform: scale(1.2);
 	transform: scale(1.2);
 }
 
@@ -123,9 +124,9 @@
 .tarjeta .textos .tarjeta-header {
 	display: flex;
 	flex-direction: row;
-	width: 150px;
+	width: 100%;
 	align-self: center;
-	z-index: 1;
+	z-index: 3;
 }
 
 .tarjeta .textos .tarjeta-footer {
@@ -133,14 +134,14 @@
 	flex-direction: row;
 	justify-content: space-between;
 	background-color: #00000091;
-	width: 150px;
+	width: 100%;
 	align-self: center;
 	padding-left: 5px;
 	padding-right: 5px;
-	height: 25px;
+	height: 30px;
 	align-items: center;
 	/* margin-bottom: -5px; */
-	z-index: 1;
+	z-index: 3;
 }
 
 .contenedor-banner {

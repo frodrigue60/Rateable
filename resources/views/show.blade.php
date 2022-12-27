@@ -18,7 +18,7 @@
         <div class="row justify-content-center">
             <div class="card card-video">
                 <div class="card-header d-flex justify-content-between align-items-start">
-                    <h5 class="card-title text-light">{{ $post->title }}</h5>
+                    <h5 id="video-title" class="card-title text-light">{{ $post->title }}</h5>
                     <div>
                         @guest
                             <button class="btn btn-danger" disabled id="like">Favorite <i class="fa fa-heart"></i></button>
@@ -76,29 +76,28 @@
                                     @if (isset($score_format))
                                         @switch($score_format)
                                             @case('POINT_100')
-                                                <strong>{{ round($post->averageRating) }}</strong>
+                                                {{ round($post->averageRating) }}
                                             @break
 
                                             @case('POINT_10_DECIMAL')
-                                                <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                    class="fa fa-star"></i>
+                                                {{ round($post->averageRating / 10, 1) }}
                                             @break
 
                                             @case('POINT_10')
-                                                <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
+                                                {{ round($post->averageRating / 10) }}
                                             @break
 
                                             @case('POINT_5')
-                                                <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
+                                                {{ round($post->averageRating / 20) }}
                                             @break
 
                                             @default
-                                                <strong>{{ round($post->averageRating) }}</strong>
+                                                {{ round($post->averageRating) }}
                                         @endswitch
                                     @else
-                                        <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                            class="fa fa-star"></i>
+                                        {{ round($post->averageRating / 10, 1) }}
                                     @endif
+                                    <i class="fa fa-star" aria-hidden="true"></i>
                                 </strong>
                             </h2>
 

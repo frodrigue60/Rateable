@@ -7,14 +7,16 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($openings as $post)
-                    <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                    
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
                                     <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                                 </div>
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}">
+                                </a>
                                 <div class="tarjeta-footer text-light">
                                     <div>
                                         {{ $post->likeCount }} <i class="fa fa-heart"></i>
@@ -26,34 +28,33 @@
                                         @if (isset($score_format))
                                             @switch($score_format)
                                                 @case('POINT_100')
-                                                    <strong>{{ round($post->averageRating) }}</strong>
+                                                    {{ round($post->averageRating) }}
                                                 @break
 
                                                 @case('POINT_10_DECIMAL')
-                                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                        class="fa fa-star"></i>
+                                                    {{ round($post->averageRating / 10, 1) }}
                                                 @break
 
                                                 @case('POINT_10')
-                                                    <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
+                                                    {{ round($post->averageRating / 10) }}
                                                 @break
 
                                                 @case('POINT_5')
-                                                    <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
+                                                    {{ round($post->averageRating / 20) }}
                                                 @break
 
                                                 @default
-                                                    <strong>{{ round($post->averageRating) }}</strong>
+                                                    {{ round($post->averageRating) }}
                                             @endswitch
                                         @else
-                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                class="fa fa-star"></i>
+                                            {{ round($post->averageRating / 10, 1) }}
                                         @endif
+                                        <i class="fa fa-star" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    
                 @endforeach
         </div>
         <hr>
@@ -63,14 +64,16 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($endings as $post)
-                    <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                    
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
                                     <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                                 </div>
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}">
+                                </a>
                                 <div class="tarjeta-footer text-light">
                                     <div>
                                         {{ $post->likeCount }} <i class="fa fa-heart"></i>
@@ -82,34 +85,33 @@
                                         @if (isset($score_format))
                                             @switch($score_format)
                                                 @case('POINT_100')
-                                                    <strong>{{ round($post->averageRating) }}</strong>
+                                                    {{ round($post->averageRating) }}
                                                 @break
 
                                                 @case('POINT_10_DECIMAL')
-                                                    <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                        class="fa fa-star"></i>
+                                                    {{ round($post->averageRating / 10, 1) }}
                                                 @break
 
                                                 @case('POINT_10')
-                                                    <strong>{{ round($post->averageRating / 10) }}</strong> <i class="fa fa-star"></i>
+                                                    {{ round($post->averageRating / 10) }}
                                                 @break
 
                                                 @case('POINT_5')
-                                                    <strong>{{ round($post->averageRating / 20) }}</strong> <i class="fa fa-star"></i>
+                                                    {{ round($post->averageRating / 20) }}
                                                 @break
 
                                                 @default
-                                                    <strong>{{ round($post->averageRating) }}</strong>
+                                                    {{ round($post->averageRating) }}
                                             @endswitch
                                         @else
-                                            <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                class="fa fa-star"></i>
+                                            {{ round($post->averageRating / 10, 1) }}
                                         @endif
+                                        <i class="fa fa-star" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </a>
+                    
                 @endforeach
         </div>
     </div>

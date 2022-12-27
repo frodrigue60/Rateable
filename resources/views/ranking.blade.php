@@ -35,15 +35,14 @@
 
                                             @case('POINT_10_DECIMAL')
                                                 {{ round($opening->averageRating / 10, 1) }}
-                                                <i class="fa fa-star"></i>
                                             @break
 
                                             @case('POINT_10')
-                                                {{ round($opening->averageRating / 10) }} <i class="fa fa-star"></i>
+                                                {{ round($opening->averageRating / 10) }}
                                             @break
 
                                             @case('POINT_5')
-                                                {{ round($opening->averageRating / 20) }} <i class="fa fa-star"></i>
+                                                {{ round($opening->averageRating / 20) }}
                                             @break
 
                                             @default
@@ -51,8 +50,8 @@
                                         @endswitch
                                     @else
                                         {{ round($opening->averageRating / 10, 1) }}
-                                        <i class="fa fa-star"></i>
                                     @endif
+                                    <i class="fa fa-star" aria-hidden="true"></i>
                                 </td>
                             </tr>
                         @endforeach
@@ -89,15 +88,15 @@
                                             @break
 
                                             @case('POINT_10_DECIMAL')
-                                                {{ round($ending->averageRating / 10, 1) }} <i class="fa fa-star"></i>
+                                                {{ round($ending->averageRating / 10, 1) }}
                                             @break
 
                                             @case('POINT_10')
-                                                {{ round($ending->averageRating / 10) }} <i class="fa fa-star"></i>
+                                                {{ round($ending->averageRating / 10) }}
                                             @break
 
                                             @case('POINT_5')
-                                                {{ round($ending->averageRating / 20) }} <i class="fa fa-star"></i>
+                                                {{ round($ending->averageRating / 20) }}
                                             @break
 
                                             @default
@@ -105,8 +104,8 @@
                                         @endswitch
                                     @else
                                         {{ round($opening->averageRating / 10, 1) }}
-                                        <i class="fa fa-star"></i>
                                     @endif
+                                    <i class="fa fa-star" aria-hidden="true"></i>
                                 </td>
                             </tr>
                         @endforeach
