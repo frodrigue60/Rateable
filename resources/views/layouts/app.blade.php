@@ -27,7 +27,9 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('/resources/flickity/flickity.css') }}">
+    <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}">
+    
 
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> --}}
@@ -36,7 +38,7 @@
 
     <!-- JS -->
     <script src="{{ asset('resources/js/jquery-3.6.3.js') }}"></script>
-    <script src="{{ asset('resources/flickity/flickity.pkgd.js') }}"></script>
+    <script src="{{asset('/resources/owlcarousel/owl.carousel.js')}}"></script>
     {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script>
     <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.js') }}"></script> --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
