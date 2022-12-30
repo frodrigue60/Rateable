@@ -766,4 +766,16 @@ class PostController extends Controller
             Session::put('page_visited_' . $id, true);
         }
     }
+    public function apiPosts(Request $request){
+        $q = $request->get('q');
+        //dd($q);
+        $posts = Post::where('title','LIKE',"%$q%")->orderBy('title', 'asc')->limit(5)->get(['id','title','slug']);
+        
+        $artists = Artist::where('name','LIKE',"%$q%")->orderBy('name', 'asc')->limit(5)->get(['name','name_slug']);
+
+        $data = ["posts"=>$posts, "artists"=>$artists];
+
+        
+        return response()->json($data);
+    }
 }

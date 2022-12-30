@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}">
-    
+
 
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> --}}
@@ -38,7 +38,7 @@
 
     <!-- JS -->
     <script src="{{ asset('resources/js/jquery-3.6.3.js') }}"></script>
-    <script src="{{asset('/resources/owlcarousel/owl.carousel.js')}}"></script>
+    <script src="{{ asset('/resources/owlcarousel/owl.carousel.js') }}"></script>
     {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script>
     <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.js') }}"></script> --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
@@ -114,8 +114,9 @@
                                 <option value="artist">Artist</option>
                                 <option value="season">Season</option>
                             </select>
-                            <input type="text" name="search" class="form-control" aria-label="search"
-                                placeholder="Type something...">
+                            <input id="searchInput" type="text" name="search" class="form-control"
+                                aria-label="search" placeholder="Search..." data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">
 
                             <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
 
@@ -176,6 +177,91 @@
 
         <main class="py-4">
             @yield('content')
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header mt-2">
+                            <form class="d-flex w-100" role="search">
+                                <input id="searchInputModal" class="form-control me-2" type="search"
+                                    placeholder="Search" aria-label="Search" autofocus>
+                            </form>
+                        </div>
+                        <div id="modalBody" class="modal-body p-2">
+                            {{-- <div class="result">
+                                <a href="post/{id}/show"><span></span></a>
+                            </div> --}}
+                            <div>
+                                <span><h6>POSTS</h6></span>
+                                <div id="posts">
+
+                                </div>
+                            </div>
+                            <div>
+                                <span><h6>ARTISTS</h6></span>
+                                <div id="artists"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                const myModal = document.getElementById('exampleModal');
+                const modalBody = document.querySelector(".modal-body");
+                const postsDiv = document.querySelector("#posts");
+                const artistsDiv = document.querySelector("#artists");
+                const input = document.getElementById('searchInputModal');
+                const token = document.querySelector('meta[name="csrf-token"]').content;
+
+                myModal.addEventListener('shown.bs.modal', function() {
+                    input.focus();
+                    
+                    input.addEventListener('keyup', () => {
+
+                        console.log('input: ' + input.value)
+                        if (input.value.length >= 1) {
+                            
+                            try {
+                                fetch('http://localhost:8000/api/posts/search?q=' + input.value, {
+                                    headers: {
+                                        'X-Request-With': 'XMLHttpRequest',
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': token,
+                                    },
+                                    method: "get",
+                                }).then(response => {
+                                    return response.json()
+                                }).then((data) => {
+                                    postsDiv.innerHTML = "";
+                                    artistsDiv.innerHTML = "";
+                                    data.posts.forEach(element => {
+                                        postsDiv.innerHTML += '<div class="result" id="posts"><a href="show/'+element.id+'/'+element.slug+'"><span>'+element.title+'</span></a></div>';
+                                    });
+                                    data.artists.forEach(element => {
+                                        artistsDiv.innerHTML += '<div class="result" id="posts"><a href="artist/'+element.name_slug+'"><span>'+element.name+'</span></a></div>';
+                                    });
+                                    
+                                });
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        }
+                        else{
+                            postsDiv.innerHTML = "";
+                            artistsDiv.innerHTML = "";
+                            postsDiv.innerHTML = '<div class="result" id="posts"><span>'+"Nothing"+'</span></div>';
+                            artistsDiv.innerHTML = '<div class="result" id="posts"><span>'+"Nothing"+'</span></div>';
+                        }
+
+                    })
+                });
+            </script>
         </main>
         <footer class="text-center text-lg-start py-1 mt-1 color1">
             <div class="text-center p-3 text-light">

@@ -18,6 +18,19 @@
 ::-webkit-scrollbar-thumb:hover {
 	background: #0e3d5f;
 }
+.result{
+    background-color: #a9dbff;
+    padding: 5px;
+    border-radius: 3px;
+    margin: 2px;
+    transform: scale(1);
+    transition: all .25s ease-out;
+}
+.result:hover{
+    background-color: #8bb5d3;
+    transform: scale(1.01);
+    transition: .1s ease-in;
+}
 .carousel-cell{
 	width: 150px;
 	height: 230px;

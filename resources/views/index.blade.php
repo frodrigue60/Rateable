@@ -9,64 +9,64 @@
             </div>
         </div>
     @endif
-    
-        <div class="container mb-2">
-            <div class="mb-1 mt-1" style="background-color: #0E3D5F">
-                <h2 class="text-light">Recent added</h2>
-            </div>
-            <div id="carouselRecents" class="owl-carousel">
-                @foreach ($posts->sortByDesc('created_at')->take(10) as $post)
-                    <div class="items">
-                        <div class="tarjeta">
-                            <div class="textos">
-                                <div class="tarjeta-header text-light">
-                                    <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
+
+    <div class="container mb-2">
+        <div class="mb-1 mt-1" style="background-color: #0E3D5F">
+            <h2 class="text-light">Recent added</h2>
+        </div>
+        <div id="carouselRecents" class="owl-carousel">
+            @foreach ($posts->sortByDesc('created_at') as $post)
+                <div class="items">
+                    <div class="tarjeta">
+                        <div class="textos">
+                            <div class="tarjeta-header text-light">
+                                <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
+                            </div>
+                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    alt="{{ $post->title }}">
+                            </a>
+                            <div class="tarjeta-footer text-light">
+                                <div>
+                                    {{ $post->likeCount }} <i class="fa fa-heart"></i>
                                 </div>
-                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                        alt="{{ $post->title }}">
-                                </a>
-                                <div class="tarjeta-footer text-light">
-                                    <div>
-                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
-                                    </div>
-                                    <div>
-                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                    </div>
-                                    <div>
-                                        @if (isset($score_format))
-                                            @switch($score_format)
-                                                @case('POINT_100')
-                                                    {{ round($post->averageRating) }}
-                                                @break
-        
-                                                @case('POINT_10_DECIMAL')
-                                                    {{ round($post->averageRating / 10, 1) }}
-                                                @break
-        
-                                                @case('POINT_10')
-                                                    {{ round($post->averageRating / 10) }}
-                                                @break
-        
-                                                @case('POINT_5')
-                                                    {{ round($post->averageRating / 20) }}
-                                                @break
-        
-                                                @default
-                                                    {{ round($post->averageRating) }}
-                                            @endswitch
-                                        @else
-                                            {{ round($post->averageRating / 10, 1) }}
-                                        @endif
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </div>
+                                <div>
+                                    {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                </div>
+                                <div>
+                                    @if (isset($score_format))
+                                        @switch($score_format)
+                                            @case('POINT_100')
+                                                {{ round($post->averageRating) }}
+                                            @break
+
+                                            @case('POINT_10_DECIMAL')
+                                                {{ round($post->averageRating / 10, 1) }}
+                                            @break
+
+                                            @case('POINT_10')
+                                                {{ round($post->averageRating / 10) }}
+                                            @break
+
+                                            @case('POINT_5')
+                                                {{ round($post->averageRating / 20) }}
+                                            @break
+
+                                            @default
+                                                {{ round($post->averageRating) }}
+                                        @endswitch
+                                    @else
+                                        {{ round($post->averageRating / 10, 1) }}
+                                    @endif
+                                    <i class="fa fa-star" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
+    </div>
     <div class="container">
         <div class="contenedor">
             <div>
@@ -97,19 +97,19 @@
                                                 @case('POINT_100')
                                                     {{ round($post->averageRating) }}
                                                 @break
-    
+
                                                 @case('POINT_10_DECIMAL')
                                                     {{ round($post->averageRating / 10, 1) }}
                                                 @break
-    
+
                                                 @case('POINT_10')
                                                     {{ round($post->averageRating / 10) }}
                                                 @break
-    
+
                                                 @case('POINT_5')
                                                     {{ round($post->averageRating / 20) }}
                                                 @break
-    
+
                                                 @default
                                                     {{ round($post->averageRating) }}
                                             @endswitch
@@ -151,7 +151,7 @@
                                 </tr>
                             @endforeach
                             </tr>
-    
+
                         </table>
                         <br>
                         <a href="{{ route('tags') }}" class="btn btn-primary">All Seasons</a>
@@ -178,19 +178,19 @@
                                                     @case('POINT_100')
                                                         {{ round($post->averageRating) }}
                                                     @break
-    
+
                                                     @case('POINT_10_DECIMAL')
                                                         {{ round($post->averageRating / 10, 1) }}
                                                     @break
-    
+
                                                     @case('POINT_10')
                                                         {{ round($post->averageRating / 10) }}
                                                     @break
-    
+
                                                     @case('POINT_5')
                                                         {{ round($post->averageRating / 20) }} <i class="fa fa-star"></i>
                                                     @break
-    
+
                                                     @default
                                                         {{ round($post->averageRating) }}
                                                 @endswitch
@@ -198,7 +198,7 @@
                                                 <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
                                                     class="fa fa-star"></i>
                                             @endif
-    
+
                                         </span></h5>
                                 </td>
                             </tr>
@@ -214,14 +214,15 @@
     <script>
         $(document).ready(function() {
             $("#carouselRecents").owlCarousel({
-                stagePadding: 10,
-                loop: true,
+                //stagePadding: 1,
+                loop: false,
                 margin: 8,
                 autoWidth: true,
                 dots: false,
                 autoplay: true,
                 autoplayTimeout: 3000,
                 autoplayHoverPause: true,
+                rewind:true,
             });
         });
     </script>
