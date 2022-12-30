@@ -769,9 +769,9 @@ class PostController extends Controller
     public function apiPosts(Request $request){
         $q = $request->get('q');
         //dd($q);
-        $posts = Post::where('title','LIKE',"%$q%")->orderBy('title', 'asc')->limit(5)->get(['id','title','slug']);
+        $posts = Post::where('title','LIKE',"%$q%")->limit(5)->get(['id','title','slug']);
         
-        $artists = Artist::where('name','LIKE',"%$q%")->orderBy('name', 'asc')->limit(5)->get(['name','name_slug']);
+        $artists = Artist::where('name','LIKE',"%$q%")->limit(5)->get(['name','name_slug']);
 
         $data = ["posts"=>$posts, "artists"=>$artists];
 
