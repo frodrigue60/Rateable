@@ -13,8 +13,8 @@
         <div class="contenedor">
             {{-- DIV POSTS --}}
             <div>
-                <div class="mb-1 mt-1" style="background-color: #0E3D5F">
-                    <h2 class="text-light">Recent added</h2>
+                <div id="top-header" class="mb-1 mt-1" style="background-color: #0E3D5F">
+                    <h2 class="text-light mb-0">Recent added</h2>
                 </div>
                     <div id="carouselRecents" class="owl-carousel">
                         @foreach ($posts->sortByDesc('created_at') as $post)
@@ -66,8 +66,8 @@
                             </div>
                         @endforeach
                     </div>
-                <div class="mb-1 mt-1" style="background-color: #0E3D5F">
-                    <h2 class="text-light">Most popular</h2>
+                <div id="top-header" class="mb-1 mt-1" style="background-color: #0E3D5F">
+                    <h2 class="text-light mb-0">Most popular</h2>
                 </div>
                 <div class="contenedor-tarjetas">
                     @foreach ($posts->sortByDesc('likeCount')->take(10) as $post)
@@ -126,18 +126,10 @@
                     <div class="banner text-white" style="background-image: url('{{ asset('banner-background.webp') }}');">
                         <table>
                             <tr>
-                                <div class="row">
-                                    {{-- KOFI WIDGET --}}
-                                    <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
-                                    <script type='text/javascript'>
-                                        kofiwidget2.init('Support Me on Ko-fi', '#FD8798', 'F1F4GMOPH');
-                                        kofiwidget2.draw();
-                                    </script>
-                                </div>
                                 <th class>
                                     <h3>Seasons</h3>
                                 </th>
-                                <br>
+                                
                             </tr>
                             @foreach ($tags as $tag)
                                 <tr>

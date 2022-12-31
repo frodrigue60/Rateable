@@ -715,7 +715,9 @@ class PostController extends Controller
 
         $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'name_slug']);
 
-        $data = ["posts" => $posts, "artists" => $artists];
+        $tags = Tag::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
+
+        $data = ["posts" => $posts, "artists" => $artists, "tags"=>$tags];
 
         return response()->json($data);
     }

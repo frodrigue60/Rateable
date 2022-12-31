@@ -18,18 +18,10 @@
 ::-webkit-scrollbar-thumb:hover {
 	background: #0e3d5f;
 }
-.result{
-    background-color: #a9dbff;
-    padding: 5px;
-    border-radius: 3px;
-    margin: 2px;
-    transform: scale(1);
-    transition: all .25s ease-out;
-}
-.result:hover{
-    background-color: #8bb5d3;
-    transform: scale(1.01);
-    transition: .1s ease-in;
+#searchInput{
+	background-color: #0c2638;
+    border-color: #3877a3;
+	color: #a9dbff;
 }
 #searchPanel{
 	width: 100%;
@@ -291,7 +283,7 @@
 
 @media screen and (max-width: 1440px) {
 	#carouselRecents{
-		width: 976px;
+		width: 810px;
 	}
 	.card {
 		width: 80%;
@@ -321,7 +313,7 @@
 
 	.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(6, 150px);
+		grid-template-columns: repeat(5, 150px);
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
