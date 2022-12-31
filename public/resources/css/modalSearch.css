@@ -1,0 +1,116 @@
+.res{
+    gap: 10px;
+    background-color: #0e3d5f;
+    padding-bottom: 5px;
+    color: #a9dbff;
+    padding: 2px;
+    border-radius: 3px;
+}
+#catTitle{
+    margin-left: 5px;
+}
+.result{
+    background-color: #a9dbff;
+    padding: 5px;
+    border-radius: 3px;
+    margin: 2px;
+    transform: scale(1);
+    transition: all .25s ease-out;
+    color: #0C2638;
+}
+.result:hover{
+    background-color: #8bb5d3;
+    transform: scale(1.01);
+    transition: .1s ease-in;
+}
+.customModal{
+    background-color: #0e3d5f;
+    
+}
+.container-top {
+    display: flex;
+    flex-direction: row;
+}
+
+.container-items {
+    background-color: #0C2638;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 10px;
+    padding-top: 5px;
+}
+
+.top-item {
+    white-space: nowrap;
+    background-color: #0e3d5f;
+    /* border-radius: 5px; */
+    width: 96%;
+    /* height: 100%; */
+    /* padding: 7px 5px 5px 5px; */
+    transform: scale(1);
+    transition: all .25s ease-out;
+    /* display: grid;
+    grid-template-columns: 1fr 10fr 1fr; */
+     margin: 1px;
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    color: #ffffff;
+    z-index: 1;
+}
+
+.top-item:hover {
+    transform: scale(1.02);
+    transition: .1s ease-in;
+    box-shadow: 0px 0px 15px #d6ce87;
+    background-color: #0e3d5f;
+    z-index: 2;
+}
+
+.item-thumb img {
+    height: 100px;
+    place-self: center;
+}
+
+#item-info {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    height: fit-content;
+    align-self: center;
+}
+
+#item-place {
+    margin: auto;
+}
+
+#item-post-info {
+    display: flex;
+    place-content: center;
+}
+
+#item-song-info {
+    display: flex;
+    place-content: center;
+}
+
+#item-score {
+    margin: auto;
+}
+#top-header{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 96%;
+    align-items: center;
+    margin-top: 5px;
+    color: #ffffff;
+    border-left: solid 3px;
+    border-color: #d6ce87;
+    padding-left: 5px;
+    margin-bottom: 5px
+}
+.result > a {
+    text-decoration: none;
+    color: #0C2638;
+}

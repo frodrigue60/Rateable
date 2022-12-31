@@ -7,7 +7,6 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($openings as $post)
-                    
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
@@ -64,7 +63,6 @@
         </div>
         <div class="contenedor-favoritos">
             @foreach ($endings as $post)
-                    
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
@@ -111,7 +109,6 @@
                                 </div>
                             </div>
                         </div>
-                    
                 @endforeach
         </div>
     </div>

@@ -41,7 +41,7 @@
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.js') }}"></script>
     {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script>
     <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.js') }}"></script> --}}
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
@@ -187,33 +187,36 @@
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header mt-2">
+                    <div class="modal-content customModal">
+                        <div class="modal-header mt-2 customModal">
                             <form class="d-flex w-100" role="search">
                                 <input id="searchInputModal" class="form-control me-2" type="search"
                                     placeholder="Search" aria-label="Search" autofocus>
                             </form>
                         </div>
-                        <div id="modalBody" class="modal-body p-2">
-                            {{-- <div class="result">
-                                <a href="post/{id}/show"><span></span></a>
-                            </div> --}}
-                            <div>
-                                <span>
-                                    <h6>POSTS</h6>
-                                </span>
-                                <div id="posts"></div>
-                            </div>
-                            <div>
-                                <span>
-                                    <h6>ARTISTS</h6>
-                                </span>
-                                <div id="artists"></div>
+                        <div id="modalBody" class="modal-body p-2 customModal">
+                            <div class="res">
+                                <span id="catTitle">Anime</span>
+                                <div id="posts">
+
+                                </div>
+
+
+                                <span id="catTitle">Artist</span>
+                                <div id="artists">
+                                </div>
+
+                                {{-- <span id="catTitle">Tag</span>
+                                <div class="result">
+                                    <a href="?"><span>Coming soon...</span></a>
+                                </div> --}}
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button> -->
+                        <div class="modal-footer justify-content-center customModal">
+                            <div class="d-flex">
+                                <a href="{{ route('filter') }}" type="button" class="btn btn-primary color3">More
+                                    options</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -228,12 +231,14 @@
 
                 myModal.addEventListener('shown.bs.modal', function() {
                     input.focus();
-
+                    
                     input.addEventListener('keyup', () => {
-
+                        postsDiv.innerHTML =
+                            '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
+                        artistsDiv.innerHTML =
+                            '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>'
                         console.log('input: ' + input.value)
                         if (input.value.length >= 1) {
-
                             try {
                                 fetch('http://localhost:8000/api/posts/search?q=' + input.value, {
                                     headers: {
@@ -244,22 +249,24 @@
                                     method: "get",
                                 }).then(response => {
                                     return response.json()
-                                }).then((data) => {
+                                }).then(  (data) => {
                                     postsDiv.innerHTML = "";
                                     artistsDiv.innerHTML = "";
                                     data.posts.forEach(element => {
+
                                         postsDiv.innerHTML +=
-                                            '<div class="result" id="posts"><a href="show/' +
-                                            element.id + '/' + element.slug + '"><span>' + element
+                                            '<div class="result"><a href="http://127.0.0.1:8000/show/' +
+                                            element.id + '/' + element.slug + '"><span>' +
+                                            element
                                             .title + '</span></a></div>';
+
                                     });
                                     data.artists.forEach(element => {
                                         artistsDiv.innerHTML +=
-                                            '<div class="result" id="posts"><a href="artist/' +
+                                            '<div class="result"><a href="http://127.0.0.1:8000/artist/' +
                                             element.name_slug + '"><span>' + element.name +
                                             '</span></a></div>';
                                     });
-
                                 });
                             } catch (error) {
                                 console.log(error)
