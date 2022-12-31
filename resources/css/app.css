@@ -31,11 +31,12 @@
     transform: scale(1.01);
     transition: .1s ease-in;
 }
-.carousel-cell{
-	width: 150px;
-	height: 230px;
-	margin: 0px 7px 0px 7px;
+
+#carouselRecents{
+	width: 1024px;
 }
+
+
 #video-title{
 	margin-top: auto;
 }
@@ -99,7 +100,7 @@
 	grid-template-columns: repeat(auto-fill, 150px);
 	grid-template-rows: repeat(auto-fill, 220px);
 	gap: 15px;
-	place-content: center;
+	
 }
 
 #thumb {
@@ -177,6 +178,9 @@
 }
 
 @media screen and (max-width: 1920px) {
+	#carouselRecents{
+		width: 976px;
+	}
 	.card {
 		width: 80%;
 	}
@@ -190,13 +194,11 @@
 	}
 
 	.contenedor {
-		width: 100%;
+		width: fit-content;
 		display: grid;
 		grid-template-columns: 4fr 1fr;
 		gap: 15px;
-		/*inline-size: fit-content;*/
-		/* padding-left: 6px;
-		padding-right: 6px; */
+		
 	}
 
 	/*.contenedor-tarjetas {
@@ -260,17 +262,17 @@
 }
 
 @media screen and (max-width: 1440px) {
+	#carouselRecents{
+		width: 976px;
+	}
 	.card {
 		width: 80%;
 	}
 	.contenedor {
-		width: 100%;
+		width: fit-content;
 		display: grid;
 		grid-template-columns: 4fr 1fr;
 		gap: 15px;
-		/* padding-left: 12px;
-		padding-right: 12px; */
-
 	}
 
 	/*.contenedor-tarjetas {
@@ -315,7 +317,10 @@
 
 }
 
-@media (max-width: 960px) and (max-width: 1280px) {
+@media screen and (max-width: 1280px) {
+	#carouselRecents{
+		width: 647px;
+	}
 	.card {
 		width: 80%;
 	}
@@ -329,13 +334,9 @@
 	}
 
 	.contenedor {
-		width: 100%;
-		display: grid;
-		grid-template-columns: 5fr 1fr;
+		width: fit-content;
+		display: flex;
 		gap: 15px;
-		/* padding-left: 12px;
-		padding-right: 12px; */
-
 	}
 /*
 	.contenedor-tarjetas {
@@ -380,7 +381,11 @@
 
 }
 
-@media (min-width: 800px) and (max-width: 960px) {
+/* RESPONSIVE CAROUSEL */
+@media screen and (max-width: 960px) {
+	#carouselRecents{
+		width: 645px;
+	}
 	.card {
 		width: 100%;
 	}
@@ -394,7 +399,7 @@
 	}
 
 	.contenedor {
-		width: 100%;
+		width: fit-content;
 		display: flex;
 		flex-direction: column;
 		gap: 15px;
@@ -405,7 +410,7 @@
 	.contenedor-tarjetas {
 		display: grid;
 		/* grid-template-columns: repeat(4, 1fr); */
-		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-columns: repeat(4, 150px);
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 		place-content: center;
@@ -445,12 +450,15 @@
 }
 
 @media screen and (max-width: 800px) {
+	#carouselRecents{
+		width: 645px;
+	}
 	.card {
 		width: 100%;
 	}
 
 	.contenedor {
-		width: 100%;
+		width: fit-content;
 		display: flex;
 		flex-direction: column;
 	}
@@ -459,10 +467,9 @@
 		display: grid;
 		/*grid-template-columns: repeat(3, 1fr);
 		align-self: center;*/
-		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-columns: repeat(4, 150px);
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
-
 		place-content: center;
 	}
 
@@ -481,6 +488,7 @@
 		grid-template-columns: repeat(2, 1fr);
 		gap: 10px;
 		align-self: center;
+		margin: auto;
 	}
 
 	.banner {
@@ -498,12 +506,15 @@
 }
 
 @media screen and (max-width: 768px) {
+	#carouselRecents{
+		width: 484px;
+	}
 	.card {
 		width: 100%;
 	}
 
 	.contenedor {
-		width: 100%;
+		width: fit-content;
 		display: flex;
 		flex-direction: column;
 	}
@@ -551,12 +562,15 @@
 }
 
 @media screen and (max-width: 600px) {
+	#carouselRecents{
+		width: 325px;
+	}
 	.card {
 		width: 100%;
 	}
 
 	.contenedor {
-		width: 100%;
+		width: fit-content;
 		padding: 0px 0;
 
 		display: flex;
@@ -567,7 +581,7 @@
 		display: grid;
 		/*grid-template-columns: repeat(2, 1fr);
 		align-self: center;*/
-		grid-template-columns: repeat(auto-fill, 150px);
+		grid-template-columns: repeat(2, 150px);
 		grid-template-rows: repeat(auto-fill, 220px);
 		place-content: center;
 	}
@@ -601,6 +615,7 @@
 		flex-direction: column;
 		gap: 10px;
 		width: 325px;
+		margin: auto;
 	}
 
 }

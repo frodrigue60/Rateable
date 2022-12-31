@@ -73,6 +73,8 @@
                             href="{{ route('endings') }}">Endings</a>
                         <a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"
                             href="{{ route('globalranking') }}">Global Ranking</a>
+                        <a class="nav-link {{ Request::is('filter') ? 'active' : '' }}"
+                            href="{{ route('filter') }}">Filter</a>
                         @auth
                             <a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}"
                                 href="{{ route('favorites') }}">My Favorites</a>
@@ -108,7 +110,7 @@
                             <button class="btn btn-success" type="submit"><i class="fa fa-search"
                                     aria-hidden="true"></i></button>
                         </form> --}}
-                        <form class="d-flex" role="search" action="{{ route('search') }}" method="GET">
+                        {{-- <form class="d-flex" role="search" action="{{ route('search') }}" method="GET">
                             <select class="btn btn-primary dropdown-toggle" name="search_type">
                                 <option value="anime">Anime</option>
                                 <option value="artist">Artist</option>
@@ -117,11 +119,14 @@
                             <input id="searchInput" type="text" name="search" class="form-control"
                                 aria-label="search" placeholder="Search..." data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
-
                             <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-
                         </form>
-
+ --}}
+                        <div class="d-flex">
+                            <input id="searchInput" type="text" name="search" class="form-control"
+                                aria-label="search" placeholder="Search..." data-bs-toggle="modal"
+                                data-bs-target="#exampleModal">
+                        </div>
 
                         <!-- Authentication Links -->
                         @guest
@@ -194,13 +199,15 @@
                                 <a href="post/{id}/show"><span></span></a>
                             </div> --}}
                             <div>
-                                <span><h6>POSTS</h6></span>
-                                <div id="posts">
-
-                                </div>
+                                <span>
+                                    <h6>POSTS</h6>
+                                </span>
+                                <div id="posts"></div>
                             </div>
                             <div>
-                                <span><h6>ARTISTS</h6></span>
+                                <span>
+                                    <h6>ARTISTS</h6>
+                                </span>
                                 <div id="artists"></div>
                             </div>
                         </div>
@@ -221,12 +228,12 @@
 
                 myModal.addEventListener('shown.bs.modal', function() {
                     input.focus();
-                    
+
                     input.addEventListener('keyup', () => {
 
                         console.log('input: ' + input.value)
                         if (input.value.length >= 1) {
-                            
+
                             try {
                                 fetch('http://localhost:8000/api/posts/search?q=' + input.value, {
                                     headers: {
@@ -241,22 +248,29 @@
                                     postsDiv.innerHTML = "";
                                     artistsDiv.innerHTML = "";
                                     data.posts.forEach(element => {
-                                        postsDiv.innerHTML += '<div class="result" id="posts"><a href="show/'+element.id+'/'+element.slug+'"><span>'+element.title+'</span></a></div>';
+                                        postsDiv.innerHTML +=
+                                            '<div class="result" id="posts"><a href="show/' +
+                                            element.id + '/' + element.slug + '"><span>' + element
+                                            .title + '</span></a></div>';
                                     });
                                     data.artists.forEach(element => {
-                                        artistsDiv.innerHTML += '<div class="result" id="posts"><a href="artist/'+element.name_slug+'"><span>'+element.name+'</span></a></div>';
+                                        artistsDiv.innerHTML +=
+                                            '<div class="result" id="posts"><a href="artist/' +
+                                            element.name_slug + '"><span>' + element.name +
+                                            '</span></a></div>';
                                     });
-                                    
+
                                 });
                             } catch (error) {
                                 console.log(error)
                             }
-                        }
-                        else{
+                        } else {
                             postsDiv.innerHTML = "";
                             artistsDiv.innerHTML = "";
-                            postsDiv.innerHTML = '<div class="result" id="posts"><span>'+"Nothing"+'</span></div>';
-                            artistsDiv.innerHTML = '<div class="result" id="posts"><span>'+"Nothing"+'</span></div>';
+                            postsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
+                                '</span></div>';
+                            artistsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
+                                '</span></div>';
                         }
 
                     })

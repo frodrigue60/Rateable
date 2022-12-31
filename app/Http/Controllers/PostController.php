@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Song;
 use Conner\Tagging\Model\Tag;
-use Conner\Tagging\Model\Tagged;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Carbon;
 
 class PostController extends Controller
 {
@@ -581,71 +582,11 @@ class PostController extends Controller
     }
 
     //public seasrch posts
-    public function search(Request $request)
+    public function filter()
     {
-        if ($request->input('search') != null) {
-            $type_search = $request->search_type;
-            if (Auth::check()) {
-                $score_format = Auth::user()->score_format;
-            } else {
-                $score_format = null;
-            }
-
-            switch ($type_search) {
-                case 'anime':
-                    $openings = Post::query()
-                        ->where('title', 'LIKE', "%{$request->input('search')}%")
-                        ->where('type', '=', 'op')
-                        ->get()
-                        ->take(20);
-
-                    $endings = Post::query()
-                        ->where('title', 'LIKE', "%{$request->input('search')}%")
-                        ->where('type', '=', 'ed')
-                        ->get()
-                        ->take(20);
-
-                    return view('fromTags', compact('openings', 'score_format', 'endings'));
-                    break;
-
-                case 'artist':
-                    $artist = Artist::where('name', 'LIKE', "%{$request->input('search')}%")
-                        ->first();
-                    if ($artist === null) {
-                        return redirect()->route('/')->with('status', 'Does not exist ' . $request->input('search') . ' artist');
-                    }
-
-                    $openings = Post::query()
-                        ->where('artist_id', '=', $artist->id)
-                        ->where('type', '=', 'op')
-                        ->get();
-
-                    $endings = Post::query()
-                        ->where('artist_id', '=', $artist->id)
-                        ->where('type', '=', 'ed')
-                        ->get();
-                    return view('fromTags', compact('openings', 'endings', 'score_format', 'artist'));
-                    break;
-                case 'season':
-                    $slug = Str::slug($request->input('search'));
-                    $tagName = DB::table('tagging_tags')->where('slug', 'LIKE', $slug)->first(['name']);
-                    //dd($tagName);
-                    $openings = Post::withAnyTag([$slug])
-                        ->where('type', 'op')
-                        ->orderby('title', 'asc')
-                        ->get();
-
-                    $endings = Post::withAnyTag([$slug])
-                        ->where('type', 'ed')
-                        ->orderby('title', 'asc')
-                        ->get();
-
-                    return view('fromTags', compact('openings', 'endings', 'score_format', 'tagName'));
-
-                    break;
-            }
-        }
-        return redirect()->route('/')->with('status', 'Search a value');
+        $posts = Post::paginate(14);
+        
+        return view('filter',compact('posts'));
     }
 
     //seach posts in admin pannel
@@ -766,16 +707,16 @@ class PostController extends Controller
             Session::put('page_visited_' . $id, true);
         }
     }
-    public function apiPosts(Request $request){
+    public function apiPosts(Request $request)
+    {
         $q = $request->get('q');
         //dd($q);
-        $posts = Post::where('title','LIKE',"%$q%")->limit(5)->get(['id','title','slug']);
-        
-        $artists = Artist::where('name','LIKE',"%$q%")->limit(5)->get(['name','name_slug']);
+        $posts = Post::where('title', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug']);
 
-        $data = ["posts"=>$posts, "artists"=>$artists];
+        $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'name_slug']);
 
-        
+        $data = ["posts" => $posts, "artists" => $artists];
+
         return response()->json($data);
     }
 }
