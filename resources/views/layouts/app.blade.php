@@ -36,11 +36,13 @@
     {{-- <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.css') }}"> --}}
 
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
     <!-- JS -->
     <script src="{{ asset('resources/js/jquery-3.6.3.js') }}"></script>
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.js') }}"></script>
     {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script>
     <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.js') }}"></script> --}}
+
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
@@ -214,7 +216,7 @@
                                 </div>
 
                                 <span id="catTitle">Tag</span>
-                                <div id="tags">
+                                <div id="tagsRes">
                                 </div>
                             </div>
                         </div>
@@ -231,7 +233,7 @@
                 const myModal = document.getElementById('exampleModal');
                 const postsDiv = document.querySelector("#posts");
                 const artistsDiv = document.querySelector("#artists");
-                const tagsDiv = document.querySelector("#tags");
+                const tagsDiv = document.querySelector("#tagsRes");
                 const input = document.getElementById('searchInputModal');
                 const token = document.querySelector('meta[name="csrf-token"]').content;
 

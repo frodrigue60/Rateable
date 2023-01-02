@@ -13,7 +13,39 @@
         <div class="contenedor-filtro">
             <div>
                 <div id="searchPanel">
-                    
+                    <form action="{{ route('filter') }}" method="get">
+                        <div class="justify-content-center">
+                            <span class="text-light">Select Type</span>
+                            <select id="chzn-type" name="type" class="form-select" aria-label="Default select example">
+                                <option value="" selected>Select the type</option>
+                                <option value="op">Opening</option>
+                                <option value="ed">Ending</option>
+                            </select>
+                        </div>
+                        <div class="justify-content-center">
+                            <span class="text-light">Select Season</span>
+                            <select id="chzn-tag" name='tag' class="form-select" aria-label="Default select example">
+                                <option value="" selected>Select the season</option>
+                                @foreach ($tags as $tag)
+                                    <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="justify-content-center">
+                            <span class="text-light">Sort By</span>
+                            <select id="chzn-sort" name="sortBy" class="form-select" aria-label="Default select example">
+                                <option value="title">Title</option>
+                                <option value="score">Score</option>
+                                <option value="views">Views</option>
+                                <option value="favorites">Favorites</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="d-flex justify-content-center">
+                            <button class="btn btn-success w-100" type="submit">Do it</button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
             <div>
@@ -76,5 +108,16 @@
             {{ $posts->links() }}
         </div>
 
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#chzn-type").chosen();
+                $("#chzn-tag").chosen();
+                $("#chzn-sort").chosen();
+            });
+        </script>
     </div>
 @endsection

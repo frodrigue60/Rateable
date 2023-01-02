@@ -79,7 +79,7 @@
                                 placeholder="Second Embed (optional)" id="scndlink" name="scndlink">
                             <br>
                             <label for="tags">Select season</label>
-                            <select class="chzn-select" multiple="true" name="tags[]" id="tags" style="width:100%;">
+                            <select class="form-select chzn-select" multiple name="tags[]" id="tags" style="width:100%;">
                                 @foreach ($post->tags as $tag)
                                     <option selected value="{{ $tag->name }}">{{ $tag->name }}</option>
                                 @endforeach
@@ -96,12 +96,12 @@
             
         </div>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+        {{-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> --}}
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
 
-        <script type="text/javascript">
+        <script>
             $(function() {
                 $(".chzn-select").chosen();
             });

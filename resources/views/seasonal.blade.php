@@ -13,11 +13,29 @@
         <div class="contenedor">
             {{-- DIV POSTS --}}
             <div>
-                <div class="mb-1 mt-1" style="background-color: #0E3D5F">
-                    <h2 class="text-light">Most popular</h2>
+                <div id="top-header" class="color1">
+                    @if (Request::is('openings'))
+                    <div>
+                        <h2 class="text-light mb-0">Openings @isset($currentSeason)
+                            {{$currentSeason->name}}
+                        @endisset</h2>
+                    </div>
+                    @endif
+                    @if (Request::is('endings'))
+                    <div>
+                        <h2 class="text-light mb-0">Endings @isset($currentSeason)
+                            {{$currentSeason->name}}
+                        @endisset</h2>
+                    </div>
+                    @endif
+                    
+                    <div>
+                        {{-- <a href="{{route('globalranking')}}" class="btn btn-sm btn-primary">More</a> --}}
+                    </div>
                 </div>
+
                 <div class="contenedor-tarjetas">
-                    @foreach ($posts->sortByDesc('likeCount')->take(10) as $post)
+                    @foreach ($posts as $post)
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
@@ -73,18 +91,9 @@
                     <div class="banner text-white" style="background-image: url('{{ asset('banner-background.webp') }}');">
                         <table>
                             <tr>
-                                <div class="row">
-                                    {{-- KOFI WIDGET --}}
-                                    <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
-                                    <script type='text/javascript'>
-                                        kofiwidget2.init('Support Me on Ko-fi', '#FD8798', 'F1F4GMOPH');
-                                        kofiwidget2.draw();
-                                    </script>
-                                </div>
                                 <th class>
                                     <h3>Seasons</h3>
                                 </th>
-                                <br>
                             </tr>
                             @foreach ($tags as $tag)
                                 <tr>

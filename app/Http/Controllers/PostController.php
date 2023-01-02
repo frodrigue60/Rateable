@@ -308,30 +308,39 @@ class PostController extends Controller
     //return index view with all openings
     public function home()
     {
+        $recently = Post::orderBy('created_at','desc')->get()/* ->take(10) */;
+        
         if (Auth::check()) {
             $currentSeason = DB::table('current_season')->first();
             $score_format = Auth::user()->score_format;
 
             if ($currentSeason  == null) {
 
-                $posts = Post::where('type', 'op')
+                $openings = Post::where('type', 'op')
                     ->orderBy('title', 'asc')
                     ->get();
-                //->where('type', 'op')
-                //->orderBy('title', 'asc');
+                $endings = Post::where('type', 'ed')
+                    ->orderBy('title', 'asc')
+                    ->get();
+
 
                 $tags = DB::table('tagging_tags')
                     ->orderBy('name', 'desc')
                     ->take(5)
                     ->get();
 
-                return view('index', compact('posts', 'tags', 'score_format'));
-            } else {
+                return view('index', compact('openings', 'endings', 'tags', 'score_format', 'recently'));
+            }
+            else {
                 //search the current season and the posts
                 $currentSeason = DB::table('current_season')->first();
 
-                $posts = Post::withAllTags($currentSeason->name)
+                $openings = Post::withAllTags($currentSeason->name)
                     ->where('type', 'op')
+                    ->orderBy('title', 'asc')
+                    ->get();
+                    $endings = Post::withAllTags($currentSeason->name)
+                    ->where('type', 'ed')
                     ->orderBy('title', 'asc')
                     ->get();
 
@@ -340,33 +349,18 @@ class PostController extends Controller
                     ->take(5)
                     ->get();
 
-                return view('index', compact('posts', 'tags', 'score_format'));
+                return view('index', compact('openings','endings', 'tags', 'score_format','recently'));
             }
         }
         //if exist current season setted
         $currentSeason = DB::table('current_season')->first();
-
 
         if ($currentSeason  == null) {
 
             $posts = Post::where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
-            //->where('type', 'op')
-            //->orderBy('title', 'asc');
-
-            $tags = DB::table('tagging_tags')
-                ->orderBy('name', 'desc')
-                ->take(5)
-                ->get();
-
-            return view('index', compact('posts', 'tags'));
-        } else {
-            //search the current season and the posts
-            $currentSeason = DB::table('current_season')->first();
-
-            $posts = Post::withAllTags($currentSeason->name)
-                ->where('type', 'op')
+                $endings = Post::where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
 
@@ -375,7 +369,27 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('index', compact('openings','endings', 'tags','recently'));
+        } else {
+            //search the current season and the posts
+            $currentSeason = DB::table('current_season')->first();
+
+            $openings = Post::withAllTags($currentSeason->name)
+                ->where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+                $endings = Post::withAllTags($currentSeason->name)
+                ->where('type', 'ed')
+                ->orderBy('title', 'asc')
+                ->get();
+
+
+            $tags = DB::table('tagging_tags')
+                ->orderBy('name', 'desc')
+                ->take(5)
+                ->get();
+
+            return view('index', compact('openings','endings', 'tags','recently'));
         }
     }
 
@@ -403,7 +417,7 @@ class PostController extends Controller
         } else {
             $currentSeason = DB::table('current_season')->first();
 
-            $posts = Post::withAllTags($currentSeason->name)
+            $posts = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
@@ -413,7 +427,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('seasonal', compact('posts', 'tags', 'score_format'));
+            return view('seasonal', compact('posts', 'tags', 'score_format', 'currentSeason'));
         }
     }
     public function endings()
@@ -440,7 +454,7 @@ class PostController extends Controller
         } else {
             $currentSeason = DB::table('current_season')->first();
 
-            $posts = Post::withAllTags($currentSeason->name)
+            $posts = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
@@ -450,7 +464,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('seasonal', compact('posts', 'tags', 'score_format'));
+            return view('seasonal', compact('posts', 'tags', 'score_format', 'currentSeason'));
         }
     }
 
@@ -582,11 +596,14 @@ class PostController extends Controller
     }
 
     //public seasrch posts
-    public function filter()
+    public function filter(Request $request)
     {
-        $posts = Post::paginate(14);
-        
-        return view('filter',compact('posts'));
+        $tags = Tag::all();
+
+        $posts = Post::latest()->paginate(10);
+
+
+        return view('filter', compact('posts', 'tags'));
     }
 
     //seach posts in admin pannel
@@ -717,7 +734,7 @@ class PostController extends Controller
 
         $tags = Tag::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
 
-        $data = ["posts" => $posts, "artists" => $artists, "tags"=>$tags];
+        $data = ["posts" => $posts, "artists" => $artists, "tags" => $tags];
 
         return response()->json($data);
     }
