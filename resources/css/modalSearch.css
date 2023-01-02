@@ -83,7 +83,10 @@
 
 #item-post-info {
     display: flex;
-    place-content: center;
+    max-width: 355px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #item-song-info {
@@ -139,9 +142,21 @@
 }
 
 @media screen and (max-width: 768px) {
-	
+	#item-post-info {
+        display: flex;
+        max-width: 330px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 @media screen and (max-width: 600px) {
-    
+    #item-post-info {
+        display: flex;
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
