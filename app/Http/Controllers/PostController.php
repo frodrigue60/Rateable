@@ -15,7 +15,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Carbon;
+use stdClass;
+
+use function PHPSTORM_META\type;
 
 class PostController extends Controller
 {
@@ -308,8 +310,10 @@ class PostController extends Controller
     //return index view with all openings
     public function home()
     {
-        $recently = Post::orderBy('created_at','desc')->get()/* ->take(10) */;
-        
+        $recently = Post::all()->sortByDesc('created_at')/* ->take(10) */;
+        $popular = Post::all()->sortByDesc('likeCount')/* ->take(10) */;
+        $viewed = Post::all()->sortByDesc('view_count')/* ->take(10) */;
+
         if (Auth::check()) {
             $currentSeason = DB::table('current_season')->first();
             $score_format = Auth::user()->score_format;
@@ -330,8 +334,7 @@ class PostController extends Controller
                     ->get();
 
                 return view('index', compact('openings', 'endings', 'tags', 'score_format', 'recently'));
-            }
-            else {
+            } else {
                 //search the current season and the posts
                 $currentSeason = DB::table('current_season')->first();
 
@@ -339,7 +342,7 @@ class PostController extends Controller
                     ->where('type', 'op')
                     ->orderBy('title', 'asc')
                     ->get();
-                    $endings = Post::withAllTags($currentSeason->name)
+                $endings = Post::withAllTags($currentSeason->name)
                     ->where('type', 'ed')
                     ->orderBy('title', 'asc')
                     ->get();
@@ -349,7 +352,7 @@ class PostController extends Controller
                     ->take(5)
                     ->get();
 
-                return view('index', compact('openings','endings', 'tags', 'score_format','recently'));
+                return view('index', compact('openings', 'endings', 'tags', 'score_format', 'recently','popular','viewed'));
             }
         }
         //if exist current season setted
@@ -360,7 +363,7 @@ class PostController extends Controller
             $posts = Post::where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
-                $endings = Post::where('type', 'ed')
+            $endings = Post::where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
 
@@ -369,7 +372,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('openings','endings', 'tags','recently'));
+            return view('index', compact('openings', 'endings', 'tags', 'recently'));
         } else {
             //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
@@ -378,7 +381,7 @@ class PostController extends Controller
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
-                $endings = Post::withAllTags($currentSeason->name)
+            $endings = Post::withAllTags($currentSeason->name)
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
@@ -389,7 +392,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('openings','endings', 'tags','recently'));
+            return view('index', compact('openings', 'endings', 'tags', 'recently', 'popular', 'viewed'));
         }
     }
 
@@ -599,11 +602,59 @@ class PostController extends Controller
     public function filter(Request $request)
     {
         $tags = Tag::all();
+        $tag = $request->tag;
+        $type = $request->type;
+        $sort = $request->sort;
 
-        $posts = Post::latest()->paginate(10);
+        $requested = new stdClass;
+        $requested->type = $type;
+        $requested->tag = $tag;
+        $requested->sort = $sort;
 
+        
 
-        return view('filter', compact('posts', 'tags'));
+        if ($tag != null) {
+            if ($type != null) {
+                $posts = Post::withAnyTag($tag)
+                ->where('type', $type)
+                ->get();
+            }else {
+                $posts = Post::withAnyTag($tag)->get();
+            }
+            
+        }
+        else {
+            if ($type != null) {
+                $posts = Post::where('type', $type)
+                ->get();
+            }else {
+                $posts = Post::all();
+            }
+        }
+
+        //SWITCH ORDER THE POSTS
+        switch ($sort) {
+            case 'title':
+                $posts = $posts->sortBy('title');
+                return view('filter', compact('posts', 'tags', 'requested'));
+                break;
+            case 'averageRating':
+                $posts = $posts->sortByDesc('averageRating');
+                return view('filter', compact('posts', 'tags', 'requested'));
+            case 'view_count':
+                $posts = $posts->sortByDesc('view_count');
+                return view('filter', compact('posts', 'tags', 'requested'));
+
+            case 'likeCount':
+                $posts = $posts->sortByDesc('likeCount');
+                return view('filter', compact('posts', 'tags', 'requested'));
+                break;
+
+            default:
+                $posts = $posts->sortByDesc('created_at');
+                return view('filter', compact('posts', 'tags', 'requested'));
+                break;
+        }
     }
 
     //seach posts in admin pannel
@@ -645,13 +696,13 @@ class PostController extends Controller
             //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
 
-            $openings = Post::withAllTags($currentSeason->name)
+            $openings = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
             $op_count = $openings->count();
 
-            $endings = Post::withAllTags($currentSeason->name)
+            $endings = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();

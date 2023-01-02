@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -18,64 +19,74 @@
 ::-webkit-scrollbar-thumb:hover {
 	background: #0e3d5f;
 }
-#searchInput{
+
+#searchInput {
 	background-color: #0c2638;
-    border-color: #3877a3;
+	border-color: #3877a3;
 	color: #a9dbff;
 	border-radius: 20px 20px;
 }
-#searchInputModal{
+
+#searchInputModal {
 	background-color: #0c2638;
-    border-color: #3877a3;
+	border-color: #3877a3;
 	color: #a9dbff;
 	border-radius: 20px 20px;
 }
-#searchPanel{
+
+#searchPanel {
 	width: 100%;
-    height: auto;
-    background-color: rgb(80, 100, 153);
+	height: auto;
+	background-color: rgb(80, 100, 153);
 	padding: 5px;
 }
 
-#carouselRecents{
+#carouselRecents {
 	width: 1024px;
 }
 
 
-#video-title{
+#video-title {
 	margin-top: auto;
 }
 
 .card {
 	background-color: #0e3d5f;
 }
+
 .card-video {
 	background-color: #0e3d5f;
 	border: 0px;
 	border-radius: 0px;
 	padding: 0px;
 }
-.color1{
+
+.color1 {
 	background-color: #0e3d5f;
 }
-.color2{
+
+.color2 {
 	background: #0c2638;
 }
-.color3{
+
+.color3 {
 	background: #a9dbff;
 	color: #0c2638;
 	border: none;
 }
-.color3:hover{
+
+.color3:hover {
 	background: #0c2638;
 	color: #a9dbff;
 	border: none;
 }
-.color4{
+
+.color4 {
 	background-color: #0e3d5f;
 	color: #ffffff;
 }
-.color4:hover{
+
+.color4:hover {
 	background-color: #1e5175;
 	color: #ffffff;
 }
@@ -108,18 +119,21 @@
 	grid-template-columns: 5fr 1fr;
 	gap: 10px;
 }
+
 .contenedor-tarjetas {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 150px);
 	grid-template-rows: repeat(auto-fill, 220px);
 	gap: 15px;
 }
+
 .contenedor-main {
 	width: 1146px;
-    margin: auto;
+	margin: auto;
 	padding: 0px 0;
 	gap: 10px;
 }
+
 .contenedor-tarjetas-main {
 	display: grid;
 	place-content: center;
@@ -127,6 +141,7 @@
 	grid-template-rows: repeat(auto-fill, 220px);
 	gap: 15px;
 }
+
 .contenedor-favoritos {
 	display: grid;
 	/*grid-template-columns: repeat(6, 1fr);*/
@@ -135,6 +150,7 @@
 	gap: 15px;
 	place-content: space-around;
 }
+
 #thumb {
 	position: absolute;
 	width: 150px;
@@ -145,6 +161,7 @@
 	transition: .2s ease-in-out;
 	top: 0;
 }
+
 .tarjeta {
 	border-radius: 5px;
 	/* font-weight: bold; */
@@ -173,6 +190,14 @@
 	width: 100%;
 	align-self: center;
 	z-index: 3;
+}
+
+.tarjeta-header h6 {
+	max-width: 100%;
+	max-height: 55px;
+	white-space: wrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .tarjeta .textos .tarjeta-footer {
@@ -210,9 +235,10 @@
 }
 
 @media screen and (max-width: 1920px) {
-	#carouselRecents{
+	#carouselRecents {
 		width: 976px;
 	}
+
 	.card {
 		width: 80%;
 	}
@@ -224,15 +250,17 @@
 		overflow: hidden;
 		white-space: nowrap;
 	}
+
 	.contenedor-filtro {
 		width: 100%;
 		margin: auto;
 		padding: 0px 0;
-	
+
 		display: grid;
 		grid-template-columns: 1fr 4fr;
 		gap: 10px;
 	}
+
 	.contenedor-tarjetas-filtro {
 		display: grid;
 		/*grid-template-columns: repeat(7, 1fr);*/
@@ -246,7 +274,7 @@
 		display: grid;
 		grid-template-columns: 4fr 1fr;
 		gap: 15px;
-		
+
 	}
 
 	.contenedor-tarjetas {
@@ -255,7 +283,8 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
-/*
+
+	/*
 	.contenedor-favoritos {
 		display: grid;
 		/*grid-template-columns: repeat(7, 1fr);
@@ -309,21 +338,24 @@
 }
 
 @media screen and (max-width: 1440px) {
-	#carouselRecents{
+	#carouselRecents {
 		width: 810px;
 	}
+
 	.card {
 		width: 80%;
 	}
+
 	.contenedor-filtro {
 		width: 100%;
 		margin: auto;
 		padding: 0px 0;
-	
+
 		display: grid;
 		grid-template-columns: 1fr 3fr;
 		gap: 10px;
 	}
+
 	.contenedor-tarjetas-filtro {
 		display: grid;
 		/*grid-template-columns: repeat(7, 1fr);*/
@@ -331,6 +363,7 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
+
 	.contenedor {
 		width: fit-content;
 		display: grid;
@@ -344,12 +377,14 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
+
 	.contenedor-main {
 		width: 1146px;
 		margin: auto;
 		padding: 0px 0;
 		gap: 10px;
 	}
+
 	.contenedor-tarjetas-main {
 		display: grid;
 		place-content: center;
@@ -357,7 +392,8 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
- /*
+
+	/*
 	.contenedor-favoritos {
 		display: grid;
 		/*grid-template-columns: repeat(7, 1fr);
@@ -393,9 +429,10 @@
 }
 
 @media screen and (max-width: 1280px) {
-	#carouselRecents{
+	#carouselRecents {
 		width: 647px;
 	}
+
 	.card {
 		width: 80%;
 	}
@@ -407,15 +444,17 @@
 		overflow: hidden;
 		white-space: nowrap;
 	}
+
 	.contenedor-filtro {
 		width: 100%;
 		margin: auto;
 		padding: 0px 0;
-	
+
 		display: grid;
 		grid-template-columns: 1fr 3fr;
 		gap: 10px;
 	}
+
 	.contenedor-tarjetas-filtro {
 		display: grid;
 		/*grid-template-columns: repeat(7, 1fr);*/
@@ -423,6 +462,7 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
+
 	.contenedor {
 		width: fit-content;
 		display: flex;
@@ -432,16 +472,17 @@
 	.contenedor-tarjetas {
 		display: grid;
 		grid-template-columns: repeat(4, 150px);
-		grid-template-rows: repeat(auto-fill, 220px); 
+		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
+
 	.contenedor-main {
 		width: 980px;
 		margin: auto;
 		padding: 0px 0;
 		gap: 10px;
 	}
-	
+
 	/* .contenedor-favoritos {
 		display: grid;
 		grid-template-columns: repeat(7, 1fr);
@@ -477,9 +518,10 @@
 
 /* RESPONSIVE CAROUSEL */
 @media screen and (max-width: 960px) {
-	#carouselRecents{
+	#carouselRecents {
 		width: 645px;
 	}
+
 	.card {
 		width: 100%;
 	}
@@ -496,11 +538,12 @@
 		width: fit-content;
 		margin: auto;
 		padding: 0px 0;
-	
+
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
 	}
+
 	.contenedor-tarjetas-filtro {
 		display: grid;
 		width: fit-content;
@@ -508,6 +551,7 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
+
 	.contenedor {
 		width: fit-content;
 		display: flex;
@@ -525,13 +569,15 @@
 		gap: 15px;
 		place-content: center;
 	}
+
 	.contenedor-main {
 		width: 650px;
 		margin: auto;
 		padding: 0px 0;
 		gap: 10px;
 	}
-/*
+
+	/*
 	.contenedor-favoritos {
 		display: grid;
 		/*grid-template-columns: repeat(7, 1fr);
@@ -566,21 +612,24 @@
 }
 
 @media screen and (max-width: 800px) {
-	#carouselRecents{
+	#carouselRecents {
 		width: 645px;
 	}
+
 	.card {
 		width: 100%;
 	}
+
 	.contenedor-filtro {
 		width: fit-content;
 		margin: auto;
 		padding: 0px 0;
-	
+
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
 	}
+
 	.contenedor-tarjetas-filtro {
 		display: grid;
 		width: fit-content;
@@ -588,6 +637,7 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
+
 	.contenedor {
 		width: fit-content;
 		display: flex;
@@ -603,6 +653,7 @@
 		gap: 15px;
 		place-content: center;
 	}
+
 	.contenedor-main {
 		width: 650px;
 		margin: auto;
@@ -643,9 +694,10 @@
 }
 
 @media screen and (max-width: 768px) {
-	#carouselRecents{
+	#carouselRecents {
 		width: 484px;
 	}
+
 	.card {
 		width: 100%;
 	}
@@ -666,6 +718,7 @@
 
 		place-content: center;
 	}
+
 	.contenedor-main {
 		width: 480px;
 		margin: auto;
@@ -705,21 +758,24 @@
 }
 
 @media screen and (max-width: 600px) {
-	#carouselRecents{
+	#carouselRecents {
 		width: 325px;
 	}
+
 	.card {
 		width: 100%;
 	}
+
 	.contenedor-filtro {
 		width: fit-content;
 		margin: auto;
 		padding: 0px 0;
-	
+
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
 	}
+
 	.contenedor-tarjetas-filtro {
 		display: grid;
 		width: fit-content;
@@ -727,6 +783,7 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		gap: 15px;
 	}
+
 	.contenedor {
 		width: fit-content;
 		padding: 0px 0;
@@ -743,6 +800,7 @@
 		grid-template-rows: repeat(auto-fill, 220px);
 		place-content: center;
 	}
+
 	.contenedor-main {
 		width: 320px;
 		margin: auto;

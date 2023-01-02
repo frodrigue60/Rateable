@@ -9,6 +9,10 @@
             </div>
         </div>
     @endif
+    @isset($requested)
+        <h3 class="text-light text-center">Request: {{$requested->type}}/{{$requested->tag}}/{{$requested->sort}}</h3>
+    @endisset
+    
     <div class="container">
         <div class="contenedor-filtro">
             <div>
@@ -18,6 +22,7 @@
                             <span class="text-light">Select Type</span>
                             <select id="chzn-type" name="type" class="form-select" aria-label="Default select example">
                                 <option value="" selected>Select the type</option>
+                                {{-- <option value="{{ $type }}" {{ $type == $post->type ? 'selected' : '' }}>{{ $type }} </option> --}}
                                 <option value="op">Opening</option>
                                 <option value="ed">Ending</option>
                             </select>
@@ -33,11 +38,12 @@
                         </div>
                         <div class="justify-content-center">
                             <span class="text-light">Sort By</span>
-                            <select id="chzn-sort" name="sortBy" class="form-select" aria-label="Default select example">
+                            <select id="chzn-sort" name="sort" class="form-select" aria-label="Default select example">
+                                <option value="" selected>Select order method</option>
                                 <option value="title">Title</option>
-                                <option value="score">Score</option>
-                                <option value="views">Views</option>
-                                <option value="favorites">Favorites</option>
+                                <option value="averageRating">Score</option>
+                                <option value="view_count">Views</option>
+                                <option value="likeCount">Favorites</option>
                             </select>
                         </div>
                         <br>
@@ -104,9 +110,9 @@
         </div>
 
 
-        <div style="display: flex;justify-content: center;margin: 10px;">
+        {{-- <div style="display: flex;justify-content: center;margin: 10px;">
             {{ $posts->links() }}
-        </div>
+        </div> --}}
 
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>

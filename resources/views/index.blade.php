@@ -70,7 +70,7 @@
                 <h2 class="text-light mb-0">Most popular</h2>
             </div>
             <div id="carousel-recents-main" class="owl-carousel">
-                @foreach ($openings->sortByDesc('likeCount') as $post)
+                @foreach ($popular as $post)
                     <div class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
@@ -123,7 +123,7 @@
                 <h2 class="text-light mb-0">Most viewed</h2>
             </div>
             <div id="carousel-recents-main" class="owl-carousel">
-                @foreach ($openings->sortByDesc('view_count') as $post)
+                @foreach ($viewed as $post)
                     <div class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
