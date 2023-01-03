@@ -177,7 +177,7 @@
                 <div class="container-items">
                     <div id="top-header">
                         <div>
-                            <span>Top Openings</span>
+                            <span>Global Top Openings</span>
                         </div>
                         <div>
                             <a href="{{route('globalranking')}}" class="btn btn-sm color4">More</a>
@@ -237,7 +237,7 @@
                 <div class="container-items">
                     <div id="top-header">
                         <div>
-                            <span>Top Endings</span>
+                            <span>Global Top Endings</span>
                         </div>
                         <div>
                             <a href="{{route('globalranking')}}" class="btn btn-sm color4">More</a>

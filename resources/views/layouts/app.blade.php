@@ -27,27 +27,25 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('/resources/css/modalSearch.css') }}"> --}}
 
-
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.css') }}"> --}}
-
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
     <!-- JS -->
-    <script src="{{ asset('resources/js/jquery-3.6.3.js') }}"></script>
-    <script src="{{ asset('/resources/owlcarousel/owl.carousel.js') }}"></script>
-    {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script>
-    <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.js') }}"></script> --}}
-
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
-
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script> --}}
+    <script src="{{ asset('/resources/js/jquery-3.6.3.js') }}"></script>
+    <script src="{{ asset('/resources/owlcarousel/owl.carousel.js') }}"></script>
+    
+    {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}
+     @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
+
+
+
 
 
 </head>
@@ -122,19 +120,19 @@
                                 aria-label="search" placeholder="Search..." data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                             <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-                        </form>--}}
+                        </form> --}}
                         {{-- <li class="nav-item">
                             <a class="nav-link" href="#" role="button"
                             data-bs-toggle="modal"
                             data-bs-target="#exampleModal">
                                 <i class="fa fa-search" aria-hidden="true"></i></a>
                         </li> --}}
-                        
+
                         <div class="d-flex">
                             <input id="searchInput" type="text" name="search" class="form-control"
                                 aria-label="search" placeholder="Search..." data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
-                            
+
                         </div>
 
                         <!-- Authentication Links -->
@@ -216,7 +214,7 @@
                                 </div>
 
                                 <span id="catTitle">Tag</span>
-                                <div id="tagsRes">
+                                <div id="tags">
                                 </div>
                             </div>
                         </div>
@@ -229,99 +227,8 @@
                     </div>
                 </div>
             </div>
-            <script>
-                const myModal = document.getElementById('exampleModal');
-                const postsDiv = document.querySelector("#posts");
-                const artistsDiv = document.querySelector("#artists");
-                const tagsDiv = document.querySelector("#tagsRes");
-                const input = document.getElementById('searchInputModal');
-                const token = document.querySelector('meta[name="csrf-token"]').content;
-
-                let typingTimer; //timer identifier
-                let doneTypingInterval = 300; //time in ms (5 seconds)
-
-                document.addEventListener("DOMContentLoaded", function() {
-                    nullValueInput();
-                    myModal.addEventListener('shown.bs.modal', function() {
-                        input.focus();
-
-                        input.addEventListener('keyup', () => {
-                            postsDiv.innerHTML =
-                                '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-                            artistsDiv.innerHTML =
-                                '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-                            tagsDiv.innerHTML =
-                                '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-                            console.log('input: ' + input.value);
-
-                            clearTimeout(typingTimer);
-                            if (input.value.length >= 1) {
-                                typingTimer = setTimeout(doneTyping, doneTypingInterval);
-                            } else {
-                                postsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                                    '</span></div>';
-                                artistsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                                    '</span></div>';
-                                tagsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                                    '</span></div>';
-                            }
-
-                        })
-
-                        function doneTyping() {
-                            try {
-                                fetch('http://localhost:8000/api/posts/search?q=' + input.value, {
-                                    headers: {
-                                        'X-Request-With': 'XMLHttpRequest',
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': token,
-                                    },
-                                    method: "get",
-                                }).then(response => {
-                                    return response.json()
-                                }).then((data) => {
-                                    postsDiv.innerHTML = "";
-                                    artistsDiv.innerHTML = "";
-                                    tagsDiv.innerHTML = "";
-
-                                    data.posts.forEach(element => {
-                                        postsDiv.innerHTML +=
-                                            '<div class="result"><a href="http://127.0.0.1:8000/show/' +
-                                            element.id + '/' + element.slug + '"><span>' +
-                                            element
-                                            .title + '</span></a></div>';
-                                    });
-
-                                    data.artists.forEach(element => {
-                                        artistsDiv.innerHTML +=
-                                            '<div class="result"><a href="http://127.0.0.1:8000/artist/' +
-                                            element.name_slug + '"><span>' + element.name +
-                                            '</span></a></div>';
-                                    });
-
-                                    data.tags.forEach(element => {
-                                        tagsDiv.innerHTML +=
-                                            '<div class="result"><a href="http://127.0.0.1:8000/tag/' +
-                                            element.slug + '"><span>' + element.name +
-                                            '</span></a></div>';
-                                    });
-                                });
-                            } catch (error) {
-                                console.log(error)
-                            }
-                        }
-                    });
-                    function nullValueInput() {
-                            postsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                                '</span></div>';
-                            artistsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                                '</span></div>';
-                            tagsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                                '</span></div>';
-                        }
-                });
-            </script>
         </main>
+        <script src="{{ asset('/resources/js/ajaxSearch.js') }}"></script>
         <footer class="text-center text-lg-start py-1 mt-1 color1">
             <div class="text-center p-3 text-light">
                 © 2022 Copyright:

@@ -3,11 +3,19 @@
 @section('content')
     <div class="container">
         <div class="container-top">
-
             <div class="container-items" style="width: 100%">
                 <div id="top-header">
                     <div>
-                        <h3 class="mb-0">Top 100 Openings</h3>
+                        @if (Request::is('seasonal-ranking'))
+                            <h2 class="text-light mb-0">Top Openings: @isset($currentSeason)
+                                {{$currentSeason->name}}
+                            @endisset
+                            </h2>
+                        @endif
+                        @if (Request::is('global-ranking'))
+                            <h2 class="text-light mb-0">Global Rank Openings
+                            </h2>
+                        @endif
                     </div>
                 </div>
                 @for ($j = 1; $j < 0; $j++)
@@ -23,11 +31,11 @@
                                         class="text-light no-deco">{{ $post->title }}</a></span>
                             </div>
                             @isset($post->song->song_romaji)
-                                    <div id="item-song-info">
-                                        <span><strong>{{ $post->song->song_romaji }}</strong> By
-                                            <strong>{{ $post->artist->name }}</strong></span>
-                                    </div>
-                                @endisset
+                                <div id="item-song-info">
+                                    <span><strong>{{ $post->song->song_romaji }}</strong> By
+                                        <strong>{{ $post->artist->name }}</strong></span>
+                                </div>
+                            @endisset
                         </div>
                         <div id="item-score">
                             <span>
@@ -64,9 +72,18 @@
             <div class="container-items">
                 <div id="top-header">
                     <div>
-                        <h3 class="mb-0">Top 100 Endings</h3>
+                        @if (Request::is('seasonal-ranking'))
+                            <h2 class="text-light mb-0">Top Openings: 
+                                @isset($currentSeason)
+                                    {{$currentSeason->name}}
+                                @endisset
+                            </h2>
+                        @endif
+                        @if (Request::is('global-ranking'))
+                            <h2 class="text-light mb-0">Global Rank Endings
+                            </h2>
+                        @endif
                     </div>
-
                 </div>
                 @for ($j = 1; $j < 0; $j++)
                 @endfor
@@ -82,11 +99,11 @@
                                         class="text-light no-deco">{{ $post->title }}</a></span>
                             </div>
                             @isset($post->song->song_romaji)
-                                    <div id="item-song-info">
-                                        <span><strong>{{ $post->song->song_romaji }}</strong> By
-                                            <strong>{{ $post->artist->name }}</strong></span>
-                                    </div>
-                                @endisset
+                                <div id="item-song-info">
+                                    <span><strong>{{ $post->song->song_romaji }}</strong> By
+                                        <strong>{{ $post->artist->name }}</strong></span>
+                                </div>
+                            @endisset
                         </div>
                         <div id="item-score">
                             <span>

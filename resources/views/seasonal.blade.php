@@ -15,20 +15,22 @@
             <div>
                 <div id="top-header" class="color1">
                     @if (Request::is('openings'))
-                    <div>
-                        <h2 class="text-light mb-0">Openings @isset($currentSeason)
-                            {{$currentSeason->name}}
-                        @endisset</h2>
-                    </div>
+                        <div>
+                            <h2 class="text-light mb-0">Openings @isset($currentSeason)
+                                    {{ $currentSeason->name }}
+                                @endisset
+                            </h2>
+                        </div>
                     @endif
                     @if (Request::is('endings'))
-                    <div>
-                        <h2 class="text-light mb-0">Endings @isset($currentSeason)
-                            {{$currentSeason->name}}
-                        @endisset</h2>
-                    </div>
+                        <div>
+                            <h2 class="text-light mb-0">Endings @isset($currentSeason)
+                                    {{ $currentSeason->name }}
+                                @endisset
+                            </h2>
+                        </div>
                     @endif
-                    
+
                     <div>
                         {{-- <a href="{{route('globalranking')}}" class="btn btn-sm btn-primary">More</a> --}}
                     </div>
@@ -87,78 +89,90 @@
             </div>
             <div>
                 {{-- DIV BANNER --}}
+
                 <div class="contenedor-banner">
-                    <div class="banner text-white" style="background-image: url('{{ asset('banner-background.webp') }}');">
-                        <table>
-                            <tr>
-                                <th class>
-                                    <h3>Seasons</h3>
-                                </th>
-                            </tr>
-                            @foreach ($tags as $tag)
-                                <tr>
-                                    <td>
-                                        <h5><a href="{{ route('fromtag', $tag->slug) }}"
-                                                class="badge text-bg-dark no-deco">{{ $tag->name }}</a></h5>
-                                    </td>
-                                </tr>
+                    <div id="seasons-container banner">
+                        <div id="top-header">
+                            <div>
+                                <span>Seasons</span>
+                            </div>
+                            <div>
+                                <a href="{{ route('tags') }}" class="btn btn-sm color4">More</a>
+                            </div>
+                        </div>
+                        <div id="seasons-content">
+                            @foreach ($tags as $item)
+                                <div id="season-item" class="color4">
+                                    <span><a href="{{ route('fromtag', $item->slug) }}"
+                                            class="no-deco text-light">{{ $item->name }}</a></span>
+                                </div>
                             @endforeach
-                            </tr>
-
-                        </table>
-                        <br>
-                        <a href="{{ route('tags') }}" class="btn btn-primary">All Seasons</a>
+                        </div>
                     </div>
-                    <div class="banner text-white" style="background-image: url('{{ asset('banner-background.webp') }}');">
-                        @for ($i = 1; $i < 0; $i++)
+                    <div class="container-items-seasonal">
+                        <div id="top-header">
+                            <div>
+                                @if (Request::is('openings'))
+                                        <span class="text-light mb-0">Top Openings @isset($currentSeason)
+                                                {{ $currentSeason->name }}
+                                            @endisset
+                                        </span>
+                                @endif
+                                @if (Request::is('endings'))
+                                        <span class="text-light mb-0">Top Endings @isset($currentSeason)
+                                                {{ $currentSeason->name }}
+                                            @endisset
+                                        </span>
+                                @endif
+                            </div>
+                            <div>
+                                <a href="{{ route('seasonalranking') }}" class="btn btn-sm color4">More</a>
+                            </div>
+                        </div>
+                        @for ($j = 1; $j < 0; $j++)
                         @endfor
-                        <table>
-                            <tr>
-                                <h3> TOP 10 </h3>
-                            </tr>
-                            <tr>
-                                @foreach ($posts->sortByDesc('averageRating')->take(10) as $post)
-                            <tr>
-                                <td>{{ $i++ }}</td>
-                                <td class="ellipsis">
-                                    <h5><a href="{{ route('show', $post->id) }}"
-                                            class="badge text-bg-dark no-deco">{{ $post->title }}</a></h5>
-                                </td>
-                                <td>
-                                    <h5><span class="badge bg-primary">
-                                            @if (isset($score_format))
-                                                @switch($score_format)
-                                                    @case('POINT_100')
-                                                        {{ round($post->averageRating) }}
-                                                    @break
+                        @foreach ($posts->sortByDesc('averageRating')->take(15) as $post)
+                            <div class="top-item-seasonal">
+                                <div id="item-place-seasonal">
+                                    <span><strong>{{ $j++ }}</strong></span>
+                                </div>
+                                <div id="item-info-seasonal">
+                                    <div id="item-post-info-seasonal">
+                                        <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                class="text-light no-deco">{{ $post->title }}</a></span>
+                                    </div>
+                                </div>
+                                <div id="item-score-seasonal">
+                                    <span>
+                                        @if (isset($score_format))
+                                            @switch($score_format)
+                                                @case('POINT_100')
+                                                    {{ round($post->averageRating) }}
+                                                @break
 
-                                                    @case('POINT_10_DECIMAL')
-                                                        {{ round($post->averageRating / 10, 1) }}
-                                                    @break
+                                                @case('POINT_10_DECIMAL')
+                                                    {{ round($post->averageRating / 10, 1) }}
+                                                @break
 
-                                                    @case('POINT_10')
-                                                        {{ round($post->averageRating / 10) }}
-                                                    @break
+                                                @case('POINT_10')
+                                                    {{ round($post->averageRating / 10) }}
+                                                @break
 
-                                                    @case('POINT_5')
-                                                        {{ round($post->averageRating / 20) }} <i class="fa fa-star"></i>
-                                                    @break
+                                                @case('POINT_5')
+                                                    {{ round($post->averageRating / 20) }}
+                                                @break
 
-                                                    @default
-                                                        {{ round($post->averageRating) }}
-                                                @endswitch
-                                            @else
-                                                <strong>{{ round($post->averageRating / 10, 1) }}</strong> <i
-                                                    class="fa fa-star"></i>
-                                            @endif
-
-                                        </span></h5>
-                                </td>
-                            </tr>
-                            @endforeach
-                            </tr>
-                        </table>
-                        <a href="{{ route('seasonalranking') }}" class="btn btn-primary">All Places</a>
+                                                @default
+                                                    {{ round($post->averageRating) }}
+                                            @endswitch
+                                        @else
+                                            {{ round($post->averageRating / 10, 1) }}
+                                        @endif
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
             </div>

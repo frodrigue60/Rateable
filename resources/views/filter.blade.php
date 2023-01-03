@@ -1,24 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (session('status'))
+    {{-- @if (session('status'))
         <div class="container">
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>Holy guacamole!</strong> {{ session('status') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
-    @endif
-    @isset($requested)
+    @endif --}}
+    {{-- @isset($requested)
         <h3 class="text-light text-center">Request: {{$requested->type}}/{{$requested->tag}}/{{$requested->sort}}</h3>
-    @endisset
+    @endisset --}}
     
     <div class="container">
         <div class="contenedor-filtro">
             <div>
                 <div id="searchPanel">
                     <form action="{{ route('filter') }}" method="get">
-                        <div class="justify-content-center">
+                        <div class="searchItem">
                             <span class="text-light">Select Type</span>
                             <select id="chzn-type" name="type" class="form-select" aria-label="Default select example">
                                 <option value="" selected>Select the type</option>
@@ -27,7 +27,7 @@
                                 <option value="ed">Ending</option>
                             </select>
                         </div>
-                        <div class="justify-content-center">
+                        <div class="searchItem">
                             <span class="text-light">Select Season</span>
                             <select id="chzn-tag" name='tag' class="form-select" aria-label="Default select example">
                                 <option value="" selected>Select the season</option>
@@ -36,7 +36,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="justify-content-center">
+                        <div class="searchItem">
                             <span class="text-light">Sort By</span>
                             <select id="chzn-sort" name="sort" class="form-select" aria-label="Default select example">
                                 <option value="" selected>Select order method</option>
