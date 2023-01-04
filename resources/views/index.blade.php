@@ -13,8 +13,13 @@
         <div class="contenedor-main">
             {{-- DIV POSTS --}}
 
-            <div id="top-header" class="mb-1 mt-1 color1">
-                <h2 class="text-light mb-0">Recently added</h2>
+            <div id="top-header" class="mb-1 mt-1">
+                <div>
+                    <h2 class="text-light mb-0">Recently added</h2>
+                </div>
+                <div>
+                    <a href="{{route('filter','sort=null')}}" class="btn btn-sm color4">More</a>
+                </div>
             </div>
             <div id="carousel-recents-main" class="owl-carousel">
                 @foreach ($recently as $post)
@@ -66,8 +71,13 @@
                     </div>
                 @endforeach
             </div>
-            <div id="top-header" class="mb-1 mt-1 color1">
-                <h2 class="text-light mb-0">Most popular</h2>
+            <div id="top-header" class="mb-1 mt-1">
+                <div>
+                    <h2 class="text-light mb-0">Most popular</h2>
+                </div>
+                <div>
+                    <a href="{{route('filter','sort=likeCount')}}" class="btn btn-sm color4">More</a>
+                </div>
             </div>
             <div id="carousel-recents-main" class="owl-carousel">
                 @foreach ($popular as $post)
@@ -119,8 +129,13 @@
                     </div>
                 @endforeach
             </div>
-            <div id="top-header" class="mb-1 mt-1 color1">
-                <h2 class="text-light mb-0">Most viewed</h2>
+            <div id="top-header" class="mb-1 mt-1">
+                <div>
+                    <h2 class="text-light mb-0">Most viewed</h2>
+                </div>
+                <div>
+                    <a href="{{route('filter','sort=view_count')}}" class="btn btn-sm color4">More</a>
+                </div>
             </div>
             <div id="carousel-recents-main" class="owl-carousel">
                 @foreach ($viewed as $post)

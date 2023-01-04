@@ -65,13 +65,13 @@
         <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content customModal text-light">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ $post->title }}</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row text-center text-dark">
+                        <div class="row text-center">
                             <h2>Average Score: <strong>
                                     @if (isset($score_format))
                                         @switch($score_format)

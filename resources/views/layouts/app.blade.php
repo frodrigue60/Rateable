@@ -27,8 +27,8 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> --}}
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}">
@@ -41,13 +41,9 @@
     <script src="{{ asset('/resources/js/jquery-3.6.3.js') }}"></script>
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.js') }}"></script>
     
+    
     {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}
-     @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
-
-
-
-
-
+    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>
 
 <body class="color2">
@@ -228,7 +224,6 @@
                 </div>
             </div>
         </main>
-        <script src="{{ asset('/resources/js/ajaxSearch.js') }}"></script>
         <footer class="text-center text-lg-start py-1 mt-1 color1">
             <div class="text-center p-3 text-light">
                 © 2022 Copyright:
@@ -236,6 +231,7 @@
             </div>
         </footer>
     </div>
+    {{-- <script src="{{ asset('/resources/js/ajaxSearch.js') }}"></script> --}}
 </body>
 
 </html>

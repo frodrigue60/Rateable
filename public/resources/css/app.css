@@ -1,9 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
-* {
-	font-family: "Helvetica Neue","Noto Sans",Arial,"Liberation Sans", "Roboto", "Gill Sans", system-ui, sans-serif;
+*{
+	font-family: "Nunito";
 }
-
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -44,10 +41,9 @@
 	background-color: #0e3d5f;
 	padding: 10px;
 }
-
-.searchItem {
+.searchItem{
 	display: flex;
-	flex-direction: column;
+    flex-direction: column;
 	place-items: center;
 }
 
@@ -59,7 +55,113 @@
 #video-title {
 	margin-top: auto;
 }
+/* container tags on seasonal view */
+#seasons-container{
+	margin: 5px;
+}
+#seasons-header{
+	text-align: center;
+	border-left: solid 3px;
+    border-color: #d6ce87;
+	margin-bottom: 3px;
+	font-size: 20px;
+}
+#seasons-content{
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+	text-align: center;
+}
+#season-item span a{
+	color: #a9dbff;
+}
+#season-item{
+	color: #ffffff;
+	transform: scale(1);
+    transition: all .25s ease-out;
+}
+#season-item:hover{
+	color: #a9dbff;
+	transform: scale(1.05);
+    transition: all .25s ease-out;
+}
 
+#seasons-footer{
+	text-align: center;
+	margin-top: 3px;
+	padding: 5px;
+}
+.button1{
+	background-color: #0e3d5f;
+	border: solid 1px;
+	border-color: #a9dbff;
+	color: #a9dbff;
+	border-radius: 5px;
+	font-size: 15px;
+}
+.button1:hover{
+	background-color: #a9dbff;
+	border: solid 1px;
+	border-color: #0e3d5f;
+	color: #0e3d5f;
+	border-radius: 5px;
+}
+.button1 a{
+	color: #a9dbff;
+	text-decoration: none;
+}
+.button1 a:hover{
+	color: #0e3d5f;
+	text-decoration: none;
+}
+/* end container tags on seasonal view */
+
+/* start top on seasonal top */
+.top-item-seasonal {
+    white-space: nowrap;
+    background-color: #0e3d5f;
+    width: 100%;
+    transform: scale(1);
+    transition: all .25s ease-out;
+     margin: 1px;
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    color: #ffffff;
+    z-index: 1;
+}
+
+.top-item-seasonal:hover {
+    transform: scale(1.02);
+    transition: .1s ease-in;
+    box-shadow: 0px 0px 3px 3px #0b2538;
+    background-color: #2c6288;
+    z-index: 2;
+}
+#item-place-seasonal {
+    background-color: #1e5983;
+    text-align: center;
+}
+#item-post-info-seasonal {
+    display: flex;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	padding-left: 5px;
+}
+#item-score-seasonal {
+    background-color: #1e5983;
+	text-align: end;
+}
+.container-items-seasonal {
+    background-color: #0C2638;
+    max-width: 243px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+/* end top on seasonal view */
 .card {
 	background-color: #0e3d5f;
 }
@@ -204,7 +306,7 @@
 
 .tarjeta-header h6 {
 	max-width: 100%;
-	max-height: 45px;
+	max-height: 60px;
 	white-space: wrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -245,6 +347,22 @@
 }
 
 @media screen and (max-width: 1920px) {
+	.container-items-seasonal {
+		background-color: #0C2638;
+		max-width: 306px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 5px;
+	}
+	#item-post-info-seasonal {
+		display: flex;
+		max-width: 200px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding-left: 5px;
+	}
 	#carouselRecents {
 		width: 976px;
 	}
@@ -282,7 +400,7 @@
 	.contenedor {
 		width: fit-content;
 		display: grid;
-		grid-template-columns: 4fr 1fr;
+		grid-template-columns: 3fr 1fr;
 		gap: 15px;
 
 	}
@@ -348,6 +466,22 @@
 }
 
 @media screen and (max-width: 1440px) {
+	#item-post-info-seasonal {
+		display: flex;
+		max-width: 170px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.container-items-seasonal {
+		background-color: #0C2638;
+		max-width: 270px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 5px;
+	}
+	
 	#carouselRecents {
 		width: 810px;
 	}
@@ -377,7 +511,7 @@
 	.contenedor {
 		width: fit-content;
 		display: grid;
-		grid-template-columns: 4fr 1fr;
+		grid-template-columns: 3fr 1fr;
 		gap: 15px;
 	}
 
@@ -439,6 +573,21 @@
 }
 
 @media screen and (max-width: 1280px) {
+	.container-items-seasonal {
+		background-color: #0C2638;
+		max-width: 270px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 5px;
+	}
+	#item-post-info-seasonal {
+		display: flex;
+		max-width: 175px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	#carouselRecents {
 		width: 647px;
 	}
@@ -528,6 +677,21 @@
 
 /* RESPONSIVE CAROUSEL */
 @media screen and (max-width: 960px) {
+	.container-items-seasonal {
+		background-color: #0C2638;
+		max-width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 5px;
+	}
+	#item-post-info-seasonal {
+		display: flex;
+		max-width: 200px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	#carouselRecents {
 		width: 645px;
 	}
@@ -622,6 +786,21 @@
 }
 
 @media screen and (max-width: 800px) {
+	.container-items-seasonal {
+		background-color: #0C2638;
+		max-width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 5px;
+	}
+	#item-post-info-seasonal {
+		display: flex;
+		max-width: 150px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	#carouselRecents {
 		width: 645px;
 	}
@@ -704,6 +883,13 @@
 }
 
 @media screen and (max-width: 768px) {
+	#item-post-info-seasonal {
+		display: flex;
+		max-width: 150px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	#carouselRecents {
 		width: 484px;
 	}
@@ -768,6 +954,13 @@
 }
 
 @media screen and (max-width: 600px) {
+	#item-post-info-seasonal {
+		display: flex;
+		max-width: 220px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	#carouselRecents {
 		width: 325px;
 	}

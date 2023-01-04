@@ -12,7 +12,7 @@
     {{-- @isset($requested)
         <h3 class="text-light text-center">Request: {{$requested->type}}/{{$requested->tag}}/{{$requested->sort}}</h3>
     @endisset --}}
-    
+
     <div class="container">
         <div class="contenedor-filtro">
             <div>
@@ -48,7 +48,7 @@
                         </div>
                         <br>
                         <div class="d-flex justify-content-center">
-                            <button class="btn btn-success w-100" type="submit">Do it</button>
+                            <button class="btn btn-primary w-100" type="submit">Do it</button>
                         </div>
                     </form>
 
@@ -105,14 +105,18 @@
                         </div>
                     @endforeach
                 </div>
+                <div style="display: flex;justify-content: center;
+                margin-top: 10px;">
+                    {{ $posts->links() }}
+                </div>
             </div>
 
         </div>
 
 
-        {{-- <div style="display: flex;justify-content: center;margin: 10px;">
-            {{ $posts->links() }}
-        </div> --}}
+        
+            
+        
 
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>

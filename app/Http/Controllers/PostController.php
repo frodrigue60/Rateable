@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Song;
 use Conner\Tagging\Model\Tag;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -352,7 +354,7 @@ class PostController extends Controller
                     ->take(5)
                     ->get();
 
-                return view('index', compact('openings', 'endings', 'tags', 'score_format', 'recently','popular','viewed'));
+                return view('index', compact('openings', 'endings', 'tags', 'score_format', 'recently', 'popular', 'viewed'));
             }
         }
         //if exist current season setted
@@ -611,23 +613,21 @@ class PostController extends Controller
         $requested->tag = $tag;
         $requested->sort = $sort;
 
-        
+
 
         if ($tag != null) {
             if ($type != null) {
                 $posts = Post::withAnyTag($tag)
-                ->where('type', $type)
-                ->get();
-            }else {
+                    ->where('type', $type)
+                    ->get();
+            } else {
                 $posts = Post::withAnyTag($tag)->get();
             }
-            
-        }
-        else {
+        } else {
             if ($type != null) {
                 $posts = Post::where('type', $type)
-                ->get();
-            }else {
+                    ->get();
+            } else {
                 $posts = Post::all();
             }
         }
@@ -636,25 +636,39 @@ class PostController extends Controller
         switch ($sort) {
             case 'title':
                 $posts = $posts->sortBy('title');
+                $posts = $this->paginate($posts)->withQueryString();
                 return view('filter', compact('posts', 'tags', 'requested'));
                 break;
             case 'averageRating':
                 $posts = $posts->sortByDesc('averageRating');
+                $posts = $this->paginate($posts)->withQueryString();
                 return view('filter', compact('posts', 'tags', 'requested'));
             case 'view_count':
                 $posts = $posts->sortByDesc('view_count');
+                $posts = $this->paginate($posts)->withQueryString();
                 return view('filter', compact('posts', 'tags', 'requested'));
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
+                $posts = $this->paginate($posts)->withQueryString();
                 return view('filter', compact('posts', 'tags', 'requested'));
                 break;
 
             default:
                 $posts = $posts->sortByDesc('created_at');
+                $posts = $this->paginate($posts)->withQueryString();
                 return view('filter', compact('posts', 'tags', 'requested'));
                 break;
         }
+    }
+    public function paginate($posts, $perPage = 20, $page = null, $options = [])
+    {
+        
+        $page = Paginator::resolveCurrentPage();
+        $options = ['path' => Paginator::resolveCurrentPath()];
+        $items = $posts instanceof Collection ? $posts : Collection::make($posts);
+        $posts = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return $posts;
     }
 
     //seach posts in admin pannel
