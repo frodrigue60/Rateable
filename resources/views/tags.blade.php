@@ -1,6 +1,8 @@
+@if (Request::is('tags'))
+    <title>All Seasons Openings & Endings</title>
+    <meta title="All Seasons Openings & Endings">
+@endif
 @extends ('layouts.app')
-
-@section('title', 'All Tags')
 
 @section('content')
     <div class="container">

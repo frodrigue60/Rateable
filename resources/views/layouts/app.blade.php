@@ -2,16 +2,15 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <title>Anirank</title>
-    <!-- -->
+    {{-- <title>Anirank</title> --}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- comment <meta title="Search, play, and rate the openings and endings of your favorite animes."> --}}
     <meta name="description"
         content="The site you were looking for to rate openings and endings of your favorite animes.">
     <meta name="keywords" content="anime, openings, endings, ranking, rating" />
-    <meta name="robots" content="index, nofollow" />
-    <meta name="Author" lang="es" content="Luis Rodz" />
+    <meta name="robots" content="index, follow" />
+    <meta name="Author" lang="en" content="Luis Rodz" />
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -22,8 +21,6 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
-
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -38,10 +35,8 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script> --}}
-    <script src="{{ asset('/resources/js/jquery-3.6.3.js') }}"></script>
-    <script src="{{ asset('/resources/owlcarousel/owl.carousel.js') }}"></script>
-    
-    
+    <script src="{{ asset('/resources/js/jquery-3.6.3.min.js') }}"></script>
+    <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
     {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}
     @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>

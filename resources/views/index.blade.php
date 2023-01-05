@@ -1,3 +1,7 @@
+@if (Request::is('/'))
+    <title>Anirank: Ranking Openings & Endings Anime</title>
+    <meta title="Search, play, and rate the openings and endings of your favorite animes.">
+@endif
 @extends('layouts.app')
 
 @section('content')
@@ -26,16 +30,15 @@
                     <div class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
+                                <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
                             </div>
-                            
                             @if ($post->type == 'op')
                                 <div class="tag">
-                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
                                 </div>
                             @else
                                 <div class="tag2">
-                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
                                 </div>
                             @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
@@ -94,15 +97,15 @@
                     <div class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
+                                <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
                             </div>
                             @if ($post->type == 'op')
                                 <div class="tag">
-                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
                                 </div>
                             @else
                                 <div class="tag2">
-                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
                                 </div>
                             @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
@@ -161,15 +164,15 @@
                     <div class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
+                                <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
                             </div>
                             @if ($post->type == 'op')
                                 <div class="tag">
-                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
                                 </div>
                             @else
                                 <div class="tag2">
-                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
                                 </div>
                             @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
@@ -238,12 +241,31 @@
                                     <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                             class="text-light no-deco">{{ $post->title }}</a></span>
                                 </div>
-                                @isset($post->song->song_romaji)
+                                @if (isset($post->song->song_romaji))
                                     <div id="item-song-info">
-                                        <span><strong>{{ $post->song->song_romaji }}</strong> By
-                                            <strong>{{ $post->artist->name }}</strong></span>
+                                        <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                    class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
+                                            @isset($post->artist->name)
+                                                By
+                                                <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                        class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                            @endisset
+                                        </span>
                                     </div>
-                                @endisset
+                                @else
+                                    @if (isset($post->song->song_en))
+                                        <div id="item-song-info">
+                                            <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                        class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
+                                                @isset($post->artist->name)
+                                                    By
+                                                    <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                            class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                                @endisset
+                                            </span>
+                                        </div>
+                                    @endif
+                                @endif
                             </div>
                             <div id="item-score">
                                 <span>
@@ -299,12 +321,31 @@
                                     <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                             class="text-light no-deco">{{ $post->title }}</a></span>
                                 </div>
-                                @isset($post->song->song_romaji)
+                                @if (isset($post->song->song_romaji))
                                     <div id="item-song-info">
-                                        <span><strong>{{ $post->song->song_romaji }}</strong> By
-                                            <strong>{{ $post->artist->name }}</strong></span>
+                                        <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                    class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
+                                            @isset($post->artist->name)
+                                                By
+                                                <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                        class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                            @endisset
+                                        </span>
                                     </div>
-                                @endisset
+                                @else
+                                    @if (isset($post->song->song_en))
+                                        <div id="item-song-info">
+                                            <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                        class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
+                                                @isset($post->artist->name)
+                                                    By
+                                                    <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                            class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                                @endisset
+                                            </span>
+                                        </div>
+                                    @endif
+                                @endif
                             </div>
                             <div id="item-score">
                                 <span>

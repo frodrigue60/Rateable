@@ -1,10 +1,17 @@
-@extends('layouts.app')
-<!doctype html>
-
 <head>
+    <title>{{ $post->title }} {{ $post->type }}
+        @isset($post->opNum)
+            {{ $post->opNum }}
+        @endisset
+    </title>
+    <meta
+        title="{{ $post->title }} {{ $post->type }}
+    @isset($post->opNum)
+        {{ $post->opNum }}
+    @endisset">
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
-    <title>{{ $post->title }}</title>
 </head>
+@extends('layouts.app')
 
 @section('content')
     <div class="container">
@@ -49,7 +56,8 @@
                     <div id="button-group">
                         <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option 1</button>
                         @if ($post->scndlink != null)
-                            <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option 2</button>
+                            <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option
+                                2</button>
                         @endif
                     </div>
                     <div class="">
@@ -68,7 +76,8 @@
                 <div class="modal-content customModal text-light">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ $post->title }}</h1>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row text-center">

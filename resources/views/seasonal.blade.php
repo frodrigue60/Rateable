@@ -1,3 +1,16 @@
+@isset($currentSeason)
+    <head>
+        @if (Request::is('openings'))
+            <title>Anirank: Openings {{ $currentSeason->name }}</title>
+            <meta title="Openings {{ $currentSeason->name }}">
+        @endif
+        @if (Request::is('endings'))
+            <title>Anirank: Endings {{ $currentSeason->name }}</title>
+            <meta title="Endings {{ $currentSeason->name }}">
+        @endif
+    </head>
+@endisset
+
 @extends('layouts.app')
 
 @section('content')
@@ -41,18 +54,16 @@
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
-                                    <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
+                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
                                 </div>
-                                @if ($post->opNum != null)
-                                    @if ($post->type == 'op')
-                                        <div class="tag">
-                                            <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                        </div>
-                                    @else
-                                        <div class="tag2">
-                                            <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                        </div>
-                                    @endif
+                                @if ($post->type == 'op')
+                                    <div class="tag">
+                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                    </div>
+                                @else
+                                    <div class="tag2">
+                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                    </div>
                                 @endif
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                                     <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"

@@ -1,3 +1,7 @@
+@if (Request::is('filter'))
+    <title>Search Openings & Endings</title>
+    <meta title="Search Openings & Endings">
+@endif
 @extends('layouts.app')
 
 @section('content')
@@ -22,7 +26,6 @@
                             <span class="text-light">Select Type</span>
                             <select id="chzn-type" name="type" class="form-select" aria-label="Default select example">
                                 <option value="" selected>Select the type</option>
-                                {{-- <option value="{{ $type }}" {{ $type == $post->type ? 'selected' : '' }}>{{ $type }} </option> --}}
                                 <option value="op">Opening</option>
                                 <option value="ed">Ending</option>
                             </select>
@@ -60,7 +63,7 @@
                         <div class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
-                                    <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
+                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
                                 </div>
                                 @if ($post->type == 'op')
                                     <div class="tag">

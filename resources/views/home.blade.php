@@ -1,9 +1,12 @@
+@if (Request::is('home'))
+    <title>Profile {{Auth::user()->name}}</title>
+    <meta title="Profile">
+@endif
 @extends('layouts.app')
 
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            
                 @if (session('status'))
                     <div class="container">
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">

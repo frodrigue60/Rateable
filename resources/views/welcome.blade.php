@@ -7,10 +7,11 @@
                 <h1>Welcome to AniRank</h1>
             </div>
             <div>
-                <h2><strong>What is?</strong></h2>
-                <h5>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et maiores, numquam suscipit, iusto id possimus
-                    facilis ratione quam optio adipisci, ex magni distinctio. Reprehenderit quam dolorum tenetur, earum
-                    aliquid rerum.</h5>
+                <h2><strong>What is it?</strong></h2>
+                <h4>It is a personal project that arises from the idea of ​​qualifying the openings and endings of the
+                    animes that are released in each season, and thus be able to place them in a ranking, to determine which
+                    are the best according to the opinion of users.
+                </h4>
             </div>
             <br>
             <hr>
@@ -19,9 +20,9 @@
                     Search <strong>openings</strong> and <strong>endings</strong>, by anime titles, artists, or season
                 </h2>
                 <h5>
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Similique possimus velit incidunt? Dignissimos
-                    natus dolore expedita, similique aut necessitatibus aspernatur alias eos, amet quisquam consequatur enim
-                    sit perferendis ducimus aperiam!
+                    On the site a search engine has been implemented that, although it is simple, will help you to search
+                    for the opening/ending, artist, or specific season in which you are interested. In this way it will be
+                    easier for you to find the musical themes, so you can add them to your favorites and rate them.
                 </h5>
             </div>
             <br>
@@ -31,10 +32,13 @@
                     Ranking OP & ED animes
                 </h2>
                 <h5>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque neque obcaecati, tempora facilis qui
-                    aliquam rerum praesentium ipsa quae molestias? Sed eaque facere praesentium libero at, quo nostrum
-                    dolorum assumenda.
+                    Based on the opinions of the users, an average rating of the musical themes is generated, and they are
+                    placed in a ranking that can be divided according to the current anime season, or in a global ranking of
+                    all time.
                 </h5>
+            </div>
+            <div class="d-flex justify-content-center">
+                <a href="{{route('/')}}" class="btn btn-ms color4">Let's Do it!</a>
             </div>
         </div>
     </div>

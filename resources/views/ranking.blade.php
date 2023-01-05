@@ -1,3 +1,11 @@
+@if (isset($currentSeason->name))
+    <title>Ranking {{$currentSeason->name}} Openings & Endings</title>
+    <meta title="Ranking {{$currentSeason->name}} Openings & Endings">
+@else
+    <title>Ranking Openings & Endings</title>
+    <meta title="Ranking Openings & Endings">
+@endif
+
 @extends('layouts.app')
 
 @section('content')
@@ -59,10 +67,6 @@
                                     </div>
                                 @endif
                             @endif
-
-
-
-
                         </div>
                         <div id="item-score">
                             <span>
