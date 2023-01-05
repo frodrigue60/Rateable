@@ -18,9 +18,18 @@
                             action="{{ route('admin.post.update', $post->id) }}" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf
-                            <label for="titleAnime" class="form-label">Title</label>
-                            <input type="text" class="form-control" value="{{ $post->title }}" id="titleAnime"
-                                name="title" required>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="titleAnime" class="form-label">Title</label>
+                                    <input type="text" class="form-control" placeholder="Anime Title" id="titleAnime"
+                                        name="title" required value="{{$post->title}}">
+                                </div >
+                                <div class="col-md-6">
+                                    <label for="opNum" class="form-label">Opening Number</label>
+                                    <input type="text" class="form-control" placeholder="OP/ED Number" id="opNum"
+                                        name="opNum" value="{{$post->opNum}}">
+                                </div>
+                            </div>
                             <br>
 
                             <label for="songRomaji" class="form-label">Song name (romaji)</label>
@@ -63,7 +72,7 @@
                             <br>
                             <label for="imageSrc" class="form-label">Image Source</label>
                             <input type="text" class="form-control" placeholder="Image link" id="imageSrc"
-                                name="imagesrc">
+                                name="imagesrc" value="{{$post->imageSrc}}">
                             <br>
                             <div class="mb-3">
                                 <label for="formFile" class="form-label">Default file input example</label>
@@ -78,8 +87,8 @@
                             <input type="text" class="form-control" value="{{ $post->scndlink }}"
                                 placeholder="Second Embed (optional)" id="scndlink" name="scndlink">
                             <br>
-                            <label for="tags">Select season</label>
-                            <select class="form-select chzn-select" multiple name="tags[]" id="tags" style="width:100%;">
+                            <label for="seasonsTags">Select season</label>
+                            <select class="form-select chzn-select" multiple name="tags[]" id="seasonsTags" style="width:100%;">
                                 @foreach ($post->tags as $tag)
                                     <option selected value="{{ $tag->name }}">{{ $tag->name }}</option>
                                 @endforeach

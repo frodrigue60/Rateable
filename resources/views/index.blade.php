@@ -18,7 +18,7 @@
                     <h2 class="text-light mb-0">Recently added</h2>
                 </div>
                 <div>
-                    <a href="{{route('filter','sort=null')}}" class="btn btn-sm color4">More</a>
+                    <a href="{{ route('filter', 'sort=null') }}" class="btn btn-sm color4">More</a>
                 </div>
             </div>
             <div id="carousel-recents-main" class="owl-carousel">
@@ -28,6 +28,16 @@
                             <div class="tarjeta-header text-light">
                                 <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                             </div>
+                            
+                            @if ($post->type == 'op')
+                                <div class="tag">
+                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                </div>
+                            @else
+                                <div class="tag2">
+                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                </div>
+                            @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                                 <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}">
@@ -76,7 +86,7 @@
                     <h2 class="text-light mb-0">Most popular</h2>
                 </div>
                 <div>
-                    <a href="{{route('filter','sort=likeCount')}}" class="btn btn-sm color4">More</a>
+                    <a href="{{ route('filter', 'sort=likeCount') }}" class="btn btn-sm color4">More</a>
                 </div>
             </div>
             <div id="carousel-recents-main" class="owl-carousel">
@@ -86,6 +96,15 @@
                             <div class="tarjeta-header text-light">
                                 <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                             </div>
+                            @if ($post->type == 'op')
+                                <div class="tag">
+                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                </div>
+                            @else
+                                <div class="tag2">
+                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                </div>
+                            @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                                 <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}">
@@ -134,7 +153,7 @@
                     <h2 class="text-light mb-0">Most viewed</h2>
                 </div>
                 <div>
-                    <a href="{{route('filter','sort=view_count')}}" class="btn btn-sm color4">More</a>
+                    <a href="{{ route('filter', 'sort=view_count') }}" class="btn btn-sm color4">More</a>
                 </div>
             </div>
             <div id="carousel-recents-main" class="owl-carousel">
@@ -144,6 +163,15 @@
                             <div class="tarjeta-header text-light">
                                 <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                             </div>
+                            @if ($post->type == 'op')
+                                <div class="tag">
+                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                </div>
+                            @else
+                                <div class="tag2">
+                                    <span class="tag-content ">{{$post->type}}{{ $post->opNum }}</span>
+                                </div>
+                            @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                                 <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}">
@@ -192,10 +220,10 @@
                 <div class="container-items">
                     <div id="top-header">
                         <div>
-                            <span>Global Top Openings</span>
+                            <span>Global Rank Openings</span>
                         </div>
                         <div>
-                            <a href="{{route('globalranking')}}" class="btn btn-sm color4">More</a>
+                            <a href="{{ route('globalranking') }}" class="btn btn-sm color4">More</a>
                         </div>
                     </div>
                     @for ($j = 1; $j < 0; $j++)
@@ -252,10 +280,10 @@
                 <div class="container-items">
                     <div id="top-header">
                         <div>
-                            <span>Global Top Endings</span>
+                            <span>Global Rank Endings</span>
                         </div>
                         <div>
-                            <a href="{{route('globalranking')}}" class="btn btn-sm color4">More</a>
+                            <a href="{{ route('globalranking') }}" class="btn btn-sm color4">More</a>
                         </div>
                     </div>
                     @for ($j = 1; $j < 0; $j++)

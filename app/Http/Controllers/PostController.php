@@ -69,6 +69,11 @@ class PostController extends Controller
             $post = new Post;
             $post->title = $request->title;
             $post->slug = Str::slug($request->title);
+            if ($request->opNum != true) {
+                $post->opNum = null;
+            } else {
+                $post->opNum = $request->opNum;
+            }
 
             if ($request->artist_id != true) {
                 $post->artist_id = null;
@@ -108,6 +113,12 @@ class PostController extends Controller
             $post->title = $request->title;
             $post->slug = Str::slug($request->title);
             $post->type = $request->type;
+            
+            if ($request->opNum != true) {
+                $post->opNum = null;
+            } else {
+                $post->opNum = $request->opNum;
+            }
             if ($request->artist_id != true) {
                 $post->artist_id = null;
             } else {
@@ -126,7 +137,7 @@ class PostController extends Controller
             $file_name = 'thumbnail_' . time() . '.' . $ext;
             Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
-
+            $post->imageSrc = $request->imagesrc;
 
             $song = new Song;
             $song->song_romaji = $request->song_romaji;
@@ -217,6 +228,11 @@ class PostController extends Controller
             $old_thumbnail = $post->thumbnail;
             $post->title = $request->title;
             $post->slug = Str::slug($request->title);
+            if ($request->opNum != true) {
+                $post->opNum = null;
+            } else {
+                $post->opNum = $request->opNum;
+            }
 
             if ($request->artist_id != true) {
                 $post->artist_id = null;
@@ -257,6 +273,11 @@ class PostController extends Controller
 
             $post->title = $request->title;
             $post->slug = Str::slug($request->title);
+            if ($request->opNum != true) {
+                $post->opNum = null;
+            } else {
+                $post->opNum = $request->opNum;
+            }
             if ($request->artist_id != true) {
                 $post->artist_id = null;
             } else {
@@ -276,6 +297,8 @@ class PostController extends Controller
             $file_name = 'thumbnail_' . time() . '.' . $ext;
             Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
+            $post->imageSrc = $request->imagesrc;
+
             $song = new Song;
             $song->song_romaji = $request->song_romaji;
             $song->song_jp = $request->song_jp;
