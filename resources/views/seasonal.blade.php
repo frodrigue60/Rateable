@@ -43,6 +43,17 @@
                                 <div class="tarjeta-header text-light">
                                     <h6 class="text-shadow text-uppercase">{{ $post->title }}</h6>
                                 </div>
+                                @if ($post->opNum != null)
+                                    @if ($post->type == 'op')
+                                        <div class="tag">
+                                            <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                        </div>
+                                    @else
+                                        <div class="tag2">
+                                            <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                        </div>
+                                    @endif
+                                @endif
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                                     <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
@@ -113,16 +124,16 @@
                         <div id="top-header">
                             <div>
                                 @if (Request::is('openings'))
-                                        <span class="text-light mb-0">Top Openings @isset($currentSeason)
-                                                {{ $currentSeason->name }}
-                                            @endisset
-                                        </span>
+                                    <span class="text-light mb-0">Top Openings @isset($currentSeason)
+                                            {{ $currentSeason->name }}
+                                        @endisset
+                                    </span>
                                 @endif
                                 @if (Request::is('endings'))
-                                        <span class="text-light mb-0">Top Endings @isset($currentSeason)
-                                                {{ $currentSeason->name }}
-                                            @endisset
-                                        </span>
+                                    <span class="text-light mb-0">Top Endings @isset($currentSeason)
+                                            {{ $currentSeason->name }}
+                                        @endisset
+                                    </span>
                                 @endif
                             </div>
                             <div>

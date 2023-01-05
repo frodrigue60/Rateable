@@ -8,8 +8,8 @@
                     <div>
                         @if (Request::is('seasonal-ranking'))
                             <h2 class="text-light mb-0">Top Openings: @isset($currentSeason)
-                                {{$currentSeason->name}}
-                            @endisset
+                                    {{ $currentSeason->name }}
+                                @endisset
                             </h2>
                         @endif
                         @if (Request::is('global-ranking'))
@@ -28,14 +28,41 @@
                         <div id="item-info">
                             <div id="item-post-info">
                                 <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
-                                        class="text-light no-deco">{{ $post->title }}</a></span>
+                                        class="text-light no-deco text-uppercase">{{ $post->title }}
+                                        @if ($post->opNum != null)
+                                            ({{ $post->type }}{{ $post->opNum }})
+                                        @endif
+                                    </a></span>
                             </div>
-                            @isset($post->song->song_romaji)
+                            @if (isset($post->song->song_romaji))
                                 <div id="item-song-info">
-                                    <span><strong>{{ $post->song->song_romaji }}</strong> By
-                                        <strong>{{ $post->artist->name }}</strong></span>
+                                    <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
+                                        @isset($post->artist->name)
+                                            By
+                                            <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                    class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                        @endisset
+                                    </span>
                                 </div>
-                            @endisset
+                            @else
+                                @if (isset($post->song->song_en))
+                                    <div id="item-song-info">
+                                        <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                    class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
+                                            @isset($post->artist->name)
+                                                By
+                                                <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                        class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                            @endisset
+                                        </span>
+                                    </div>
+                                @endif
+                            @endif
+
+
+
+
                         </div>
                         <div id="item-score">
                             <span>
@@ -73,9 +100,9 @@
                 <div id="top-header">
                     <div>
                         @if (Request::is('seasonal-ranking'))
-                            <h2 class="text-light mb-0">Top Openings: 
+                            <h2 class="text-light mb-0">Top Openings:
                                 @isset($currentSeason)
-                                    {{$currentSeason->name}}
+                                    {{ $currentSeason->name }}
                                 @endisset
                             </h2>
                         @endif
@@ -96,7 +123,11 @@
                         <div id="item-info">
                             <div id="item-post-info">
                                 <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
-                                        class="text-light no-deco">{{ $post->title }}</a></span>
+                                        class="text-light no-deco text-uppercase">{{ $post->title }}
+                                        @if ($post->opNum != null)
+                                            ({{ $post->type }}{{ $post->opNum }})
+                                        @endif
+                                    </a></span>
                             </div>
                             @isset($post->song->song_romaji)
                                 <div id="item-song-info">

@@ -91,7 +91,6 @@
 
 #item-song-info {
     display: flex;
-    place-content: center;
 }
 
 #item-score {
