@@ -1,8 +1,8 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     {{-- <title>Anirank</title> --}}
+    <link rel="canonical" href="https://anirank.ddns.net" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- comment <meta title="Search, play, and rate the openings and endings of your favorite animes."> --}}
@@ -18,27 +18,20 @@
     <link rel="icon" type="image/png" href="{{ asset('logo.svg') }}">
     <link rel="shortcut icon" sizes="192x192" href="{{ asset('logo.svg') }}">
 
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
     <!-- CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('/resources/css/modalSearch.css') }}"> --}}
 
     <!-- JS -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
-    </script> --}}
     <script src="{{ asset('/resources/js/jquery-3.6.3.min.js') }}"></script>
+    {{-- <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
-    {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}
-    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
+    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css']) --}}
 </head>
 
 <body class="color2">
@@ -226,7 +219,7 @@
             </div>
         </footer>
     </div>
-    {{-- <script src="{{ asset('/resources/js/ajaxSearch.js') }}"></script> --}}
+    <script src="{{ asset('/resources/js/ajaxSearch.js') }}"></script>
 </body>
 
 </html>

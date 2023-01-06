@@ -4,12 +4,14 @@ const artistsDiv = document.querySelector("#artists");
 const tagsDiv = document.querySelector("#tags");
 const input = document.getElementById('searchInputModal');
 const token = document.querySelector('meta[name="csrf-token"]').content;
+const titles = document.querySelectorAll('.post-titles');
 
 let typingTimer; //timer identifier
 let doneTypingInterval = 300; //time in ms (5 seconds)
 
 document.addEventListener("DOMContentLoaded", function () {
     nullValueInput();
+    cutTitles();
     myModal.addEventListener('shown.bs.modal', function () {
         input.focus();
 
@@ -86,5 +88,12 @@ document.addEventListener("DOMContentLoaded", function () {
             '</span></div>';
         tagsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
             '</span></div>';
+    }
+    function cutTitles(){
+        titles.forEach(title => {
+            if (title.textContent.length > 25) {
+              title.textContent = title.textContent.substr(0, 25) + "...";
+            }
+          });
     }
 });

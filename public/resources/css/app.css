@@ -1,6 +1,7 @@
-*{
-	font-family: "Nunito";
+* {
+	font-family: "Nunito", "Roboto",sans-serif, "Arial",system-ui;
 }
+
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -20,6 +21,7 @@
 ::-webkit-scrollbar-thumb:hover {
 	background: #0e3d5f;
 }
+
 
 #searchInput {
 	background-color: #0c2638;
@@ -41,9 +43,10 @@
 	background-color: #0e3d5f;
 	padding: 10px;
 }
-.searchItem{
+
+.searchItem {
 	display: flex;
-    flex-direction: column;
+	flex-direction: column;
 	place-items: center;
 }
 
@@ -55,43 +58,50 @@
 #video-title {
 	margin-top: auto;
 }
+
 /* container tags on seasonal view */
-#seasons-container{
+#seasons-container {
 	margin: 5px;
 }
-#seasons-header{
+
+#seasons-header {
 	text-align: center;
 	border-left: solid 3px;
-    border-color: #d6ce87;
+	border-color: #d6ce87;
 	margin-bottom: 3px;
 	font-size: 20px;
 }
-#seasons-content{
+
+#seasons-content {
 	display: flex;
 	flex-direction: column;
 	gap: 3px;
 	text-align: center;
 }
-#season-item span a{
+
+#season-item span a {
 	color: #a9dbff;
-}
-#season-item{
-	color: #ffffff;
-	transform: scale(1);
-    transition: all .25s ease-out;
-}
-#season-item:hover{
-	color: #a9dbff;
-	transform: scale(1.05);
-    transition: all .25s ease-out;
 }
 
-#seasons-footer{
+#season-item {
+	color: #ffffff;
+	transform: scale(1);
+	transition: all .25s ease-out;
+}
+
+#season-item:hover {
+	color: #a9dbff;
+	transform: scale(1.05);
+	transition: all .25s ease-out;
+}
+
+#seasons-footer {
 	text-align: center;
 	margin-top: 3px;
 	padding: 5px;
 }
-.button1{
+
+.button1 {
 	background-color: #0e3d5f;
 	border: solid 1px;
 	border-color: #a9dbff;
@@ -99,69 +109,110 @@
 	border-radius: 5px;
 	font-size: 15px;
 }
-.button1:hover{
+
+.button1:hover {
 	background-color: #a9dbff;
 	border: solid 1px;
 	border-color: #0e3d5f;
 	color: #0e3d5f;
 	border-radius: 5px;
 }
-.button1 a{
+
+.button1 a {
 	color: #a9dbff;
 	text-decoration: none;
 }
-.button1 a:hover{
+
+.button1 a:hover {
 	color: #0e3d5f;
 	text-decoration: none;
 }
+
 /* end container tags on seasonal view */
 
 /* start top on seasonal top */
 .top-item-seasonal {
-    white-space: nowrap;
-    background-color: #0e3d5f;
-    width: 100%;
-    transform: scale(1);
-    transition: all .25s ease-out;
-     margin: 1px;
-    display: grid;
-    grid-template-columns: 1fr 5fr 1fr;
-    color: #ffffff;
-    z-index: 1;
+	white-space: nowrap;
+	background-color: #0e3d5f;
+	width: 100%;
+	transform: scale(1);
+	transition: all .25s ease-out;
+	margin: 1px;
+	display: grid;
+	grid-template-columns: 1fr 5fr 1fr;
+	color: #ffffff;
+	z-index: 1;
 }
 
 .top-item-seasonal:hover {
-    transform: scale(1.02);
-    transition: .1s ease-in;
-    box-shadow: 0px 0px 3px 3px #0b2538;
-    background-color: #2c6288;
-    z-index: 2;
+	transform: scale(1.02);
+	transition: .1s ease-in;
+	box-shadow: 0px 0px 3px 3px #0b2538;
+	background-color: #2c6288;
+	z-index: 2;
 }
+
 #item-place-seasonal {
-    background-color: #1e5983;
-    text-align: center;
+	background-color: #1e5983;
+	text-align: center;
 }
+
 #item-post-info-seasonal {
-    display: flex;
-    max-width: 140px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+	display: flex;
+	max-width: 140px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	padding-left: 5px;
 }
+
 #item-score-seasonal {
-    background-color: #1e5983;
+	background-color: #1e5983;
 	text-align: end;
 }
+
 .container-items-seasonal {
-    background-color: #0C2638;
-    max-width: 243px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px;
+	background-color: #0C2638;
+	max-width: 243px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 5px;
 }
+
 /* end top on seasonal view */
+.tag {
+    height: 40px;
+    width: 75px;
+    background-color: #42a76f;
+    z-index: 10;
+    position: absolute;
+    transform: rotate(45deg) translate(65px, -90px);
+    display: flex;
+    align-items: end;
+}
+
+.tag2 {
+    height: 40px;
+    width: 75px;
+    background-color: #cc4eac;
+    z-index: 10;
+    position: absolute;
+    transform: rotate(45deg) translate(65px, -90px);
+    display: flex;
+    align-items: end;
+}
+
+.tag-content {
+    position: absolute;
+    z-index: 11;
+    color: #ffffff;
+    transform: rotate(0deg) translate(0px, 4px);
+    text-transform: uppercase;
+    font-size: smaller;
+    text-align: center;
+    width: 100%;
+}
 .card {
 	background-color: #0e3d5f;
 }
@@ -304,13 +355,14 @@
 	z-index: 3;
 }
 
-.tarjeta-header h6 {
-	max-width: 100%;
-	max-height: 60px;
-	white-space: wrap;
+.tarjeta-header span {
+	width: 100%;
+	/* max-height: 55px; */
 	overflow: hidden;
 	text-overflow: ellipsis;
+	font-size: small;
 }
+
 
 .tarjeta .textos .tarjeta-footer {
 	display: flex;
@@ -325,6 +377,7 @@
 	align-items: center;
 	/* margin-bottom: -5px; */
 	z-index: 3;
+	font-size: small;
 }
 
 .contenedor-banner {
@@ -355,6 +408,7 @@
 		align-items: center;
 		padding: 5px;
 	}
+
 	#item-post-info-seasonal {
 		display: flex;
 		max-width: 200px;
@@ -363,6 +417,7 @@
 		text-overflow: ellipsis;
 		padding-left: 5px;
 	}
+
 	#carouselRecents {
 		width: 976px;
 	}
@@ -473,6 +528,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	.container-items-seasonal {
 		background-color: #0C2638;
 		max-width: 270px;
@@ -481,7 +537,7 @@
 		align-items: center;
 		padding: 5px;
 	}
-	
+
 	#carouselRecents {
 		width: 810px;
 	}
@@ -496,7 +552,7 @@
 		padding: 0px 0;
 
 		display: grid;
-		grid-template-columns: 1fr 3fr;
+		grid-template-columns: 1fr 4fr;
 		gap: 10px;
 	}
 
@@ -581,6 +637,7 @@
 		align-items: center;
 		padding: 5px;
 	}
+
 	#item-post-info-seasonal {
 		display: flex;
 		max-width: 175px;
@@ -588,6 +645,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	#carouselRecents {
 		width: 647px;
 	}
@@ -685,6 +743,7 @@
 		align-items: center;
 		padding: 5px;
 	}
+
 	#item-post-info-seasonal {
 		display: flex;
 		max-width: 200px;
@@ -692,6 +751,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	#carouselRecents {
 		width: 645px;
 	}
@@ -794,6 +854,7 @@
 		align-items: center;
 		padding: 5px;
 	}
+
 	#item-post-info-seasonal {
 		display: flex;
 		max-width: 150px;
@@ -801,6 +862,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	#carouselRecents {
 		width: 645px;
 	}
@@ -890,6 +952,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	#carouselRecents {
 		width: 484px;
 	}
@@ -961,6 +1024,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
 	#carouselRecents {
 		width: 325px;
 	}
