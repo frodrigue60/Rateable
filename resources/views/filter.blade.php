@@ -1,25 +1,19 @@
 @if (Request::is('filter'))
-    <title>Search Openings & Endings</title>
-    <meta title="Search Openings & Endings">
+
+    <head>
+        <title>Search Openings & Endings</title>
+        <meta title="Search Openings & Endings">
+    </head>
 @endif
 @extends('layouts.app')
 
 @section('content')
-    {{-- @if (session('status'))
-        <div class="container">
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> {{ session('status') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
-    @endif --}}
-    {{-- @isset($requested)
-        <h3 class="text-light text-center">Request: {{$requested->type}}/{{$requested->tag}}/{{$requested->sort}}</h3>
-    @endisset --}}
-
     <div class="container">
+        <div id="top-header" class="color1 mb-1 mt-1">
+            <h2 class="text-light mb-0">Filter Posts</h2>
+        </div>
         <div class="contenedor-filtro">
-            <div>
+            <aside>
                 <div id="searchPanel">
                     <form action="{{ route('filter') }}" method="get">
                         <div class="searchItem">
@@ -56,11 +50,11 @@
                     </form>
 
                 </div>
-            </div>
-            <div>
+            </aside>
+            <section>
                 <div class="contenedor-tarjetas-filtro">
                     @foreach ($posts as $post)
-                        <div class="tarjeta">
+                        <article class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
                                     <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
@@ -114,32 +108,25 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     @endforeach
                 </div>
                 <div style="display: flex;justify-content: center;
                 margin-top: 10px;">
                     {{ $posts->links() }}
                 </div>
-            </div>
-
+            </section>
         </div>
-
-
-
-
-
-
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#chzn-type").chosen();
-                $("#chzn-tag").chosen();
-                $("#chzn-sort").chosen();
-            });
-        </script>
     </div>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#chzn-type").chosen();
+            $("#chzn-tag").chosen();
+            $("#chzn-sort").chosen();
+        });
+    </script>
 @endsection

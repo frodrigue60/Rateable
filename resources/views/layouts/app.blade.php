@@ -31,7 +31,7 @@
     {{-- <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
-    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css']) --}}
+    @vite(['resources/sass/app.scss', 'resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>
 
 <body class="color2">

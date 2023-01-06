@@ -15,213 +15,219 @@
     @endif
     <div class="container">
         <h1 hidden>Ranking Anime Openings & Endings</h1>
-        <div class="contenedor-main">
+        <section class="contenedor-main">
             {{-- DIV POSTS --}}
-
-            <div id="top-header" class="mb-1 mt-1">
-                <div>
-                    <h2 class="text-light mb-0">Recently added</h2>
-                </div>
-                <div>
-                    <a href="{{ route('filter', 'sort=null') }}" class="btn btn-sm color4">All Recently Posts</a>
-                </div>
-            </div>
-            <div id="carousel-recents-main" class="owl-carousel">
-                @foreach ($recently as $post)
-                    <div class="tarjeta">
-                        <div class="textos">
-                            <div class="tarjeta-header text-light">
-                                <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
-                            </div>
-                            @if ($post->type == 'op')
-                                <div class="tag">
-                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                </div>
-                            @else
-                                <div class="tag2">
-                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                </div>
-                            @endif
-                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
-                            </a>
-                            <div class="tarjeta-footer text-light">
-                                <div>
-                                    {{ $post->likeCount }} <i class="fa fa-heart"></i>
-                                </div>
-                                <div>
-                                    {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                </div>
-                                <div>
-                                    @if (isset($score_format))
-                                        @switch($score_format)
-                                            @case('POINT_100')
-                                                {{ round($post->averageRating) }}
-                                            @break
-
-                                            @case('POINT_10_DECIMAL')
-                                                {{ round($post->averageRating / 10, 1) }}
-                                            @break
-
-                                            @case('POINT_10')
-                                                {{ round($post->averageRating / 10) }}
-                                            @break
-
-                                            @case('POINT_5')
-                                                {{ round($post->averageRating / 20) }}
-                                            @break
-
-                                            @default
-                                                {{ round($post->averageRating) }}
-                                        @endswitch
-                                    @else
-                                        {{ round($post->averageRating / 10, 1) }}
-                                    @endif
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
+            <section>
+                <div id="top-header" class="mb-1 mt-1">
+                    <div>
+                        <h2 class="text-light mb-0">Recently added</h2>
                     </div>
-                @endforeach
-            </div>
-            <div id="top-header" class="mb-1 mt-1">
-                <div>
-                    <h2 class="text-light mb-0">Most popular</h2>
-                </div>
-                <div>
-                    <a href="{{ route('filter', 'sort=likeCount') }}" class="btn btn-sm color4">All Most Populars</a>
-                </div>
-            </div>
-            <div id="carousel-recents-main" class="owl-carousel">
-                @foreach ($popular as $post)
-                    <div class="tarjeta">
-                        <div class="textos">
-                            <div class="tarjeta-header text-light">
-                                <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
-                            </div>
-                            @if ($post->type == 'op')
-                                <div class="tag">
-                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                </div>
-                            @else
-                                <div class="tag2">
-                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                </div>
-                            @endif
-                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
-                            </a>
-                            <div class="tarjeta-footer text-light">
-                                <div>
-                                    {{ $post->likeCount }} <i class="fa fa-heart"></i>
-                                </div>
-                                <div>
-                                    {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                </div>
-                                <div>
-                                    @if (isset($score_format))
-                                        @switch($score_format)
-                                            @case('POINT_100')
-                                                {{ round($post->averageRating) }}
-                                            @break
-
-                                            @case('POINT_10_DECIMAL')
-                                                {{ round($post->averageRating / 10, 1) }}
-                                            @break
-
-                                            @case('POINT_10')
-                                                {{ round($post->averageRating / 10) }}
-                                            @break
-
-                                            @case('POINT_5')
-                                                {{ round($post->averageRating / 20) }}
-                                            @break
-
-                                            @default
-                                                {{ round($post->averageRating) }}
-                                        @endswitch
-                                    @else
-                                        {{ round($post->averageRating / 10, 1) }}
-                                    @endif
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
+                    <div>
+                        <a href="{{ route('filter', 'sort=null') }}" class="btn btn-sm color4">All Recently Posts</a>
                     </div>
-                @endforeach
-            </div>
-            <div id="top-header" class="mb-1 mt-1">
-                <div>
-                    <h2 class="text-light mb-0">All Most viewed</h2>
                 </div>
-                <div>
-                    <a href="{{ route('filter', 'sort=view_count') }}" class="btn btn-sm color4">More</a>
-                </div>
-            </div>
-            <div id="carousel-recents-main" class="owl-carousel">
-                @foreach ($viewed as $post)
-                    <div class="tarjeta">
-                        <div class="textos">
-                            <div class="tarjeta-header text-light">
-                                <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
-                            </div>
-                            @if ($post->type == 'op')
-                                <div class="tag">
-                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                <div id="carousel-recents-main" class="owl-carousel">
+                    @foreach ($recently as $post)
+                        <article class="tarjeta">
+                            <div class="textos">
+                                <div class="tarjeta-header text-light">
+                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
                                 </div>
-                            @else
-                                <div class="tag2">
-                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                </div>
-                            @endif
-                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
-                            </a>
-                            <div class="tarjeta-footer text-light">
-                                <div>
-                                    {{ $post->likeCount }} <i class="fa fa-heart"></i>
-                                </div>
-                                <div>
-                                    {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                </div>
-                                <div>
-                                    @if (isset($score_format))
-                                        @switch($score_format)
-                                            @case('POINT_100')
-                                                {{ round($post->averageRating) }}
-                                            @break
-
-                                            @case('POINT_10_DECIMAL')
-                                                {{ round($post->averageRating / 10, 1) }}
-                                            @break
-
-                                            @case('POINT_10')
-                                                {{ round($post->averageRating / 10) }}
-                                            @break
-
-                                            @case('POINT_5')
-                                                {{ round($post->averageRating / 20) }}
-                                            @break
-
-                                            @default
-                                                {{ round($post->averageRating) }}
-                                        @endswitch
-                                    @else
-                                        {{ round($post->averageRating / 10, 1) }}
-                                    @endif
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                @if ($post->type == 'op')
+                                    <div class="tag">
+                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                    </div>
+                                @else
+                                    <div class="tag2">
+                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                    </div>
+                                @endif
+                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                </a>
+                                <div class="tarjeta-footer text-light">
+                                    <div>
+                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                    </div>
+                                    <div>
+                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                    </div>
+                                    <div>
+                                        @if (isset($score_format))
+                                            @switch($score_format)
+                                                @case('POINT_100')
+                                                    {{ round($post->averageRating) }}
+                                                @break
+    
+                                                @case('POINT_10_DECIMAL')
+                                                    {{ round($post->averageRating / 10, 1) }}
+                                                @break
+    
+                                                @case('POINT_10')
+                                                    {{ round($post->averageRating / 10) }}
+                                                @break
+    
+                                                @case('POINT_5')
+                                                    {{ round($post->averageRating / 20) }}
+                                                @break
+    
+                                                @default
+                                                    {{ round($post->averageRating) }}
+                                            @endswitch
+                                        @else
+                                            {{ round($post->averageRating / 10, 1) }}
+                                        @endif
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+            <section>
+                <div id="top-header" class="mb-1 mt-1">
+                    <div>
+                        <h2 class="text-light mb-0">Most popular</h2>
                     </div>
-                @endforeach
-            </div>
-
+                    <div>
+                        <a href="{{ route('filter', 'sort=likeCount') }}" class="btn btn-sm color4">All Most Populars</a>
+                    </div>
+                </div>
+                <div id="carousel-recents-main" class="owl-carousel">
+                    @foreach ($popular as $post)
+                        <article class="tarjeta">
+                            <div class="textos">
+                                <div class="tarjeta-header text-light">
+                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                </div>
+                                @if ($post->type == 'op')
+                                    <div class="tag">
+                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                    </div>
+                                @else
+                                    <div class="tag2">
+                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                    </div>
+                                @endif
+                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                </a>
+                                <div class="tarjeta-footer text-light">
+                                    <div>
+                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                    </div>
+                                    <div>
+                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                    </div>
+                                    <div>
+                                        @if (isset($score_format))
+                                            @switch($score_format)
+                                                @case('POINT_100')
+                                                    {{ round($post->averageRating) }}
+                                                @break
+    
+                                                @case('POINT_10_DECIMAL')
+                                                    {{ round($post->averageRating / 10, 1) }}
+                                                @break
+    
+                                                @case('POINT_10')
+                                                    {{ round($post->averageRating / 10) }}
+                                                @break
+    
+                                                @case('POINT_5')
+                                                    {{ round($post->averageRating / 20) }}
+                                                @break
+    
+                                                @default
+                                                    {{ round($post->averageRating) }}
+                                            @endswitch
+                                        @else
+                                            {{ round($post->averageRating / 10, 1) }}
+                                        @endif
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+            <section>
+                <div id="top-header" class="mb-1 mt-1">
+                    <div>
+                        <h2 class="text-light mb-0">Most viewed</h2>
+                    </div>
+                    <div>
+                        <a href="{{ route('filter', 'sort=view_count') }}" class="btn btn-sm color4">All Most Viewed</a>
+                    </div>
+                </div>
+                <div id="carousel-recents-main" class="owl-carousel">
+                    @foreach ($viewed as $post)
+                        <article class="tarjeta">
+                            <div class="textos">
+                                <div class="tarjeta-header text-light">
+                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                </div>
+                                @if ($post->type == 'op')
+                                    <div class="tag">
+                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                    </div>
+                                @else
+                                    <div class="tag2">
+                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                    </div>
+                                @endif
+                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                </a>
+                                <div class="tarjeta-footer text-light">
+                                    <div>
+                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                    </div>
+                                    <div>
+                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                    </div>
+                                    <div>
+                                        @if (isset($score_format))
+                                            @switch($score_format)
+                                                @case('POINT_100')
+                                                    {{ round($post->averageRating) }}
+                                                @break
+    
+                                                @case('POINT_10_DECIMAL')
+                                                    {{ round($post->averageRating / 10, 1) }}
+                                                @break
+    
+                                                @case('POINT_10')
+                                                    {{ round($post->averageRating / 10) }}
+                                                @break
+    
+                                                @case('POINT_5')
+                                                    {{ round($post->averageRating / 20) }}
+                                                @break
+    
+                                                @default
+                                                    {{ round($post->averageRating) }}
+                                            @endswitch
+                                        @else
+                                            {{ round($post->averageRating / 10, 1) }}
+                                        @endif
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            </section>
+        </section>
+        <section class="contenedor-main">
             <div class="container-top">
-                <div class="container-items">
+                <section class="container-items">
                     <div id="top-header">
                         <div>
                             <span>Global Rank Openings</span>
@@ -230,10 +236,11 @@
                             <a href="{{ route('globalranking') }}" class="btn btn-sm color4">Global Ranking</a>
                         </div>
                     </div>
-                    @for ($j = 1; $j < 0; $j++)
-                    @endfor
+                    @php
+                        $j = 1;
+                    @endphp
                     @foreach ($openings->take(10)->sortByDesc('averageRating') as $post)
-                        <div class="top-item">
+                        <article class="top-item">
                             <div id="item-place">
                                 <span><strong>{{ $j++ }}</strong></span>
                             </div>
@@ -297,10 +304,10 @@
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                 </span>
                             </div>
-                        </div>
+                        </article>
                     @endforeach
-                </div>
-                <div class="container-items">
+                </section>
+                <section class="container-items">
                     <div id="top-header">
                         <div>
                             <span>Global Rank Endings</span>
@@ -309,10 +316,11 @@
                             <a href="{{ route('globalranking') }}" class="btn btn-sm color4">Global Ranking</a>
                         </div>
                     </div>
-                    @for ($j = 1; $j < 0; $j++)
-                    @endfor
+                    @php
+                        $j = 1;
+                    @endphp
                     @foreach ($endings->take(10)->sortByDesc('averageRating') as $post)
-                        <div class="top-item">
+                        <article class="top-item">
                             <div id="item-place">
 
                                 <span><strong>{{ $j++ }}</strong></span>
@@ -377,11 +385,11 @@
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                 </span>
                             </div>
-                        </div>
+                        </article>
                     @endforeach
-                </div>
+                </section>
             </div>
-        </div>
+        </section>
 
     </div>
     <script>

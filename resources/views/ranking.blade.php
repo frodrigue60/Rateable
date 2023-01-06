@@ -10,8 +10,8 @@
 
 @section('content')
     <div class="container">
-        <div class="container-top">
-            <div class="container-items" style="width: 100%">
+        <section class="container-top">
+            <section class="container-items">
                 <div id="top-header">
                     <div>
                         @if (Request::is('seasonal-ranking'))
@@ -26,10 +26,11 @@
                         @endif
                     </div>
                 </div>
-                @for ($j = 1; $j < 0; $j++)
-                @endfor
+                @php
+                    $j =1;
+                @endphp
                 @foreach ($openings->sortByDesc('averageRating') as $post)
-                    <div class="top-item">
+                    <article class="top-item">
                         <div id="item-place">
                             <span><strong>{{ $j++ }}</strong></span>
                         </div>
@@ -97,10 +98,10 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                             </span>
                         </div>
-                    </div>
+                    </article>
                 @endforeach
-            </div>
-            <div class="container-items">
+            </section>
+            <section class="container-items">
                 <div id="top-header">
                     <div>
                         @if (Request::is('seasonal-ranking'))
@@ -116,10 +117,11 @@
                         @endif
                     </div>
                 </div>
-                @for ($j = 1; $j < 0; $j++)
-                @endfor
+                @php
+                    $j = 1; 
+                @endphp
                 @foreach ($endings->sortByDesc('averageRating') as $post)
-                    <div class="top-item">
+                    <article class="top-item">
                         <div id="item-place">
 
                             <span><strong>{{ $j++ }}</strong></span>
@@ -169,9 +171,9 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                             </span>
                         </div>
-                    </div>
+                    </article>
                 @endforeach
-            </div>
-        </div>
+            </section>
+        </section>
     </div>
 @endsection
