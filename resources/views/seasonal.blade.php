@@ -25,7 +25,7 @@
     <div class="container">
         <div class="contenedor">
             {{-- DIV POSTS --}}
-            <div>
+            <section>
                 <div id="top-header" class="color1">
                     @if (Request::is('openings'))
                         <div>
@@ -49,9 +49,9 @@
                     </div>
                 </div>
 
-                <div class="contenedor-tarjetas">
+                <section class="contenedor-tarjetas">
                     @foreach ($posts as $post)
-                        <div class="tarjeta">
+                        <article class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
                                     <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
@@ -105,15 +105,14 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     @endforeach
-                </div>
-            </div>
-            <div>
+                </section>
+            </section>
+            <aside>
                 {{-- DIV BANNER --}}
-
-                <div class="contenedor-banner">
-                    <div id="seasons-container banner">
+                <section class="contenedor-banner">
+                    <section id="seasons-container banner">
                         <div id="top-header">
                             <div>
                                 <span>Seasons</span>
@@ -124,14 +123,14 @@
                         </div>
                         <div id="seasons-content">
                             @foreach ($tags as $item)
-                                <div id="season-item" class="color4">
+                                <article id="season-item" class="color4">
                                     <span><a href="{{ route('fromtag', $item->slug) }}"
                                             class="no-deco text-light">{{ $item->name }}</a></span>
-                                </div>
+                                </article>
                             @endforeach
                         </div>
-                    </div>
-                    <div class="container-items-seasonal">
+                    </section>
+                    <section class="container-items-seasonal">
                         <div id="top-header">
                             <div>
                                 @if (Request::is('openings'))
@@ -151,10 +150,11 @@
                                 <a href="{{ route('seasonalranking') }}" class="btn btn-sm color4">More</a>
                             </div>
                         </div>
-                        @for ($j = 1; $j < 0; $j++)
-                        @endfor
+                        @php
+                            $j = 1;
+                        @endphp
                         @foreach ($posts->sortByDesc('averageRating')->take(15) as $post)
-                            <div class="top-item-seasonal">
+                            <article class="top-item-seasonal">
                                 <div id="item-place-seasonal">
                                     <span><strong>{{ $j++ }}</strong></span>
                                 </div>
@@ -193,11 +193,11 @@
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                     </span>
                                 </div>
-                            </div>
+                            </article>
                         @endforeach
-                    </div>
-                </div>
-            </div>
+                    </section>
+                </section>
+            </aside>
         </div>
     </div>
 @endsection
