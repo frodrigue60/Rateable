@@ -1,3 +1,7 @@
+@if (Request::is('welcome'))
+    <title>Welcome to AniRank</title>
+    <meta title="Welcome to AniRank">
+@endif
 @extends('layouts.app')
 
 @section('content')

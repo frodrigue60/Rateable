@@ -14,6 +14,7 @@
         </div>
     @endif
     <div class="container">
+        <h1 hidden>Ranking Anime Openings & Endings</h1>
         <div class="contenedor-main">
             {{-- DIV POSTS --}}
 
