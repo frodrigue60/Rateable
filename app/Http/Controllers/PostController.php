@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use stdClass;
+use Intervention\Image\ImageManagerStatic as Image;
+
 
 use function PHPSTORM_META\type;
 
@@ -84,15 +86,14 @@ class PostController extends Controller
             $post->type = $request->type;
             $post->ytlink = $request->ytlink;
             $post->scndlink = $request->scndlink;
-
-            $file_extension = $request->file->extension();
-            //$file_mime_type = $request->file->getClientMimeType();
-
-            $file_name = 'thumbnail_' . time() . '.' . $file_extension;
-
+            //$file_extension = $request->file->extension();
+            /* $file_mime_type = $request->file->getClientMimeType();  NOT USED*/
+            $file_name = 'thumbnail_' . time() . '.' . '.webp';
             $post->thumbnail = $file_name;
 
-            $request->file->storeAs('thumbnails', $file_name, 'public');
+            $encoded = Image::make($request->file)->encode('webp', 75);
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            //$request->file->storeAs('thumbnails', $file_name, 'public');
             $song = new Song;
             $song->song_romaji = $request->song_romaji;
             $song->song_jp = $request->song_jp;
@@ -133,9 +134,11 @@ class PostController extends Controller
             }
 
             $image_file_data = file_get_contents($request->imagesrc);
-            $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
-            $file_name = 'thumbnail_' . time() . '.' . $ext;
-            Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+            //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $file_name = 'thumbnail_' . time() . '.' . '.webp';
+            $encoded = Image::make($image_file_data)->encode('webp', 75);
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
             $post->imageSrc = $request->imagesrc;
 
@@ -245,17 +248,17 @@ class PostController extends Controller
             $post->ytlink = $request->ytlink;
             $post->scndlink = $request->scndlink;
 
-            $file_extension = $request->file->extension();
+            //$file_extension = $request->file->extension();
             //$file_mime_type = $request->file->getClientMimeType();
 
 
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
 
-            $file_name = 'thumbnail_' . time() . '.' . $file_extension;
-
+            $file_name = 'thumbnail_' . time() . '.' . '.webp';
             $post->thumbnail = $file_name;
-
-            $request->file->storeAs('thumbnails', $file_name, 'public');
+            //$request->file->storeAs('thumbnails', $file_name, 'public');
+            $encoded = Image::make($request->file)->encode('webp', 75);
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             $song = new Song;
             $song->song_romaji = $request->song_romaji;
             $song->song_jp = $request->song_jp;
@@ -293,9 +296,11 @@ class PostController extends Controller
             }
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
             $image_file_data = file_get_contents($request->imagesrc);
-            $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
-            $file_name = 'thumbnail_' . time() . '.' . $ext;
-            Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+            //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $file_name = 'thumbnail_' . time() . '.' . '.webp';
+            $encoded = Image::make($image_file_data)->encode('webp', 75);
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
             $post->imageSrc = $request->imagesrc;
 
