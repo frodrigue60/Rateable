@@ -38,8 +38,8 @@
                             <div class="item-post-info">
                                 <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                         class="text-light no-deco text-uppercase">{{ $post->title }}
-                                        @if ($post->opNum != null)
-                                            ({{ $post->type }}{{ $post->opNum }})
+                                        @if ($post->themeNum != null)
+                                            ({{ $post->type }}{{ $post->themeNum }})
                                         @endif
                                     </a></span>
                             </div>
@@ -130,8 +130,8 @@
                             <div class="item-post-info">
                                 <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                         class="text-light no-deco text-uppercase">{{ $post->title }}
-                                        @if ($post->opNum != null)
-                                            ({{ $post->type }}{{ $post->opNum }})
+                                        @if ($post->themeNum != null)
+                                            ({{ $post->type }}{{ $post->themeNum }})
                                         @endif
                                     </a></span>
                             </div>

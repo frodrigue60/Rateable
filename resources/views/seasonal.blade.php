@@ -54,27 +54,17 @@
                             <div class="tarjeta-header text-light">
                                 <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                             </div>
-                            @if ($post->type == 'op')
-                                <div class="tag">
-                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                <div class="{{ $post->type === "op" ? "tag" : "tag2" }}">
+                                    <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                                 </div>
-                            @else
-                                <div class="tag2">
-                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                </div>
-                            @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                                 <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}">
                             </a>
                             <div class="tarjeta-footer text-light">
-                                <div>
-                                    {{ $post->likeCount }} <i class="fa fa-heart"></i>
-                                </div>
-                                <div>
-                                    {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                </div>
-                                <div>
+                                    <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
+                                    <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
+                                <span>
                                     @if (isset($score_format))
                                         @switch($score_format)
                                             @case('POINT_100')
@@ -100,7 +90,7 @@
                                         {{ round($post->averageRating / 10, 1) }}
                                     @endif
                                     <i class="fa fa-star" aria-hidden="true"></i>
-                                </div>
+                                </span>
                             </div>
                         </div>
                     </article>

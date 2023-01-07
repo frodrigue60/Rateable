@@ -7,8 +7,6 @@ const token = document.querySelector('meta[name="csrf-token"]').content;
 const titles = document.querySelectorAll('.post-titles');
 const loaderContainer = document.querySelector('.loader-container');
 
-        
-
 let typingTimer; //timer identifier
 let doneTypingInterval = 500; //time in ms (5 seconds)
 
@@ -63,22 +61,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     data.posts.forEach(element => {
                         postsDiv.innerHTML +=
-                            '<div class="result"><a href="show/' +
+                            '<div class="result"><a href="https://anirank.ddns.net/show/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
-                                .title + ' '+ element.type + '</span></a></div>';
+                                .title + ' '+ element.themeNum+ '</span></a></div>';
                     });
 
                     data.artists.forEach(element => {
                         artistsDiv.innerHTML +=
-                            '<div class="result"><a href="artist/' +
+                            '<div class="result"><a href="https://anirank.ddns.net/artist/' +
                             element.name_slug + '"><span>' + element.name +
                             '</span></a></div>';
                     });
 
                     data.tags.forEach(element => {
                         tagsDiv.innerHTML +=
-                            '<div class="result"><a href="tag/' +
+                            '<div class="result"><a href="https://anirank.ddns.net/tag/' +
                             element.slug + '"><span>' + element.name +
                             '</span></a></div>';
                     });

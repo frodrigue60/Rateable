@@ -24,8 +24,8 @@
     <!-- CSS -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
+    {{-- <link rel="preload" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}" as="style"
+        onload="this.onload=null;this.rel='stylesheet'"> --}}
     <link rel="preload" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}" as="style"
@@ -36,10 +36,10 @@
 
     <!-- JS -->
     <script src="{{ asset('/resources/js/jquery-3.6.3.min.js') }}"></script>
-    <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
+    {{-- <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('/resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
-    @vite(['resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
+    @vite(['resources/sass/app.scss','resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>
 
 <body class="color2">

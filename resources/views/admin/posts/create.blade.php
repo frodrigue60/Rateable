@@ -23,9 +23,9 @@
                                     name="title" required>
                             </div >
                             <div class="col-md-6">
-                                <label for="opNum" class="form-label">OP/ED Number</label>
-                                <input type="text" class="form-control" placeholder="Opening Number" id="opNum"
-                                    name="opNum">
+                                <label for="themeNum" class="form-label">OP/ED Number</label>
+                                <input type="text" class="form-control" placeholder="Opening Number" id="themeNum"
+                                    name="themeNum">
                             </div>
                         </div>
                         <br>

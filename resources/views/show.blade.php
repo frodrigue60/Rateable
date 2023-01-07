@@ -2,13 +2,13 @@
 @extends('layouts.app')
 @section('meta')
     <title>{{ $post->title }} {{ $post->type }}
-        @isset($post->opNum)
-            {{ $post->opNum }}
+        @isset($post->themeNum)
+            {{ $post->themeNum }}
         @endisset
     </title>
     <meta title="{{ $post->title }} {{ $post->type }}
-    @isset($post->opNum)
-        {{ $post->opNum }}
+    @isset($post->themeNum)
+        {{ $post->themeNum }}
     @endisset">
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
 @endsection

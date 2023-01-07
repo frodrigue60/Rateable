@@ -20,8 +20,9 @@ return new class extends Migration
             $table->string('imageSrc')->nullable();
             $table->unsignedBigInteger('song_id')->nullable();
             $table->unsignedBigInteger('artist_id')->nullable();
-            $table->enum('type', ['op', 'ed'])->nullable();
-            $table->string('opNum')->nullable();
+            $table->enum('type', ['OP', 'ED'])->nullable();
+            $table->string('themeNum')->nullable();
+            $table->string('suffix')->nullable();
             $table->text('ytlink')->nullable();
             $table->text('scndlink')->nullable();
             $table->string('thumbnail')->nullable();

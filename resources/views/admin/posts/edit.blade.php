@@ -25,15 +25,15 @@
                                         name="title" required value="{{$post->title}}">
                                 </div >
                                 <div class="col-md-6">
-                                    <label for="opNum" class="form-label">Opening Number</label>
-                                    <input type="text" class="form-control" placeholder="OP/ED Number" id="opNum"
-                                        name="opNum" value="{{$post->opNum}}">
+                                    <label for="themeNum" class="form-label">Opening Number</label>
+                                    <input type="text" class="form-control" placeholder="OP/ED Number" id="themeNum"
+                                        name="themeNum" value="{{$post->themeNum}}">
                                 </div>
                             </div>
                             <br>
 
                             <label for="songRomaji" class="form-label">Song name (romaji)</label>
-                            <input type="text" class="form-control" value="{{ $post->song->song_romaji }}"
+                            <input type="text" class="form-control" value="{{ $post->song->song_romaji != null ? $post->song->song_romaji : null }}"
                                 id="songRomaji" name="song_romaji">
                             <br>
                             <label for="songJp" class="form-label">Song name (JP)</label>
