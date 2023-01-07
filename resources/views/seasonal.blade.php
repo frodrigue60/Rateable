@@ -1,5 +1,6 @@
-@isset($currentSeason)
-    <head>
+@extends('layouts.app')
+@section('meta')
+    @isset($currentSeason)
         @if (Request::is('openings'))
             <title>Anirank: Openings {{ $currentSeason->name }}</title>
             <meta title="Openings {{ $currentSeason->name }}">
@@ -8,11 +9,8 @@
             <title>Anirank: Endings {{ $currentSeason->name }}</title>
             <meta title="Endings {{ $currentSeason->name }}">
         @endif
-    </head>
-@endisset
-
-@extends('layouts.app')
-
+    @endisset
+@endsection
 @section('content')
     @if (session('status'))
         <div class="container">

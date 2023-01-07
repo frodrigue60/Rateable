@@ -1,9 +1,10 @@
-@if (Request::is('/'))
-    <title>Anirank: Ranking Openings & Endings Anime</title>
-    <meta title="Search, play, and rate the openings and endings of your favorite animes.">
-@endif
 @extends('layouts.app')
-
+@section('meta')
+    @if (Request::is('/'))
+        <title>Anirank: Ranking Openings & Endings Anime</title>
+        <meta title="Search, play, and rate the openings and endings of your favorite animes.">
+    @endif
+@endsection
 @section('content')
     @if (session('status'))
         <div class="container">
@@ -14,9 +15,10 @@
         </div>
     @endif
     <div class="container">
-        <h1 hidden>Ranking Anime Openings & Endings</h1>
+        <h1 hidden>TOP ANIME OPENINGS & ENDINGS</h1>
+        {{-- POSTS SECTION --}}
         <section class="contenedor-main">
-            {{-- DIV POSTS --}}
+            {{-- RECENTS --}}
             <section>
                 <div id="top-header" class="mb-1 mt-1">
                     <div>
@@ -59,19 +61,19 @@
                                                 @case('POINT_100')
                                                     {{ round($post->averageRating) }}
                                                 @break
-    
+
                                                 @case('POINT_10_DECIMAL')
                                                     {{ round($post->averageRating / 10, 1) }}
                                                 @break
-    
+
                                                 @case('POINT_10')
                                                     {{ round($post->averageRating / 10) }}
                                                 @break
-    
+
                                                 @case('POINT_5')
                                                     {{ round($post->averageRating / 20) }}
                                                 @break
-    
+
                                                 @default
                                                     {{ round($post->averageRating) }}
                                             @endswitch
@@ -86,6 +88,7 @@
                     @endforeach
                 </div>
             </section>
+            {{-- POPULAR --}}
             <section>
                 <div id="top-header" class="mb-1 mt-1">
                     <div>
@@ -128,19 +131,19 @@
                                                 @case('POINT_100')
                                                     {{ round($post->averageRating) }}
                                                 @break
-    
+
                                                 @case('POINT_10_DECIMAL')
                                                     {{ round($post->averageRating / 10, 1) }}
                                                 @break
-    
+
                                                 @case('POINT_10')
                                                     {{ round($post->averageRating / 10) }}
                                                 @break
-    
+
                                                 @case('POINT_5')
                                                     {{ round($post->averageRating / 20) }}
                                                 @break
-    
+
                                                 @default
                                                     {{ round($post->averageRating) }}
                                             @endswitch
@@ -155,6 +158,7 @@
                     @endforeach
                 </div>
             </section>
+            {{-- MOST VIEWED --}}
             <section>
                 <div id="top-header" class="mb-1 mt-1">
                     <div>
@@ -197,19 +201,19 @@
                                                 @case('POINT_100')
                                                     {{ round($post->averageRating) }}
                                                 @break
-    
+
                                                 @case('POINT_10_DECIMAL')
                                                     {{ round($post->averageRating / 10, 1) }}
                                                 @break
-    
+
                                                 @case('POINT_10')
                                                     {{ round($post->averageRating / 10) }}
                                                 @break
-    
+
                                                 @case('POINT_5')
                                                     {{ round($post->averageRating / 20) }}
                                                 @break
-    
+
                                                 @default
                                                     {{ round($post->averageRating) }}
                                             @endswitch
@@ -225,6 +229,7 @@
                 </div>
             </section>
         </section>
+        {{-- TOP SECTION --}}
         <section class="contenedor-main">
             <div class="container-top">
                 <section class="container-items">
@@ -390,21 +395,5 @@
                 </section>
             </div>
         </section>
-
     </div>
-    <script>
-        $(document).ready(function() {
-            $(".owl-carousel").owlCarousel({
-                //stagePadding: 1,
-                loop: false,
-                margin: 8,
-                autoWidth: true,
-                dots: false,
-                autoplay: true,
-                autoplayTimeout: 5000,
-                autoplayHoverPause: true,
-                rewind: true,
-            });
-        });
-    </script>
 @endsection

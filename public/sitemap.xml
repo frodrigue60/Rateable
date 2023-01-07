@@ -2,373 +2,235 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
         <loc>https://anirank.ddns.net/</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/register</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/login</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
-        <loc>https://anirank.ddns.net/openings</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/endings</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/34/hunterhunter-2011</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/33/fairy-tail</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter?sort=null</loc>
-        <lastmod>2023-01-06T00:29:44+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/global-ranking</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/32/gintama</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/31/naruto-shippuden</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/29/mairimashita-iruma-kun-3</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/30/yuusha-party-wo-tsuihou-sareta-beast-tamer-saikyoushu-no-nekomimi-shoujo-to-deau</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <loc>https://anirank.ddns.net/register</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/28/shinobi-no-ittoki</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
-        <loc>https://anirank.ddns.net/show/26/engage-kiss</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <loc>https://anirank.ddns.net/show/29/mairimashita-iruma-kun-3</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/filter?sort=null</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/filter</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/endings</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/openings</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/show/30/yuusha-party-wo-tsuihou-sareta-beast-tamer-saikyoushu-no-nekomimi-shoujo-to-deau</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/global-ranking</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/27/spyfamily-part-2</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/25/kuro-no-shoukanshi</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/24/made-in-abyss-retsujitsu-no-ougonkyou</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/23/overlord-iv</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/22/lycoris-recoil</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/20/summer-time-render</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/19/yofukashi-no-uta</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/21/yofukashi-no-uta</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/14/urusei-yatsura-2022</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/15/uzaki-chan-wa-asobitai-o</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
-        <loc>https://anirank.ddns.net/show/16/kakkou-no-iinazuke</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <loc>https://anirank.ddns.net/show/14/urusei-yatsura-2022</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/13/shinmai-renkinjutsushi-no-tenpo-keiei</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/show/12/renai-flops</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/11/fuufu-ijou-koibito-miman</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/10/do-it-yourself</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/8/tensei-shitara-ken-deshita</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/9/akiba-meido-sensou</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/show/8/tensei-shitara-ken-deshita</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/6/kidou-senshi-gundam-suisei-no-majo</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/show/5/fumetsu-no-anata-e-season-2</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/7/koukyuu-no-karasu</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/4/chainsaw-man</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/show/5/fumetsu-no-anata-e-season-2</loc>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/3/kage-no-jitsuryokusha-ni-naritakute</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:43+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/2/spyfamily-part-2</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/show/1/bocchi-the-rock</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/password/reset</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/filter?sort=view_count</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/artist/aimer</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter?sort=likeCount</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/artist/yuzu</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/tags</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/tag/winter-2023</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/tag/winter-2021</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/tag/winter-2023</loc>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+        </url>
+    <url>
+        <loc>https://anirank.ddns.net/tag/summer-2022</loc>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/tag/summer-2021</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/tag/spring-2022</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter?sort=null&amp;page=2</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter?page=2</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/artist/macaroni-enpitsu</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter?sort=view_count&amp;page=2</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/seasonal-ranking</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter?sort=likeCount&amp;page=2</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/tag/fall-2021</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
         <loc>https://anirank.ddns.net/tag/spring-2021</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
-        <loc>https://anirank.ddns.net/filter?sort=null&amp;page=1</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
+        <loc>https://anirank.ddns.net/tag/fall-2021</loc>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>
     <url>
-        <loc>https://anirank.ddns.net/filter?page=1</loc>
-        <lastmod>2023-01-06T00:29:45+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter?sort=likeCount&amp;page=1</loc>
-        <lastmod>2023-01-06T00:29:46+00:00</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.8</priority>
-        </url>
-    <url>
-        <loc>https://anirank.ddns.net/filter?sort=view_count&amp;page=1</loc>
-        <lastmod>2023-01-06T00:29:46+00:00</lastmod>
+        <loc>https://anirank.ddns.net/tag/fall-2022</loc>
+        <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>
         </url>

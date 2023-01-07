@@ -1,12 +1,12 @@
-@if (Request::is('filter'))
 
-    <head>
+
+@extends('layouts.app')
+@section('meta')
+    @if (Request::is('filter'))
         <title>Search Openings & Endings</title>
         <meta title="Search Openings & Endings">
-    </head>
-@endif
-@extends('layouts.app')
-
+    @endif
+@endsection
 @section('content')
     <div class="container">
         <div id="top-header" class="color1 mb-1 mt-1">

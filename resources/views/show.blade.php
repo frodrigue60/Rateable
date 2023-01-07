@@ -1,18 +1,17 @@
-<head>
+
+@extends('layouts.app')
+@section('meta')
     <title>{{ $post->title }} {{ $post->type }}
         @isset($post->opNum)
             {{ $post->opNum }}
         @endisset
     </title>
-    <meta
-        title="{{ $post->title }} {{ $post->type }}
+    <meta title="{{ $post->title }} {{ $post->type }}
     @isset($post->opNum)
         {{ $post->opNum }}
     @endisset">
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
-</head>
-@extends('layouts.app')
-
+@endsection
 @section('content')
     <div class="container">
         @if (session('status'))

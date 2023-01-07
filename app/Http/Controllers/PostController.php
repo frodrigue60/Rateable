@@ -641,8 +641,6 @@ class PostController extends Controller
         $requested->tag = $tag;
         $requested->sort = $sort;
 
-
-
         if ($tag != null) {
             if ($type != null) {
                 $posts = Post::withAnyTag($tag)

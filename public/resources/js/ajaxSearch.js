@@ -12,6 +12,7 @@ let doneTypingInterval = 300; //time in ms (5 seconds)
 document.addEventListener("DOMContentLoaded", function () {
     nullValueInput();
     cutTitles();
+    
     myModal.addEventListener('shown.bs.modal', function () {
         input.focus();
 
@@ -22,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
             tagsDiv.innerHTML =
                 '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-            console.log('input: ' + input.value);
 
             clearTimeout(typingTimer);
             if (input.value.length >= 1) {
@@ -96,4 +96,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           });
     }
+    $(".owl-carousel").owlCarousel({
+        //stagePadding: 1,
+        loop: false,
+        margin: 8,
+        autoWidth: true,
+        dots: false,
+        autoplay: true,
+        autoplayTimeout: 8000,
+        autoplayHoverPause: true,
+        rewind: true,
+    });
 });

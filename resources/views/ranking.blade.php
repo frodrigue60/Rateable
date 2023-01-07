@@ -1,13 +1,13 @@
-@if (isset($currentSeason->name))
-    <title>Ranking {{$currentSeason->name}} Openings & Endings</title>
-    <meta title="Ranking {{$currentSeason->name}} Openings & Endings">
-@else
-    <title>Ranking Openings & Endings</title>
-    <meta title="Ranking Openings & Endings">
-@endif
-
 @extends('layouts.app')
-
+@section('meta')
+    @if (isset($currentSeason->name))
+        <title>Ranking {{ $currentSeason->name }} Openings & Endings</title>
+        <meta title="Ranking {{ $currentSeason->name }} Openings & Endings">
+    @else
+        <title>Ranking Openings & Endings</title>
+        <meta title="Ranking Openings & Endings">
+    @endif
+@endsection
 @section('content')
     <div class="container">
         <section class="container-top">
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 @php
-                    $j =1;
+                    $j = 1;
                 @endphp
                 @foreach ($openings->sortByDesc('averageRating') as $post)
                     <article class="top-item">
@@ -118,7 +118,7 @@
                     </div>
                 </div>
                 @php
-                    $j = 1; 
+                    $j = 1;
                 @endphp
                 @foreach ($endings->sortByDesc('averageRating') as $post)
                     <article class="top-item">
