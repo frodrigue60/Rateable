@@ -1,5 +1,3 @@
-
-
 @extends('layouts.app')
 @section('meta')
     @if (Request::is('filter'))
@@ -9,12 +7,12 @@
 @endsection
 @section('content')
     <div class="container">
-        <div id="top-header" class="color1 mb-1 mt-1">
+        <div class="top-header color1 mb-1 mt-1">
             <h2 class="text-light mb-0">Filter Posts</h2>
         </div>
         <div class="contenedor-filtro">
             <aside>
-                <div id="searchPanel">
+                <div class="searchPanel">
                     <form action="{{ route('filter') }}" method="get">
                         <div class="searchItem">
                             <span class="text-light">Select Type</span>
@@ -57,7 +55,7 @@
                         <article class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
-                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                    <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
                                 @if ($post->type == 'op')
                                     <div class="tag">
@@ -69,7 +67,7 @@
                                     </div>
                                 @endif
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">

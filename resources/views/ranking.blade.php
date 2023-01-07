@@ -12,7 +12,7 @@
     <div class="container">
         <section class="container-top">
             <section class="container-items">
-                <div id="top-header">
+                <div class="top-header">
                     <div>
                         @if (Request::is('seasonal-ranking'))
                             <h2 class="text-light mb-0">Top Openings: @isset($currentSeason)
@@ -31,11 +31,11 @@
                 @endphp
                 @foreach ($openings->sortByDesc('averageRating') as $post)
                     <article class="top-item">
-                        <div id="item-place">
+                        <div class="item-place">
                             <span><strong>{{ $j++ }}</strong></span>
                         </div>
-                        <div id="item-info">
-                            <div id="item-post-info">
+                        <div class="item-info">
+                            <div class="item-post-info">
                                 <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                         class="text-light no-deco text-uppercase">{{ $post->title }}
                                         @if ($post->opNum != null)
@@ -44,7 +44,7 @@
                                     </a></span>
                             </div>
                             @if (isset($post->song->song_romaji))
-                                <div id="item-song-info">
+                                <div class="item-song-info">
                                     <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                                 class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
                                         @isset($post->artist->name)
@@ -56,7 +56,7 @@
                                 </div>
                             @else
                                 @if (isset($post->song->song_en))
-                                    <div id="item-song-info">
+                                    <div class="item-song-info">
                                         <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                                     class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
                                             @isset($post->artist->name)
@@ -69,7 +69,7 @@
                                 @endif
                             @endif
                         </div>
-                        <div id="item-score">
+                        <div class="item-score">
                             <span>
                                 @if (isset($score_format))
                                     @switch($score_format)
@@ -102,7 +102,7 @@
                 @endforeach
             </section>
             <section class="container-items">
-                <div id="top-header">
+                <div class="top-header">
                     <div>
                         @if (Request::is('seasonal-ranking'))
                             <h2 class="text-light mb-0">Top Openings:
@@ -122,12 +122,12 @@
                 @endphp
                 @foreach ($endings->sortByDesc('averageRating') as $post)
                     <article class="top-item">
-                        <div id="item-place">
+                        <div class="item-place">
 
                             <span><strong>{{ $j++ }}</strong></span>
                         </div>
-                        <div id="item-info">
-                            <div id="item-post-info">
+                        <div class="item-info">
+                            <div class="item-post-info">
                                 <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                         class="text-light no-deco text-uppercase">{{ $post->title }}
                                         @if ($post->opNum != null)
@@ -136,13 +136,13 @@
                                     </a></span>
                             </div>
                             @isset($post->song->song_romaji)
-                                <div id="item-song-info">
+                                <div class="item-song-info">
                                     <span><strong>{{ $post->song->song_romaji }}</strong> By
                                         <strong>{{ $post->artist->name }}</strong></span>
                                 </div>
                             @endisset
                         </div>
-                        <div id="item-score">
+                        <div class="item-score">
                             <span>
                                 @if (isset($score_format))
                                     @switch($score_format)

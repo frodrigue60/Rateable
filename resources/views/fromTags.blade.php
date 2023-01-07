@@ -41,7 +41,7 @@
                          <article class="tarjeta">
                              <div class="textos">
                                  <div class="tarjeta-header text-light">
-                                     <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                     <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                  </div>
                                  @if ($post->type == 'op')
                                      <div class="tag">
@@ -53,7 +53,7 @@
                                      </div>
                                  @endif
                                  <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                     <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                     <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                          alt="{{ $post->title }}">
                                  </a>
                                  <div class="tarjeta-footer text-light">
@@ -108,7 +108,7 @@
                          <article class="tarjeta">
                              <div class="textos">
                                  <div class="tarjeta-header text-light">
-                                     <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                     <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                  </div>
                                  @if ($post->type == 'op')
                                      <div class="tag">
@@ -120,7 +120,7 @@
                                      </div>
                                  @endif
                                  <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                     <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                     <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                          alt="{{ $post->title }}">
                                  </a>
                                  <div class="tarjeta-footer text-light">

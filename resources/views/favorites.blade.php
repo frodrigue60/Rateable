@@ -9,7 +9,7 @@
 @section('content')
     <div class="container">
         <section>
-            <div id="top-header" class="color1 mb-1 mt-1">
+            <div class="top-header color1 mb-1 mt-1">
                 <h2 class="text-light mb-0">OPENINGS</h2>
             </div>
             <div class="contenedor-favoritos">
@@ -17,7 +17,7 @@
                     <article class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                             </div>
                             @if ($post->type == 'op')
                                 <div class="tag">
@@ -29,7 +29,7 @@
                                 </div>
                             @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}">
                             </a>
                             <div class="tarjeta-footer text-light">
@@ -74,7 +74,7 @@
         </section>
         <hr>
         <section>
-            <div id="top-header" class="color1 mb-1 mt-1">
+            <div class="top-header color1 mb-1 mt-1">
                 <h2 class="text-light mb-0">ENDINGS</h2>
             </div>
             <div class="contenedor-favoritos">
@@ -82,7 +82,7 @@
                     <article class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                             </div>
                             @if ($post->type == 'op')
                                 <div class="tag">
@@ -94,7 +94,7 @@
                                 </div>
                             @endif
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}">
                             </a>
                             <div class="tarjeta-footer text-light">

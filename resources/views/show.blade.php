@@ -24,7 +24,7 @@
         <div class="row justify-content-center">
             <div class="card card-video">
                 <div class="card-header d-flex justify-content-between align-items-start">
-                    <h5 id="video-title" class="card-title text-light">{{ $post->title }}</h5>
+                    <h5 class="card-title video-title text-light">{{ $post->title }}</h5>
                     <div>
                         @guest
                             <button class="btn btn-danger" disabled id="like">Favorite <i class="fa fa-heart"></i></button>

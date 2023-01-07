@@ -24,7 +24,7 @@
         <div class="contenedor">
             {{-- DIV POSTS --}}
             <section>
-                <div id="top-header" class="color1">
+                <div class="top-header color1">
                     @if (Request::is('openings'))
                         <div>
                             <h2 class="text-light mb-0">Openings @isset($currentSeason)
@@ -49,69 +49,69 @@
 
                 <section class="contenedor-tarjetas">
                     @foreach ($posts as $post)
-                        <article class="tarjeta">
-                            <div class="textos">
-                                <div class="tarjeta-header text-light">
-                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                    <article class="tarjeta">
+                        <div class="textos">
+                            <div class="tarjeta-header text-light">
+                                <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
+                            </div>
+                            @if ($post->type == 'op')
+                                <div class="tag">
+                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
                                 </div>
-                                @if ($post->type == 'op')
-                                    <div class="tag">
-                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                    </div>
-                                @else
-                                    <div class="tag2">
-                                        <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
-                                    </div>
-                                @endif
-                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                        alt="{{ $post->title }}">
-                                </a>
-                                <div class="tarjeta-footer text-light">
-                                    <div>
-                                        {{ $post->likeCount }} <i class="fa fa-heart"></i>
-                                    </div>
-                                    <div>
-                                        {{ $post->view_count }} <i class="fa fa-eye"></i>
-                                    </div>
-                                    <div>
-                                        @if (isset($score_format))
-                                            @switch($score_format)
-                                                @case('POINT_100')
-                                                    {{ round($post->averageRating) }}
-                                                @break
+                            @else
+                                <div class="tag2">
+                                    <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                </div>
+                            @endif
+                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    alt="{{ $post->title }}">
+                            </a>
+                            <div class="tarjeta-footer text-light">
+                                <div>
+                                    {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                </div>
+                                <div>
+                                    {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                </div>
+                                <div>
+                                    @if (isset($score_format))
+                                        @switch($score_format)
+                                            @case('POINT_100')
+                                                {{ round($post->averageRating) }}
+                                            @break
 
-                                                @case('POINT_10_DECIMAL')
-                                                    {{ round($post->averageRating / 10, 1) }}
-                                                @break
+                                            @case('POINT_10_DECIMAL')
+                                                {{ round($post->averageRating / 10, 1) }}
+                                            @break
 
-                                                @case('POINT_10')
-                                                    {{ round($post->averageRating / 10) }}
-                                                @break
+                                            @case('POINT_10')
+                                                {{ round($post->averageRating / 10) }}
+                                            @break
 
-                                                @case('POINT_5')
-                                                    {{ round($post->averageRating / 20) }}
-                                                @break
+                                            @case('POINT_5')
+                                                {{ round($post->averageRating / 20) }}
+                                            @break
 
-                                                @default
-                                                    {{ round($post->averageRating) }}
-                                            @endswitch
-                                        @else
-                                            {{ round($post->averageRating / 10, 1) }}
-                                        @endif
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </div>
+                                            @default
+                                                {{ round($post->averageRating) }}
+                                        @endswitch
+                                    @else
+                                        {{ round($post->averageRating / 10, 1) }}
+                                    @endif
+                                    <i class="fa fa-star" aria-hidden="true"></i>
                                 </div>
                             </div>
-                        </article>
+                        </div>
+                    </article>
                     @endforeach
                 </section>
             </section>
             <aside>
                 {{-- DIV BANNER --}}
                 <section class="contenedor-banner">
-                    <section id="seasons-container banner">
-                        <div id="top-header">
+                    <section class="seasons-container">
+                        <div class="top-header">
                             <div>
                                 <span>Seasons</span>
                             </div>
@@ -119,9 +119,9 @@
                                 <a href="{{ route('tags') }}" class="btn btn-sm color4">More</a>
                             </div>
                         </div>
-                        <div id="seasons-content">
+                        <div class="seasons-content">
                             @foreach ($tags as $item)
-                                <article id="season-item" class="color4">
+                                <article class="season-item color4">
                                     <span><a href="{{ route('fromtag', $item->slug) }}"
                                             class="no-deco text-light">{{ $item->name }}</a></span>
                                 </article>
@@ -129,7 +129,7 @@
                         </div>
                     </section>
                     <section class="container-items-seasonal">
-                        <div id="top-header">
+                        <div class="top-header">
                             <div>
                                 @if (Request::is('openings'))
                                     <span class="text-light mb-0">Top Openings @isset($currentSeason)
@@ -153,16 +153,16 @@
                         @endphp
                         @foreach ($posts->sortByDesc('averageRating')->take(15) as $post)
                             <article class="top-item-seasonal">
-                                <div id="item-place-seasonal">
+                                <div class="item-place-seasonal">
                                     <span><strong>{{ $j++ }}</strong></span>
                                 </div>
-                                <div id="item-info-seasonal">
-                                    <div id="item-post-info-seasonal">
+                                <div class="item-info-seasonal">
+                                    <div class="item-post-info-seasonal">
                                         <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                                 class="text-light no-deco">{{ $post->title }}</a></span>
                                     </div>
                                 </div>
-                                <div id="item-score-seasonal">
+                                <div class="item-score-seasonal">
                                     <span>
                                         @if (isset($score_format))
                                             @switch($score_format)

@@ -2,7 +2,7 @@
 @section('meta')
     @if (Request::is('/'))
         <title>Anirank: Ranking Openings & Endings Anime</title>
-        <meta title="Search, play, and rate the openings and endings of your favorite animes.">
+        <meta name="title" content="Search, play, and rate the openings and endings of your favorite animes.">
     @endif
 @endsection
 @section('content')
@@ -20,7 +20,7 @@
         <section class="contenedor-main">
             {{-- RECENTS --}}
             <section>
-                <div id="top-header" class="mb-1 mt-1">
+                <div class="top-header mb-1 mt-1 ">
                     <div>
                         <h2 class="text-light mb-0">Recently added</h2>
                     </div>
@@ -28,12 +28,12 @@
                         <a href="{{ route('filter', 'sort=null') }}" class="btn btn-sm color4">All Recently Posts</a>
                     </div>
                 </div>
-                <div id="carousel-recents-main" class="owl-carousel">
+                <div class="owl-carousel carousel-recents-main">
                     @foreach ($recently as $post)
                         <article class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
-                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                    <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
                                 @if ($post->type == 'op')
                                     <div class="tag">
@@ -45,7 +45,7 @@
                                     </div>
                                 @endif
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">
@@ -90,7 +90,7 @@
             </section>
             {{-- POPULAR --}}
             <section>
-                <div id="top-header" class="mb-1 mt-1">
+                <div class="top-header mb-1 mt-1">
                     <div>
                         <h2 class="text-light mb-0">Most popular</h2>
                     </div>
@@ -98,12 +98,12 @@
                         <a href="{{ route('filter', 'sort=likeCount') }}" class="btn btn-sm color4">All Most Populars</a>
                     </div>
                 </div>
-                <div id="carousel-recents-main" class="owl-carousel">
+                <div class="owl-carousel carousel-recents-main">
                     @foreach ($popular as $post)
                         <article class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
-                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                    <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
                                 @if ($post->type == 'op')
                                     <div class="tag">
@@ -115,7 +115,7 @@
                                     </div>
                                 @endif
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">
@@ -160,7 +160,7 @@
             </section>
             {{-- MOST VIEWED --}}
             <section>
-                <div id="top-header" class="mb-1 mt-1">
+                <div class="top-header mb-1 mt-1">
                     <div>
                         <h2 class="text-light mb-0">Most viewed</h2>
                     </div>
@@ -168,12 +168,12 @@
                         <a href="{{ route('filter', 'sort=view_count') }}" class="btn btn-sm color4">All Most Viewed</a>
                     </div>
                 </div>
-                <div id="carousel-recents-main" class="owl-carousel">
+                <div class="owl-carousel carousel-recents-main">
                     @foreach ($viewed as $post)
                         <article class="tarjeta">
                             <div class="textos">
                                 <div class="tarjeta-header text-light">
-                                    <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                    <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
                                 @if ($post->type == 'op')
                                     <div class="tag">
@@ -185,7 +185,7 @@
                                     </div>
                                 @endif
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">
@@ -233,7 +233,7 @@
         <section class="contenedor-main">
             <div class="container-top">
                 <section class="container-items">
-                    <div id="top-header">
+                    <div class="top-header">
                         <div>
                             <span>Global Rank Openings</span>
                         </div>
@@ -246,16 +246,16 @@
                     @endphp
                     @foreach ($openings->take(10)->sortByDesc('averageRating') as $post)
                         <article class="top-item">
-                            <div id="item-place">
+                            <div class="item-place">
                                 <span><strong>{{ $j++ }}</strong></span>
                             </div>
-                            <div id="item-info">
-                                <div id="item-post-info">
+                            <div class="item-info">
+                                <div class="item-post-info">
                                     <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                             class="text-light no-deco">{{ $post->title }}</a></span>
                                 </div>
                                 @if (isset($post->song->song_romaji))
-                                    <div id="item-song-info">
+                                    <div class="item-song-info">
                                         <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                                     class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
                                             @isset($post->artist->name)
@@ -267,7 +267,7 @@
                                     </div>
                                 @else
                                     @if (isset($post->song->song_en))
-                                        <div id="item-song-info">
+                                        <div class="item-song-info">
                                             <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                                         class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
                                                 @isset($post->artist->name)
@@ -280,7 +280,7 @@
                                     @endif
                                 @endif
                             </div>
-                            <div id="item-score">
+                            <div class="item-score">
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)
@@ -313,7 +313,7 @@
                     @endforeach
                 </section>
                 <section class="container-items">
-                    <div id="top-header">
+                    <div class="top-header">
                         <div>
                             <span>Global Rank Endings</span>
                         </div>
@@ -326,17 +326,17 @@
                     @endphp
                     @foreach ($endings->take(10)->sortByDesc('averageRating') as $post)
                         <article class="top-item">
-                            <div id="item-place">
+                            <div class="item-place">
 
                                 <span><strong>{{ $j++ }}</strong></span>
                             </div>
-                            <div id="item-info">
-                                <div id="item-post-info">
+                            <div class="item-info">
+                                <div class="item-post-info">
                                     <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                             class="text-light no-deco">{{ $post->title }}</a></span>
                                 </div>
                                 @if (isset($post->song->song_romaji))
-                                    <div id="item-song-info">
+                                    <div class="item-song-info">
                                         <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                                     class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
                                             @isset($post->artist->name)
@@ -348,7 +348,7 @@
                                     </div>
                                 @else
                                     @if (isset($post->song->song_en))
-                                        <div id="item-song-info">
+                                        <div class="item-song-info">
                                             <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                                         class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
                                                 @isset($post->artist->name)
@@ -361,7 +361,7 @@
                                     @endif
                                 @endif
                             </div>
-                            <div id="item-score">
+                            <div class="item-score">
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)
