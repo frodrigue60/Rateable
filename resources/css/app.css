@@ -65,6 +65,10 @@
 
 .carouselRecents {
 	width: 1024px;
+	height: 220px;
+}
+.carouselContainermain{
+	height: 260px;
 }
 
 
@@ -434,6 +438,7 @@
 
 	.carouselRecents {
 		width: 976px;
+		height: 220px;
 	}
 
 	.card {
@@ -554,6 +559,7 @@
 
 	.carouselRecents {
 		width: 810px;
+		height: 220px;
 	}
 
 	.card {
@@ -662,6 +668,7 @@
 
 	.carouselRecents {
 		width: 647px;
+		height: 220px;
 	}
 
 	.card {
@@ -768,6 +775,7 @@
 
 	.carouselRecents {
 		width: 645px;
+		height: 220px;
 	}
 
 	.card {
@@ -879,6 +887,7 @@
 
 	.carouselRecents {
 		width: 645px;
+		height: 220px;
 	}
 
 	.card {
@@ -969,6 +978,7 @@
 
 	.carouselRecents {
 		width: 484px;
+		height: 220px;
 	}
 
 	.card {
@@ -1041,6 +1051,7 @@
 
 	.carouselRecents {
 		width: 325px;
+		height: 220px;
 	}
 
 	.card {

@@ -88,10 +88,10 @@ class PostController extends Controller
             $post->scndlink = $request->scndlink;
             //$file_extension = $request->file->extension();
             /* $file_mime_type = $request->file->getClientMimeType();  NOT USED*/
-            $file_name = 'thumbnail_' . time() . '.' . '.webp';
+            $file_name = 'thumbnail_' . time() . '.' . 'webp';
             $post->thumbnail = $file_name;
 
-            $encoded = Image::make($request->file)->encode('webp', 75);
+            $encoded = Image::make($request->file)->resize(150, 212)->encode('webp', 100);
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //$request->file->storeAs('thumbnails', $file_name, 'public');
             $song = new Song;
@@ -135,8 +135,8 @@ class PostController extends Controller
 
             $image_file_data = file_get_contents($request->imagesrc);
             //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
-            $file_name = 'thumbnail_' . time() . '.' . '.webp';
-            $encoded = Image::make($image_file_data)->encode('webp', 75);
+            $file_name = 'thumbnail_' . time() . '.' . 'webp';
+            $encoded = Image::make($image_file_data)->resize(150, 212)->encode('webp', 100);
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
@@ -254,10 +254,10 @@ class PostController extends Controller
 
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
 
-            $file_name = 'thumbnail_' . time() . '.' . '.webp';
+            $file_name = 'thumbnail_' . time() . '.' . 'webp';
             $post->thumbnail = $file_name;
             //$request->file->storeAs('thumbnails', $file_name, 'public');
-            $encoded = Image::make($request->file)->encode('webp', 75);
+            $encoded = Image::make($request->file)->resize(150, 212)->encode('webp', 100);
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             $song = new Song;
             $song->song_romaji = $request->song_romaji;
@@ -297,8 +297,8 @@ class PostController extends Controller
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
             $image_file_data = file_get_contents($request->imagesrc);
             //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
-            $file_name = 'thumbnail_' . time() . '.' . '.webp';
-            $encoded = Image::make($image_file_data)->encode('webp', 75);
+            $file_name = 'thumbnail_' . time() . '.' . 'webp';
+            $encoded = Image::make($image_file_data)->resize(150, 212)->encode('webp', 100);
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
@@ -314,7 +314,7 @@ class PostController extends Controller
             $post->save();
             $tags = $request->tags;
             $post->retag($tags);
-            return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has url image');
+            return redirect(route('admin.post.index'))->with('status', 'Post Updated Successfully, has url image');
         }
         return redirect(route('admin.post.index'))->with('status', 'Post not created, image not found');
     }

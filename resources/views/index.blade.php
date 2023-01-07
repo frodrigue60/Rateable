@@ -20,10 +20,10 @@
         <section class="contenedor-main">
             <h2 hidden>ANIME OPENINGS & ENDINGS</h2>
             {{-- RECENTS --}}
-            <section>
+            <section class="carouselContainermain">
                 <div class="top-header mb-1 mt-1">
                     <div>
-                        <h2 class="text-light mb-0">Recently added</h2>
+                        <h3 class="text-light mb-0">Recently added</h3>
                     </div>
                     <div>
                         <a href="{{ route('filter', 'sort=null') }}" class="btn btn-sm color4">All Recently Posts</a>
@@ -90,10 +90,10 @@
                 </div>
             </section>
             {{-- POPULAR --}}
-            <section>
+            <section class="carouselContainermain">
                 <div class="top-header mb-1 mt-1">
                     <div>
-                        <h2 class="text-light mb-0">Most popular</h2>
+                        <h3 class="text-light mb-0">Most popular</h3>
                     </div>
                     <div>
                         <a href="{{ route('filter', 'sort=likeCount') }}" class="btn btn-sm color4">All Most Populars</a>
@@ -160,10 +160,10 @@
                 </div>
             </section>
             {{-- MOST VIEWED --}}
-            <section>
+            <section class="carouselContainermain">
                 <div class="top-header mb-1 mt-1">
                     <div>
-                        <h2 class="text-light mb-0">Most viewed</h2>
+                        <h3 class="text-light mb-0">Most viewed</h3>
                     </div>
                     <div>
                         <a href="{{ route('filter', 'sort=view_count') }}" class="btn btn-sm color4">All Most Viewed</a>

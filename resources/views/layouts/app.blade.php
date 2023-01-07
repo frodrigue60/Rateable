@@ -3,11 +3,13 @@
 
 <head>
     {{-- <title>Anirank</title> --}}
+    {{-- <meta http-equiv="Content-Security-Policy" content="script-src 'none'"> --}}
     <link rel="canonical" href="https://anirank.ddns.net">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- comment <meta title="Search, play, and rate the openings and endings of your favorite animes."> --}}
-    <meta name="description" content="The site you were looking for to rate openings and endings of your favorite animes.">
+    <meta name="description"
+        content="The site you were looking for to rate openings and endings of your favorite animes.">
     <meta name="keywords" content="anime, openings, endings, ranking, rating">
     <meta name="robots" content="index, follow">
     <meta name="Author" lang="en" content="Luis Rodz">
@@ -22,19 +24,20 @@
     <!-- CSS -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="stylesheet" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
+    <link rel="preload" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}" as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
-    {{-- <link rel="stylesheet" href="{{ asset('/resources/css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('/resources/css/modalSearch.css') }}"> --}}
+
     {{-- <link rel="stylesheet" href="{{ asset('/build/assets/modalSearch.00eba843.css') }}">
-    <link rel="stylesheet" href="{{ asset('/build/assets/app.0ecb0dd3.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('/build/assets/app.e55e8342.css') }}"> --}}
+
     <!-- JS -->
     <script src="{{ asset('/resources/js/jquery-3.6.3.min.js') }}"></script>
     <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('resources/js/popper.min.js') }}"></script>
+    {{-- <script src="{{ asset('/resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
     @vite(['resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>
@@ -45,7 +48,6 @@
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('text4491.png') }}" alt="Logo" width="157" height="25">
-                    {{-- {{ config('app.name', 'Laravel') }}    - {{ str_replace('_', '-', app()->getLocale()) }} --}}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -92,9 +94,8 @@
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
-                            <input id="searchInput" type="text" name="search" class="form-control"
-                                aria-label="search" placeholder="Search..." data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
+                        <input id="searchInput" type="text" name="search" class="form-control" aria-label="search"
+                            placeholder="Search..." data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item dropdown">
@@ -162,14 +163,10 @@
                             <div class="res">
                                 <span class="catTitle">Anime</span>
                                 <div id="posts">
-
                                 </div>
-
-
                                 <span class="catTitle">Artist</span>
                                 <div id="artists">
                                 </div>
-
                                 <span class="catTitle">Tag</span>
                                 <div id="tags">
                                 </div>
