@@ -33,7 +33,7 @@ class PostSeeder extends Seeder
         ];
 
         $randomtype = [
-            //'op',
+            'op',
             'ed'
         ];
 

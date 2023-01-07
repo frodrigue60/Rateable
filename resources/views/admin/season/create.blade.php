@@ -4,20 +4,29 @@
 
 @section('content')
     <div class="container">
-        <h1 class="text-light">Create current season</h1>
-
-        <form name="add-blog-post-form" id="add-blog-post-form" method="post" action="{{ route('admin.season.store') }}"
-            enctype="multipart/form-data">
-            @csrf
-            <select class="chzn-select" name="season" id="season" style="width:50%;">
-                @foreach ($seasons as $season)
-                    <option value="{{ $season->name }}">{{ $season->name }}</option>
-                @endforeach
-            </select>
-            <br>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-
+        <div class="row justify-content-center">
+                <div class="card bg-dark text-light">
+                    <div class="card-header">
+                        Create the current season
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{{ route('admin.season.store') }}" enctype="multipart/form-data">
+                            @csrf
+                            <label for="season">Select Season</label>
+                            <select class="chzn-select" name="season" id="season" style="width:100%;">
+                                @foreach ($seasons as $season)
+                                    <option value="{{ $season->name }}">{{ $season->name }}</option>
+                                @endforeach
+                            </select>
+                            <br>
+                            <br>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                    </div>
+                </div>
+        </div>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
         <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>

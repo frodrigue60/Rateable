@@ -17,9 +17,23 @@ class Post extends Model
 
     protected $fillable = [
         'title',
-        'imagesrc',
+        'slug',
+        'song_id',
+        'artist_id',
         'ytlink',
+        'scndlink',
         'type',
         'thumbnail',
+        'view_count',
     ];
+
+    public function artist()
+    {
+        return $this->belongsTo('App\Models\Artist');
+    }
+
+    public function song()
+    {
+        return $this->belongsTo('App\Models\Song');
+    }
 }

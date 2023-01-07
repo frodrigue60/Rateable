@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('type', ['admin', 'user'])->default('user');
             $table->string('image')->nullable();
-            $table->enum('score_format', ['POINT_100', 'POINT_10_DECIMAL','POINT_10','POINT_5'])->default('POINT_100');
+            $table->enum('score_format', ['POINT_100', 'POINT_10_DECIMAL','POINT_10','POINT_5'])->default('POINT_10_DECIMAL');
 
             $table->rememberToken();
             $table->timestamps();

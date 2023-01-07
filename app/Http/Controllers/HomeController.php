@@ -90,4 +90,9 @@ class HomeController extends Controller
         }
         return Redirect::back()->with('status', '¡Ooops!');
     }
+    
+    public function welcome()
+    {
+        return view('welcome');
+    }
 }

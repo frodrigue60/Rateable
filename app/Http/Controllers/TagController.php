@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -96,7 +97,6 @@ class TagController extends Controller
             ->where('id', $id)
             ->update(['name' => $name, 'slug' => $slug]);
 
-
         return redirect(route('admin.tags.index'))->with('status', 'Data has been updated');
     }
 
@@ -113,19 +113,28 @@ class TagController extends Controller
         return redirect(route('admin.tags.index'))->with('status', 'Data deleted');
     }
 
-    public function slug($name)
+    public function tag_slug($slug)
     {
-        $openings = Post::withAnyTag([$name])
-        ->where('type', 'op')
-        ->get();; // fetch articles with any tag listed
+        $tagName = DB::table('tagging_tags')->where('slug','=', $slug)->first();
+        //dd($tagName);
 
-        //$tags = DB::table('tagging_tags')->get();
-        $endings = Post::withAnyTag([$name])
-        ->where('type', 'ed')
-        ->get();
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+        $openings = Post::withAnyTag([$slug])
+            ->where('type', 'op')
+            ->orderby('title', 'asc')
+            ->get();
 
-        //dd($endings,$openings);
-        return view('fromTags', compact('openings','endings'));
+        $endings = Post::withAnyTag([$slug])
+            ->where('type', 'ed')
+            ->orderby('title', 'asc')
+            ->get();
+
+        
+        return view('fromTags', compact('openings', 'endings', 'score_format', 'tagName'));
     }
 
     public function alltags()
@@ -137,17 +146,14 @@ class TagController extends Controller
 
     public function searchTag(Request $request)
     {
-        if (Auth::check()) {
-            if (Auth::user()->type == 'admin') {
-                $tags = DB::table('tagging_tags')
-                    ->where('name', 'LIKE', "%{$request->input('search')}%")
-                    ->paginate(10);
+        if (Auth::check() && (Auth::user()->type == 'admin')) {
+            $tags = DB::table('tagging_tags')
+                ->where('name', 'LIKE', "%{$request->input('search')}%")
+                ->paginate(10);
 
-                return view('admin.tags.index', compact('tags'));
-            }
-            return redirect()->route('/')->with('status', 'Only admins');
+            return view('admin.tags.index', compact('tags'));
         } else {
-            return redirect()->route('/')->with('status', 'Please login');
+            return redirect()->route('/')->with('status', 'Only admins');
         }
     }
 }

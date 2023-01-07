@@ -1,71 +1,168 @@
-@extends('layouts.app')
+ @extends('layouts.app')
+ @section('meta')
+     @if (isset($tagName))
+         <title>{{ $tagName->name }} Openings & Endings</title>
+         <meta title="{{ $tagName->name }}  Openings & Endings">
+     @endif
+     @if (isset($artist))
+         <title>{{ $artist->name }} Openings & Endings</title>
+         <meta title="{{ $artist->name }}  Openings & Endings">
+     @endif
+ @endsection
+ @section('content')
+     <div class="container">
+         @if (session('status'))
+             <div class="container">
+                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                     <strong>Holy guacamole!</strong> {{ session('status') }}
+                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                 </div>
+             </div>
+         @endif
+         <div class="container text-center text-light">
+             @isset($tagName)
+                 <h1>{{ $tagName->name }}</h1>
+             @endisset
+             @isset($artist)
+                 <h1>{{ $artist->name }}
+                     @isset($artist->name_jp)
+                         ({{ $artist->name_jp }})
+                     @endisset
+                 </h1>
+             @endisset
+         </div>
+         <section>
+             <div class="color1">
+                 <h2 class="text-light">OPENINGS</h2>
+             </div>
+             <section class="contenedor-favoritos">
+                 @isset($openings)
+                     @foreach ($openings as $post)
+                         <article class="tarjeta">
+                             <div class="textos">
+                                 <div class="tarjeta-header text-light">
+                                     <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                 </div>
+                                 @if ($post->type == 'op')
+                                     <div class="tag">
+                                         <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                     </div>
+                                 @else
+                                     <div class="tag2">
+                                         <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                     </div>
+                                 @endif
+                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                     <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                         alt="{{ $post->title }}">
+                                 </a>
+                                 <div class="tarjeta-footer text-light">
+                                     <div>
+                                         {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                     </div>
+                                     <div>
+                                         {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                     </div>
+                                     <div>
+                                         @if (isset($score_format))
+                                             @switch($score_format)
+                                                 @case('POINT_100')
+                                                     {{ round($post->averageRating) }}
+                                                 @break
 
-@section('content')
-    <div class="container">
-        <div>
-            <h2 class="text-light" style="background-color: #0e3d5f">OPENINGS</h2>
-        </div>
-        <div class="contenedor-favoritos">
-            @foreach ($openings as $opening)
-                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/'.$opening->thumbnail) }}')">
-                    <div class="textos">
-                        <div class="tarjeta-header text-light">
-                            <h4 class="text-shadow text-uppercase">{{ $opening->title }}</h4>
-                        </div>
-                        <div class="tarjeta-footer">
-                            <a href="{{ route('show', $opening->id) }}" class="btn btn-primary"> Ver</a>
-                            @auth
-                                @if ($opening->liked())
-                                    <form action="{{ route('unlike.post', $opening->id) }}" method="post">
-                                        @csrf
-                                        <button class="btn btn-danger"><i class="fa fa-heart"></i></button>
-                                    </form>
-                                @else
-                                    <form action="{{ route('like.post', $opening->id) }}" method="post">
-                                        @csrf
-                                        <button class="btn btn-success"><i class="fa fa-heart"></i></button>
-                                    </form>
-                                @endif
-                            @endauth
-                            <button class="btn btn-primary">{{ $opening->averageRating / 10 }} <i
-                                    class="fa fa-star"></i></button>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-        <br>
-        <div>
-            <h2 class="text-light" style="background-color: #0e3d5f">ENDINGS</h2>
-        </div>
-        <div class="contenedor-favoritos">
-            @foreach ($endings as $ending)
-                <div class="tarjeta" style="background-image: url('{{ asset('/storage/thumbnails/'.$ending->thumbnail) }}')">
-                    <div class="textos">
-                        <div class="tarjeta-header text-light">
-                            <h4 class="text-shadow text-uppercase">{{ $ending->title }}</h4>
-                        </div>
-                        <div class="tarjeta-footer">
-                            <a href="{{ route('show', $ending->id) }}" class="btn btn-primary"> Ver</a>
-                            @auth
-                                @if ($ending->liked())
-                                    <form action="{{ route('unlike.post', $ending->id) }}" method="post">
-                                        @csrf
-                                        <button class="btn btn-danger"><i class="fa fa-heart"></i></button>
-                                    </form>
-                                @else
-                                    <form action="{{ route('like.post', $ending->id) }}" method="post">
-                                        @csrf
-                                        <button class="btn btn-success"><i class="fa fa-heart"></i></button>
-                                    </form>
-                                @endif
-                            @endauth
-                            <button class="btn btn-primary">{{ $ending->averageRating / 10 }} <i
-                                    class="fa fa-star"></i></button>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-@endsection
+                                                 @case('POINT_10_DECIMAL')
+                                                     {{ round($post->averageRating / 10, 1) }}
+                                                 @break
+
+                                                 @case('POINT_10')
+                                                     {{ round($post->averageRating / 10) }}
+                                                 @break
+
+                                                 @case('POINT_5')
+                                                     {{ round($post->averageRating / 20) }}
+                                                 @break
+
+                                                 @default
+                                                     {{ round($post->averageRating) }}
+                                             @endswitch
+                                         @else
+                                             {{ round($post->averageRating / 10, 1) }}
+                                         @endif
+                                         <i class="fa fa-star" aria-hidden="true"></i>
+                                     </div>
+                                 </div>
+                             </div>
+                         </article>
+                     @endforeach
+                 @endisset
+             </section>
+         </section>
+         <br>
+         <section>
+             <div class="color1">
+                 <h2 class="text-light">ENDINGS</h2>
+             </div>
+             <section class="contenedor-favoritos">
+                 @isset($endings)
+                     @foreach ($endings as $post)
+                         <article class="tarjeta">
+                             <div class="textos">
+                                 <div class="tarjeta-header text-light">
+                                     <span class="text-shadow text-uppercase post-titles">{{ $post->title }}</span>
+                                 </div>
+                                 @if ($post->type == 'op')
+                                     <div class="tag">
+                                         <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                     </div>
+                                 @else
+                                     <div class="tag2">
+                                         <span class="tag-content ">{{ $post->type }}{{ $post->opNum }}</span>
+                                     </div>
+                                 @endif
+                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                     <img id="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                         alt="{{ $post->title }}">
+                                 </a>
+                                 <div class="tarjeta-footer text-light">
+                                     <div>
+                                         {{ $post->likeCount }} <i class="fa fa-heart"></i>
+                                     </div>
+                                     <div>
+                                         {{ $post->view_count }} <i class="fa fa-eye"></i>
+                                     </div>
+                                     <div>
+                                         @if (isset($score_format))
+                                             @switch($score_format)
+                                                 @case('POINT_100')
+                                                     {{ round($post->averageRating) }}
+                                                 @break
+
+                                                 @case('POINT_10_DECIMAL')
+                                                     {{ round($post->averageRating / 10, 1) }}
+                                                 @break
+
+                                                 @case('POINT_10')
+                                                     {{ round($post->averageRating / 10) }}
+                                                 @break
+
+                                                 @case('POINT_5')
+                                                     {{ round($post->averageRating / 20) }}
+                                                 @break
+
+                                                 @default
+                                                     {{ round($post->averageRating) }}
+                                             @endswitch
+                                         @else
+                                             {{ round($post->averageRating / 10, 1) }}
+                                         @endif
+                                         <i class="fa fa-star" aria-hidden="true"></i>
+                                     </div>
+                                 </div>
+                             </div>
+                         </article>
+                     @endforeach
+                 @endisset
+             </section>
+         </section>
+     </div>
+ @endsection

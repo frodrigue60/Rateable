@@ -2,14 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Song;
 use Conner\Tagging\Model\Tag;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Session;
+use stdClass;
+use Intervention\Image\ImageManagerStatic as Image;
+
+
+use function PHPSTORM_META\type;
 
 class PostController extends Controller
 {
@@ -20,8 +32,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
-
+        $posts = Post::orderByDesc('id')->paginate(10);
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -34,7 +45,8 @@ class PostController extends Controller
     {
         $types = ['op', 'ed'];
         $tags = Tag::all();
-        return view('admin.posts.create', compact('tags', 'types'));
+        $artists = Artist::all();
+        return view('admin.posts.create', compact('tags', 'types', 'artists'));
     }
 
     /**
@@ -55,20 +67,40 @@ class PostController extends Controller
                 return Redirect::back()->with('status', $errors);
             }
 
+
             $post = new Post;
             $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
+            if ($request->opNum != true) {
+                $post->opNum = null;
+            } else {
+                $post->opNum = $request->opNum;
+            }
+
+            if ($request->artist_id != true) {
+                $post->artist_id = null;
+            } else {
+                $post->artist_id = $request->artist_id;
+            }
+
             $post->type = $request->type;
-
             $post->ytlink = $request->ytlink;
-
-            $file_extension = $request->file->extension();
-            //$file_mime_type = $request->file->getClientMimeType();
-
-            $file_name = 'thumbnail_' . time() . '.' . $file_extension;
-
+            $post->scndlink = $request->scndlink;
+            //$file_extension = $request->file->extension();
+            /* $file_mime_type = $request->file->getClientMimeType();  NOT USED*/
+            $file_name = 'thumbnail_' . time() . '.' . '.webp';
             $post->thumbnail = $file_name;
 
-            $request->file->storeAs('thumbnails', $file_name, 'public');
+            $encoded = Image::make($request->file)->encode('webp', 75);
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            //$request->file->storeAs('thumbnails', $file_name, 'public');
+            $song = new Song;
+            $song->song_romaji = $request->song_romaji;
+            $song->song_jp = $request->song_jp;
+            $song->song_en = $request->song_en;
+            $song->save();
+
+            $post->song_id = $song->id;
 
             $post->save();
 
@@ -77,21 +109,47 @@ class PostController extends Controller
 
             return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has file');
         } else {
-
+            //dd($request->all());
             $post = new Post;
             $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
             $post->type = $request->type;
+            
+            if ($request->opNum != true) {
+                $post->opNum = null;
+            } else {
+                $post->opNum = $request->opNum;
+            }
+            if ($request->artist_id != true) {
+                $post->artist_id = null;
+            } else {
+                $post->artist_id = $request->artist_id;
+            }
 
             $post->ytlink = $request->ytlink;
+            $post->scndlink = $request->scndlink;
 
             if ($request->imagesrc == null) {
                 return Redirect::back()->with('status', 'Post not created, images not founds');
             }
+
             $image_file_data = file_get_contents($request->imagesrc);
-            $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
-            $file_name = 'thumbnail_' . time() . '.' . $ext;
-            Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+            //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $file_name = 'thumbnail_' . time() . '.' . '.webp';
+            $encoded = Image::make($image_file_data)->encode('webp', 75);
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
+            $post->imageSrc = $request->imagesrc;
+
+            $song = new Song;
+            $song->song_romaji = $request->song_romaji;
+            $song->song_jp = $request->song_jp;
+            $song->song_en = $request->song_en;
+            $song->save();
+
+            $post->song_id = $song->id;
+
             $post->save();
             $tags = $request->tags;
             $post->tag($tags);
@@ -108,13 +166,29 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::findOrFail($id);
+        if (Auth::check() && Auth::user()->type == 'admin') {
 
-        $tags = $post->tagged;
+            $score_format = Auth::user()->score_format;
 
-        //$userid = Auth::user()->id;
+            $post = Post::findOrFail($id);
+            $artist = $post->artist;
+            $tags = $post->tagged;
+            //dd($post);
+            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+        }
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+            $post = Post::findOrFail($id);
+            $tags = $post->tagged;
+            $artist = $post->artist;
+            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+        } else {
+            $post = Post::findOrFail($id);
+            $tags = $post->tagged;
+            $artist = $post->artist;
 
-        return view('show', compact('post', 'tags'));
+            return view('show', compact('post', 'tags', 'artist'));
+        }
     }
 
     /**
@@ -127,9 +201,11 @@ class PostController extends Controller
     {
         $types = ['op', 'ed'];
         $post = Post::find($id);
+        $song = Song::find($post->song_id);
         $tags = Tag::all();
+        $artists = Artist::all();
 
-        return view('admin.posts.edit', compact('post', 'tags', 'types'));
+        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists', 'song'));
     }
 
     /**
@@ -153,24 +229,42 @@ class PostController extends Controller
 
             $post = Post::find($id);
             $old_thumbnail = $post->thumbnail;
-
             $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
+            if ($request->opNum != true) {
+                $post->opNum = null;
+            } else {
+                $post->opNum = $request->opNum;
+            }
+
+            if ($request->artist_id != true) {
+                $post->artist_id = null;
+            } else {
+                $post->artist_id = $request->artist_id;
+            }
+
             $post->type = $request->type;
 
             $post->ytlink = $request->ytlink;
+            $post->scndlink = $request->scndlink;
 
-            $file_extension = $request->file->extension();
+            //$file_extension = $request->file->extension();
             //$file_mime_type = $request->file->getClientMimeType();
 
 
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
 
-            $file_name = 'thumbnail_' . time() . '.' . $file_extension;
-
+            $file_name = 'thumbnail_' . time() . '.' . '.webp';
             $post->thumbnail = $file_name;
-
-            $request->file->storeAs('thumbnails', $file_name, 'public');
-
+            //$request->file->storeAs('thumbnails', $file_name, 'public');
+            $encoded = Image::make($request->file)->encode('webp', 75);
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            $song = new Song;
+            $song->song_romaji = $request->song_romaji;
+            $song->song_jp = $request->song_jp;
+            $song->song_en = $request->song_en;
+            $song->save();
+            $post->song_id = $song->id;
             $post->save();
 
             $tags = $request->tags;
@@ -181,21 +275,45 @@ class PostController extends Controller
             $old_thumbnail = $post->thumbnail;
 
             $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
+            if ($request->opNum != true) {
+                $post->opNum = null;
+            } else {
+                $post->opNum = $request->opNum;
+            }
+            if ($request->artist_id != true) {
+                $post->artist_id = null;
+            } else {
+                $post->artist_id = $request->artist_id;
+            }
+
             $post->type = $request->type;
 
             $post->ytlink = $request->ytlink;
+            $post->scndlink = $request->scndlink;
             if ($request->imagesrc == null) {
                 return redirect(route('admin.post.index'))->with('status', 'Post not created, images not founds');
             }
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
             $image_file_data = file_get_contents($request->imagesrc);
-            $ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
-            $file_name = 'thumbnail_' . time() . '.' . $ext;
-            Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+            //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $file_name = 'thumbnail_' . time() . '.' . '.webp';
+            $encoded = Image::make($image_file_data)->encode('webp', 75);
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
+            $post->imageSrc = $request->imagesrc;
+
+            $song = new Song;
+            $song->song_romaji = $request->song_romaji;
+            $song->song_jp = $request->song_jp;
+            $song->song_en = $request->song_en;
+            $song->save();
+
+            $post->song_id = $song->id;
             $post->save();
             $tags = $request->tags;
-            $post->tag($tags);
+            $post->retag($tags);
             return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has url image');
         }
         return redirect(route('admin.post.index'))->with('status', 'Post not created, image not found');
@@ -210,6 +328,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
+
         $file = $post->thumbnail;
 
         Storage::disk('public')->delete('/thumbnails/' . $file);
@@ -221,30 +340,40 @@ class PostController extends Controller
     //return index view with all openings
     public function home()
     {
+        $recently = Post::all()->sortByDesc('created_at')/* ->take(10) */;
+        $popular = Post::all()->sortByDesc('likeCount')/* ->take(10) */;
+        $viewed = Post::all()->sortByDesc('view_count')/* ->take(10) */;
+
         if (Auth::check()) {
             $currentSeason = DB::table('current_season')->first();
             $score_format = Auth::user()->score_format;
 
             if ($currentSeason  == null) {
 
-                $posts = Post::where('type', 'op')
+                $openings = Post::where('type', 'op')
                     ->orderBy('title', 'asc')
                     ->get();
-                //->where('type', 'op')
-                //->orderBy('title', 'asc');
+                $endings = Post::where('type', 'ed')
+                    ->orderBy('title', 'asc')
+                    ->get();
+
 
                 $tags = DB::table('tagging_tags')
                     ->orderBy('name', 'desc')
                     ->take(5)
                     ->get();
 
-                return view('index', compact('posts', 'tags', 'score_format'));
+                return view('index', compact('openings', 'endings', 'tags', 'score_format', 'recently'));
             } else {
                 //search the current season and the posts
                 $currentSeason = DB::table('current_season')->first();
 
-                $posts = Post::withAllTags($currentSeason->name)
+                $openings = Post::withAllTags($currentSeason->name)
                     ->where('type', 'op')
+                    ->orderBy('title', 'asc')
+                    ->get();
+                $endings = Post::withAllTags($currentSeason->name)
+                    ->where('type', 'ed')
                     ->orderBy('title', 'asc')
                     ->get();
 
@@ -253,32 +382,75 @@ class PostController extends Controller
                     ->take(5)
                     ->get();
 
-                return view('index', compact('posts', 'tags', 'score_format'));
+                return view('index', compact('openings', 'endings', 'tags', 'score_format', 'recently', 'popular', 'viewed'));
             }
         }
         //if exist current season setted
         $currentSeason = DB::table('current_season')->first();
-        
 
         if ($currentSeason  == null) {
 
             $posts = Post::where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
-            //->where('type', 'op')
-            //->orderBy('title', 'asc');
+            $endings = Post::where('type', 'ed')
+                ->orderBy('title', 'asc')
+                ->get();
 
             $tags = DB::table('tagging_tags')
                 ->orderBy('name', 'desc')
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('index', compact('openings', 'endings', 'tags', 'recently'));
         } else {
             //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
 
-            $posts = Post::withAllTags($currentSeason->name)
+            $openings = Post::withAllTags($currentSeason->name)
+                ->where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+            $endings = Post::withAllTags($currentSeason->name)
+                ->where('type', 'ed')
+                ->orderBy('title', 'asc')
+                ->get();
+
+
+            $tags = DB::table('tagging_tags')
+                ->orderBy('name', 'desc')
+                ->take(5)
+                ->get();
+
+            return view('index', compact('openings', 'endings', 'tags', 'recently', 'popular', 'viewed'));
+        }
+    }
+
+    public function openings()
+    {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+        $currentSeason = DB::table('current_season')->first();
+
+        if ($currentSeason == null) {
+
+            $posts = Post::where('type', 'op')
+                ->orderBy('title', 'asc')
+                ->get();
+
+            $tags = DB::table('tagging_tags')
+                ->orderBy('name', 'desc')
+                ->take(5)
+                ->get();
+
+            return view('seasonal', compact('posts', 'tags', 'score_format'));
+        } else {
+            $currentSeason = DB::table('current_season')->first();
+
+            $posts = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
@@ -288,13 +460,18 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('seasonal', compact('posts', 'tags', 'score_format', 'currentSeason'));
         }
     }
-
     public function endings()
     {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
         $currentSeason = DB::table('current_season')->first();
+
         if ($currentSeason == null) {
 
             $posts = Post::where('type', 'ed')
@@ -306,11 +483,11 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('seasonal', compact('posts', 'tags', 'score_format'));
         } else {
             $currentSeason = DB::table('current_season')->first();
 
-            $posts = Post::withAllTags($currentSeason->name)
+            $posts = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
@@ -320,7 +497,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('index', compact('posts', 'tags'));
+            return view('seasonal', compact('posts', 'tags', 'score_format', 'currentSeason'));
         }
     }
 
@@ -329,16 +506,78 @@ class PostController extends Controller
         if (Auth::check()) {
             $post = Post::find($id);
             $score = $request->score;
+            $score_format = $request->score_format;
 
             if (blank($score)) {
                 return redirect()->back()->with('status', 'Score can not be null');
             }
+            switch ($score_format) {
+                case 'POINT_100':
+                    settype($score, "integer");
+                    if (($score >= 1) && ($score <= 100)) {
+                        $post->rateOnce($score);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                    }
+                    break;
 
-            if (($score >= 1) && ($score <= 100)) {
-                $post->rateOnce($score);
-                return redirect()->back()->with('status', 'Post rated Successfully');
-            } else {
-                return redirect()->back()->with('status', 'Only values between 1 and 100');
+                case 'POINT_10_DECIMAL':
+                    settype($score, "float");
+                    if (($score >= 1) && ($score <= 10)) {
+                        $int = intval($score * 10);
+                        $post->rateOnce($int);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 10 (can use decimals)');
+                    }
+                    break;
+                case 'POINT_10':
+                    settype($score, "integer");
+                    if (($score >= 1) && ($score <= 10)) {
+                        $int = intval($score * 10);
+                        $post->rateOnce($int);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 10 (only integer numbers)');
+                    }
+                    break;
+                case 'POINT_5':
+                    settype($score, "integer");
+
+                    if (($score >= 1) && ($score <= 100)) {
+                        if ($score <= 20) {
+                            $score = 20;
+                        }
+                        if (($score > 20) && ($score <= 40)) {
+                            $score = 40;
+                        }
+                        if (($score > 40) && ($score <= 60)) {
+                            $score = 60;
+                        }
+                        if (($score > 60) && ($score <= 80)) {
+                            $score = 80;
+                        }
+                        if ($score > 80) {
+                            $score = 100;
+                        }
+                        $post->rateOnce($score);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                    }
+                    break;
+
+
+                default:
+                    settype($score, "integer");
+                    if (($score >= 1) && ($score <= 100)) {
+                        $post->rateOnce($score);
+                        return redirect()->back()->with('status', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                    }
+                    break;
             }
         }
         return redirect()->route('login');
@@ -347,6 +586,7 @@ class PostController extends Controller
     public function favorites()
     {
         if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
             $userId = Auth::id();
             $openings = Post::whereLikedBy($userId) // find only articles where user liked them
                 ->with('likeCounter') // highly suggested to allow eager load
@@ -360,7 +600,7 @@ class PostController extends Controller
 
             //dd($openings,$endings);
 
-            return view('favorites', compact('openings', 'endings'));
+            return view('favorites', compact('openings', 'endings', 'score_format'));
         } else {
             return redirect()->route('login');
         }
@@ -389,22 +629,72 @@ class PostController extends Controller
     }
 
     //public seasrch posts
-    public function search(Request $request)
+    public function filter(Request $request)
     {
-        if ($request->input('search') != null) {
-            $openings = Post::query()
-                ->where('title', 'LIKE', "%{$request->input('search')}%")
-                ->where('type', '=', 'op')
-                ->get();
+        $tags = Tag::all();
+        $tag = $request->tag;
+        $type = $request->type;
+        $sort = $request->sort;
 
-            $endings = Post::query()
-                ->where('title', 'LIKE', "%{$request->input('search')}%")
-                ->where('type', '=', 'ed')
-                ->get();
+        $requested = new stdClass;
+        $requested->type = $type;
+        $requested->tag = $tag;
+        $requested->sort = $sort;
 
-            return view('fromTags', compact('openings', 'endings'));
+        if ($tag != null) {
+            if ($type != null) {
+                $posts = Post::withAnyTag($tag)
+                    ->where('type', $type)
+                    ->get();
+            } else {
+                $posts = Post::withAnyTag($tag)->get();
+            }
+        } else {
+            if ($type != null) {
+                $posts = Post::where('type', $type)
+                    ->get();
+            } else {
+                $posts = Post::all();
+            }
         }
-        return redirect()->route('/')->with('status', 'Search a value');
+
+        //SWITCH ORDER THE POSTS
+        switch ($sort) {
+            case 'title':
+                $posts = $posts->sortBy('title');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested'));
+                break;
+            case 'averageRating':
+                $posts = $posts->sortByDesc('averageRating');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested'));
+            case 'view_count':
+                $posts = $posts->sortByDesc('view_count');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested'));
+
+            case 'likeCount':
+                $posts = $posts->sortByDesc('likeCount');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested'));
+                break;
+
+            default:
+                $posts = $posts->sortByDesc('created_at');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested'));
+                break;
+        }
+    }
+    public function paginate($posts, $perPage = 20, $page = null, $options = [])
+    {
+        
+        $page = Paginator::resolveCurrentPage();
+        $options = ['path' => Paginator::resolveCurrentPath()];
+        $items = $posts instanceof Collection ? $posts : Collection::make($posts);
+        $posts = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return $posts;
     }
 
     //seach posts in admin pannel
@@ -421,11 +711,14 @@ class PostController extends Controller
         }
     }
 
-    public function ranking()
+    public function seasonalranking()
     {
-        //if current season doesnt exist
         $currentSeason = DB::table('current_season')->first();
-        //dd($currentSeason);
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
         if ($currentSeason == null) {
             $op_count = Post::where('type', 'op')->count();
             $ed_count = Post::where('type', 'ed')->count();
@@ -438,32 +731,102 @@ class PostController extends Controller
                 ->orderBy('title', 'asc')
                 ->get();
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count'));
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
         } else {
             //search the current season and the posts
             $currentSeason = DB::table('current_season')->first();
 
-            $op_count = Post::withAllTags($currentSeason->name)
-                ->where('type', 'op')
-                ->count();
-
-            $ed_count = Post::withAllTags($currentSeason->name)
-                ->where('type', 'ed')
-                ->count();
-
-            $openings = Post::withAllTags($currentSeason->name)
+            $openings = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
+            $op_count = $openings->count();
 
-            $endings = Post::withAllTags($currentSeason->name)
+            $endings = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
+            $ed_count = $endings->count();
+
 
             //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason'));
+            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason', 'score_format'));
         }
+    }
+    public function globalrank()
+    {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+        $getOpenings = Post::where('type', 'op')
+            ->orderBy('title', 'asc')
+            ->get();
+        $op_count = $getOpenings->count();
+
+        $openings = $getOpenings->sortByDesc('averageRating')->take(100);
+
+        $getEndings = Post::where('type', 'ed')
+            ->orderBy('title', 'asc')
+            ->get();
+        $ed_count = $getEndings->count();
+
+        $endings = $getEndings->sortByDesc('averageRating')->take(100);
+
+        return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
+    }
+
+    public function showBySlug($id, $slug)
+    {
+        if (Auth::check() && Auth::user()->type == 'admin') {
+            $score_format = Auth::user()->score_format;
+
+            $post = Post::where('id', '=', $id)->first();
+            //dd($post);
+            $artist = $post->artist;
+            $tags = $post->tagged;
+            //dd($post);
+            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+        }
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+            $post = Post::where('id', '=', $id)->first();
+            $tags = $post->tagged;
+            $artist = $post->artist;
+            $this->count_views($id);
+            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+        } else {
+            $post = Post::where('id', '=', $id)->first();
+            $tags = $post->tagged;
+            $artist = $post->artist;
+            $this->count_views($id);
+
+            return view('show', compact('post', 'tags', 'artist'));
+        }
+    }
+    public function count_views($id)
+    {
+        if (!Session::has('page_visited_' . $id)) {
+            DB::table('posts')
+                ->where('id', $id)
+                ->increment('view_count');
+            Session::put('page_visited_' . $id, true);
+        }
+    }
+    public function apiPosts(Request $request)
+    {
+        $q = $request->get('q');
+        //dd($q);
+        $posts = Post::where('title', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug']);
+
+        $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'name_slug']);
+
+        $tags = Tag::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
+
+        $data = ["posts" => $posts, "artists" => $artists, "tags" => $tags];
+
+        return response()->json($data);
     }
 }

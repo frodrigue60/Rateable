@@ -8,12 +8,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
+        
         <div class="row justify-content-center">
-            <div class="col-md-12">
+            
                 <div class="card bg-dark">
                     {{-- CARD HEADER --}}
                     <div class="card-header">
-                        <a class="btn btn-sm btn-primary" href="{{ route('admin.post.create') }}">CREATE</a>
+                        <a class="btn btn-sm btn-primary" href="{{ route('admin.post.create') }}">CREATE POST</a>
                     </div>
                     {{-- CARD BODY --}}
                     <div class="card-body">
@@ -28,9 +29,9 @@
                                     <th scope="col">ID</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Tags</th>
-                                    <th scope="col">Type</th>
-                                    <th scope="col">AvgScore</th>
-                                    <th scope="col">Tmb</th>
+                                    <th scope="col">Type-opNum</th>
+                                    <th scope="col">Song</th>
+                                    <th scope="col">Artist</th>
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
@@ -49,14 +50,30 @@
                                             @endforeach
 
                                         </td>
-                                        <td>{{ $post->type }}</td>
-                                        <td>{{ $post->averageRating / 10 }}</td>
-                                        <td>{{ asset('/storage/thumbnails/'.$post->thumbnail) }}</td>
+                                        <td>{{ $post->type }}-{{$post->opNum}}</td>
+                                        <td>@isset($post->song_id)
+                                                @isset($post->song->song_romaji)
+                                                    {{$post->song->song_romaji}}
+                                                @endisset
+                                                @isset($post->song->song_en)
+                                                    {{$post->song->song_en}}
+                                                @endisset
+                                            @endisset
+                                        </td>
+                                        <td>
+                                            @isset($post->artist->name)
+                                                <a
+                                                    href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
+                                            @endisset
+
+                                        </td>
                                         <td>
                                             <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"
-                                                    class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit {{ $post->id }}</button></a>
+                                                    class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o"
+                                                        aria-hidden="true"></i> Edit {{ $post->id }}</button></a>
                                             <a href="{{ route('admin.post.destroy', $post->id) }}"><button type="button"
-                                                    class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Delete {{ $post->id }}</button></a>
+                                                    class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                                                        aria-hidden="true"></i> Delete {{ $post->id }}</button></a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -67,12 +84,12 @@
                     {{-- CARD FOOTER --}}
                     <div class="card-footer">
                         <div class="d-flex justify-content-center">
-                            {!! $posts->links() !!}
+                            {{ $posts->links() }}
                         </div>
                     </div>
                 </div>
 
-            </div>
+            
         </div>
     </div>
 @endsection
