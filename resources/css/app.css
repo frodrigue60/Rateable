@@ -1,5 +1,34 @@
 * {
 	font-family: "Nunito", "Roboto",sans-serif, "Arial",system-ui;
+	font-display: swap;
+}
+
+.spinner {
+    width: 64px;
+    height: 64px;
+    border: 8px solid;
+    border-color: #F1E582 transparent #F1E582 transparent;
+    border-radius: 50%;
+    animation: spin-anim 2s linear infinite;
+}
+.loader-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    background: #0E3D5F;
+    z-index: 100;
+}
+
+@keyframes spin-anim {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* width */

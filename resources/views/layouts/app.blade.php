@@ -43,6 +43,9 @@
 </head>
 
 <body class="color2">
+    <div class="loader-container">
+        <div class="spinner"></div>
+    </div>
     <div id="app">
         <nav class="navbar navbar-expand-lg navbar-dark color1">
             <div class="container">
