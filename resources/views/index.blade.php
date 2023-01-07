@@ -14,13 +14,14 @@
             </div>
         </div>
     @endif
-    <div class="container">
+    <section class="container">
         <h1 hidden>TOP ANIME OPENINGS & ENDINGS</h1>
         {{-- POSTS SECTION --}}
         <section class="contenedor-main">
+            <h2 hidden>ANIME OPENINGS & ENDINGS</h2>
             {{-- RECENTS --}}
             <section>
-                <div class="top-header mb-1 mt-1 ">
+                <div class="top-header mb-1 mt-1">
                     <div>
                         <h2 class="text-light mb-0">Recently added</h2>
                     </div>
@@ -231,6 +232,7 @@
         </section>
         {{-- TOP SECTION --}}
         <section class="contenedor-main">
+            <h2 hidden>RANKING ANIME OPENINGS & ENDINGS</h2>
             <div class="container-top">
                 <section class="container-items">
                     <div class="top-header">
@@ -395,5 +397,5 @@
                 </section>
             </div>
         </section>
-    </div>
+    </section>
 @endsection

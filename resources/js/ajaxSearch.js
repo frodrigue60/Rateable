@@ -12,6 +12,7 @@ let doneTypingInterval = 300; //time in ms (5 seconds)
 document.addEventListener("DOMContentLoaded", function () {
     nullValueInput();
     cutTitles();
+    
     myModal.addEventListener('shown.bs.modal', function () {
         input.focus();
 
@@ -22,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
             tagsDiv.innerHTML =
                 '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-            console.log('input: ' + input.value);
 
             clearTimeout(typingTimer);
             if (input.value.length >= 1) {
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function doneTyping() {
             try {
-                fetch('http://localhost:8000/api/posts/search?q=' + input.value, {
+                fetch('https://anirank.ddns.net/api/posts/search?q=' + input.value, {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     data.posts.forEach(element => {
                         postsDiv.innerHTML +=
-                            '<div class="result"><a href="http://127.0.0.1:8000/show/' +
+                            '<div class="result"><a href="https://anirank.ddns.net/show/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
                                 .title + '</span></a></div>';
@@ -64,14 +64,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     data.artists.forEach(element => {
                         artistsDiv.innerHTML +=
-                            '<div class="result"><a href="http://127.0.0.1:8000/artist/' +
+                            '<div class="result"><a href="https://anirank.ddns.net/artist/' +
                             element.name_slug + '"><span>' + element.name +
                             '</span></a></div>';
                     });
 
                     data.tags.forEach(element => {
                         tagsDiv.innerHTML +=
-                            '<div class="result"><a href="http://127.0.0.1:8000/tag/' +
+                            '<div class="result"><a href="https://anirank.ddns.net/tag/' +
                             element.slug + '"><span>' + element.name +
                             '</span></a></div>';
                     });
@@ -96,4 +96,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           });
     }
+    $(".owl-carousel").owlCarousel({
+        //stagePadding: 1,
+        loop: false,
+        margin: 8,
+        autoWidth: true,
+        dots: false,
+        autoplay: true,
+        autoplayTimeout: 8000,
+        autoplayHoverPause: true,
+        rewind: true,
+    });
 });
