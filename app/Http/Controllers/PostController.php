@@ -775,7 +775,7 @@ class PostController extends Controller
     {
         $q = $request->get('q');
         //dd($q);
-        $posts = Post::where('title', 'LIKE', "%$q%")->orWhere('suffix', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug', 'suffix']);
+        $posts = Post::where('title', 'LIKE', "%$q%")->orWhere('suffix', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug','type','themeNum', 'suffix']);
 
         $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'name_slug']);
 

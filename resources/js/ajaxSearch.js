@@ -60,11 +60,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     tagsDiv.innerHTML = "";
 
                     data.posts.forEach(element => {
-                        postsDiv.innerHTML +=
+                        if (element.suffix != undefined) {
+                            postsDiv.innerHTML +=
                             '<div class="result"><a href="https://anirank.ddns.net/show/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
                                 .title + ' '+ element.suffix + '</span></a></div>';
+                        } else {
+                            postsDiv.innerHTML +=
+                            '<div class="result"><a href="https://anirank.ddns.net/show/' +
+                            element.id + '/' + element.slug + '"><span>' +
+                            element
+                                .title + ' '+ element.type + '</span></a></div>';
+                        }
                     });
 
                     data.artists.forEach(element => {
