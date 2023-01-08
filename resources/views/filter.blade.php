@@ -37,7 +37,7 @@
                                 <option value="">Select order method</option>
                                 <option value="title" {{ $requested->sort == 'title' ? 'selected' : '' }}>Title</option>
                                 <option value="averageRating" {{ $requested->sort == 'averageRating' ? 'selected' : '' }}>Score</option>
-                                <option value="view_count" {{ $requested->sort == 'view_count' ? 'selected' : '' }}>Views</option>
+                                <option value="viewCount" {{ $requested->sort == 'viewCount' ? 'selected' : '' }}>Views</option>
                                 <option value="likeCount" {{ $requested->sort == 'likeCount' ? 'selected' : '' }}>Favorites</option>
                             </select>
                         </div>
@@ -66,7 +66,7 @@
                             </a>
                             <div class="tarjeta-footer text-light">
                                     <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                    <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
+                                    <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)

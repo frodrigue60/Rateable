@@ -63,7 +63,7 @@
                             </a>
                             <div class="tarjeta-footer text-light">
                                     <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                    <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
+                                    <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)

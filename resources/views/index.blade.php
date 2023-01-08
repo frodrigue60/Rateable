@@ -45,7 +45,7 @@
                                 </a>
                                 <div class="tarjeta-footer text-light">
                                         <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                        <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
+                                        <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
                                     <span>
                                         @if (isset($score_format))
                                             @switch($score_format)
@@ -105,7 +105,7 @@
                             </a>
                             <div class="tarjeta-footer text-light">
                                     <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                    <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
+                                    <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)
@@ -146,7 +146,7 @@
                         <h3 class="text-light mb-0">Most viewed</h3>
                     </div>
                     <div>
-                        <a href="{{ route('filter', 'sort=view_count') }}" class="btn btn-sm color4">All Most Viewed</a>
+                        <a href="{{ route('filter', 'sort=viewCount') }}" class="btn btn-sm color4">All Most Viewed</a>
                     </div>
                 </div>
                 <div class="owl-carousel carousel-recents-main">
@@ -165,7 +165,7 @@
                             </a>
                             <div class="tarjeta-footer text-light">
                                     <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                    <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
+                                    <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)

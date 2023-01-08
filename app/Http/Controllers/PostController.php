@@ -348,7 +348,7 @@ class PostController extends Controller
     {
         $recently = Post::all()->sortByDesc('created_at')/* ->take(10) */;
         $popular = Post::all()->sortByDesc('likeCount')/* ->take(10) */;
-        $viewed = Post::all()->sortByDesc('view_count')/* ->take(10) */;
+        $viewed = Post::all()->sortByDesc('viewCount')/* ->take(10) */;
 
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
@@ -588,7 +588,7 @@ class PostController extends Controller
         $sortMethods = [
             ['name' => 'Title','value'=>'title'],
             ['name' => 'Score','value'=>'averageRating'],
-            ['name' => 'Views','value'=>'view_count'],
+            ['name' => 'Views','value'=>'viewCount'],
             ['name' => 'Popular','value'=>'likeCount']
         ]; */
 
@@ -620,8 +620,8 @@ class PostController extends Controller
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
                 return view('filter', compact('posts', 'tags', 'requested'));
-            case 'view_count':
-                $posts = $posts->sortByDesc('view_count');
+            case 'viewCount':
+                $posts = $posts->sortByDesc('viewCount');
                 $posts = $this->paginate($posts)->withQueryString();
                 return view('filter', compact('posts', 'tags', 'requested'));
 
@@ -762,7 +762,7 @@ class PostController extends Controller
         if (!Session::has('page_visited_' . $id)) {
             DB::table('posts')
                 ->where('id', $id)
-                ->increment('view_count');
+                ->increment('viewCount');
             Session::put('page_visited_' . $id, true);
         }
     }
