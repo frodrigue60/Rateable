@@ -46,7 +46,7 @@ Route::group(['middleware' => 'admin.routes'], function () {
         Route::get('/post/{id}/destroy', [PostController::class, 'destroy'])->name('admin.post.destroy');
         Route::post('/post/store',      [PostController::class, 'store'])->name('admin.post.store');
         Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('admin.post.show');
-
+        Route::get('/searchpost', [PostController::class, 'searchPost'])->name('searchpost');
 
         //TAGS
         Route::get('/tags/index',           [TagController::class, 'index'])->name('admin.tags.index');
@@ -55,6 +55,7 @@ Route::group(['middleware' => 'admin.routes'], function () {
         Route::put('/tags/{id}/update',    [TagController::class, 'update'])->name('admin.tags.update');
         Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy');
         Route::post('/tags/store',          [TagController::class, 'store'])->name('admin.tags.store');
+        Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
         //END TAGS
 
         //CURRENT SEASON OP
@@ -83,9 +84,6 @@ Auth::routes();
 Route::post('/scoreformat', [App\Http\Controllers\HomeController::class, 'scoreFormat'])->name('scoreformat');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');
-
-Route::get('/searchpost', [PostController::class, 'searchPost'])->name('searchpost');
-Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
 
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
 

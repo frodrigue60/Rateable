@@ -11,14 +11,6 @@
  @endsection
  @section('content')
      <div class="container">
-         @if (session('status'))
-             <div class="container">
-                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                     <strong>Holy guacamole!</strong> {{ session('status') }}
-                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                 </div>
-             </div>
-         @endif
          <div class="container text-center text-light">
              @isset($tagName)
                  <h1>{{ $tagName->name }}</h1>

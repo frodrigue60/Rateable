@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 @section('meta')
     @if (Request::is('favorites'))

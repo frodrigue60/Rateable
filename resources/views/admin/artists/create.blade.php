@@ -5,7 +5,6 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-
             <div class="card bg-dark text-light">
                 <div class="card-header">
                     Create artist
@@ -27,11 +26,8 @@
                     </form>
                 </div>
                 <div class="card-footer">
-
                 </div>
-
             </div>
-
         </div>
     </div>
 @endsection

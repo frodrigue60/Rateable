@@ -64,7 +64,7 @@ class PostController extends Controller
 
             if ($validator->fails()) {
                 $errors = $validator->getMessageBag();
-                return Redirect::back()->with('status', $errors);
+                return Redirect::back()->with('error', $errors);
             }
 
 
@@ -108,7 +108,7 @@ class PostController extends Controller
             $tags = $request->tags;
             $post->tag($tags);
 
-            return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has file');
+            return redirect(route('admin.post.index'))->with('success', 'Post created Successfully, has file');
         } else {
             //dd($request->all());
             $post = new Post;
@@ -132,7 +132,7 @@ class PostController extends Controller
             $post->scndlink = $request->scndlink;
 
             if ($request->imagesrc == null) {
-                return Redirect::back()->with('status', 'Post not created, images not founds');
+                return Redirect::back()->with('error', 'Post not created, images not founds');
             }
 
             $image_file_data = file_get_contents($request->imagesrc);
@@ -155,9 +155,9 @@ class PostController extends Controller
             $post->save();
             $tags = $request->tags;
             $post->tag($tags);
-            return redirect(route('admin.post.index'))->with('status', 'Post created Successfully, has url image');
+            return redirect(route('admin.post.index'))->with('success', 'Post created Successfully, has url image');
         }
-        return redirect(route('admin.post.index'))->with('status', 'Post not created, image not found');
+        return redirect(route('admin.post.index'))->with('error', 'Post not created, image not found');
     }
 
     /**
@@ -226,7 +226,7 @@ class PostController extends Controller
 
             if ($validator->fails()) {
                 $errors = $validator->getMessageBag();
-                return Redirect::back()->with('status', $errors);
+                return Redirect::back()->with('error', $errors);
             }
 
             $post = Post::find($id);
@@ -272,7 +272,7 @@ class PostController extends Controller
 
             $tags = $request->tags;
             $post->tag($tags);
-            return redirect(route('admin.post.index'))->with('status', 'Post updated Successfully, has file image');
+            return redirect(route('admin.post.index'))->with('success', 'Post updated Successfully, has file image');
         } else {
             $post = Post::find($id);
             $old_thumbnail = $post->thumbnail;
@@ -296,7 +296,7 @@ class PostController extends Controller
             $post->ytlink = $request->ytlink;
             $post->scndlink = $request->scndlink;
             if ($request->imagesrc == null) {
-                return redirect(route('admin.post.index'))->with('status', 'Post not created, images not founds');
+                return redirect(route('admin.post.index'))->with('error', 'Post not created, images not founds');
             }
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
             $image_file_data = file_get_contents($request->imagesrc);
@@ -318,9 +318,9 @@ class PostController extends Controller
             $post->save();
             $tags = $request->tags;
             $post->retag($tags);
-            return redirect(route('admin.post.index'))->with('status', 'Post Updated Successfully, has url image');
+            return redirect(route('admin.post.index'))->with('success', 'Post Updated Successfully, has url image');
         }
-        return redirect(route('admin.post.index'))->with('status', 'Post not created, image not found');
+        return redirect(route('admin.post.index'))->with('error', 'Post not created, image not found');
     }
 
     /**
@@ -340,7 +340,7 @@ class PostController extends Controller
         $song = Song::find($post->song->id);
         $song->delete();
 
-        return Redirect::back()->with('status', 'Post Deleted successfully!');
+        return Redirect::back()->with('success', 'Post Deleted successfully!');
     }
 
     //return index view with all openings
@@ -449,16 +449,16 @@ class PostController extends Controller
             $score_format = $request->score_format;
 
             if (blank($score)) {
-                return redirect()->back()->with('status', 'Score can not be null');
+                return redirect()->back()->with('warning', 'Score can not be null');
             }
             switch ($score_format) {
                 case 'POINT_100':
                     settype($score, "integer");
                     if (($score >= 1) && ($score <= 100)) {
                         $post->rateOnce($score);
-                        return redirect()->back()->with('status', 'Post rated Successfully');
+                        return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
-                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
                     }
                     break;
 
@@ -467,9 +467,9 @@ class PostController extends Controller
                     if (($score >= 1) && ($score <= 10)) {
                         $int = intval($score * 10);
                         $post->rateOnce($int);
-                        return redirect()->back()->with('status', 'Post rated Successfully');
+                        return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
-                        return redirect()->back()->with('status', 'Only values between 1 and 10 (can use decimals)');
+                        return redirect()->back()->with('warning', 'Only values between 1 and 10 (can use decimals)');
                     }
                     break;
                 case 'POINT_10':
@@ -477,9 +477,9 @@ class PostController extends Controller
                     if (($score >= 1) && ($score <= 10)) {
                         $int = intval($score * 10);
                         $post->rateOnce($int);
-                        return redirect()->back()->with('status', 'Post rated Successfully');
+                        return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
-                        return redirect()->back()->with('status', 'Only values between 1 and 10 (only integer numbers)');
+                        return redirect()->back()->with('warning', 'Only values between 1 and 10 (only integer numbers)');
                     }
                     break;
                 case 'POINT_5':
@@ -502,9 +502,9 @@ class PostController extends Controller
                             $score = 100;
                         }
                         $post->rateOnce($score);
-                        return redirect()->back()->with('status', 'Post rated Successfully');
+                        return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
-                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
                     }
                     break;
 
@@ -513,9 +513,9 @@ class PostController extends Controller
                     settype($score, "integer");
                     if (($score >= 1) && ($score <= 100)) {
                         $post->rateOnce($score);
-                        return redirect()->back()->with('status', 'Post rated Successfully');
+                        return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
-                        return redirect()->back()->with('status', 'Only values between 1 and 100');
+                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
                     }
                     break;
             }
@@ -552,9 +552,9 @@ class PostController extends Controller
             $userId = Auth::id();
             Post::find($id)->like($userId);
 
-            return Redirect::back()->with('status', 'Post Like successfully!');
+            return Redirect::back()->with('success', 'Post Like successfully!');
         }
-        return redirect()->route('/')->with('status', 'Please login');
+        return redirect()->route('/')->with('warning', 'Please login');
     }
 
     public function unlikePost($id)
@@ -563,9 +563,9 @@ class PostController extends Controller
             $userId = Auth::id();
             Post::find($id)->unlike($userId);
 
-            return Redirect::back()->with('status', 'Post Like undo successfully!');
+            return Redirect::back()->with('success', 'Post Like undo successfully!');
         }
-        return redirect()->route('/')->with('status', 'Please login');
+        return redirect()->route('/')->with('warning', 'Please login');
     }
 
     //public seasrch posts
@@ -663,7 +663,7 @@ class PostController extends Controller
 
             return view('admin.posts.index', compact('posts'));
         } else {
-            return redirect()->route('/')->with('status', 'Only admins');
+            return redirect()->route('/')->with('error', 'Only admins');
         }
     }
 

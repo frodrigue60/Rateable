@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use willvincent\Rateable\Rateable;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ArtistController extends Controller
 {
@@ -20,6 +23,8 @@ class ArtistController extends Controller
     public function index()
     {
         $artists =  Artist::all();
+        $artists = $artists->sortByDesc('created_at');
+        $artists = $this->paginate($artists);
         return view('admin.artists.index', compact('artists'));
     }
 
@@ -45,12 +50,16 @@ class ArtistController extends Controller
         $name_jp = $request->name_jp;
         $name_slug = Str::slug($name);
 
-        $artist = new Artist();
-        $artist->name = $name;
-        $artist->name_jp = $name_jp;
-        $artist->name_slug = $name_slug;
-        $artist->save();
-        return redirect(route('admin.artist.index'))->with('status', 'Data Has Been Inserted Successfully');
+        if ($name != null) {
+            $artist = new Artist();
+            $artist->name = $name;
+            $artist->name_jp = $name_jp;
+            $artist->name_slug = $name_slug;
+            $artist->save();
+            return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Inserted Successfully');
+        } else {
+            return redirect(route('admin.artist.index'))->with('error', 'Artist not created, "name" has not be null');
+        }
     }
 
     /**
@@ -73,7 +82,7 @@ class ArtistController extends Controller
     public function edit($id)
     {
         $artist = Artist::find($id);
-        return view('admin.artists.edit')->with('artist',$artist);
+        return view('admin.artists.edit')->with('artist', $artist);
     }
 
     /**
@@ -86,17 +95,21 @@ class ArtistController extends Controller
     public function update(Request $request, $id)
     {
         $artist = Artist::find($id);
+
         $name = $request->name;
         $name_jp = $request->name_jp;
         $name_slug = Str::slug($name);
 
-        $artist->name = $name;
-        $artist->name_jp = $name_jp;
-        $artist->name_slug = $name_slug;
-        
-        $artist->update();
-        //$artist->update($request->all());
-        return redirect(route('admin.artist.index'))->with('status', 'Data Has Been Inserted Successfully');
+        if ($name != null) {
+            $artist->name = $name;
+            $artist->name_jp = $name_jp;
+            $artist->name_slug = $name_slug;
+
+            $artist->update();
+            return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Updated Successfully');
+        } else {
+            return redirect(route('admin.artist.index'))->with('error', 'Artist not Updated, "name" has not be null');
+        }
     }
 
     /**
@@ -109,10 +122,11 @@ class ArtistController extends Controller
     {
         $artist = Artist::find($id);
         $artist->delete();
-        return redirect(route('admin.artist.index'))->with('status', 'Data deleted');
+        return redirect(route('admin.artist.index'))->with('success', 'Data deleted');
     }
 
-    public function artist_slug($name_slug){
+    public function artist_slug($name_slug)
+    {
         $artist = Artist::where('name_slug', $name_slug)->first();
 
         if (Auth::check()) {
@@ -120,15 +134,24 @@ class ArtistController extends Controller
         } else {
             $score_format = null;
         }
-        
+
         $openings = Post::where('artist_id', '=', $artist->id)
-        ->where('type', '=', 'op')
-        ->get();
+            ->where('type', '=', 'op')
+            ->get();
 
         $endings = Post::where('artist_id', '=', $artist->id)
-        ->where('type', '=', 'ed')
-        ->get();
-        
-        return view('fromtags', compact('openings', 'endings', 'score_format','artist'));
+            ->where('type', '=', 'ed')
+            ->get();
+
+        return view('fromtags', compact('openings', 'endings', 'score_format', 'artist'));
+    }
+    
+    public function paginate($artists, $perPage = 10, $page = null, $options = [])
+    {
+        $page = Paginator::resolveCurrentPage();
+        $options = ['path' => Paginator::resolveCurrentPath()];
+        $items = $artists instanceof Collection ? $artists : Collection::make($artists);
+        $artists = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return $artists;
     }
 }

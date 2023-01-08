@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
-
-
-
 class TagController extends Controller
 {
     /**
@@ -21,10 +18,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        //$tags = Tag::all();
         $tags = DB::table('tagging_tags')->paginate(10);
-        //dd($tags);
-
         return view('admin.tags.index', compact('tags'));
     }
 
@@ -49,12 +43,19 @@ class TagController extends Controller
         $name = $request->name;
         $slug = Str::slug($request->name);
 
-        DB::table('tagging_tags')->insert([
+        if ($name != null) {
+            DB::table('tagging_tags')->insert([
+                'slug' => $slug,
+                'name' => $name
+            ]);
+            return redirect(route('admin.tags.index'))->with('success', 'Data Has Been Inserted Successfully');
+        } else {
+            return redirect(route('admin.tags.index'))->with('error', 'Data Has Not Been Inserted');
+        }
+        /* DB::table('tagging_tags')->insert([
             'slug' => $slug,
             'name' => $name
-        ]);
-
-        return redirect(route('admin.tags.index'))->with('status', 'Data Has Been Inserted Successfully');
+        ]); */
     }
 
     /**
@@ -110,12 +111,12 @@ class TagController extends Controller
     {
         DB::table('tagging_tags')->where('id', '=', $id)->delete();
 
-        return redirect(route('admin.tags.index'))->with('status', 'Data deleted');
+        return redirect(route('admin.tags.index'))->with('success', 'Data deleted');
     }
 
     public function tag_slug($slug)
     {
-        $tagName = DB::table('tagging_tags')->where('slug','=', $slug)->first();
+        $tagName = DB::table('tagging_tags')->where('slug', '=', $slug)->first();
         //dd($tagName);
 
         if (Auth::check()) {
@@ -133,7 +134,7 @@ class TagController extends Controller
             ->orderby('title', 'asc')
             ->get();
 
-        
+
         return view('fromTags', compact('openings', 'endings', 'score_format', 'tagName'));
     }
 
@@ -146,14 +147,9 @@ class TagController extends Controller
 
     public function searchTag(Request $request)
     {
-        if (Auth::check() && (Auth::user()->type == 'admin')) {
-            $tags = DB::table('tagging_tags')
-                ->where('name', 'LIKE', "%{$request->input('search')}%")
-                ->paginate(10);
-
-            return view('admin.tags.index', compact('tags'));
-        } else {
-            return redirect()->route('/')->with('status', 'Only admins');
-        }
+        $tags = DB::table('tagging_tags')
+            ->where('name', 'LIKE', "%{$request->input('search')}%")
+            ->paginate(10);
+        return view('admin.tags.index', compact('tags'));
     }
 }

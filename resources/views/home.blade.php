@@ -8,14 +8,6 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            @if (session('status'))
-                <div class="container">
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong>Holy guacamole!</strong> {{ session('status') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            @endif
             <div class="card text-light">
                 <div class="card-header"><strong>{{ Auth::user()->name }}</strong>'s Dashboard</div>
                 <div class="card-body">

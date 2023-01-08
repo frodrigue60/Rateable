@@ -6,14 +6,7 @@
     @endif
 @endsection
 @section('content')
-    @if (session('status'))
-        <div class="container">
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> {{ session('status') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
-    @endif
+    
     <section class="container">
         <h1 hidden>TOP ANIME OPENINGS & ENDINGS</h1>
         {{-- POSTS SECTION --}}

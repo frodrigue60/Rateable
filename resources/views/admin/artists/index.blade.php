@@ -4,12 +4,6 @@
 
 @section('content')
     <div class="container">
-        @if (session('status'))
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> {{ session('status') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
         <div class="row justify-content-center">
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
@@ -61,7 +55,7 @@
                 {{-- CARD FOOTER --}}
                 <div class="card-footer">
                     <div class="d-flex justify-content-center">
-
+                        {{ $artists->links() }}
                     </div>
                 </div>
             </div>

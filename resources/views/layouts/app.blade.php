@@ -151,6 +151,7 @@
             </div>
         </nav>
         <main class="py-4">
+            @include('layouts.alerts')
             @yield('content')
             {{-- Modal Search --}}
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
