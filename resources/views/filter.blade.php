@@ -18,8 +18,11 @@
                             <span class="text-light">Select Type</span>
                             <select id="chzn-type" name="type" class="form-select" aria-label="Default select example">
                                 <option value="">Select the type</option>
-                                <option value="OP" {{ $requested->type == 'OP' ? 'selected' : '' }}>Opening</option>
-                                <option value="ED" {{ $requested->type == 'ED' ? 'selected' : '' }}>Ending</option>
+                                {{-- <option value="OP" {{ $requested->type == 'OP' ? 'selected' : '' }}>Opening</option>
+                                <option value="ED" {{ $requested->type == 'ED' ? 'selected' : '' }}>Ending</option> --}}
+                                @foreach ($types as $item)
+                                    <option value="{{$item['value']}}" {{ $requested->type == $item['value'] ? 'selected' : '' }}>{{$item['name']}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="searchItem">
@@ -35,10 +38,9 @@
                             <span class="text-light">Sort By</span>
                             <select id="chzn-sort" name="sort" class="form-select" aria-label="Default select example">
                                 <option value="">Select order method</option>
-                                <option value="title" {{ $requested->sort == 'title' ? 'selected' : '' }}>Title</option>
-                                <option value="averageRating" {{ $requested->sort == 'averageRating' ? 'selected' : '' }}>Score</option>
-                                <option value="viewCount" {{ $requested->sort == 'viewCount' ? 'selected' : '' }}>Views</option>
-                                <option value="likeCount" {{ $requested->sort == 'likeCount' ? 'selected' : '' }}>Favorites</option>
+                                @foreach ($sortMethods as $item)
+                                    <option value="{{$item['value']}}" {{ $requested->sort == $item['value'] ? 'selected' : '' }}>{{$item['name']}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <br>

@@ -581,16 +581,21 @@ class PostController extends Controller
         $requested->tag = $tag;
         $requested->sort = $sort;
 
-        /* $types = new stdClass;
-        $types = ['OP' => 'Opening', 'ED' => 'Ending'];
+        //$types = new stdClass;
+        //$types = ['OP' => 'Opening', 'ED' => 'Ending'];
 
-        $sortMethods = new stdClass;
+        $types = [
+            ['name' => 'Opening','value'=>'OP'],
+            ['name' => 'Ending','value'=>'ED']
+        ];
+
+        //$sortMethods = new stdClass;
         $sortMethods = [
             ['name' => 'Title','value'=>'title'],
             ['name' => 'Score','value'=>'averageRating'],
             ['name' => 'Views','value'=>'viewCount'],
             ['name' => 'Popular','value'=>'likeCount']
-        ]; */
+        ];
 
         if ($tag != null) {
             if ($type != null) {
@@ -614,27 +619,27 @@ class PostController extends Controller
             case 'title':
                 $posts = $posts->sortBy('title');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
                 break;
             case 'averageRating':
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
             case 'viewCount':
                 $posts = $posts->sortByDesc('viewCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
                 break;
 
             default:
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
                 break;
         }
     }
