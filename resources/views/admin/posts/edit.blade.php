@@ -33,7 +33,7 @@
                             <br>
 
                             <label for="songRomaji" class="form-label">Song name (romaji)</label>
-                            <input type="text" class="form-control" value="{{ $post->song->song_romaji != null ? $post->song->song_romaji : null }}"
+                            <input type="text" class="form-control" value="{{ $post->song->song_romaji }}"
                                 id="songRomaji" name="song_romaji">
                             <br>
                             <label for="songJp" class="form-label">Song name (JP)</label>

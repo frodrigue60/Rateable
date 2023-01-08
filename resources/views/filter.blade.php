@@ -17,28 +17,28 @@
                         <div class="searchItem">
                             <span class="text-light">Select Type</span>
                             <select id="chzn-type" name="type" class="form-select" aria-label="Default select example">
-                                <option value="" selected>Select the type</option>
-                                <option value="op">Opening</option>
-                                <option value="ed">Ending</option>
+                                <option value="">Select the type</option>
+                                <option value="OP" {{ $requested->type == 'OP' ? 'selected' : '' }}>Opening</option>
+                                <option value="ED" {{ $requested->type == 'ED' ? 'selected' : '' }}>Ending</option>
                             </select>
                         </div>
                         <div class="searchItem">
                             <span class="text-light">Select Season</span>
                             <select id="chzn-tag" name='tag' class="form-select" aria-label="Default select example">
-                                <option value="" selected>Select the season</option>
+                                <option value="">Select the season</option>
                                 @foreach ($tags as $tag)
-                                    <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                    <option value="{{ $tag->name }}" {{ $requested->tag == $tag->name ? 'selected' : '' }}>{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="searchItem">
                             <span class="text-light">Sort By</span>
                             <select id="chzn-sort" name="sort" class="form-select" aria-label="Default select example">
-                                <option value="" selected>Select order method</option>
-                                <option value="title">Title</option>
-                                <option value="averageRating">Score</option>
-                                <option value="view_count">Views</option>
-                                <option value="likeCount">Favorites</option>
+                                <option value="">Select order method</option>
+                                <option value="title" {{ $requested->sort == 'title' ? 'selected' : '' }}>Title</option>
+                                <option value="averageRating" {{ $requested->sort == 'averageRating' ? 'selected' : '' }}>Score</option>
+                                <option value="view_count" {{ $requested->sort == 'view_count' ? 'selected' : '' }}>Views</option>
+                                <option value="likeCount" {{ $requested->sort == 'likeCount' ? 'selected' : '' }}>Favorites</option>
                             </select>
                         </div>
                         <br>

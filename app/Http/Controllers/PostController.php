@@ -75,9 +75,9 @@ class PostController extends Controller
                 $post->themeNum = null;
             } else {
                 $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type.$request->themeNum;
+                $post->suffix = $request->type . $request->themeNum;
             }
-            
+
             if ($request->artist_id != true) {
                 $post->artist_id = null;
             } else {
@@ -92,7 +92,7 @@ class PostController extends Controller
             $file_name = 'thumbnail_' . time() . '.' . 'webp';
             $post->thumbnail = $file_name;
 
-            $encoded = Image::make($request->file)->encode('webp', 100);//->resize(150, 212)
+            $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //$request->file->storeAs('thumbnails', $file_name, 'public');
             $song = new Song;
@@ -115,12 +115,12 @@ class PostController extends Controller
             $post->title = $request->title;
             $post->slug = Str::slug($request->title);
             $post->type = $request->type;
-            
+
             if ($request->themeNum != true) {
                 $post->themeNum = null;
             } else {
                 $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type.$request->themeNum;
+                $post->suffix = $request->type . $request->themeNum;
             }
             if ($request->artist_id != true) {
                 $post->artist_id = null;
@@ -138,7 +138,7 @@ class PostController extends Controller
             $image_file_data = file_get_contents($request->imagesrc);
             //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
             $file_name = 'thumbnail_' . time() . '.' . 'webp';
-            $encoded = Image::make($image_file_data)->encode('webp', 100);//->resize(150, 212)
+            $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
@@ -201,7 +201,7 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $types = ['op', 'ed'];
+        $types = ['OP', 'ED'];
         $post = Post::find($id);
         $song = Song::find($post->song_id);
         $tags = Tag::all();
@@ -237,7 +237,7 @@ class PostController extends Controller
                 $post->themeNum = null;
             } else {
                 $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type.$request->themeNum;
+                $post->suffix = $request->type . $request->themeNum;
             }
 
             if ($request->artist_id != true) {
@@ -260,7 +260,7 @@ class PostController extends Controller
             $file_name = 'thumbnail_' . time() . '.' . 'webp';
             $post->thumbnail = $file_name;
             //$request->file->storeAs('thumbnails', $file_name, 'public');
-            $encoded = Image::make($request->file)->encode('webp', 100);//->resize(150, 212)
+            $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             $song = new Song;
             $song->song_romaji = $request->song_romaji;
@@ -283,7 +283,7 @@ class PostController extends Controller
                 $post->themeNum = null;
             } else {
                 $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type.$request->themeNum;
+                $post->suffix = $request->type . $request->themeNum;
             }
             if ($request->artist_id != true) {
                 $post->artist_id = null;
@@ -302,7 +302,7 @@ class PostController extends Controller
             $image_file_data = file_get_contents($request->imagesrc);
             //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
             $file_name = 'thumbnail_' . time() . '.' . 'webp';
-            $encoded = Image::make($image_file_data)->encode('webp', 100);//->resize(150, 212)
+            $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
@@ -352,19 +352,18 @@ class PostController extends Controller
 
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
         }
-        else{
-             $score_format = null;
-        }
-            
-            $allOpenings = Post::where('type', 'op')
-                ->get();
-            $allEndings = Post::where('type', 'ed')
-                ->get();
-            $openings = $allOpenings->sortByDesc('averageRating')->take(10);
-            $endings = $allEndings->sortByDesc('averageRating')->take(10);
 
-            return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed','score_format'));
+        $allOpenings = Post::where('type', 'op')
+            ->get();
+        $allEndings = Post::where('type', 'ed')
+            ->get();
+        $openings = $allOpenings->sortByDesc('averageRating')->take(10);
+        $endings = $allEndings->sortByDesc('averageRating')->take(10);
+
+        return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));
     }
 
     public function openings()
@@ -582,6 +581,17 @@ class PostController extends Controller
         $requested->tag = $tag;
         $requested->sort = $sort;
 
+        /* $types = new stdClass;
+        $types = ['OP' => 'Opening', 'ED' => 'Ending'];
+
+        $sortMethods = new stdClass;
+        $sortMethods = [
+            ['name' => 'Title','value'=>'title'],
+            ['name' => 'Score','value'=>'averageRating'],
+            ['name' => 'Views','value'=>'view_count'],
+            ['name' => 'Popular','value'=>'likeCount']
+        ]; */
+
         if ($tag != null) {
             if ($type != null) {
                 $posts = Post::withAnyTag($tag)
@@ -630,7 +640,7 @@ class PostController extends Controller
     }
     public function paginate($posts, $perPage = 20, $page = null, $options = [])
     {
-        
+
         $page = Paginator::resolveCurrentPage();
         $options = ['path' => Paginator::resolveCurrentPath()];
         $items = $posts instanceof Collection ? $posts : Collection::make($posts);
@@ -760,7 +770,7 @@ class PostController extends Controller
     {
         $q = $request->get('q');
         //dd($q);
-        $posts = Post::where('title', 'LIKE', "%$q%")->orWhere('themeNum', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug','themeNum']);
+        $posts = Post::where('title', 'LIKE', "%$q%")->orWhere('suffix', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug', 'suffix']);
 
         $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'name_slug']);
 

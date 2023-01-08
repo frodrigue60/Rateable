@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             '<div class="result"><a href="https://anirank.ddns.net/show/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
-                                .title + ' '+ element.themeNum+ '</span></a></div>';
+                                .title + ' '+ element.suffix + '</span></a></div>';
                     });
 
                     data.artists.forEach(element => {
