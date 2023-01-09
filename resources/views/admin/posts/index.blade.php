@@ -2,20 +2,6 @@
 
 @section('content')
     <div class="container">
-        @if (session('status'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> {{ session('status') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-    </div>
-    <div class="container">
         <div class="row justify-content-center">
 
             <div class="card bg-dark">
@@ -60,12 +46,15 @@
                                     <td>{{ $post->type }}-{{ $post->themeNum }}</td>
                                     <td>
                                         @isset($post->song_id)
-                                            @isset($post->song->song_romaji)
+                                            @if (isset($post->song->song_romaji))
                                                 {{ $post->song->song_romaji }}
-                                            @endisset
-                                            @isset($post->song->song_en)
-                                                {{ $post->song->song_en }}
-                                            @endisset
+                                            @else
+                                                @if (isset($post->song->song_en))
+                                                    {{ $post->song->song_en }}
+                                                @else
+                                                    N/A
+                                                @endif
+                                            @endif
                                         @endisset
                                     </td>
                                     <td>

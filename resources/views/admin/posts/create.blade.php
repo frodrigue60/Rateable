@@ -2,13 +2,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Holy guacamole!</strong> {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+        <div class="row justify-content-center">item
             <div class="card bg-dark text-light">
                 <div class="card-header">Create Post</div>
 
@@ -52,8 +46,8 @@
                             <div class="col">
                                 <label for="type" class="form-label">Type:</label>
                                 <select class="chzn-select" name="type" id="type" style="width:100%;">
-                                    @foreach ($types as $type)
-                                        <option value="{{ $type }}">{{ $type }}</option>
+                                    @foreach ($types as $item)
+                                        <option value="{{$item['value']}}">{{$item['name']}}</option>
                                     @endforeach
                                 </select>
                             </div>

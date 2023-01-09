@@ -10,7 +10,6 @@
                     <a class="btn btn-sm btn-primary" href="{{ route('admin.season.create') }}" role="button">CREATE
                         SEASON</a>
                 </div>
-
                 <div class="card-body">
                     <table class="table table-dark">
                         <thead>
@@ -26,26 +25,18 @@
                                     <td>{{ $season->id }}</td>
                                     <td>{{ $season->name }}</td>
                                     <td>
-                                        @auth
-                                            <a class="btn btn-sm btn-success" href="/admin/season/{{ $season->id }}/edit"
-                                                role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
-                                                {{ $season->id }}</a>
-                                            <a class="btn btn-sm btn-danger" href="/admin/season/{{ $season->id }}/destroy"
-                                                role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete
-                                                {{ $season->id }}</a>
-
-                                        @endauth
-                                        @guest
-                                            <a class="btn btn-danger disabled" href="#" role="button">Delete</a>
-                                            <a class="btn btn-success disabled" href="#" role="button">Edit</a>
-                                        @endguest
+                                        <a class="btn btn-sm btn-success" href="/admin/season/{{ $season->id }}/edit"
+                                            role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
+                                            {{ $season->id }}</a>
+                                        <a class="btn btn-sm btn-danger" href="/admin/season/{{ $season->id }}/destroy"
+                                            role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                            {{ $season->id }}</a>
                                     </td>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
                 <div class="card-footer">
-                    <h4>Footer</h4>
                 </div>
             </div>
         </div>

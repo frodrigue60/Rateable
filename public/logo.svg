@@ -29,8 +29,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="152.59834"
-     inkscape:cy="205.88384"
+     inkscape:cx="106.57361"
+     inkscape:cy="209.21488"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -54,7 +54,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -64,35 +64,35 @@
      id="layer1"
      transform="translate(0,-229.26665)">
     <rect
-       style="opacity:1;vector-effect:none;fill:#373737;fill-opacity:1;stroke:none;stroke-width:0.9322263;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#0e3d5f;fill-opacity:1;stroke:none;stroke-width:0.9322263;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4495"
        width="67.73333"
        height="67.73333"
        x="2.9369046e-006"
        y="229.26665"
-       rx="33.866665"
-       ry="33.866665" />
+       rx="0"
+       ry="0" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:72.24229431px;line-height:18.813097px;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f1e582;fill-opacity:1;stroke:none;stroke-width:0.7525239"
-       x="41.10881"
-       y="282.34784"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:75.03900146px;line-height:19.54140663px;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#f1e582;fill-opacity:1;stroke:none;stroke-width:0.78165632"
+       x="41.4851"
+       y="283.23135"
        id="text4491"><tspan
          sodipodi:role="line"
          id="tspan4489"
-         x="41.10881"
-         y="282.34784"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';fill:#f1e582;fill-opacity:1;stroke-width:0.7525239">R</tspan></text>
+         x="41.4851"
+         y="283.23135"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';fill:#f1e582;fill-opacity:1;stroke-width:0.78165632">R</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:72.24229431px;line-height:18.813097px;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#9cdaff;fill-opacity:1;stroke:none;stroke-width:0.7525239"
-       x="29.08289"
-       y="282.34784"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:75.03900146px;line-height:19.54140663px;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#66b2e9;fill-opacity:1;stroke:none;stroke-width:0.78165632"
+       x="28.801767"
+       y="283.23135"
        id="text4487"><tspan
          sodipodi:role="line"
          id="tspan4485"
-         x="29.08289"
-         y="282.34784"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';fill:#9cdaff;fill-opacity:1;stroke-width:0.7525239">A</tspan></text>
+         x="28.801767"
+         y="283.23135"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Calibri;-inkscape-font-specification:'Calibri Bold';fill:#66b2e9;fill-opacity:1;stroke-width:0.78165632">A</tspan></text>
   </g>
 </svg>

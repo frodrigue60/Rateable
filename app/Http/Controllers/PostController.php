@@ -43,7 +43,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        $types = ['OP', 'ED'];
+        $types = [
+            ['name' => 'Opening','value'=>'OP'],
+            ['name' => 'Ending','value'=>'ED']
+        ];
         $tags = Tag::all();
         $artists = Artist::all();
         return view('admin.posts.create', compact('tags', 'types', 'artists'));
@@ -201,7 +204,11 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $types = ['OP', 'ED'];
+        $types = [
+            ['name' => 'Opening','value'=>'OP'],
+            ['name' => 'Ending','value'=>'ED']
+        ];
+
         $post = Post::find($id);
         $song = Song::find($post->song_id);
         $tags = Tag::all();
@@ -268,7 +275,7 @@ class PostController extends Controller
             $song->song_en = $request->song_en;
             $song->save();
             $post->song_id = $song->id;
-            $post->save();
+            $post->update();
 
             $tags = $request->tags;
             $post->tag($tags);
@@ -315,7 +322,7 @@ class PostController extends Controller
             $song->save();
 
             $post->song_id = $song->id;
-            $post->save();
+            $post->update();
             $tags = $request->tags;
             $post->retag($tags);
             return redirect(route('admin.post.index'))->with('success', 'Post Updated Successfully, has url image');
@@ -575,21 +582,19 @@ class PostController extends Controller
         $tag = $request->tag;
         $type = $request->type;
         $sort = $request->sort;
+        $char = $request->char;
 
         $requested = new stdClass;
         $requested->type = $type;
         $requested->tag = $tag;
         $requested->sort = $sort;
-
-        //$types = new stdClass;
-        //$types = ['OP' => 'Opening', 'ED' => 'Ending'];
+        $requested->char = $char;
 
         $types = [
             ['name' => 'Opening','value'=>'OP'],
             ['name' => 'Ending','value'=>'ED']
         ];
 
-        //$sortMethods = new stdClass;
         $sortMethods = [
             ['name' => 'Title','value'=>'title'],
             ['name' => 'Score','value'=>'averageRating'],
@@ -597,55 +602,82 @@ class PostController extends Controller
             ['name' => 'Popular','value'=>'likeCount']
         ];
 
+        $characters = range('A', 'Z');
+
         if ($tag != null) {
             if ($type != null) {
-                $posts = Post::withAnyTag($tag)
+                if ($char != null) {
+                    $posts = Post::withAnyTag($tag)
+                    ->where('type', $type)
+                    ->where('title', 'LIKE', "{$char}%")
+                    ->get();
+                }
+                else{
+                    $posts = Post::withAnyTag($tag)
                     ->where('type', $type)
                     ->get();
+                }
             } else {
-                $posts = Post::withAnyTag($tag)->get();
+                if ($char != null) {
+                    $posts = Post::withAnyTag($tag)
+                    ->where('title', 'LIKE', "{$char}%")
+                    ->get();
+                } else {
+                    $posts = Post::withAnyTag($tag)->get();
+                }
             }
         } else {
             if ($type != null) {
-                $posts = Post::where('type', $type)
+                if ($char != null) {
+                    $posts = Post::where('type', $type)
+                    ->where('title', 'LIKE', "{$char}%")
                     ->get();
+                } else {
+                    $posts = Post::where('type', $type)
+                    ->get();
+                }
             } else {
-                $posts = Post::all();
+                if ($char != null) {
+                    $posts = Post::where('title', 'LIKE', "{$char}%")
+                    ->get();
+                } else {
+                    $posts = Post::all();
+                }
             }
         }
-
+        
         //SWITCH ORDER THE POSTS
         switch ($sort) {
             case 'title':
                 $posts = $posts->sortBy('title');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
                 break;
             case 'averageRating':
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
             case 'viewCount':
                 $posts = $posts->sortByDesc('viewCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
                 break;
 
             default:
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
                 break;
         }
     }
+
     public function paginate($posts, $perPage = 20, $page = null, $options = [])
     {
-
         $page = Paginator::resolveCurrentPage();
         $options = ['path' => Paginator::resolveCurrentPath()];
         $items = $posts instanceof Collection ? $posts : Collection::make($posts);

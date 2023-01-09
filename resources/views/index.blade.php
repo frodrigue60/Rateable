@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('meta')
     @if (Request::is('/'))
-        <title>Anirank: Ranking Openings & Endings Anime</title>
+        <title>Ranking Anime Openings & Endings | Anirank</title>
         <meta name="title" content="Search, play, and rate the openings and endings of your favorite animes.">
     @endif
 @endsection

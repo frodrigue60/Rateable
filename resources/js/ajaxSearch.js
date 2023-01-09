@@ -119,5 +119,6 @@ document.addEventListener("DOMContentLoaded", function () {
         autoplayTimeout: 5000,
         autoplayHoverPause: true,
         rewind: true,
+        nav:true,
     });
 });

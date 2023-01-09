@@ -5,7 +5,6 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            
                 <div class="card bg-dark text-light">
                     <div class="card-footer">
                         Edit the Current Season
@@ -27,14 +26,9 @@
                         </form>
                     </div>
                     <div class="card-footer">
-
                     </div>
-
                 </div>
-            
-
         </div>
-
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
         <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
