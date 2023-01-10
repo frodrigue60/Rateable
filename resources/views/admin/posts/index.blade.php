@@ -62,7 +62,6 @@
                                             <a
                                                 href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
                                         @endisset
-
                                     </td>
                                     <td>
                                         <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"
@@ -74,7 +73,6 @@
                                     </td>
                                 </tr>
                             @endforeach
-
                         </tbody>
                     </table>
                 </div>
