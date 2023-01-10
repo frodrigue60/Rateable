@@ -1,16 +1,13 @@
-var staticCacheName = "pwa-v" + new Date().getTime();
-var filesToCache = [
-    '/offline',
-    '/css/app.css',
-    '/js/app.js',
-    '/images/icons/icon-72x72.png',
-    '/images/icons/icon-96x96.png',
-    '/images/icons/icon-128x128.png',
-    '/images/icons/icon-144x144.png',
-    '/images/icons/icon-152x152.png',
-    '/images/icons/icon-192x192.png',
-    '/images/icons/icon-384x384.png',
-    '/images/icons/icon-512x512.png',
+const staticCacheName = "pwa-v" + new Date().getTime();
+const filesToCache = [
+    'resources/css/app.css',
+    'resources/css/modalSearch.css',
+    'resources/css/fivestars.css',
+    'resources/js/ajaxSearch.js',
+    'resources/js/popper.min.js',
+    'pwa-sw.js',
+    'resources/owlcarousel/assets/owl.carousel.min.css',
+    'resources/owlcarousel/assets/owl.theme.default.min.css'
 ];
 
 // Cache on install

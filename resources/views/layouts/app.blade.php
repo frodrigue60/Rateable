@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
+    {{-- <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content"> --}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:site_name" content="{{ env('APP_NAME') }}">
@@ -16,8 +16,9 @@
     {{-- STYLES --}}
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/images/favicon-16x16.png') }}">
-    <link rel="shortcut icon" sizes="192x192" href="{{ asset('resources/images/logo.svg') }}">
+    <link rel="shortcut icon" sizes="512x512" href="{{ asset('resources/images/logo.svg') }}">
     <link rel="manifest" href="/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0E3D5F">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,10 +30,10 @@
     <meta name="msapplication-TileColor" content="#0E3D5F">
 
 
-    <link rel="prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+   {{--  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <link rel="prefetch" as="style" href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800">
-        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800" rel="stylesheet">
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800" rel="stylesheet"> --}}
     {{-- <link rel="preload" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'"> --}}
     <link rel="prefetch" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}" as="style"
@@ -44,11 +45,13 @@
     <link rel="stylesheet" href="{{ asset('/build/assets/app.e55e8342.css') }}"> --}}
 
     <!-- JS -->
+    <script src="{{ asset('/resources/js/pwa-script.js') }}"></script>
     <script src="{{ asset('/resources/js/jquery-3.6.3.min.js') }}"></script>
     {{-- <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('/resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
+    
 </head>
 
 <body class="color2">
