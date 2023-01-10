@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
         input.focus();
 
         input.addEventListener('keyup', () => {
+            let inputTrim = input.value.trim();
+            console.log(inputTrim);
             postsDiv.innerHTML =
                 '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
             artistsDiv.innerHTML =
@@ -45,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function doneTyping() {
             try {
-                fetch('https://anirank.ddns.net/api/posts/search?q=' + input.value, {
+                fetch('https://anirank.ddns.net/api/search?q=' + input.value, {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',

@@ -54,7 +54,7 @@
                         </div>
                         <br>
                         <label for="imageSrc" class="form-label">Image Source Url</label>
-                        <input type="text" class="form-control" placeholder="Image link" id="imageSrc" name="imagesrc">
+                        <input type="text" class="form-control" placeholder="Image link" id="imageSrc" name="imageSrc">
                         <br>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Upload Image Thumbnail</label>

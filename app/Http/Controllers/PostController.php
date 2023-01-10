@@ -134,18 +134,18 @@ class PostController extends Controller
             $post->ytlink = $request->ytlink;
             $post->scndlink = $request->scndlink;
 
-            if ($request->imagesrc == null) {
+            if ($request->imageSrc == null) {
                 return Redirect::back()->with('error', 'Post not created, images not founds');
             }
 
-            $image_file_data = file_get_contents($request->imagesrc);
-            //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $image_file_data = file_get_contents($request->imageSrc);
+            //$ext = pathinfo($request->imageSrc, PATHINFO_EXTENSION);
             $file_name = 'thumbnail_' . time() . '.' . 'webp';
             $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
-            $post->imageSrc = $request->imagesrc;
+            $post->imageSrc = $request->imageSrc;
 
             $song = new Song;
             $song->song_romaji = $request->song_romaji;
@@ -302,18 +302,18 @@ class PostController extends Controller
 
             $post->ytlink = $request->ytlink;
             $post->scndlink = $request->scndlink;
-            if ($request->imagesrc == null) {
+            if ($request->imageSrc == null) {
                 return redirect(route('admin.post.index'))->with('error', 'Post not created, images not founds');
             }
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
-            $image_file_data = file_get_contents($request->imagesrc);
-            //$ext = pathinfo($request->imagesrc, PATHINFO_EXTENSION);
+            $image_file_data = file_get_contents($request->imageSrc);
+            //$ext = pathinfo($request->imageSrc, PATHINFO_EXTENSION);
             $file_name = 'thumbnail_' . time() . '.' . 'webp';
             $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
-            $post->imageSrc = $request->imagesrc;
+            $post->imageSrc = $request->imageSrc;
 
             $song = new Song;
             $song->song_romaji = $request->song_romaji;
@@ -351,6 +351,7 @@ class PostController extends Controller
     }
 
     //return index view with all openings
+    
     public function home()
     {
         $recently = Post::all()->sortByDesc('created_at')/* ->take(10) */;
@@ -395,7 +396,6 @@ class PostController extends Controller
 
             return view('seasonal', compact('posts', 'tags', 'score_format'));
         } else {
-            $currentSeason = DB::table('current_season')->first();
 
             $posts = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'op')
@@ -432,7 +432,6 @@ class PostController extends Controller
 
             return view('seasonal', compact('posts', 'tags', 'score_format'));
         } else {
-            $currentSeason = DB::table('current_season')->first();
 
             $posts = Post::withAnyTag($currentSeason->name)
                 ->where('type', 'ed')

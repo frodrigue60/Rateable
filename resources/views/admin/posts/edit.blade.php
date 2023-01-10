@@ -77,7 +77,7 @@
                         <br>
                         <br>
                         <label for="imageSrc" class="form-label">Image Source</label>
-                        <input type="text" class="form-control" placeholder="Image link" id="imageSrc" name="imagesrc"
+                        <input type="text" class="form-control" placeholder="Image link" id="imageSrc" name="imageSrc"
                             value="{{ $post->imageSrc }}">
                         <br>
                         <div class="mb-3">

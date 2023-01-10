@@ -48,7 +48,7 @@ class PostSeeder extends Seeder
             /*DB::table('posts')->insert([
                 'title' => Str::random(12),
                 'type' => Arr::random($randomtype),
-                'imagesrc' => Arr::random($collection),
+                'imageSrc' => Arr::random($collection),
                 'ytlink' => 'https://www.youtube.com/embed/dlSbEP4V-gI',
 
             ]);*/
@@ -56,7 +56,7 @@ class PostSeeder extends Seeder
             $post = new Post;
             $post->title = Str::random(12);
             $post->type = Arr::random($randomtype);
-            //$post->imagesrc = Arr::random($collection);
+            //$post->imageSrc = Arr::random($collection);
             $post->ytlink = 'https://www.youtube.com/embed/dlSbEP4V-gI';
             $post->thumbnail = $thumbnail;
             

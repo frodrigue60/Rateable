@@ -20,4 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/posts/search',       [apiPostController::class, 'apiPosts'])->name('api.posts');
+Route::controller(apiPostController::class)->group(function(){
+    Route::get('/posts','index');
+    Route::post('/post','store');
+    Route::get('/post/{id}','show');
+    Route::put('/post/{id}','update');
+    Route::delete('/post/{id}','destroy');
+    Route::get('/search','search');
+});
