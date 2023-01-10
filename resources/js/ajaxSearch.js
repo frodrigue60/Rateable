@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     $(".owl-carousel").owlCarousel({
-        //stagePadding: 1,
+        stagePadding: 1,
         loop: false,
         margin: 8,
         autoWidth: true,
@@ -119,6 +119,5 @@ document.addEventListener("DOMContentLoaded", function () {
         autoplayTimeout: 5000,
         autoplayHoverPause: true,
         rewind: true,
-        nav:true,
     });
 });

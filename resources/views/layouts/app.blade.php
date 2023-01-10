@@ -2,33 +2,42 @@
 <html lang="en">
 
 <head>
-    {{-- <title>Anirank</title> --}}
-    {{-- <meta http-equiv="Content-Security-Policy" content="script-src 'none'"> --}}
-    <link rel="canonical" href="https://anirank.ddns.net">
+    <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{-- comment <meta title="Search, play, and rate the openings and endings of your favorite animes."> --}}
-    <meta name="description"
-        content="The site you were looking for to rate openings and endings of your favorite animes.">
-    <meta name="keywords" content="anime, openings, endings, ranking, rating">
-    <meta name="robots" content="index, follow">
+    <meta property="og:site_name" content="{{ env('APP_NAME') }}">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="Author" lang="en" content="Luis Rodz">
     @yield('meta')
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" type="image/png" href="{{ asset('logo.svg') }}">
-    <link rel="shortcut icon" sizes="192x192" href="{{ asset('logo.svg') }}">
+    {{-- STYLES --}}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/images/favicon-16x16.png') }}">
+    <link rel="shortcut icon" sizes="192x192" href="{{ asset('resources/images/logo.svg') }}">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0E3D5F">
 
-    <!-- CSS -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="{{ env('APP_NAME') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('resources/images/apple-touch-icon.png') }}">
+    <link rel="mask-icon" href="{{ asset('resources/images/safari-pinned-tab.svg') }}" color="#0E3D5F">
+    <meta name="msapplication-TileImage" content="{{ asset('resources/images/msapplication-icon-144x144.png') }}">
+    <meta name="msapplication-TileColor" content="#0E3D5F">
+
+
+    <link rel="prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="prefetch" as="style" href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800" rel="stylesheet">
     {{-- <link rel="preload" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'"> --}}
-    <link rel="preload" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}" as="style"
+    <link rel="prefetch" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}" as="style"
+    <link rel="prefetch" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'">
 
     {{-- <link rel="stylesheet" href="{{ asset('/build/assets/modalSearch.00eba843.css') }}">
@@ -39,18 +48,18 @@
     {{-- <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('/resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
-    @vite(['resources/sass/app.scss','resources/js/app.js','resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>
 
 <body class="color2">
-    <div class="loader-container">
-        <div class="spinner"></div>
-    </div>
     <div id="app">
+        <div class="loader-container">
+            <div class="spinner"></div>
+        </div>
         <nav class="navbar navbar-expand-lg navbar-dark color1">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    <img src="{{ asset('text4491.png') }}" alt="Logo" width="157" height="25">
+                    <img src="{{ asset('resources/images/logo.png') }}" alt="Logo" width="157" height="25">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

@@ -1,31 +1,46 @@
-
 @extends('layouts.app')
 @section('meta')
-    <title>{{ $post->title }} {{ $post->type }}
-        @isset($post->themeNum)
-            {{ $post->themeNum }}
-        @endisset
-    </title>
-    <meta title="{{ $post->title }} {{ $post->type }}
-    @isset($post->themeNum)
+    <title>{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
+    <meta name="title"
+        content="{{ $post->title }} {{ $post->suffix == true ? $post->suffix : $post->type }}
+    {{-- @isset($post->themeNum)
         {{ $post->themeNum }}
-    @endisset">
+    @endisset --}}">
+
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
+
+    <meta name="description" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <link rel="canonical" href="{{ url()->current() }}">
+    {{-- <meta property="og:locale" content="es_MX"> --}}
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:description"
+        content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="article:section" content="{{ $post->type == 'OP' ? 'Opening' : 'Ending' }}">
+    {{-- <meta property="og:updated_time" content="2022-09-04T20:03:37-05:00"> --}}
+    <meta property="og:image" content="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="{{ $post->title }}">
+    <meta property="og:image:secure_url" content="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+        alt="{{ $post->title }}">
+    <meta property="og:image:width" content="460">
+    <meta property="og:image:height" content="650">
+    <meta property="og:image:alt" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:image:type" content="image/webp">
+    {{-- <meta property="article:published_time" content="2022-09-04T20:03:32-05:00">
+    <meta property="article:modified_time" content="2022-09-04T20:03:37-05:00"> --}}
+
+    {{-- <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Idolmaster Cinderella Girls U149: se estrenará en 2023 - Ayamari Network">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="https://ayamari.me/wp-content/uploads/2022/09/THE-iDOLMASTER.png">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="Akaza">
+    <meta name="twitter:label2" content="Time to read">
+    <meta name="twitter:data2" content="2 minutos"> --}}
 @endsection
 @section('content')
     <div class="container">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if (session('warning'))
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> {{ session('warning') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
         <h1 class="text-light text-center" hidden>{{ $post->title }}</h1>
         <div class="row justify-content-center">
             <div class="card card-video">
@@ -118,13 +133,14 @@
                             <div class="accordion" id="accordionExample">
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingTwo">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false"
+                                            aria-controls="collapseTwo">
                                             Song info:
                                         </button>
                                     </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                        data-bs-parent="#accordionExample">
+                                    <div id="collapseTwo" class="accordion-collapse collapse"
+                                        aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                         <div class="accordion-body">
                                             @isset($post->song->song_romaji)
                                                 <h4>Song title (romaji): <strong>{{ $post->song->song_romaji }}</strong></h4>
@@ -154,9 +170,9 @@
                                 <hr>
                                 <h6>for voting</h6>
                                 <div>
-                                    <a name="" id="" class="btn btn-sm btn-primary" href="{{ route('login') }}"
-                                        role="button">Login</a> or <a name="" id=""
-                                        class="btn btn-sm btn-primary" href="{{ route('register') }}"
+                                    <a name="" id="" class="btn btn-sm btn-primary"
+                                        href="{{ route('login') }}" role="button">Login</a> or <a name=""
+                                        id="" class="btn btn-sm btn-primary" href="{{ route('register') }}"
                                         role="button">Register</a>
                                 </div>
                             @endguest

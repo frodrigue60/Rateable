@@ -1,0 +1,73 @@
+{
+	"name": "Anirank",
+	"short_name": "Anirank",
+	"description": "The site you were looking for to rate openings and endings of your favorite animes. Discover which are the most popular opening and endings, as well as the best valued.",
+	"lang": "en-US",
+	"shortcuts": [
+		{
+			"name": "Seasonal Openings",
+			"short_name": "Openings",
+			"description": "View the anime openings of the current season",
+			"url": "/openings",
+			"icons": [
+				{
+					"src": "resources/images/pwa-op-192.png",
+					"sizes": "192x192"
+				}
+			]
+		},
+		{
+			"name": "Seasonal Endings",
+			"short_name": "Endings",
+			"description": "View the anime endings of the current season",
+			"url": "/endings",
+			"icons": [
+				{
+					"src": "resources/images/pwa-ed-192.png",
+					"sizes": "192x192"
+				}
+			]
+		}
+	],
+	"screenshots": [
+		{
+			"src": "resources/images/screenshot1.png",
+			"type": "image/png",
+			"sizes": "1440x2960"
+		},
+		{
+			"src": "resources/images/screenshot2.png",
+			"type": "image/jpg",
+			"sizes": "1440x2960"
+		}
+	],
+	"categories": [
+		"entertainment",
+		"multimedia",
+		"music",
+		"video"
+	],
+	"icons": [
+		{
+			"src": "resources/images/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "resources/images/android-chrome-512x512-maskable.png",
+			"type": "image/png",
+			"sizes": "512x512",
+			"purpose": "maskable"
+		},
+		{
+			"src": "resources/images/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	],
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#0E3D5F",
+	"theme_color": "#0E3D5F",
+	"scope": "/"
+}

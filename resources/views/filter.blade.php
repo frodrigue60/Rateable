@@ -47,9 +47,9 @@
                             </select>
                         </section>
                         <section class="searchItem">
-                            <span class="text-light">Filter By Character</span>
+                            <span class="text-light">Filter by Letter</span>
                             <select id="chzn-char" name="char" class="form-select" aria-label="Default select example">
-                                <option value="">Select a character</option>
+                                <option value="">Select a letter</option>
                                 @foreach ($characters as $item)
                                     <option value="{{$item}}" class="text-uppercase" {{ $requested->char == $item ? 'selected' : '' }}>{{$item}}</option>
                                 @endforeach
