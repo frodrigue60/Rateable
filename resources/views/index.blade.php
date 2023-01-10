@@ -2,12 +2,19 @@
 @section('meta')
     @if (Request::is('/'))
         <title>Ranking Anime Openings & Endings | {{ env('APP_NAME') }}</title>
-        <meta name="title" content="Search, play, and rate the openings and endings of your favorite animes.">
+        <meta name="title" content="Search, play, and rate anime openings and endings">
         <meta name="description"
             content="The site you were looking for to rate openings and endings of your favorite animes. Discover which are the most popular opening and endings, as well as the best valued.">
         <meta name="keywords" content="top anime openings, top anime endings, ranking openings anime, ranking endings anime">
         <meta name="robots" content="index, follow">
         <link rel="canonical" href="{{ url()->current() }}">
+
+        <meta property="og:image" content="{{ asset('resources/images/logo2.png') }}" />
+        <meta property="og:image:secure_url" content="{{ asset('resources/images/logo2.png') }}" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="256" />
+        <meta property="og:image:height" content="256" />
+        {{-- <meta property="og:image:alt" content="A shiny red apple with a bite taken out" /> --}}
     @endif
 @endsection
 @section('content')

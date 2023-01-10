@@ -803,18 +803,5 @@ class PostController extends Controller
             Session::put('page_visited_' . $id, true);
         }
     }
-    public function apiPosts(Request $request)
-    {
-        $q = $request->get('q');
-        //dd($q);
-        $posts = Post::where('title', 'LIKE', "%$q%")->orWhere('suffix', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug','type','themeNum', 'suffix']);
-
-        $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'name_slug']);
-
-        $tags = Tag::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
-
-        $data = ["posts" => $posts, "artists" => $artists, "tags" => $tags];
-
-        return response()->json($data);
-    }
+    
 }
