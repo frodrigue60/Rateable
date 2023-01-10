@@ -54,15 +54,21 @@
 			"type": "image/png"
 		},
 		{
-			"src": "resources/images/android-chrome-512x512-maskable.png",
-			"type": "image/png",
+			"src": "resources/images/android-chrome-512x512.png",
 			"sizes": "512x512",
-			"purpose": "maskable"
+			"type": "image/png"
 		},
 		{
 			"src": "resources/images/android-chrome-512x512.png",
 			"sizes": "512x512",
-			"type": "image/png"
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "resources/images/android-chrome-512x512-maskable.png",
+			"type": "image/png",
+			"sizes": "512x512",
+			"purpose": "maskable"
 		}
 	],
 	"start_url": "/",

@@ -1,11 +1,13 @@
 const staticCacheName = "pwa-v" + new Date().getTime();
 const filesToCache = [
-    'resources/css/app.css',
+    '/',
+    /* 'resources/css/app.css',
     'resources/css/modalSearch.css',
     'resources/css/fivestars.css',
     'resources/js/ajaxSearch.js',
     'resources/js/popper.min.js',
-    'pwa-sw.js',
+    '/resources/js/pwa-script.js',
+    'pwa-sw.js', */
     'resources/owlcarousel/assets/owl.carousel.min.css',
     'resources/owlcarousel/assets/owl.theme.default.min.css',
     'resources/js/jquery-3.6.3.min.js'

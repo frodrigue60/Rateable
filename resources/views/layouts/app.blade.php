@@ -30,23 +30,22 @@
     <meta name="msapplication-TileColor" content="#0E3D5F">
 
 
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800" rel="stylesheet">
-    {{-- <link rel="preload" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}" as="style"
-        onload="this.onload=null;this.rel='stylesheet'"> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}">
 
     {{-- <link rel="stylesheet" href="{{ asset('/build/assets/modalSearch.00eba843.css') }}">
-    <link rel="stylesheet" href="{{ asset('/build/assets/app.e55e8342.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('/build/assets/app.243c9c4b.css') }}"> --}}
 
     <!-- JS -->
     <script src="{{ asset('/resources/js/pwa-script.js') }}"></script>
     <script src="{{ asset('/resources/js/jquery-3.6.3.min.js') }}"></script>
-    {{-- <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('/resources/js/popper.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('/resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 
@@ -204,8 +203,7 @@
             </div>
         </footer>
     </div>
-    {{-- <script src="{{ asset('/resources/js/ajaxSearch.js') }}"></script> --}}
-    {{-- <script src="{{ asset('/build/assets/ajaxSearch.eb2e3943.js') }}"></script> --}}
+    <script src="{{ asset('/build/assets/ajaxSearch.2bf24ff5.js') }}"></script>
 </body>
 
 </html>
