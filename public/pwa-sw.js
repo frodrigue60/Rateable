@@ -7,7 +7,8 @@ const filesToCache = [
     'resources/js/popper.min.js',
     'pwa-sw.js',
     'resources/owlcarousel/assets/owl.carousel.min.css',
-    'resources/owlcarousel/assets/owl.theme.default.min.css'
+    'resources/owlcarousel/assets/owl.theme.default.min.css',
+    'resources/js/jquery-3.6.3.min.js'
 ];
 
 // Cache on install

@@ -30,16 +30,14 @@
     <meta name="msapplication-TileColor" content="#0E3D5F">
 
 
-   {{--  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800">
-        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800" rel="stylesheet"> --}}
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800" rel="stylesheet">
     {{-- <link rel="preload" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}" as="style"
         onload="this.onload=null;this.rel='stylesheet'"> --}}
-    <link rel="prefetch" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="prefetch" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}" as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}">
 
     {{-- <link rel="stylesheet" href="{{ asset('/build/assets/modalSearch.00eba843.css') }}">
     <link rel="stylesheet" href="{{ asset('/build/assets/app.e55e8342.css') }}"> --}}
@@ -51,7 +49,7 @@
     {{-- <script src="{{ asset('/resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
-    
+
 </head>
 
 <body class="color2">
@@ -109,8 +107,9 @@
                     </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
-                        <input id="searchInput" type="text" name="search" class="form-control" aria-label="search"
-                            placeholder="Search..." data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <input id="searchInput" type="text" name="search" class="form-control"
+                            aria-label="search" placeholder="Search..." data-bs-toggle="modal"
+                            data-bs-target="#exampleModal">
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item dropdown">
