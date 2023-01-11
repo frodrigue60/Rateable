@@ -1,13 +1,19 @@
 @extends('layouts.app')
 @section('meta')
     @isset($currentSeason)
+        <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="keywords"
+            content="ranking, top, anime openings {{ $currentSeason->name }}, openings anime {{ $currentSeason->name }}, anime endings {{ $currentSeason->name }}, endings anime {{ $currentSeason->name }}, of {{ $currentSeason->name }}">
         @if (Request::is('openings'))
             <title>Anirank: Openings {{ $currentSeason->name }}</title>
             <meta title="Openings {{ $currentSeason->name }}">
+            <meta name="description" content="Openings of {{ $currentSeason->name }} anime season">
         @endif
         @if (Request::is('endings'))
             <title>Anirank: Endings {{ $currentSeason->name }}</title>
             <meta title="Endings {{ $currentSeason->name }}">
+            <meta name="description" content="Endings of {{ $currentSeason->name }} anime season">
         @endif
     @endisset
 @endsection
@@ -41,51 +47,52 @@
 
                 <section class="contenedor-tarjetas">
                     @foreach ($posts as $post)
-                    <article class="tarjeta">
-                        <div class="textos">
-                            <div class="tarjeta-header text-light">
-                                <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
-                            </div>
-                                <div class="{{ $post->type === "op" ? "tag" : "tag2" }}">
-                                    <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                        <article class="tarjeta">
+                            <div class="textos">
+                                <div class="tarjeta-header text-light">
+                                    <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
-                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
-                            </a>
-                            <div class="tarjeta-footer text-light">
+                                <div class="{{ $post->type === 'op' ? 'tag' : 'tag2' }}">
+                                    <span
+                                        class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                                </div>
+                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                </a>
+                                <div class="tarjeta-footer text-light">
                                     <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
                                     <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
-                                <span>
-                                    @if (isset($score_format))
-                                        @switch($score_format)
-                                            @case('POINT_100')
-                                                {{ round($post->averageRating) }}
-                                            @break
+                                    <span>
+                                        @if (isset($score_format))
+                                            @switch($score_format)
+                                                @case('POINT_100')
+                                                    {{ round($post->averageRating) }}
+                                                @break
 
-                                            @case('POINT_10_DECIMAL')
-                                                {{ round($post->averageRating / 10, 1) }}
-                                            @break
+                                                @case('POINT_10_DECIMAL')
+                                                    {{ round($post->averageRating / 10, 1) }}
+                                                @break
 
-                                            @case('POINT_10')
-                                                {{ round($post->averageRating / 10) }}
-                                            @break
+                                                @case('POINT_10')
+                                                    {{ round($post->averageRating / 10) }}
+                                                @break
 
-                                            @case('POINT_5')
-                                                {{ round($post->averageRating / 20) }}
-                                            @break
+                                                @case('POINT_5')
+                                                    {{ round($post->averageRating / 20) }}
+                                                @break
 
-                                            @default
-                                                {{ round($post->averageRating) }}
-                                        @endswitch
-                                    @else
-                                        {{ round($post->averageRating / 10, 1) }}
-                                    @endif
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </span>
+                                                @default
+                                                    {{ round($post->averageRating) }}
+                                            @endswitch
+                                        @else
+                                            {{ round($post->averageRating / 10, 1) }}
+                                        @endif
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
                     @endforeach
                 </section>
             </section>

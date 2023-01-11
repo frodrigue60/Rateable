@@ -4,11 +4,10 @@
         <title>Ranking Anime Openings & Endings | {{ env('APP_NAME') }}</title>
         <meta name="title" content="Search, play, and rate anime openings and endings">
         <meta name="description"
-            content="The site you were looking for to rate openings and endings of your favorite animes. Discover which are the most popular opening and endings, as well as the best valued.">
-        <meta name="keywords" content="top anime openings, top anime endings, ranking openings anime, ranking endings anime">
-        <meta name="robots" content="index, follow">
+            content="The site you were looking for to rate openings and endings of your favorite animes. Discover which are the most popular opening and endings.">
+        <meta name="keywords" content="top anime openings, top anime endings, ranking openings anime, ranking endings anime, Best Anime Openings Of All Time, openings anime, endings anime">
         <link rel="canonical" href="{{ url()->current() }}">
-
+        <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
         <meta property="og:image" content="{{ asset('resources/images/logo2.png') }}" />
         <meta property="og:image:secure_url" content="{{ asset('resources/images/logo2.png') }}" />
         <meta property="og:image:type" content="image/png" />
@@ -209,9 +208,10 @@
         </section>
         {{-- TOP SECTION --}}
         <section class="contenedor-main">
-            <h2 hidden>RANKING ANIME OPENINGS & ENDINGS</h2>
+            <h2 hidden>TOP ANIME OPENINGS & ENDINGS OF ALL TIME</h2>
             <div class="container-top">
                 <section class="container-items">
+                    <h3 hidden>TOP ANIME OPENINGS OF ALL TIME</h3>
                     <div class="top-header">
                         <div>
                             <span>Global Rank Openings</span>
@@ -230,8 +230,8 @@
                             </div>
                             <div class="item-info">
                                 <div class="item-post-info">
-                                    <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
-                                            class="text-light no-deco">{{ $post->title }}</a></span>
+                                    <h6><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                            class="text-light no-deco">{{ $post->title }}</a></h6>
                                 </div>
                                 @if (isset($post->song->song_romaji))
                                     <div class="item-song-info">
@@ -292,6 +292,7 @@
                     @endforeach
                 </section>
                 <section class="container-items">
+                    <h3 hidden>TOP ANIME ENDINGS OF ALL TIME</h3>
                     <div class="top-header">
                         <div>
                             <span>Global Rank Endings</span>
@@ -311,8 +312,8 @@
                             </div>
                             <div class="item-info">
                                 <div class="item-post-info">
-                                    <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
-                                            class="text-light no-deco">{{ $post->title }}</a></span>
+                                    <h6><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                            class="text-light no-deco">{{ $post->title }}</a></h6>
                                 </div>
                                 @if (isset($post->song->song_romaji))
                                     <div class="item-song-info">

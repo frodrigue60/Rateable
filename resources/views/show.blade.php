@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
 
     <meta name="description" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
-    <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
     <link rel="canonical" href="{{ url()->current() }}">
     {{-- <meta property="og:locale" content="es_MX"> --}}
     <meta property="og:type" content="article">

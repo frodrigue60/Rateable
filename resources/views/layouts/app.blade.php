@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    {{-- <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content"> --}}
+    <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:site_name" content="{{ env('APP_NAME') }}">
@@ -17,7 +17,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/images/favicon-16x16.png') }}">
     <link rel="shortcut icon" sizes="512x512" href="{{ asset('resources/images/logo.svg') }}">
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0E3D5F">
 
@@ -34,28 +34,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.carousel.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/resources/owlcarousel/assets/owl.theme.default.min.css') }}">
-    @production
-        <link rel="stylesheet" href="{{ asset('/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('/build/assets/modalSearch.css') }}">
-        <link rel="stylesheet" href="{{ asset('/build/assets/app.css') }}">
-    @endproduction
+    <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('build/assets/modalSearch.css') }}">
 
 
-    <!-- JS -->
-    <script src="{{ asset('/resources/js/pwa-script.js') }}"></script>
-    <script src="{{ asset('/resources/js/jquery-3.6.3.min.js') }}"></script>
-    @production
-        <script src="{{ asset('/resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
-        <script src="{{ asset('/resources/js/popper.min.js') }}"></script>
-    @endproduction
+    <script src="{{ asset('resources/js/pwa-script.js') }}"></script>
+    <script src="{{ asset('resources/js/jquery-3.6.3.min.js') }}"></script>
+    <script src="{{ asset('resources/js/popper.min.js') }}"></script>
+    <script src="{{ asset('resources/js/popper.min.js.map') }}"></script>
+    <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('resources/owlcarousel/owl.carousel.min.js') }}"></script>
+    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css']) --}}
 
-    <script src="{{ asset('/resources/owlcarousel/owl.carousel.min.js') }}"></script>
-
-    @env('local')
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
-    @endenv
 
 </head>
 
@@ -73,9 +66,7 @@
         </main>
         @include('layouts.footer')
     </div>
-    @production
-        <script src="{{ asset('/build/assets/ajaxSearch.js') }}"></script>
-    @endproduction
+        <script src="{{ asset('build/assets/ajaxSearch.js') }}"></script>
 </body>
 
 </html>

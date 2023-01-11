@@ -3,6 +3,9 @@
     @if (Request::is('filter'))
         <title>Search Openings & Endings</title>
         <meta title="Search Openings & Endings">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="description" content="Search Openings & Endings by type, season, order as you want, and filter by letter">
+        <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
     @endif
 @endsection
 @section('content')
@@ -19,10 +22,10 @@
                             <span class="text-light">Select Type</span>
                             <select id="chzn-type" name="type" class="form-select" aria-label="Default select example">
                                 <option value="">Select the type</option>
-                                {{-- <option value="OP" {{ $requested->type == 'OP' ? 'selected' : '' }}>Opening</option>
-                                <option value="ED" {{ $requested->type == 'ED' ? 'selected' : '' }}>Ending</option> --}}
                                 @foreach ($types as $item)
-                                    <option value="{{$item['value']}}" {{ $requested->type == $item['value'] ? 'selected' : '' }}>{{$item['name']}}</option>
+                                    <option value="{{ $item['value'] }}"
+                                        {{ $requested->type == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
+                                    </option>
                                 @endforeach
                             </select>
                         </section>
@@ -32,7 +35,8 @@
                             <select id="chzn-tag" name='tag' class="form-select" aria-label="Default select example">
                                 <option value="">Select the season</option>
                                 @foreach ($tags as $tag)
-                                    <option value="{{ $tag->name }}" {{ $requested->tag == $tag->name ? 'selected' : '' }}>{{ $tag->name }}</option>
+                                    <option value="{{ $tag->name }}"
+                                        {{ $requested->tag == $tag->name ? 'selected' : '' }}>{{ $tag->name }}</option>
                                 @endforeach
                             </select>
                         </section>
@@ -42,7 +46,9 @@
                             <select id="chzn-sort" name="sort" class="form-select" aria-label="Default select example">
                                 <option value="">Select order method</option>
                                 @foreach ($sortMethods as $item)
-                                    <option value="{{$item['value']}}" {{ $requested->sort == $item['value'] ? 'selected' : '' }}>{{$item['name']}}</option>
+                                    <option value="{{ $item['value'] }}"
+                                        {{ $requested->sort == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
+                                    </option>
                                 @endforeach
                             </select>
                         </section>
@@ -51,7 +57,8 @@
                             <select id="chzn-char" name="char" class="form-select" aria-label="Default select example">
                                 <option value="">Select a letter</option>
                                 @foreach ($characters as $item)
-                                    <option value="{{$item}}" class="text-uppercase" {{ $requested->char == $item ? 'selected' : '' }}>{{$item}}</option>
+                                    <option value="{{ $item }}" class="text-uppercase"
+                                        {{ $requested->char == $item ? 'selected' : '' }}>{{ $item }}</option>
                                 @endforeach
                             </select>
                         </section>
@@ -60,57 +67,57 @@
                             <button class="btn btn-primary w-100" type="submit">Do it</button>
                         </div>
                     </form>
-
                 </div>
             </aside>
             <section>
                 <div class="contenedor-tarjetas-filtro">
                     @foreach ($posts as $post)
-                    <article class="tarjeta">
-                        <div class="textos">
-                            <div class="tarjeta-header text-light">
-                                <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
-                            </div>
-                                <div class="{{ $post->type === "op" ? "tag" : "tag2" }}">
-                                    <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                        <article class="tarjeta">
+                            <div class="textos">
+                                <div class="tarjeta-header text-light">
+                                    <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
-                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
-                            </a>
-                            <div class="tarjeta-footer text-light">
+                                <div class="{{ $post->type === 'op' ? 'tag' : 'tag2' }}">
+                                    <span
+                                        class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                                </div>
+                                <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                        alt="{{ $post->title }}">
+                                </a>
+                                <div class="tarjeta-footer text-light">
                                     <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
                                     <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
-                                <span>
-                                    @if (isset($score_format))
-                                        @switch($score_format)
-                                            @case('POINT_100')
-                                                {{ round($post->averageRating) }}
-                                            @break
+                                    <span>
+                                        @if (isset($score_format))
+                                            @switch($score_format)
+                                                @case('POINT_100')
+                                                    {{ round($post->averageRating) }}
+                                                @break
 
-                                            @case('POINT_10_DECIMAL')
-                                                {{ round($post->averageRating / 10, 1) }}
-                                            @break
+                                                @case('POINT_10_DECIMAL')
+                                                    {{ round($post->averageRating / 10, 1) }}
+                                                @break
 
-                                            @case('POINT_10')
-                                                {{ round($post->averageRating / 10) }}
-                                            @break
+                                                @case('POINT_10')
+                                                    {{ round($post->averageRating / 10) }}
+                                                @break
 
-                                            @case('POINT_5')
-                                                {{ round($post->averageRating / 20) }}
-                                            @break
+                                                @case('POINT_5')
+                                                    {{ round($post->averageRating / 20) }}
+                                                @break
 
-                                            @default
-                                                {{ round($post->averageRating) }}
-                                        @endswitch
-                                    @else
-                                        {{ round($post->averageRating / 10, 1) }}
-                                    @endif
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </span>
+                                                @default
+                                                    {{ round($post->averageRating) }}
+                                            @endswitch
+                                        @else
+                                            {{ round($post->averageRating / 10, 1) }}
+                                        @endif
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </article>
+                        </article>
                     @endforeach
                 </div>
                 <div style="display: flex;justify-content: center;

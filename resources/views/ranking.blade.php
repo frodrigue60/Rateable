@@ -1,11 +1,20 @@
 @extends('layouts.app')
 @section('meta')
+    <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
     @if (isset($currentSeason->name))
-        <title>Ranking {{ $currentSeason->name }} Openings & Endings</title>
-        <meta title="Ranking {{ $currentSeason->name }} Openings & Endings">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <title>Ranking Best Openings & Endings {{ $currentSeason->name }}</title>
+        <meta title="Ranking Openings & Endings {{ $currentSeason->name }}">
+        <meta name="description" content="Ranking Best Openings & Endings {{ $currentSeason->name }}">
+        <meta name="keywords"
+            content="ranking, top, anime openings {{ $currentSeason->name }}, openings anime {{ $currentSeason->name }}, anime endings {{ $currentSeason->name }}, endings anime {{ $currentSeason->name }}, of {{ $currentSeason->name }}">
     @else
-        <title>Ranking Openings & Endings</title>
-        <meta title="Ranking Openings & Endings">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <title>Ranking Openings & Endings of All Time</title>
+        <meta title="Ranking Openings & Endings of All Time">
+        <meta name="description" content="Ranking Best Openings & Endings of All Time">
+        <meta name="keywords"
+            content="ranking, top, anime openings, openings anime, anime endings, endings anime, of all time">
     @endif
 @endsection
 @section('content')
