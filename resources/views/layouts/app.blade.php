@@ -36,15 +36,15 @@
     <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('resources/css/modalSearch.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('resources/css/modalSearch.css') }}"> --}}
 
-    <script src="{{ asset('resources/js/pwa-script.js') }}"></script>
+    {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
     <script src="{{ asset('resources/js/jquery-3.6.3.min.js') }}"></script>
     <script src="{{ asset('resources/js/popper.min.js') }}"></script>
     <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('resources/owlcarousel/owl.carousel.min.js') }}"></script>
-    {{-- @vite(['resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css']) --}}
+    @vite(['resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>
 
 <body id="body" class="color2 hidden">
