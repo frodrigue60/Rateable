@@ -1,22 +1,23 @@
 const staticCacheName = "pwa-v" + new Date().getTime();
 const filesToCache = [
-    '/',
-    'resources/css/app.css',
-    'resources/css/modalSearch.css',
-    'resources/css/fivestars.css',
-    'resources/js/ajaxSearch.js',
-    'resources/js/popper.min.js',
-    'resources/js/pwa-script.js',
-    'pwa-sw.js', 
-    'resources/owlcarousel/assets/owl.carousel.min.css',
-    'resources/owlcarousel/assets/owl.theme.default.min.css',
-    'resources/js/jquery-3.6.3.min.js',
-    'resources/bootstrap-5.2.3-dist/css/bootstrap.min.css',
-    'resources/bootstrap-5.2.3-dist/js/bootstrap.min.js'
+    '/resources/css/app.css',
+    '/resources/css/modalSearch.css',
+    '/resources/js/owCarouselConfig.js',
+    '/resources/css/fivestars.css',
+    '/resources/js/ajaxSearch.js',
+    '/resources/js/popper.min.js',
+    '/resources/js/pwa-script.js',
+    '/pwa-sw.js', 
+    '/resources/owlcarousel/assets/owl.carousel.min.css',
+    '/resources/owlcarousel/assets/owl.theme.default.min.css',
+    '/resources/js/jquery-3.6.3.min.js',
+    '/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css',
+    '/resources/bootstrap-5.2.3-dist/js/bootstrap.min.js'
 ];
 
 // Cache on install
 self.addEventListener("install", event => {
+    //console.log(staticCacheName);
     this.skipWaiting();
     event.waitUntil(
         caches.open(staticCacheName)

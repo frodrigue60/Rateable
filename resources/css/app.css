@@ -20,6 +20,9 @@
     background: #0E3D5F;
     z-index: 100;
 }
+.hidden{
+	overflow: hidden;
+}
 
 @keyframes spin-anim {
     0% {

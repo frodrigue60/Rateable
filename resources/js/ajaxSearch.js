@@ -1,17 +1,19 @@
-const myModal = document.getElementById('exampleModal');
+const myModal = document.querySelector('#exampleModal');
 const postsDiv = document.querySelector("#posts");
 const artistsDiv = document.querySelector("#artists");
 const tagsDiv = document.querySelector("#tags");
-const input = document.getElementById('searchInputModal');
+const input = document.querySelector('#searchInputModal');
 const token = document.querySelector('meta[name="csrf-token"]').content;
 const titles = document.querySelectorAll('.post-titles');
 const loaderContainer = document.querySelector('.loader-container');
+const siteBody = document.querySelector('#body');
 
 let typingTimer; //timer identifier
 let doneTypingInterval = 500; //time in ms (5 seconds)
 
 window.addEventListener("load", function(event) {
     loaderContainer.style.display = 'none';
+    siteBody.classList.remove("hidden");
 });
 
 document.addEventListener("DOMContentLoaded", function () {

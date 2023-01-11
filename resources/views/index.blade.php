@@ -8,11 +8,11 @@
         <meta name="keywords" content="top anime openings, top anime endings, ranking openings anime, ranking endings anime, Best Anime Openings Of All Time, openings anime, endings anime">
         <link rel="canonical" href="{{ url()->current() }}">
         <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
-        <meta property="og:image" content="{{ asset('resources/images/logo2.png') }}" />
-        <meta property="og:image:secure_url" content="{{ asset('resources/images/logo2.png') }}" />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:width" content="256" />
-        <meta property="og:image:height" content="256" />
+        <meta property="og:image" content="{{ asset('resources/images/logo2.png') }}">
+        <meta property="og:image:secure_url" content="{{ asset('resources/images/logo2.png') }}">
+        <meta property="og:image:type" content="image/png" >
+        <meta property="og:image:width" content="256">
+        <meta property="og:image:height" content="256">
         {{-- <meta property="og:image:alt" content="A shiny red apple with a bite taken out" /> --}}
     @endif
 @endsection
@@ -44,7 +44,7 @@
                                         class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                                 </div>
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">
@@ -105,7 +105,7 @@
                                         class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                                 </div>
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">
@@ -166,7 +166,7 @@
                                         class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                                 </div>
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">

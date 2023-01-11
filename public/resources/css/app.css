@@ -2,6 +2,37 @@
 	font-family: "Nunito", "Roboto",sans-serif, "Arial",system-ui;
 }
 
+.spinner {
+    width: 64px;
+    height: 64px;
+    border: 8px solid;
+    border-color: #F1E582 transparent #F1E582 transparent;
+    border-radius: 50%;
+    animation: spin-anim 2s linear infinite;
+}
+.loader-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    background: #0E3D5F;
+    z-index: 100;
+}
+.hidden{
+	overflow: hidden;
+}
+
+@keyframes spin-anim {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -22,6 +53,19 @@
 	background: #0e3d5f;
 }
 
+.top-header{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    /* margin-top: 5px; */
+    color: #ffffff;
+    border-left: solid 3px;
+    border-color: #d6ce87;
+    padding-left: 5px;
+    margin-bottom: 5px;
+}
 
 #searchInput {
 	background-color: #0c2638;
@@ -37,7 +81,7 @@
 	border-radius: 20px 20px;
 }
 
-#searchPanel {
+.searchPanel {
 	width: 100%;
 	height: auto;
 	background-color: #0e3d5f;
@@ -50,21 +94,25 @@
 	place-items: center;
 }
 
-#carouselRecents {
+.carouselRecents {
 	width: 1024px;
+	height: 220px;
+}
+.carouselContainermain{
+	height: 260px;
 }
 
 
-#video-title {
+.video-title {
 	margin-top: auto;
 }
 
 /* container tags on seasonal view */
-#seasons-container {
+.seasons-container {
 	margin: 5px;
 }
 
-#seasons-header {
+.seasons-header {
 	text-align: center;
 	border-left: solid 3px;
 	border-color: #d6ce87;
@@ -72,30 +120,30 @@
 	font-size: 20px;
 }
 
-#seasons-content {
+.seasons-content {
 	display: flex;
 	flex-direction: column;
 	gap: 3px;
 	text-align: center;
 }
 
-#season-item span a {
+.season-item span a {
 	color: #a9dbff;
 }
 
-#season-item {
+.season-item {
 	color: #ffffff;
 	transform: scale(1);
 	transition: all .25s ease-out;
 }
 
-#season-item:hover {
+.season-item:hover {
 	color: #a9dbff;
 	transform: scale(1.05);
 	transition: all .25s ease-out;
 }
 
-#seasons-footer {
+.seasons-footer {
 	text-align: center;
 	margin-top: 3px;
 	padding: 5px;
@@ -152,12 +200,12 @@
 	z-index: 2;
 }
 
-#item-place-seasonal {
+.item-place-seasonal {
 	background-color: #1e5983;
 	text-align: center;
 }
 
-#item-post-info-seasonal {
+.item-post-info-seasonal {
 	display: flex;
 	max-width: 140px;
 	white-space: nowrap;
@@ -166,7 +214,7 @@
 	padding-left: 5px;
 }
 
-#item-score-seasonal {
+.item-score-seasonal {
 	background-color: #1e5983;
 	text-align: end;
 }
@@ -314,7 +362,7 @@
 	place-content: space-around;
 }
 
-#thumb {
+.thumb {
 	position: absolute;
 	width: 150px;
 	height: 220px;
@@ -323,6 +371,10 @@
 	transform: scale(1);
 	transition: .2s ease-in-out;
 	top: 0;
+}
+.thumb:hover {
+	background-size: cover;
+	transform: scale(1.2);
 }
 
 .tarjeta {
@@ -335,10 +387,7 @@
 	cursor: pointer;
 }
 
-#thumb:hover {
-	background-size: cover;
-	transform: scale(1.2);
-}
+
 
 .tarjeta .textos {
 	height: 100%;
@@ -355,7 +404,7 @@
 	z-index: 3;
 }
 
-.tarjeta-header span {
+.tarjeta-header h6 {
 	width: 100%;
 	/* max-height: 55px; */
 	overflow: hidden;
@@ -418,12 +467,13 @@
 		padding-left: 5px;
 	}
 
-	#carouselRecents {
+	.carouselRecents {
 		width: 976px;
+		height: 220px;
 	}
 
 	.card {
-		width: 80%;
+		width: 100%;
 	}
 
 	.ellipsis {
@@ -538,12 +588,13 @@
 		padding: 5px;
 	}
 
-	#carouselRecents {
+	.carouselRecents {
 		width: 810px;
+		height: 220px;
 	}
 
 	.card {
-		width: 80%;
+		width: 100%;
 	}
 
 	.contenedor-filtro {
@@ -646,12 +697,13 @@
 		text-overflow: ellipsis;
 	}
 
-	#carouselRecents {
+	.carouselRecents {
 		width: 647px;
+		height: 220px;
 	}
 
 	.card {
-		width: 80%;
+		width: 100%;
 	}
 
 	.ellipsis {
@@ -752,8 +804,9 @@
 		text-overflow: ellipsis;
 	}
 
-	#carouselRecents {
+	.carouselRecents {
 		width: 645px;
+		height: 220px;
 	}
 
 	.card {
@@ -863,8 +916,9 @@
 		text-overflow: ellipsis;
 	}
 
-	#carouselRecents {
+	.carouselRecents {
 		width: 645px;
+		height: 220px;
 	}
 
 	.card {
@@ -953,8 +1007,9 @@
 		text-overflow: ellipsis;
 	}
 
-	#carouselRecents {
+	.carouselRecents {
 		width: 484px;
+		height: 220px;
 	}
 
 	.card {
@@ -1025,8 +1080,9 @@
 		text-overflow: ellipsis;
 	}
 
-	#carouselRecents {
+	.carouselRecents {
 		width: 325px;
+		height: 220px;
 	}
 
 	.card {

@@ -44,8 +44,8 @@
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
-                <input id="searchInput" type="text" name="search" class="form-control" aria-label="search"
-                    placeholder="Search..." data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <li><input id="searchInput" type="text" name="search" class="form-control" aria-label="search"
+                    placeholder="Search..." data-bs-toggle="modal" data-bs-target="#exampleModal"></li>
                 <!-- Authentication Links -->
                 @guest
                 <li class="nav-item dropdown">

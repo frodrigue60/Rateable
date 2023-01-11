@@ -1,22 +1,31 @@
-const myModal = document.getElementById('exampleModal');
+const myModal = document.querySelector('#exampleModal');
 const postsDiv = document.querySelector("#posts");
 const artistsDiv = document.querySelector("#artists");
 const tagsDiv = document.querySelector("#tags");
-const input = document.getElementById('searchInputModal');
+const input = document.querySelector('#searchInputModal');
 const token = document.querySelector('meta[name="csrf-token"]').content;
 const titles = document.querySelectorAll('.post-titles');
+const loaderContainer = document.querySelector('.loader-container');
+const siteBody = document.querySelector('#body');
 
 let typingTimer; //timer identifier
-let doneTypingInterval = 300; //time in ms (5 seconds)
+let doneTypingInterval = 500; //time in ms (5 seconds)
+
+window.addEventListener("load", function(event) {
+    loaderContainer.style.display = 'none';
+    siteBody.classList.remove("hidden");
+});
 
 document.addEventListener("DOMContentLoaded", function () {
     nullValueInput();
     cutTitles();
-    
+
     myModal.addEventListener('shown.bs.modal', function () {
         input.focus();
 
         input.addEventListener('keyup', () => {
+            let inputTrim = input.value.trim();
+            console.log(inputTrim);
             postsDiv.innerHTML =
                 '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
             artistsDiv.innerHTML =
@@ -40,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function doneTyping() {
             try {
-                fetch('https://anirank.ddns.net/api/posts/search?q=' + input.value, {
+                fetch('https://anirank.ddns.net/api/search?q=' + input.value, {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',
@@ -55,11 +64,19 @@ document.addEventListener("DOMContentLoaded", function () {
                     tagsDiv.innerHTML = "";
 
                     data.posts.forEach(element => {
-                        postsDiv.innerHTML +=
+                        if (element.suffix != undefined) {
+                            postsDiv.innerHTML +=
                             '<div class="result"><a href="https://anirank.ddns.net/show/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
-                                .title + '</span></a></div>';
+                                .title + ' '+ element.suffix + '</span></a></div>';
+                        } else {
+                            postsDiv.innerHTML +=
+                            '<div class="result"><a href="https://anirank.ddns.net/show/' +
+                            element.id + '/' + element.slug + '"><span>' +
+                            element
+                                .title + ' '+ element.type + '</span></a></div>';
+                        }
                     });
 
                     data.artists.forEach(element => {
@@ -89,21 +106,21 @@ document.addEventListener("DOMContentLoaded", function () {
         tagsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
             '</span></div>';
     }
-    function cutTitles(){
+    function cutTitles() {
         titles.forEach(title => {
             if (title.textContent.length > 25) {
-              title.textContent = title.textContent.substr(0, 25) + "...";
+                title.textContent = title.textContent.substr(0, 25) + "...";
             }
-          });
+        });
     }
     $(".owl-carousel").owlCarousel({
-        //stagePadding: 1,
+        stagePadding: 1,
         loop: false,
         margin: 8,
         autoWidth: true,
         dots: false,
         autoplay: true,
-        autoplayTimeout: 8000,
+        autoplayTimeout: 5000,
         autoplayHoverPause: true,
         rewind: true,
     });
