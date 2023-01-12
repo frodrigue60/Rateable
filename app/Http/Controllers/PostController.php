@@ -595,6 +595,7 @@ class PostController extends Controller
         ];
 
         $sortMethods = [
+            ['name' => 'Recent','value'=>'recent'],
             ['name' => 'Title','value'=>'title'],
             ['name' => 'Score','value'=>'averageRating'],
             ['name' => 'Views','value'=>'viewCount'],
@@ -663,6 +664,11 @@ class PostController extends Controller
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
+                break;
+            case 'recent':
+                $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
                 return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
                 break;

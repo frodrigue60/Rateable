@@ -18,7 +18,7 @@
 @endsection
 @section('content')
     <section class="container">
-        <h1 hidden>TOP ANIME OPENINGS & ENDINGS</h1>
+        <h1 hidden>Best Anime Openings & Endings of All Time</h1>
         {{-- POSTS SECTION --}}
         <section class="contenedor-main">
             <h2 hidden>ANIME OPENINGS & ENDINGS</h2>
@@ -29,7 +29,7 @@
                         <h3 class="text-light mb-0">Recently added</h3>
                     </div>
                     <div>
-                        <a href="{{ route('filter', 'sort=null') }}" class="btn btn-sm color4">All Recently Posts</a>
+                        <a href="{{ route('filter', 'sort=recent') }}" class="btn btn-sm color4">All Recently Posts</a>
                     </div>
                 </div>
                 <div class="owl-carousel carousel-recents-main">
