@@ -35,14 +35,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.theme.default.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    {{-- <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('resources/css/modalSearch.css') }}"> --}}
 
     {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
-    <script src="{{ asset('resources/js/jquery-3.6.3.min.js') }}"></script>
-    <script src="{{ asset('resources/js/popper.min.js') }}"></script>
-    <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+    {{-- <script src="{{ asset('resources/js/jquery-3.6.3.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}
     <script src="{{ asset('resources/owlcarousel/owl.carousel.min.js') }}"></script>
     @vite(['resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>
@@ -61,8 +64,12 @@
         </main>
         @include('layouts.footer')
     </div>
-        <script src="{{ asset('resources/js/ajaxSearch.js') }}"></script>
-        <script src="{{ asset('resources/js/owCarouselConfig.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+    </script>
+    {{-- <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script> --}}
+    <script src="{{ asset('resources/js/ajaxSearch.js') }}"></script>
+    <script src="{{ asset('resources/js/owCarouselConfig.js') }}"></script>
 </body>
 
 </html>
