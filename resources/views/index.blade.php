@@ -5,12 +5,13 @@
         <meta name="title" content="Search, play, and rate anime openings and endings">
         <meta name="description"
             content="The site you were looking for to rate openings and endings of your favorite animes. Discover which are the most popular opening and endings.">
-        <meta name="keywords" content="top anime openings, top anime endings, ranking openings anime, ranking endings anime, Best Anime Openings Of All Time, openings anime, endings anime">
+        <meta name="keywords"
+            content="top anime openings, top anime endings, ranking openings anime, ranking endings anime, Best Anime Openings Of All Time, openings anime, endings anime">
         <link rel="canonical" href="{{ url()->current() }}">
         <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
         <meta property="og:image" content="{{ asset('resources/images/logo2.png') }}">
         <meta property="og:image:secure_url" content="{{ asset('resources/images/logo2.png') }}">
-        <meta property="og:image:type" content="image/png" >
+        <meta property="og:image:type" content="image/png">
         <meta property="og:image:width" content="256">
         <meta property="og:image:height" content="256">
         {{-- <meta property="og:image:alt" content="A shiny red apple with a bite taken out" /> --}}
@@ -39,12 +40,13 @@
                                 <div class="tarjeta-header text-light">
                                     <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
-                                <div class="{{ $post->type === 'op' ? 'tag' : 'tag2' }}">
+                                <div class="{{ $post->type === 'OP' ? 'tag' : 'tag2' }}">
                                     <span
                                         class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                                 </div>
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" loading="lazy"
+                                        src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">
@@ -100,12 +102,13 @@
                                 <div class="tarjeta-header text-light">
                                     <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
-                                <div class="{{ $post->type === 'op' ? 'tag' : 'tag2' }}">
+                                <div class="{{ $post->type === 'OP' ? 'tag' : 'tag2' }}">
                                     <span
                                         class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                                 </div>
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" loading="lazy"
+                                        src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">
@@ -161,12 +164,13 @@
                                 <div class="tarjeta-header text-light">
                                     <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                                 </div>
-                                <div class="{{ $post->type === 'op' ? 'tag' : 'tag2' }}">
+                                <div class="{{ $post->type === 'OP' ? 'tag' : 'tag2' }}">
                                     <span
                                         class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                                 </div>
                                 <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                                    <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                                    <img class="thumb" loading="lazy"
+                                        src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                         alt="{{ $post->title }}">
                                 </a>
                                 <div class="tarjeta-footer text-light">

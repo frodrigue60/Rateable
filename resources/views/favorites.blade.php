@@ -18,16 +18,17 @@
                         <div class="tarjeta-header text-light">
                             <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                         </div>
-                            <div class="{{ $post->type === "op" ? "tag" : "tag2" }}">
-                                <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
-                            </div>
+                        <div class="{{ $post->type === 'OP' ? 'tag' : 'tag2' }}">
+                            <span
+                                class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                        </div>
                         <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                            <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                            <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                 alt="{{ $post->title }}">
                         </a>
                         <div class="tarjeta-footer text-light">
-                                <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
+                            <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
+                            <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
                             <span>
                                 @if (isset($score_format))
                                     @switch($score_format)
@@ -73,16 +74,17 @@
                         <div class="tarjeta-header text-light">
                             <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
                         </div>
-                            <div class="{{ $post->type === "op" ? "tag" : "tag2" }}">
-                                <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
-                            </div>
+                        <div class="{{ $post->type === 'OP' ? 'tag' : 'tag2' }}">
+                            <span
+                                class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                        </div>
                         <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
-                            <img class="thumb" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                            <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                 alt="{{ $post->title }}">
                         </a>
                         <div class="tarjeta-footer text-light">
-                                <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
+                            <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
+                            <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
                             <span>
                                 @if (isset($score_format))
                                     @switch($score_format)
