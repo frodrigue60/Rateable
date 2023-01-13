@@ -13,7 +13,6 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {{-- STYLES --}}
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/images/favicon-16x16.png') }}">
     <link rel="shortcut icon" sizes="512x512" href="{{ asset('resources/images/logo.svg') }}">
@@ -29,10 +28,7 @@
     <meta name="msapplication-TileImage" content="{{ asset('resources/images/msapplication-icon-144x144.png') }}">
     <meta name="msapplication-TileColor" content="#0E3D5F">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" as="style">
     <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.theme.default.min.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -61,17 +57,17 @@
         @include('layouts.footer')
     </div>
 
-    {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
+    <script src="{{ asset('resources/js/pwa-script.js') }}"></script>
     {{-- <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script> --}}
     {{-- <script src="{{ asset('resources/js/jquery-3.6.3.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}
-    <script src="{{ asset('resources/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('resources/owlcarousel/owl.carousel.min.js') }}" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous" defer>
     </script>
     {{-- <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('build/assets/ajaxSearch.js') }}"></script> --}}
-    <script src="{{ asset('resources/js/owCarouselConfig.js') }}"></script>
+    <script src="{{ asset('resources/js/owCarouselConfig.js') }}" defer></script>
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-.res{
+.res {
     gap: 10px;
     background-color: #0e3d5f;
     padding-bottom: 5px;
@@ -6,10 +6,12 @@
     padding: 2px;
     border-radius: 3px;
 }
-.catTitle{
+
+.catTitle {
     margin-left: 5px;
 }
-.result{
+
+.result {
     background-color: #a9dbff;
     padding: 5px;
     border-radius: 3px;
@@ -18,15 +20,18 @@
     transition: all .25s ease-out;
     color: #0C2638;
 }
-.result:hover{
+
+.result:hover {
     background-color: #8bb5d3;
     transform: scale(1.01);
     transition: .1s ease-in;
 }
-.customModal{
+
+.customModal {
     background-color: #0e3d5f;
-    
+
 }
+
 .container-top {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -50,7 +55,7 @@
     width: 100%;
     transform: scale(1);
     transition: all .25s ease-out;
-     margin: 1px;
+    margin: 1px;
     display: grid;
     grid-template-columns: 1fr 5fr 1fr;
     color: #ffffff;
@@ -83,7 +88,9 @@
 
 .item-post-info {
     display: flex;
-    max-width: 355px;
+}
+.item-post-info > span{
+    max-width: 395px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -97,20 +104,87 @@
     margin: auto;
 }
 
-.result > a {
+.result>a {
     text-decoration: none;
     color: #0C2638;
 }
+
 @media screen and (max-width: 1920px) {
-	
+    .item-post-info > span{
+        max-width: 400px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .item-song-info {
+        display: flex;
+        max-width: 400px;
+        overflow: hidden;
+    }
+    #song-artist{
+        max-width: 190px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #song-title{
+        max-width: 190px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 @media screen and (max-width: 1440px) {
-    
+    .item-post-info > span{
+        max-width: 400px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .item-song-info {
+        display: flex;
+        max-width: 400px;
+        overflow: hidden;
+    }
+    #song-artist{
+        max-width: 190px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #song-title{
+        max-width: 190px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 @media screen and (max-width: 1280px) {
-	
+    .item-post-info > span{
+        max-width: 330px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .item-song-info {
+        display: flex;
+        max-width: 330px;
+        overflow: hidden;
+    }
+    #song-artist{
+        max-width: 160px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #song-title{
+        max-width: 160px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 /* RESPONSIVE CAROUSEL */
@@ -122,16 +196,77 @@
         margin: auto;
         margin-top: 10px;
     }
+    .item-post-info > span{
+        max-width: 450px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .item-song-info {
+        display: flex;
+        max-width: 450px;
+        overflow: hidden;
+    }
+    #song-artist{
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #song-title{
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 @media screen and (max-width: 800px) {
-	
+    .item-post-info > span{
+        max-width: 440px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .item-song-info {
+        display: flex;
+        max-width: 430px;
+        overflow: hidden;
+    }
+    #song-artist{
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #song-title{
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }
 
 @media screen and (max-width: 768px) {
-	.item-post-info {
+    .item-post-info > span{
+        max-width: 325px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .item-song-info {
         display: flex;
         max-width: 330px;
+        overflow: hidden;
+    }
+    #song-artist{
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #song-title{
+        max-width: 150px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -139,11 +274,18 @@
 }
 
 @media screen and (max-width: 600px) {
-    .item-post-info {
-        display: flex;
-        max-width: 220px;
+    .item-post-info > span{
+        max-width: 200px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .item-song-info {
+        display: flex;
+        max-width: 200px;
+        overflow: hidden;
+        display: none;
+    }
+    
 }

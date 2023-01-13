@@ -3,7 +3,7 @@
     <section class="carouselContainermain">
         <div class="top-header mb-2 mt-2">
             <div>
-                <h3 class="text-light mb-0">Recently added</h3>
+                <h2 class="text-light mb-0">Recently added</h2>
             </div>
             <div>
                 <a href="{{ route('filter', 'sort=recent') }}" class="btn btn-sm color4">All Recently Posts</a>
@@ -14,7 +14,7 @@
             <article class="tarjeta">
                 <div class="textos">
                     <div class="tarjeta-header text-light">
-                        <h4 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h4>
+                        <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                     </div>
                     <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
                         <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>

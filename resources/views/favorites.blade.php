@@ -16,7 +16,7 @@
                 <article class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
-                            <h4 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h4>
+                            <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                         </div>
                         <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
                             <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
@@ -71,7 +71,7 @@
                 <article class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
-                            <h4 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h4>
+                            <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                         </div>
                         <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
                             <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>

@@ -14,6 +14,7 @@
             <h2 class="text-light mb-0">Filter Posts</h2>
         </div>
         <div class="contenedor-filtro">
+            {{-- SEARCH PANEL --}}
             <aside>
                 <div class="searchPanel">
                     <form action="{{ route('filter') }}" method="get">
@@ -52,6 +53,7 @@
                                 @endforeach
                             </select>
                         </section>
+                        {{-- LETTER --}}
                         <section class="searchItem">
                             <span class="text-light">Filter by Letter</span>
                             <select id="chzn-char" name="char" class="form-select" aria-label="Default select example">
@@ -69,13 +71,14 @@
                     </form>
                 </div>
             </aside>
+            {{-- POSTS --}}
             <section>
                 <div class="contenedor-tarjetas-filtro">
                     @foreach ($posts as $post)
                     <article class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h4 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h4>
+                                <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                             </div>
                             <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
                                 <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>

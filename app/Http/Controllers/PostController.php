@@ -577,6 +577,12 @@ class PostController extends Controller
     //public seasrch posts
     public function filter(Request $request)
     {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+
         $tags = Tag::all();
         $tag = $request->tag;
         $type = $request->type;
@@ -651,32 +657,32 @@ class PostController extends Controller
             case 'title':
                 $posts = $posts->sortBy('title');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
                 break;
             case 'averageRating':
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
             case 'viewCount':
                 $posts = $posts->sortByDesc('viewCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
                 break;
             case 'recent':
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
                 break;
 
             default:
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters'));
+                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
                 break;
         }
     }

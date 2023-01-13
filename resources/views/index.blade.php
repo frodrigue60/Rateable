@@ -49,27 +49,29 @@
                             <div class="item-info">
                                 <div class="item-post-info">
                                     <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
-                                            class="text-light no-deco">{{ $post->title }}</a></span>
+                                            class="text-light no-deco">{{ $post->title }} {{ $post->suffix != null ? $post->suffix : '' }}</a></span>
                                 </div>
+                                {{-- SONG ROMAJI --}}
                                 @if (isset($post->song->song_romaji))
                                     <div class="item-song-info">
-                                        <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
-                                                    class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
+                                        <span id="song-title"><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                    class="no-deco text-light">{{ $post->song->song_romaji}}</a></strong></span>
                                             @isset($post->artist->name)
-                                                By
-                                                <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
-                                                        class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                                <span style="margin-left: 4px;margin-right:4px;">By</span>
+                                                <span id="song-artist"><strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                        class="no-deco text-light">{{$post->artist->name }}</a></strong></span>
                                             @endisset
-                                        </span>
+                                        
                                     </div>
                                 @else
+                                {{-- SONG ENG --}}
                                     @if (isset($post->song->song_en))
                                         <div class="item-song-info">
-                                            <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                            <span><strong><a id="song-title" href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
                                                         class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
                                                 @isset($post->artist->name)
-                                                    By
-                                                    <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                <span style="margin-left: 4px;margin-right:4px;">By</span>
+                                                    <strong><a id="song-artist" href="{{ route('fromartist', $post->artist->name_slug) }}"
                                                             class="no-deco text-light">{{ $post->artist->name }}</a></strong>
                                                 @endisset
                                             </span>
