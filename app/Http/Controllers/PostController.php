@@ -309,7 +309,7 @@ class PostController extends Controller
             $image_file_data = file_get_contents($request->imageSrc);
             //$ext = pathinfo($request->imageSrc, PATHINFO_EXTENSION);
             $file_name = 'thumbnail_' . time() . '.' . 'webp';
-            $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
+            $encoded = Image::make($image_file_data)->resize(200, 293)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;

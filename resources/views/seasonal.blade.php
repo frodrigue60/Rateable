@@ -50,15 +50,14 @@
                     <article class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h6 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h6>
+                                <h4 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h4>
                             </div>
-                            <div class="{{ $post->type === 'OP' ? 'tag' : 'tag2' }}">
-                                <span
-                                    class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                            <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
+                                <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                             </div>
                             <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
                                 <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}">
+                                    alt="{{ $post->title }}" title="{{ $post->title }}">
                             </a>
                             <div class="tarjeta-footer text-light">
                                 <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
@@ -69,19 +68,19 @@
                                             @case('POINT_100')
                                                 {{ round($post->averageRating) }}
                                             @break
-
+        
                                             @case('POINT_10_DECIMAL')
                                                 {{ round($post->averageRating / 10, 1) }}
                                             @break
-
+        
                                             @case('POINT_10')
                                                 {{ round($post->averageRating / 10) }}
                                             @break
-
+        
                                             @case('POINT_5')
                                                 {{ round($post->averageRating / 20) }}
                                             @break
-
+        
                                             @default
                                                 {{ round($post->averageRating) }}
                                         @endswitch
