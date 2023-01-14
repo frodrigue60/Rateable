@@ -57,7 +57,7 @@
         @include('layouts.footer')
     </div>
 
-    <script src="{{ asset('resources/js/pwa-script.js') }}"></script>
+    {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
     {{-- <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js" integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script> --}}
     {{-- <script src="{{ asset('resources/js/jquery-3.6.3.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('resources/js/popper.min.js') }}"></script> --}}

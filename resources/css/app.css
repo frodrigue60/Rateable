@@ -397,8 +397,6 @@
 	background-color: #0b2538;
 }
 
-
-
 .tarjeta .textos {
 	height: 100%;
 	display: flex;
@@ -1264,7 +1262,7 @@
 	}
 
 	.contenedor-main {
-		width: 320px;
+		width: 480px;
 		margin: auto;
 		padding: 0px 0;
 		gap: 10px;
@@ -1272,7 +1270,105 @@
 
 	.contenedor-tarjetas-main {
 		display: grid;
+		justify-items: center;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+		grid-template-areas:
+			"a b c"
+			"a b c";
+	}
+
+	.contenedor-tarjetas-main>*:nth-child(n+7) {
+		display: none;
+	}
+
+	.tarjeta .textos {
+
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		flex: auto;
+	}
+
+	.tarjeta .textos .tarjeta-footer {
+		display: flex;
+		flex-direction: row;
+
+	}
+
+	.contenedor-banner {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		width: 325px;
+		margin: auto;
+	}
+
+}
+@media screen and (max-width: 400px) {
+	#item-post-info-seasonal {
+		display: flex;
+		max-width: 220px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.carouselRecents {
+		width: 325px;
+		height: 220px;
+	}
+
+	.card {
+		width: 100%;
+	}
+
+	.contenedor-filtro {
+		width: fit-content;
+		margin: auto;
+		padding: 0px 0;
+
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.contenedor-tarjetas-filtro {
+		display: grid;
+		width: fit-content;
+		grid-template-columns: repeat(2, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
+		gap: 15px;
+	}
+
+	.contenedor {
+		width: fit-content;
+		padding: 0px 0;
+
+		display: flex;
+		flex-direction: column;
+	}
+
+	.contenedor-tarjetas {
+		display: grid;
+		/*grid-template-columns: repeat(2, 1fr);
+		align-self: center;*/
+		grid-template-columns: repeat(2, 150px);
+		grid-template-rows: repeat(auto-fill, 220px);
 		place-content: center;
+	}
+
+	.contenedor-main {
+		width: 100%;
+		margin: auto;
+		padding: 0px 0;
+		gap: 10px;
+	}
+
+	.contenedor-tarjetas-main {
+		display: grid;
+		justify-items: center;
 		grid-template-columns: repeat(2, 1fr);
 		grid-template-rows: repeat(2, 1fr);
 		grid-template-areas:
