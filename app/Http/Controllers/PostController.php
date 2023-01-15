@@ -779,39 +779,39 @@ class PostController extends Controller
 
     public function showBySlug($id, $slug)
     {
-        if (Auth::check() && Auth::user()->type == 'admin') {
+        /* if (Auth::check() && Auth::user()->type == 'admin') {
             $score_format = Auth::user()->score_format;
 
             $post = Post::where('id', '=', $id)->first();
-            //dd($post);
+            
             $artist = $post->artist;
             $tags = $post->tagged;
             //dd($post);
             return view('show', compact('post', 'tags', 'score_format', 'artist'));
-        }
+        } */
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
-            $post = Post::where('id', '=', $id)->first();
+            $post = Post::findOrFail($id);
             $tags = $post->tagged;
             $artist = $post->artist;
-            $this->count_views($id);
+            $this->count_views($post);
             return view('show', compact('post', 'tags', 'score_format', 'artist'));
         } else {
-            $post = Post::where('id', '=', $id)->first();
+            $post = Post::findOrFail($id);
             $tags = $post->tagged;
             $artist = $post->artist;
-            $this->count_views($id);
+            $this->count_views($post);
 
             return view('show', compact('post', 'tags', 'artist'));
         }
     }
-    public function count_views($id)
+    public function count_views($post)
     {
-        if (!Session::has('page_visited_' . $id)) {
+        if (!Session::has('page_visited_' . $post->id)) {
             DB::table('posts')
-                ->where('id', $id)
+                ->where('id', $post->id)
                 ->increment('viewCount');
-            Session::put('page_visited_' . $id, true);
+            Session::put('page_visited_' . $post->id, true);
         }
     }
     

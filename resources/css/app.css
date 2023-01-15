@@ -3,6 +3,23 @@
 * {
 	font-family: 'Nunito', sans-serif, 'Arial', system-ui;
 }
+html{
+	height: 100%;
+	box-sizing: border-box;
+}
+body{
+	position: relative;
+	margin: 0;
+	min-height: 100%;
+	padding-bottom: 6rem;
+	box-sizing: inherit;
+}
+footer{
+	position: absolute;
+	right: 0;
+	left: 0;
+	bottom: 0;
+}
 
 .spinner {
 	width: 64px;
@@ -1184,9 +1201,6 @@ h4 {
 }
 
 @media screen and (max-width: 768px) {
-	#footer{
-		display: none;
-	}
 	#item-post-info-seasonal {
 		display: flex;
 		max-width: 150px;
@@ -1265,9 +1279,6 @@ h4 {
 }
 
 @media screen and (max-width: 600px) {
-	#footer{
-		display: none;
-	}
 	#item-post-info-seasonal {
 		display: flex;
 		max-width: 220px;
@@ -1367,9 +1378,6 @@ h4 {
 }
 
 @media screen and (max-width: 400px) {
-	#footer{
-		display: none;
-	}
 	#item-post-info-seasonal {
 		display: flex;
 		max-width: 220px;

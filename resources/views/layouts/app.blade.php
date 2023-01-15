@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
+    {{-- <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content"> --}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:site_name" content="{{ env('APP_NAME') }}">
@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/images/favicon-16x16.png') }}">
     <link rel="shortcut icon" sizes="512x512" href="{{ asset('resources/images/logo.svg') }}">
-    <link rel="manifest" href="manifest.json">
+    {{-- <link rel="manifest" href="manifest.json"> --}}
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0E3D5F">
 
