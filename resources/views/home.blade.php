@@ -46,11 +46,10 @@
                             <div class="input-group">
                                 <select name="score_format" class="form-select" id="inputGroupSelect04"
                                     aria-label="Example select with button addon">
-                                    <option value="" selected>Select Scoring System</option>
-                                    <option value="POINT_100">100 Point (55/100)</option>
-                                    <option value="POINT_10_DECIMAL">10 Point Decimal (5.5/10)</option>
-                                    <option value="POINT_10">10 Point (5/10)</option>
-                                    <option value="POINT_5">5 Star (3/5)</option>
+                                    <option value="">Select Scoring System</option>
+                                @foreach ($score_formats as $item)
+                                    <option value="{{$item['value']}}" {{ Auth::user()->score_format == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}</option>
+                                @endforeach
                                 </select>
                                 <button type="submit" class="btn btn-primary" type="button">Save
                                     setting</button>

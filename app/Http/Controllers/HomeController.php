@@ -30,7 +30,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $score_formats = ['POINT_100', 'POINT_10_DECIMAL', 'POINT_10', 'POINT_5'];
+        $score_formats = [
+            ['name' => ' 100 Point (55/100)','value'=>'POINT_100'],
+            ['name' => '10 Point Decimal (5.5/10)','value'=>'POINT_10_DECIMAL'],
+            ['name' => '10 Point (5/10)','value'=>'POINT_10'],
+            ['name' => '5 Star (3/5)','value'=>'POINT_5'],
+        ];
         return view('home', compact('score_formats'));
     }
 
@@ -61,15 +66,15 @@ class HomeController extends Controller
                 ->where('id', $user_id)
                 ->update(['image' => $file_name]);
 
-            return redirect(route('home'))->with('status', 'Image uploaded successfully!');
+            return redirect(route('home'))->with('success', 'Image uploaded successfully!');
         }
-        return redirect(route('home'))->with('status', 'File not found');
+        return redirect(route('home'))->with('warning', 'File not found');
     }
 
     public function scoreFormat(Request $request)
     {
         if ($request->score_format == 'null') {
-            return redirect()->back()->with('status', 'score method not changed');
+            return redirect()->back()->with('warning', 'score method not changed');
         }
 
         $validator = Validator::make($request->all(), [
@@ -77,7 +82,7 @@ class HomeController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return Redirect::back()->with('status', '¡Ooops!');
+            return Redirect::back()->with('error', '¡Ooops!');
         }
 
         $user_id = Auth::user()->id;
@@ -86,9 +91,9 @@ class HomeController extends Controller
             $user->score_format = $request->score_format;
             $user->save();
 
-            return redirect()->back()->with('status', 'score method changed successfully');
+            return redirect()->back()->with('success', 'score method changed successfully');
         }
-        return Redirect::back()->with('status', '¡Ooops!');
+        //return Redirect::back()->with('error', '¡Ooops!');
     }
     
     public function welcome()

@@ -44,27 +44,6 @@
         <h1 class="text-light text-center" hidden>{{ $post->title }}</h1>
         <div class="row justify-content-center">
             <div class="card card-video">
-                <div class="card-header d-flex justify-content-between align-items-start">
-                    <h5 class="card-title video-title text-light">{{ $post->title }}</h5>
-                    <div>
-                        @guest
-                            <button class="btn btn-danger" disabled id="like">Favorite <i class="fa fa-heart"></i></button>
-                        @endguest
-                        @auth
-                            @if ($post->liked())
-                                <form action="{{ route('unlike.post', $post->id) }}" method="post">
-                                    @csrf
-                                    <button class="btn btn-danger" id="like">Favorite <i class="fa fa-heart"></i></button>
-                                </form>
-                            @else
-                                <form action="{{ route('like.post', $post->id) }}" method="post">
-                                    @csrf
-                                    <button class="btn btn-success" id="like">Favorite <i class="fa fa-heart"></i></button>
-                                </form>
-                            @endif
-                        @endauth
-                    </div>
-                </div>
                 <div class="card-body ratio ratio-16x9" id="id_iframe">
                     {{-- comment <iframe id="id_iframe" src="{{ $post->ytlink }}" title="" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
@@ -72,19 +51,50 @@
                     </iframe> --}}
                     {!! $post->ytlink !!}
                 </div>
+                <div class="card-footer">
+                        <h1 class="text-light show-view-title mb-0">{{ $post->title }} {{$post->suffix != null ? $post->suffix : $post->type }}</h1>
+                </div>
                 <div class="card-footer d-flex justify-content-between align-items-start">
-                    <div id="button-group">
-                        <button class="btn btn-secondary" value="{{ $post->ytlink }}" id="option1">Option 1</button>
-                        @if ($post->scndlink != null)
-                            <button class="btn btn-secondary" value="{{ $post->scndlink }}" id="option2">Option
-                                2</button>
-                        @endif
+                    <div class="text-light">
+                        <button class="button-border-1">{{ $post->viewCount }} <i class="fa fa-eye"></i></button>
+                        <button class="button-border-1">{{ $post->averageRating / 1 }} <i class="fa fa-star"></i></button>
                     </div>
-                    <div class="">
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#staticBackdrop">
-                            More
-                        </button>
+                    <div class="d-flex btn-group-show">
+                        <button class="button2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            Rate
+                            <i class="fa fa-star"></i></button>
+                        @guest
+                            <button class="button2" disabled id="like"> <i class="fa fa-heart"></i></button>
+                        @endguest
+                        @auth
+                            @if ($post->liked())
+                                <form action="{{ route('unlike.post', $post->id) }}" method="post">
+                                    @csrf
+                                    <button class="button-liked" id="like"> <i class="fa fa-heart"></i></button>
+                                </form>
+                            @else
+                                <form action="{{ route('like.post', $post->id) }}" method="post">
+                                    @csrf
+                                    <button class="button2" id="like"><i class="fa fa-heart"></i></button>
+                                </form>
+                            @endif
+                        @endauth
+                        <div class="btn-group" role="group">
+                            <button type="button" class="button2 dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Server
+                            </button>
+                            <ul class="dropdown-menu" id="button-group">
+                                @if ($post->ytlink != null)
+                                <li><button class="dropdown-item" value="{{ $post->ytlink }}" id="option1">Option
+                                    1</button></li>
+                                @endif
+                                @if ($post->scndlink != null)
+                                    <li><button class="dropdown-item" value="{{ $post->scndlink }}" id="option2">Option
+                                            2</button></li>
+                                @endif
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,8 +112,8 @@
                     <div class="modal-body">
                         <div class="row text-center">
                             <h2>Average Score: <strong>
-                                    @if (isset($score_format))
-                                        @switch($score_format)
+                                    @if (Auth::user())
+                                        @switch(Auth::user()->score_format)
                                             @case('POINT_100')
                                                 {{ round($post->averageRating) }}
                                             @break
@@ -184,14 +194,14 @@
                                 <form action="{{ route('post.addrate', $post->id) }}" method="post"
                                     enctype="multipart/form-data">
                                     @csrf
-                                    @if (isset($score_format))
-                                        @switch($score_format)
+                                    @if (Auth::user())
+                                        @switch(Auth::user()->score_format)
                                             @case('POINT_100')
                                                 <label for="inputNumber" class="form-label">Score</label>
                                                 <input name="score" type="number" id="inputNumber" class="form-control"
                                                     aria-describedby="" min="1" max="100" step="1"
                                                     placeholder="Your score: {{ round($post->userAverageRating) }}">
-                                                <div id="passwordHelpBlock" class="form-text">
+                                                <div id="passwordHelpBlock" class="form-text text-light">
                                                     Your score must be 1-100 values
                                                 </div>
                                                 <input type="hidden" name="score_format" value="{{ $score_format }}">
@@ -202,7 +212,7 @@
                                                 <input name="score" type="number" id="inputNumber" class="form-control"
                                                     aria-describedby="" min="1" max="10" step=".1"
                                                     placeholder="Your score: {{ round($post->userAverageRating / 10, 1) }}">
-                                                <div id="passwordHelpBlock" class="form-text">
+                                                <div id="passwordHelpBlock" class="form-text  text-light">
                                                     Your score must be 1-10 values (can use decimals)
                                                 </div>
                                                 <input type="hidden" name="score_format" value="{{ $score_format }}">
@@ -213,7 +223,7 @@
                                                 <input name="score" type="number" id="inputNumber" class="form-control"
                                                     aria-describedby="" min="1" max="10" step="1"
                                                     placeholder="Your score: {{ round($post->userAverageRating / 10) }}">
-                                                <div id="passwordHelpBlock" class="form-text">
+                                                <div id="passwordHelpBlock" class="form-text text-light">
                                                     Your score must be 1-10 values (only integer values)
                                                 </div>
                                                 <input type="hidden" name="score_format" value="{{ $score_format }}">
@@ -253,7 +263,7 @@
                                                 <label for="inputNumber" class="form-label">Score</label>
                                                 <input name="score" type="number" id="inputNumber" class="form-control"
                                                     aria-describedby="" min="1" max="100" step="1">
-                                                <div id="passwordHelpBlock" class="form-text">
+                                                <div id="passwordHelpBlock" class="form-text text-light">
                                                     Your score must be 1-100 values
                                                 </div>
                                         @endswitch
@@ -294,9 +304,8 @@
                 const id_iframe = document.getElementById("id_iframe");
                 //id_iframe.setAttribute("src", link);
                 id_iframe.innerHTML = link;
-
-                console.log(e.target.id);
-                console.log(link);
+                //console.log(e.target.id);
+                //console.log(link);
             }
             buttonGroup.addEventListener("click", buttonGroupPressed);
         </script>
