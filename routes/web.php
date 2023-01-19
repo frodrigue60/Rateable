@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\CurrentSeasonController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\api\UserController as UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,8 @@ Route::get('/endings',       [PostController::class, 'endings'])->name('endings'
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalranking'])->name('seasonalranking');
 Route::get('/global-ranking',       [PostController::class, 'globalrank'])->name('globalranking');
 Route::get('/filter', [PostController::class, 'filter'])->name('filter');
+Route::get('/user/{user}', [UserController::class, 'userList'])->name('userlist');
+
 
 Route::get('/offline', function(){
     return view('offline');

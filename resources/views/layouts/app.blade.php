@@ -12,11 +12,13 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta property="fb:app_id" content="1363850827699525" />
 
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/images/favicon-16x16.png') }}">
     <link rel="shortcut icon" sizes="512x512" href="{{ asset('resources/images/logo.svg') }}">
     {{-- <link rel="manifest" href="manifest.json"> --}}
+    {{-- <link rel="manifest" href="{{ asset('build/manifest.json') }}"> --}}
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0E3D5F">
 
@@ -39,7 +41,7 @@
     {{-- <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}"> --}}
     {{-- <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
     <link rel="stylesheet" href="{{ asset('build/assets/modalSearch.css') }}"> --}}
-    @vite(['resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
+    @vite([/* 'resources/sass/app.scss','resources/js/app.js', */'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
 </head>
 
 <body id="body" class="color2 hidden">
@@ -68,6 +70,7 @@
     {{-- <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script> --}}
     {{-- <script src="{{ asset('build/assets/ajaxSearch.js') }}"></script> --}}
     <script src="{{ asset('resources/js/owCarouselConfig.js') }}" defer></script>
+    @yield('script')
 </body>
 
 </html>

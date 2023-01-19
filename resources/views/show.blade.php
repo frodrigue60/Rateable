@@ -9,14 +9,22 @@
 
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
 
-    <meta name="description" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    @if ($post->song->song_romaji != null and $post->artist->name != null)
+        <meta name="description" content="Song: {{ $post->song->song_romaji }} - Artist: {{ $post->artist->name }}">
+    @else
+        <meta name="description" content="Song: N/A - Artist: N/A">
+    @endif
+
     <meta name="robots" content="index, follow, max-image-preview:standard">
     <link rel="canonical" href="{{ url()->current() }}">
     {{-- <meta property="og:locale" content="es_MX"> --}}
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
-    <meta property="og:description"
-        content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    @if ($post->song->song_romaji != null and $post->artist->name != null)
+        <meta property="og:description" content="{{ $post->song->song_romaji }} - {{ $post->artist->name }}">
+    @else
+        <meta property="og:description" content="Song: N/A - Artist: N/A">
+    @endif
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="article:section" content="{{ $post->type == 'OP' ? 'Opening' : 'Ending' }}">
     {{-- <meta property="og:updated_time" content="2022-09-04T20:03:37-05:00"> --}}
@@ -52,7 +60,8 @@
                     {!! $post->ytlink !!}
                 </div>
                 <div class="card-footer">
-                        <h1 class="text-light show-view-title mb-0">{{ $post->title }} {{$post->suffix != null ? $post->suffix : $post->type }}</h1>
+                    <h1 class="text-light show-view-title mb-0">{{ $post->title }}
+                        {{ $post->suffix != null ? $post->suffix : $post->type }}</h1>
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-start">
                     <div class="text-light">
@@ -86,8 +95,8 @@
                             </button>
                             <ul class="dropdown-menu" id="button-group">
                                 @if ($post->ytlink != null)
-                                <li><button class="dropdown-item" value="{{ $post->ytlink }}" id="option1">Option
-                                    1</button></li>
+                                    <li><button class="dropdown-item" value="{{ $post->ytlink }}" id="option1">Option
+                                            1</button></li>
                                 @endif
                                 @if ($post->scndlink != null)
                                     <li><button class="dropdown-item" value="{{ $post->scndlink }}" id="option2">Option
@@ -288,26 +297,28 @@
                 </div>
             </div>
         </div>
-        <script>
-            const buttonGroup = document.getElementById("button-group");
-            const buttonGroupPressed = e => {
+        @section('script')
+            <script>
+                const buttonGroup = document.getElementById("button-group");
+                const buttonGroupPressed = e => {
 
-                var isButton = e.target.nodeName === 'BUTTON';
+                    var isButton = e.target.nodeName === 'BUTTON';
 
-                if (!isButton) {
-                    return
+                    if (!isButton) {
+                        return
+                    }
+
+                    var option = document.getElementById(e.target.id);
+                    var link = option.getAttribute('value');
+
+                    const id_iframe = document.getElementById("id_iframe");
+                    //id_iframe.setAttribute("src", link);
+                    id_iframe.innerHTML = link;
+                    //console.log(e.target.id);
+                    //console.log(link);
                 }
-
-                var option = document.getElementById(e.target.id);
-                var link = option.getAttribute('value');
-
-                const id_iframe = document.getElementById("id_iframe");
-                //id_iframe.setAttribute("src", link);
-                id_iframe.innerHTML = link;
-                //console.log(e.target.id);
-                //console.log(link);
-            }
-            buttonGroup.addEventListener("click", buttonGroupPressed);
-        </script>
+                buttonGroup.addEventListener("click", buttonGroupPressed);
+            </script>
+        @endsection
     </div>
 @endsection

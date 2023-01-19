@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 
+@keyframes spin-anim {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 * {
 	font-family: 'Nunito', sans-serif, 'Arial', system-ui;
 }
@@ -11,7 +21,7 @@ body{
 	position: relative;
 	margin: 0;
 	min-height: 100%;
-	padding-bottom: 6rem;
+	padding-bottom: 4rem;
 	box-sizing: inherit;
 }
 footer{
@@ -45,16 +55,6 @@ footer{
 	overflow: hidden;
 }
 
-@keyframes spin-anim {
-	0% {
-		transform: rotate(0deg);
-	}
-
-	100% {
-		transform: rotate(360deg);
-	}
-}
-
 /* width */
 ::-webkit-scrollbar {
 	width: 10px;
@@ -73,6 +73,18 @@ footer{
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 	background: #0e3d5f;
+}
+.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+	color: #7396af;
+	opacity: 1; /* Firefox */
+}
+
+.form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
+	color: #7396af;
+}
+
+.form-control::-ms-input-placeholder { /* Microsoft Edge */
+	color: #7396af;
 }
 
 .top-header {

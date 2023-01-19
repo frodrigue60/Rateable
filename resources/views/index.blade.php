@@ -17,7 +17,6 @@
         <meta property="og:image:height" content="450">
         <meta property="og:site_name" content="{{ env('APP_NAME') }}" />
         <meta property="og:url" content="{{ url()->current() }}" />
-        <meta property="fb:app_id" content="1363850827699525" />
         <meta property="og:image:alt" content="Anirank banner" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@frodrigue60" />
