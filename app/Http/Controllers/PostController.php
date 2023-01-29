@@ -44,8 +44,8 @@ class PostController extends Controller
     public function create()
     {
         $types = [
-            ['name' => 'Opening','value'=>'OP'],
-            ['name' => 'Ending','value'=>'ED']
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED']
         ];
         $tags = Tag::all();
         $artists = Artist::all();
@@ -60,6 +60,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $post = new Post;
+        $post->title = $request->title;
+        $post->slug = Str::slug($request->title);
+
+        $post->type = $request->type;
+        $post->ytlink = $request->ytlink;
+        $post->scndlink = $request->scndlink;
+
         if ($request->hasFile('file')) {
             $validator = Validator::make($request->all(), [
                 'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
@@ -69,98 +77,59 @@ class PostController extends Controller
                 $errors = $validator->getMessageBag();
                 return Redirect::back()->with('error', $errors);
             }
-
-
-            $post = new Post;
-            $post->title = $request->title;
-            $post->slug = Str::slug($request->title);
-            if ($request->themeNum != true) {
-                $post->themeNum = null;
-            } else {
-                $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type . $request->themeNum;
-            }
-
-            if ($request->artist_id != true) {
-                $post->artist_id = null;
-            } else {
-                $post->artist_id = $request->artist_id;
-            }
-
-            $post->type = $request->type;
-            $post->ytlink = $request->ytlink;
-            $post->scndlink = $request->scndlink;
             //$file_extension = $request->file->extension();
-            /* $file_mime_type = $request->file->getClientMimeType();  NOT USED*/
-            $file_name = 'thumbnail_' . time() . '.' . 'webp';
+            $file_name = Str::slug($request->title) . '_' . time() . '.' . 'webp';
             $post->thumbnail = $file_name;
 
             $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //$request->file->storeAs('thumbnails', $file_name, 'public');
-            $song = new Song;
-            $song->song_romaji = $request->song_romaji;
-            $song->song_jp = $request->song_jp;
-            $song->song_en = $request->song_en;
-            $song->save();
-
-            $post->song_id = $song->id;
-
-            $post->save();
-
-            $tags = $request->tags;
-            $post->tag($tags);
-
-            return redirect(route('admin.post.index'))->with('success', 'Post created Successfully, has file');
         } else {
-            //dd($request->all());
-            $post = new Post;
-            $post->title = $request->title;
-            $post->slug = Str::slug($request->title);
-            $post->type = $request->type;
-
-            if ($request->themeNum != true) {
-                $post->themeNum = null;
-            } else {
-                $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type . $request->themeNum;
-            }
-            if ($request->artist_id != true) {
-                $post->artist_id = null;
-            } else {
-                $post->artist_id = $request->artist_id;
-            }
-
-            $post->ytlink = $request->ytlink;
-            $post->scndlink = $request->scndlink;
-
             if ($request->imageSrc == null) {
-                return Redirect::back()->with('error', 'Post not created, images not founds');
+                return Redirect::back()->with('error', "Post not created, images not founds");
             }
 
             $image_file_data = file_get_contents($request->imageSrc);
             //$ext = pathinfo($request->imageSrc, PATHINFO_EXTENSION);
-            $file_name = 'thumbnail_' . time() . '.' . 'webp';
+            $file_name = Str::slug($request->title) . '_' . time() . '.' . 'webp';
             $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
             $post->imageSrc = $request->imageSrc;
-
-            $song = new Song;
-            $song->song_romaji = $request->song_romaji;
-            $song->song_jp = $request->song_jp;
-            $song->song_en = $request->song_en;
-            $song->save();
-
-            $post->song_id = $song->id;
-
-            $post->save();
-            $tags = $request->tags;
-            $post->tag($tags);
-            return redirect(route('admin.post.index'))->with('success', 'Post created Successfully, has url image');
         }
-        return redirect(route('admin.post.index'))->with('error', 'Post not created, image not found');
+        if ($request->themeNum != true) {
+            $post->themeNum = null;
+        } else {
+            $post->themeNum = $request->themeNum;
+            $post->suffix = $request->type . $request->themeNum;
+        }
+
+        if ($request->artist_id != true) {
+            $post->artist_id = null;
+        } else {
+            $post->artist_id = $request->artist_id;
+        }
+        $song = new Song;
+        $song->song_romaji = $request->song_romaji;
+        $song->song_jp = $request->song_jp;
+        $song->song_en = $request->song_en;
+        $song->save();
+
+        $post->song_id = $song->id;
+
+        $post->save();
+
+        $tags = $request->tags;
+        $post->tag($tags);
+
+        if ($post->save()) {
+            $success = 'Post created successfully';
+            return redirect(route('admin.post.index'))->with('success', $success);
+        } else {
+            $error = 'Somethis was wrong!';
+            return redirect(route('admin.post.index'))->with('error', $error);
+        }
     }
 
     /**
@@ -205,8 +174,8 @@ class PostController extends Controller
     public function edit($id)
     {
         $types = [
-            ['name' => 'Opening','value'=>'OP'],
-            ['name' => 'Ending','value'=>'ED']
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED']
         ];
 
         $post = Post::find($id);
@@ -226,6 +195,26 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $post = Post::find($id);
+        $old_thumbnail = $post->thumbnail;
+        $post->title = $request->title;
+        $post->slug = Str::slug($request->title);
+        $post->type = $request->type;
+        $post->ytlink = $request->ytlink;
+        $post->scndlink = $request->scndlink;
+
+        if ($request->themeNum != true) {
+            $post->themeNum = null;
+        } else {
+            $post->themeNum = $request->themeNum;
+            $post->suffix = $request->type . $request->themeNum;
+        }
+        if ($request->artist_id != true) {
+            $post->artist_id = null;
+        } else {
+            $post->artist_id = $request->artist_id;
+        }
+
         if ($request->hasFile('file')) {
             $validator = Validator::make($request->all(), [
                 'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
@@ -236,98 +225,48 @@ class PostController extends Controller
                 return Redirect::back()->with('error', $errors);
             }
 
-            $post = Post::find($id);
-            $old_thumbnail = $post->thumbnail;
-            $post->title = $request->title;
-            $post->slug = Str::slug($request->title);
-            if ($request->themeNum != true) {
-                $post->themeNum = null;
-            } else {
-                $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type . $request->themeNum;
-            }
-
-            if ($request->artist_id != true) {
-                $post->artist_id = null;
-            } else {
-                $post->artist_id = $request->artist_id;
-            }
-
-            $post->type = $request->type;
-
-            $post->ytlink = $request->ytlink;
-            $post->scndlink = $request->scndlink;
-
             //$file_extension = $request->file->extension();
             //$file_mime_type = $request->file->getClientMimeType();
 
-
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
 
-            $file_name = 'thumbnail_' . time() . '.' . 'webp';
+            $file_name = Str::slug($request->title) .'_' . time() . '.' . 'webp';
             $post->thumbnail = $file_name;
             //$request->file->storeAs('thumbnails', $file_name, 'public');
             $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-            $song = new Song;
-            $song->song_romaji = $request->song_romaji;
-            $song->song_jp = $request->song_jp;
-            $song->song_en = $request->song_en;
-            $song->save();
-            $post->song_id = $song->id;
-            $post->update();
 
-            $tags = $request->tags;
-            $post->tag($tags);
-            return redirect(route('admin.post.index'))->with('success', 'Post updated Successfully, has file image');
         } else {
-            $post = Post::find($id);
-            $old_thumbnail = $post->thumbnail;
-
-            $post->title = $request->title;
-            $post->slug = Str::slug($request->title);
-            if ($request->themeNum != true) {
-                $post->themeNum = null;
-            } else {
-                $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type . $request->themeNum;
-            }
-            if ($request->artist_id != true) {
-                $post->artist_id = null;
-            } else {
-                $post->artist_id = $request->artist_id;
-            }
-
-            $post->type = $request->type;
-
-            $post->ytlink = $request->ytlink;
-            $post->scndlink = $request->scndlink;
             if ($request->imageSrc == null) {
                 return redirect(route('admin.post.index'))->with('error', 'Post not created, images not founds');
             }
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
             $image_file_data = file_get_contents($request->imageSrc);
             //$ext = pathinfo($request->imageSrc, PATHINFO_EXTENSION);
-            $file_name = 'thumbnail_' . time() . '.' . 'webp';
+            $file_name = Str::slug($request->title) . time() . '.' . 'webp';
             $encoded = Image::make($image_file_data)->resize(200, 293)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             $post->thumbnail = $file_name;
             $post->imageSrc = $request->imageSrc;
-
-            $song = new Song;
-            $song->song_romaji = $request->song_romaji;
-            $song->song_jp = $request->song_jp;
-            $song->song_en = $request->song_en;
-            $song->save();
-
-            $post->song_id = $song->id;
-            $post->update();
-            $tags = $request->tags;
-            $post->retag($tags);
-            return redirect(route('admin.post.index'))->with('success', 'Post Updated Successfully, has url image');
         }
-        return redirect(route('admin.post.index'))->with('error', 'Post not created, image not found');
+        $song = new Song;
+        $song->song_romaji = $request->song_romaji;
+        $song->song_jp = $request->song_jp;
+        $song->song_en = $request->song_en;
+        $song->save();
+
+        $post->song_id = $song->id;
+        $post->update();
+        $tags = $request->tags;
+        $post->retag($tags);
+
+        if ($post->update()) {
+            return redirect(route('admin.post.index'))->with('success', 'Post Updated Successfully');
+        } else {
+            return redirect(route('admin.post.index'))->with('error', 'Something has wrong');
+        }
+        
     }
 
     /**
@@ -351,7 +290,7 @@ class PostController extends Controller
     }
 
     //return index view with all openings
-    
+
     public function home()
     {
         $recently = Post::all()->sortByDesc('created_at')/* ->take(10) */;
@@ -596,16 +535,16 @@ class PostController extends Controller
         $requested->char = $char;
 
         $types = [
-            ['name' => 'Opening','value'=>'OP'],
-            ['name' => 'Ending','value'=>'ED']
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED']
         ];
 
         $sortMethods = [
-            ['name' => 'Recent','value'=>'recent'],
-            ['name' => 'Title','value'=>'title'],
-            ['name' => 'Score','value'=>'averageRating'],
-            ['name' => 'Views','value'=>'viewCount'],
-            ['name' => 'Popular','value'=>'likeCount']
+            ['name' => 'Recent', 'value' => 'recent'],
+            ['name' => 'Title', 'value' => 'title'],
+            ['name' => 'Score', 'value' => 'averageRating'],
+            ['name' => 'Views', 'value' => 'viewCount'],
+            ['name' => 'Popular', 'value' => 'likeCount']
         ];
 
         $characters = range('A', 'Z');
@@ -614,20 +553,19 @@ class PostController extends Controller
             if ($type != null) {
                 if ($char != null) {
                     $posts = Post::withAnyTag($tag)
-                    ->where('type', $type)
-                    ->where('title', 'LIKE', "{$char}%")
-                    ->get();
-                }
-                else{
+                        ->where('type', $type)
+                        ->where('title', 'LIKE', "{$char}%")
+                        ->get();
+                } else {
                     $posts = Post::withAnyTag($tag)
-                    ->where('type', $type)
-                    ->get();
+                        ->where('type', $type)
+                        ->get();
                 }
             } else {
                 if ($char != null) {
                     $posts = Post::withAnyTag($tag)
-                    ->where('title', 'LIKE', "{$char}%")
-                    ->get();
+                        ->where('title', 'LIKE', "{$char}%")
+                        ->get();
                 } else {
                     $posts = Post::withAnyTag($tag)->get();
                 }
@@ -636,53 +574,53 @@ class PostController extends Controller
             if ($type != null) {
                 if ($char != null) {
                     $posts = Post::where('type', $type)
-                    ->where('title', 'LIKE', "{$char}%")
-                    ->get();
+                        ->where('title', 'LIKE', "{$char}%")
+                        ->get();
                 } else {
                     $posts = Post::where('type', $type)
-                    ->get();
+                        ->get();
                 }
             } else {
                 if ($char != null) {
                     $posts = Post::where('title', 'LIKE', "{$char}%")
-                    ->get();
+                        ->get();
                 } else {
                     $posts = Post::all();
                 }
             }
         }
-        
+
         //SWITCH ORDER THE POSTS
         switch ($sort) {
             case 'title':
                 $posts = $posts->sortBy('title');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
                 break;
             case 'averageRating':
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
             case 'viewCount':
                 $posts = $posts->sortByDesc('viewCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
                 break;
             case 'recent':
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
                 break;
 
             default:
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
                 break;
         }
     }
@@ -814,5 +752,4 @@ class PostController extends Controller
             Session::put('page_visited_' . $post->id, true);
         }
     }
-    
 }

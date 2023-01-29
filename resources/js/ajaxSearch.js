@@ -2,6 +2,7 @@ const myModal = document.querySelector('#exampleModal');
 const postsDiv = document.querySelector("#posts");
 const artistsDiv = document.querySelector("#artists");
 const tagsDiv = document.querySelector("#tags");
+const usersDiv = document.querySelector("#users");
 const input = document.querySelector('#searchInputModal');
 const token = document.querySelector('meta[name="csrf-token"]').content;
 const titles = document.querySelectorAll('.post-titles');
@@ -32,6 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
             tagsDiv.innerHTML =
                 '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+            usersDiv.innerHTML =
+                '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
 
             clearTimeout(typingTimer);
             if (input.value.length >= 1) {
@@ -43,13 +46,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     '</span></div>';
                 tagsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
                     '</span></div>';
+                    usersDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
+                    '</span></div>';
             }
 
         })
 
         function doneTyping() {
             try {
-                fetch('https://anirank.co/api/search?q=' + input.value, {
+                fetch('http://127.0.0.1:8000/api/search?q=' + input.value, {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',
@@ -62,17 +67,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     postsDiv.innerHTML = "";
                     artistsDiv.innerHTML = "";
                     tagsDiv.innerHTML = "";
+                    usersDiv.innerHTML = "";
 
                     data.posts.forEach(element => {
                         if (element.suffix != undefined) {
                             postsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank.co/show/' +
+                            '<div class="result"><a href="http://127.0.0.1:8000/show/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
                                 .title + ' '+ element.suffix + '</span></a></div>';
                         } else {
                             postsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank.co/show/' +
+                            '<div class="result"><a href="http://127.0.0.1:8000/show/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
                                 .title + ' '+ element.type + '</span></a></div>';
@@ -81,15 +87,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     data.artists.forEach(element => {
                         artistsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank.co/artist/' +
+                            '<div class="result"><a href="http://127.0.0.1:8000/artist/' +
                             element.name_slug + '"><span>' + element.name +
                             '</span></a></div>';
                     });
 
                     data.tags.forEach(element => {
                         tagsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank.co/tag/' +
+                            '<div class="result"><a href="http://127.0.0.1:8000/tag/' +
                             element.slug + '"><span>' + element.name +
+                            '</span></a></div>';
+                    });
+                    data.users.forEach(element => {
+                        usersDiv.innerHTML +=
+                            '<div class="result"><a href="http://127.0.0.1:8000/user/' +
+                            element.id + '"><span>' + element.name +
                             '</span></a></div>';
                     });
                 });
@@ -104,6 +116,8 @@ document.addEventListener("DOMContentLoaded", function () {
         artistsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
             '</span></div>';
         tagsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
+            '</span></div>';
+            usersDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
             '</span></div>';
     }
     function cutTitles() {

@@ -117,14 +117,18 @@ class UserController extends Controller
                     $posts = Post::withAnyTag($tag)
                     ->where('type', $type)
                     ->where('title', 'LIKE', "{$char}%")
-                    ->whereLikedBy($userId) // find only articles where user liked them
+                    ->whereLikedBy($user->id)
+                    ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                    ->where('ratings.user_id','=',$user->id)
                     ->with('likeCounter')
                     ->get();
                 }
                 else{
                     $posts = Post::withAnyTag($tag)
                     ->where('type', $type)
-                    ->whereLikedBy($user->id) // find only articles where user liked them
+                    ->whereLikedBy($user->id)
+                    ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                    ->where('ratings.user_id','=',$user->id)
                     ->with('likeCounter')
                     ->get();
                 }
@@ -132,12 +136,16 @@ class UserController extends Controller
                 if ($char != null) {
                     $posts = Post::withAnyTag($tag)
                     ->where('title', 'LIKE', "{$char}%")
-                    ->whereLikedBy($user->id) // find only articles where user liked them
+                    ->whereLikedBy($user->id)
+                    ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                    ->where('ratings.user_id','=',$user->id)
                     ->with('likeCounter')
                     ->get();
                 } else {
                     $posts = Post::withAnyTag($tag)
-                    ->whereLikedBy($user->id) // find only articles where user liked them
+                    ->whereLikedBy($user->id)
+                    ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                    ->where('ratings.user_id','=',$user->id)
                     ->with('likeCounter')
                     ->get();
                 }
@@ -147,24 +155,33 @@ class UserController extends Controller
                 if ($char != null) {
                     $posts = Post::where('type', $type)
                     ->where('title', 'LIKE', "{$char}%")
-                    ->whereLikedBy($user->id) // find only articles where user liked them
+                    ->whereLikedBy($user->id)
+                    ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                    ->where('ratings.user_id','=',$user->id)
                     ->with('likeCounter')
                     ->get();
                 } else {
                     $posts = Post::where('type', $type)
-                    ->whereLikedBy($user->id) // find only articles where user liked them
+                    ->whereLikedBy($user->id)
+                    ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                    ->where('ratings.user_id','=',$user->id)
                     ->with('likeCounter')
                     ->get();
                 }
             } else {
                 if ($char != null) {
                     $posts = Post::where('title', 'LIKE', "{$char}%")
-                    ->whereLikedBy($user->id) // find only articles where user liked them
+                    ->whereLikedBy($user->id)
+                    ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                    ->where('ratings.user_id','=',$user->id)
                     ->with('likeCounter')
                     ->get();
                 } else {
-                    $posts = Post::whereLikedBy($user->id) // find only articles where user liked them
+                    $posts = Post::whereLikedBy($user->id)
+                    ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                    ->where('ratings.user_id','=',$user->id)
                     ->with('likeCounter')->get();
+                    //dd($posts);
                 }
             }
         }

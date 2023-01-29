@@ -18,6 +18,9 @@
                     <span class="catTitle">Tag</span>
                     <div id="tags">
                     </div>
+                    <span class="catTitle">Users</span>
+                    <div id="users">
+                    </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-center customModal">

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -297,7 +298,9 @@ class PostController extends Controller
 
         $tags = Tag::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
 
-        $data = ["posts" => $posts, "artists" => $artists, "tags" => $tags];
+        $users = User::where('name', 'LIKE', "%$q%")->limit(5)->get(['id','name']);
+
+        $data = ["posts" => $posts, "artists" => $artists, "tags" => $tags,"users" => $users];
 
         return response()->json($data);
     }

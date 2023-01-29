@@ -6,20 +6,26 @@
         <link rel="canonical" href="{{ url()->current() }}">
         <meta name="description" content="Search Openings & Endings by type, season, order as you want, and filter by letter">
         <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
-    @endif 
+    @endif
     @if (Request::routeIs('userlist'))
-        <title>{{$user->name}} - list</title>
-        <meta title="{{$user->name}} - Themes list">
+        <title>{{ $user->name }} - list</title>
+        <meta title="{{ $user->name }} - Themes list">
         <link rel="canonical" href="{{ url()->current() }}">
-        <meta name="description" content="Openings & Endings from {{$user->name}}">
+        <meta name="description" content="Openings & Endings from {{ $user->name }}">
         <meta name="robots" content="index, follow, max-image-preview:standard">
     @endif
 @endsection
 @section('content')
     <div class="container">
-        <div class="top-header color1 mb-1 mt-1">
-            <h2 class="text-light mb-0">Filter Posts</h2>
-        </div>
+        @if (Request::routeIs('userlist'))
+            <div class="top-header color1 mb-1 mt-1">
+                <h2 class="text-light mb-0">Filter Posts - {{ $user->name }}</h2>
+            </div>
+        @else
+            <div class="top-header color1 mb-1 mt-1">
+                <h2 class="text-light mb-0">Filter Posts</h2>
+            </div>
+        @endif
         <div class="contenedor-filtro">
             {{-- SEARCH PANEL --}}
             <aside>
@@ -35,11 +41,11 @@
             {{-- POSTS --}}
             <section>
                 @if (Request::routeIs('filter'))
-                        @include('filter.searchTarjetas')
-                    @endif
-                    @if (Request::routeIs('userlist'))
-                        @include('filter.userTarjetas')
-                    @endif
+                    @include('filter.searchTarjetas')
+                @endif
+                @if (Request::routeIs('userlist'))
+                    @include('filter.userTarjetas')
+                @endif
                 <div style="display: flex;justify-content: center;
                 margin-top: 10px;">
                     {{ $posts->links() }}
@@ -47,18 +53,18 @@
             </section>
         </div>
     </div>
-    @section('script')
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#chzn-type").chosen();
-                $("#chzn-tag").chosen();
-                $("#chzn-sort").chosen();
-                $("#chzn-char").chosen();
-            });
-        </script>
-    @endsection
+@section('script')
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#chzn-type").chosen();
+            $("#chzn-tag").chosen();
+            $("#chzn-sort").chosen();
+            $("#chzn-char").chosen();
+        });
+    </script>
+@endsection
 @endsection
