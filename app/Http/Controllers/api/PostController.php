@@ -279,12 +279,11 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
-        $post->delete();
 
         if ($post->delete()) {
-            return "Success";
+            return Redirect::route('admin.post.index')->with('success','Post deleted successfully');
         } else {
-            return "Somethis was wrong!";
+            return Redirect::route('admin.post.index')->with('warning','Post was wrong!');
         }
     }
 

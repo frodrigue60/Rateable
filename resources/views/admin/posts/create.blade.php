@@ -14,7 +14,7 @@
                                 <label for="titleAnime" class="form-label">Title</label>
                                 <input type="text" class="form-control" placeholder="Anime Title" id="titleAnime"
                                     name="title" required>
-                            </div >
+                            </div>
                             <div class="col-md-6">
                                 <label for="themeNum" class="form-label">OP/ED Number</label>
                                 <input type="text" class="form-control" placeholder="Opening Number" id="themeNum"
@@ -47,7 +47,7 @@
                                 <label for="type" class="form-label">Type:</label>
                                 <select class="chzn-select" name="type" id="type" style="width:100%;">
                                     @foreach ($types as $item)
-                                        <option value="{{$item['value']}}">{{$item['name']}}</option>
+                                        <option value="{{ $item['value'] }}">{{ $item['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -70,7 +70,8 @@
                             name="scndlink">
                         <br>
                         <label for="seasonsTags">Select season</label>
-                        <select class="chzn-select" multiple="true" name="tags[]" id="seasonsTags" style="width:50%;display:flex;flex-direction:column;">
+                        <select class="chzn-select" multiple="true" name="tags[]" id="seasonsTags"
+                            style="width:100%;display:flex;flex-direction:column;">
                             @foreach ($tags as $tag)
                                 <option value="{{ $tag->name }}">{{ $tag->name }}</option>
                             @endforeach
@@ -84,6 +85,7 @@
 
         </div>
 
+    @section('script')
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
         {{-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> --}}
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
@@ -95,5 +97,6 @@
                 $(".chzn-select").chosen();
             });
         </script>
-    </div>
+    @endsection
+</div>
 @endsection

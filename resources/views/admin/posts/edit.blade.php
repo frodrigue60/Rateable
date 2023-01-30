@@ -45,12 +45,11 @@
                         <label for="songEn" class="form-label">Song name (EN)</label>
                         @if (isset($post->song->song_en))
                             <input type="text" class="form-control" value="{{ $post->song->song_en }}" id="songEn"
-                            name="song_en">
+                                name="song_en">
                         @else
-                            <input type="text" class="form-control" value="" id="songEn"
-                            name="song_en">
+                            <input type="text" class="form-control" value="" id="songEn" name="song_en">
                         @endif
-                        
+
                         <br>
                         <div class="row">
                             <div class="col">
@@ -69,7 +68,9 @@
                                 <select class="chzn-select" name="type" id="type" style="width:100%;">
                                     <option value="">Selecte a type</option>
                                     @foreach ($types as $item)
-                                        <option value="{{ $item['value'] }}" {{ $post->type == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}</option>
+                                        <option value="{{ $item['value'] }}"
+                                            {{ $post->type == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -111,6 +112,7 @@
             </div>
 
         </div>
+    @section('script')
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
         {{-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> --}}
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
@@ -122,5 +124,6 @@
                 $(".chzn-select").chosen();
             });
         </script>
-    </div>
+    @endsection
+</div>
 @endsection

@@ -1,0 +1,64 @@
+@extends ('layouts.app')
+
+@section('title', 'Posts Index')
+
+@section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="card bg-dark">
+                {{-- CARD HEADER --}}
+                <div class="card-header">
+                    <a class="btn btn-primary btn-sm" href="{{ route('admin.users.create') }}" role="button">CREATE
+                        USER</a>
+                </div>
+                {{-- CARD BODY --}}
+                <div class="card-body">
+                    {{-- search form --}}
+                    <form class="d-flex" action="{{ route('searchuser') }}" method="GET">
+                        <input class="form-control me-2" type="text" name="search" placeholder="Search" required />
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach ($users as $item)
+                                <tr>
+                                    <td>{{ $item->id }}</td>
+                                    <td><a href="{{route('userlist',$item->id)}}">{{ $item->name }}</a></td>
+                                    <td>{{$item->email}}</td>
+                                    <td>{{$item->type}}</td>
+                                    <td>
+                                        @auth
+                                            <a class="btn btn-success btn-sm" href="{{route('admin.users.edit',$item->id)}}"
+                                                role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
+                                                {{ $item->id }}</a>
+                                            <a class="btn btn-danger btn-sm" href="{{route('admin.users.destroy',$item->id)}}"
+                                                role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                                {{ $item->id }}</a>
+                                        @endauth
+                                    </td>
+                            @endforeach
+
+                        </tbody>
+                    </table>
+                </div>
+                {{-- CARD FOOTER --}}
+                <div class="card-footer">
+                    <div class="d-flex justify-content-center">
+                        {{ $users->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+@endsection

@@ -7,7 +7,8 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\CurrentSeasonController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\api\UserController as UserController;
+use App\Http\Controllers\api\UserController as apiUserController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Route::get('/endings',       [PostController::class, 'endings'])->name('endings'
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalranking'])->name('seasonalranking');
 Route::get('/global-ranking',       [PostController::class, 'globalrank'])->name('globalranking');
 Route::get('/filter', [PostController::class, 'filter'])->name('filter');
-Route::get('/user/{user}', [UserController::class, 'userList'])->name('userlist');
+Route::get('/user/{user}', [apiUserController::class, 'userList'])->name('userlist');
 
 
 Route::get('/offline', function(){
@@ -81,6 +82,15 @@ Route::group(['middleware' => 'admin.routes'], function () {
         Route::get('/artist/{id}/edit',       [ArtistController::class, 'edit'])->name('admin.artist.edit');
         Route::put('/artist/{id}/update',    [ArtistController::class, 'update'])->name('admin.artist.update');
         //END ARTISTS 
+
+        //START USERS
+        Route::get('/users/create',          [UserController::class, 'create'])->name('admin.users.create');
+        Route::post('/users/store',          [UserController::class, 'store'])->name('admin.users.store');
+        Route::get('/users/index',           [UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/users/{id}/destroy',    [UserController::class, 'destroy'])->name('admin.users.destroy');
+        Route::get('/users/{id}/edit',       [UserController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/users/{id}/update',    [UserController::class, 'update'])->name('admin.users.update');
+        Route::get('/searchUser', [UserController::class, 'searchUser'])->name('searchuser');
     });
 });
 

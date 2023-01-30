@@ -24,7 +24,7 @@
                 <div class="top-header">
                     <div>
                         @if (Request::is('seasonal-ranking'))
-                            <h2 class="text-light mb-0">Top Openings: @isset($currentSeason)
+                            <h2 class="text-light mb-0">Top Openings @isset($currentSeason)
                                     {{ $currentSeason->name }}
                                 @endisset
                             </h2>
@@ -114,7 +114,7 @@
                 <div class="top-header">
                     <div>
                         @if (Request::is('seasonal-ranking'))
-                            <h2 class="text-light mb-0">Top Openings:
+                            <h2 class="text-light mb-0">Top Endings
                                 @isset($currentSeason)
                                     {{ $currentSeason->name }}
                                 @endisset
