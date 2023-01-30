@@ -1,4 +1,4 @@
-<form action="{{ route('userlist', $user->id) }}" method="get">
+<form action="{{ route('favorites') }}" method="get">
     {{-- FILTER BY --}}
     <section class="searchItem">
         <span class="text-light">Filter By</span>

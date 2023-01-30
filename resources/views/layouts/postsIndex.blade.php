@@ -61,7 +61,7 @@
             <h2 class="text-light mb-0">Most Viewed</h2>
         </div>
         <div>
-            <a href="{{ route('filter', 'sort=likeCount') }}" class="btn btn-sm color4">Most Viewed</a>
+            <a href="{{ route('filter', 'sort=viewCount') }}" class="btn btn-sm color4">Most Viewed</a>
         </div>
     </div>
     <section class="contenedor-tarjetas-main">

@@ -230,12 +230,11 @@ class PostController extends Controller
 
             Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
 
-            $file_name = Str::slug($request->title) .'_' . time() . '.' . 'webp';
+            $file_name = Str::slug($request->title) . '_' . time() . '.' . 'webp';
             $post->thumbnail = $file_name;
             //$request->file->storeAs('thumbnails', $file_name, 'public');
             $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
             Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-
         } else {
             if ($request->imageSrc == null) {
                 return redirect(route('admin.post.index'))->with('error', 'Post not created, images not founds');
@@ -266,7 +265,6 @@ class PostController extends Controller
         } else {
             return redirect(route('admin.post.index'))->with('error', 'Something has wrong');
         }
-        
     }
 
     /**
@@ -468,26 +466,288 @@ class PostController extends Controller
         return redirect()->route('login');
     }
 
-    public function favorites()
+    public function favorites(Request $request)
     {
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
-            $userId = Auth::id();
-            $openings = Post::whereLikedBy($userId) // find only articles where user liked them
-                ->with('likeCounter') // highly suggested to allow eager load
-                ->where('type', 'op')
-                ->get();
-
-            $endings = Post::whereLikedBy($userId) // find only articles where user liked them
-                ->with('likeCounter') // highly suggested to allow eager load
-                ->where('type', 'ed')
-                ->get();
-
-            //dd($openings,$endings);
-
-            return view('favorites', compact('openings', 'endings', 'score_format'));
+            $user = Auth::user();
         } else {
             return redirect()->route('login');
+        }
+
+        $tags = Tag::all();
+        $tag = $request->tag;
+        $filterBy = $request->filterBy;
+        $type = $request->type;
+        $sort = $request->sort;
+        $char = $request->char;
+
+        $requested = new stdClass;
+        $requested->filterBy = $filterBy;
+        $requested->type = $type;
+        $requested->tag = $tag;
+        $requested->sort = $sort;
+        $requested->char = $char;
+
+        $filters = [
+            ['name' => 'All', 'value' => 'all'],
+            ['name' => 'Only Rated', 'value' => 'rated']
+        ];
+
+        $types = [
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED']
+        ];
+
+        $sortMethods = [
+            ['name' => 'Recent', 'value' => 'recent'],
+            ['name' => 'Title', 'value' => 'title'],
+            ['name' => 'Score', 'value' => 'averageRating'],
+            ['name' => 'Views', 'value' => 'viewCount'],
+            ['name' => 'Popular', 'value' => 'likeCount']
+        ];
+
+        $characters = range('A', 'Z');
+
+        switch ($filterBy) {
+            case 'all':
+                if ($tag != null) {
+                    if ($type != null) {
+                        if ($char != null) {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('type', $type)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('type', $type)
+                                ->whereLikedBy($user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    } else {
+                        if ($char != null) {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::withAnyTag($tag)
+                                ->whereLikedBy($user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    }
+                } else {
+                    if ($type != null) {
+                        if ($char != null) {
+                            $posts = Post::where('type', $type)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::where('type', $type)
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    } else {
+                        if ($char != null) {
+                            $posts = Post::where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            //DEFAULT POSTS
+                            $posts = Post::whereLikedBy($user->id)
+
+                                ->with('likeCounter')->get();
+                        }
+                    }
+                }
+                break;
+            case 'rated':
+                if ($tag != null) {
+                    if ($type != null) {
+                        if ($char != null) {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('type', $type)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->where('ratings.user_id', '=', $user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('type', $type)
+                                ->whereLikedBy($user->id)
+                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->where('ratings.user_id', '=', $user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    } else {
+                        if ($char != null) {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->where('ratings.user_id', '=', $user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::withAnyTag($tag)
+                                ->whereLikedBy($user->id)
+                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->where('ratings.user_id', '=', $user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    }
+                } else {
+                    if ($type != null) {
+                        if ($char != null) {
+                            $posts = Post::where('type', $type)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->where('ratings.user_id', '=', $user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::where('type', $type)
+                                ->whereLikedBy($user->id)
+                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->where('ratings.user_id', '=', $user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    } else {
+                        if ($char != null) {
+                            $posts = Post::where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->where('ratings.user_id', '=', $user->id)
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            //DEFAULT POSTS
+                            $posts = Post::whereLikedBy($user->id)
+                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->where('ratings.user_id', '=', $user->id)
+                                ->with('likeCounter')->get();
+                        }
+                    }
+                }
+                break;
+            default:
+                if ($tag != null) {
+                    if ($type != null) {
+                        if ($char != null) {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('type', $type)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('type', $type)
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    } else {
+                        if ($char != null) {
+                            $posts = Post::withAnyTag($tag)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::withAnyTag($tag)
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    }
+                } else {
+                    if ($type != null) {
+                        if ($char != null) {
+                            $posts = Post::where('type', $type)
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            $posts = Post::where('type', $type)
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        }
+                    } else {
+                        if ($char != null) {
+                            $posts = Post::where('title', 'LIKE', "{$char}%")
+                                ->whereLikedBy($user->id)
+
+                                ->with('likeCounter')
+                                ->get();
+                        } else {
+                            //DEFAULT POSTS
+                            $posts = Post::whereLikedBy($user->id)
+
+                                ->with('likeCounter')->get();
+                        }
+                    }
+                }
+                break;
+        }
+
+        switch ($sort) {
+            case 'title':
+                $posts = $posts->sortBy('title');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                break;
+            case 'averageRating':
+                $posts = $posts->sortByDesc('averageRating');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+            case 'viewCount':
+                $posts = $posts->sortByDesc('viewCount');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+
+            case 'likeCount':
+                $posts = $posts->sortByDesc('likeCount');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                break;
+            case 'recent':
+                $posts = $posts->sortByDesc('created_at');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                break;
+
+            default:
+                $posts = $posts->sortByDesc('created_at');
+                $posts = $this->paginate($posts)->withQueryString();
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                break;
         }
     }
 
