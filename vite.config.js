@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/ajaxSearch.js',
                 'resources/css/app.css',
                 'resources/css/modalSearch.css',
+                'resources/css/userProfile.css',
             ],
             refresh: true,
         }),

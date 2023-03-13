@@ -17,12 +17,11 @@
 @endsection
 
 @section('content')
+    @if (Request::routeIs('userlist'))
+        @include('layouts.userBanner')
+    @endif
     <div class="container">
-        @if (Request::routeIs('userlist'))
-            <div class="top-header color1 mb-1 mt-1">
-                <h2 class="text-light mb-0">Favorites of {{ $user->name }}</h2>
-            </div>
-        @endif
+
         @if (Request::routeIs('filter'))
             <div class="top-header color1 mb-1 mt-1">
                 <h2 class="text-light mb-0">Filter Posts</h2>
@@ -66,19 +65,19 @@
             </section>
         </div>
     </div>
-    @section('script')
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#chzn-filterBy").chosen();
-                $("#chzn-type").chosen();
-                $("#chzn-tag").chosen();
-                $("#chzn-sort").chosen();
-                $("#chzn-char").chosen();
-            });
-        </script>
-    @endsection
+@section('script')
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#chzn-filterBy").chosen();
+            $("#chzn-type").chosen();
+            $("#chzn-tag").chosen();
+            $("#chzn-sort").chosen();
+            $("#chzn-char").chosen();
+        });
+    </script>
+@endsection
 @endsection

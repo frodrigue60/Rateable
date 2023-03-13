@@ -23,27 +23,27 @@
                 @auth
                     <li><a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}"
                             href="{{ route('favorites') }}">My Favorites</a></li>
-                    @if (Auth::user()->type == 'admin')
+                @endauth
+                @auth
+                    @if (Auth::user()->isStaff())
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                ADMIN
-                            </a>
+                            <a class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('admin.post.index') }}">Post
-                                        index</a></li>
-                                <li><a class="dropdown-item" href="{{ route('admin.tags.index') }}">Tags
-                                        index</a></li>
-                                <li><a class="dropdown-item" href="{{ route('admin.artist.index') }}">Artist
-                                        index</a></li>
-                                <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a></li> 
-                                <li> <a class="dropdown-item" href="{{ route('admin.season.index') }}">Current
-                                        Season</a></li>
-                                
+                                <li><a class="dropdown-item" href="{{ route('admin.post.index') }}">Postindex</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.tags.index') }}">Tags index</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.artist.index') }}">Artist index</a></li>
+                                @if (Auth::User()->isAdmin())
+                                    <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
+                                    </li>
+                                    <li> <a class="dropdown-item"
+                                            href="{{ route('admin.season.index') }}">CurrentSeason</a></li>
+                                @endif
                             </ul>
                         </li>
                     @endif
                 @endauth
+
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">

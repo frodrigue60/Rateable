@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminRoutes
+class CreatorRoutes
 {
     /**
      * Handle an incoming request.
@@ -18,13 +18,13 @@ class AdminRoutes
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            if (Auth::user()->type == 'admin') {
+            if (Auth::user()->type == 'creator' || Auth::user()->type == 'editor' ||Auth::user()->type == 'admin') {
                 return $next($request);
             }else {
-                return redirect()->route('/')->with('error', 'ONLY ADMINS (MIDDLEWARE)');
+                return redirect()->route('/')->with('error', 'ONLY CREATORS (MIDDLEWARE)');
             }
         }else {
-            return redirect()->route('/')->with('error', 'ONLY ADMINS (MIDDLEWARE)');
+            return redirect()->route('/')->with('error', 'ONLY CREATORS (MIDDLEWARE)');
         }
     }
 }

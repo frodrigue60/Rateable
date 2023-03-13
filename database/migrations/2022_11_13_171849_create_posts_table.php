@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('song_id')->nullable();
             $table->unsignedBigInteger('artist_id')->nullable();
             $table->enum('type', ['OP', 'ED'])->nullable();
+            $table->enum('status', ['stagged', 'published'])->nullable();
             $table->string('themeNum')->nullable();
             $table->string('suffix')->nullable();
             $table->text('ytlink')->nullable();

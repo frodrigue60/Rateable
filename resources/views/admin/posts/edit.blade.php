@@ -76,6 +76,17 @@
                             </div>
                         </div>
                         <br>
+                        <div class="row">
+                            <div class="col">
+                                <label for="statusId" class="form-label">Status</label>
+                                <select class="" name="postStatus" id="statusId">
+                                    <option value="">Selecte a post status</option>
+                                    @foreach ($postStatus as $item)
+                                        <option value="{{ $item['value'] }}">{{ $item['name'] }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <br>
                         <label for="imageSrc" class="form-label">Image Source</label>
                         <input type="text" class="form-control" placeholder="Image link" id="imageSrc" name="imageSrc"
@@ -114,7 +125,7 @@
         </div>
     @section('script')
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        {{-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> --}}
+        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">

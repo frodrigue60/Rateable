@@ -1,0 +1,59 @@
+.avatar {
+    border-radius: 50%;
+    display: inline-block;
+    max-height: 230px;
+    max-width: 160px;
+    width: 100%;
+    z-index: 2;
+}
+.data-container{
+    align-items: flex-end;
+    display: flex;
+    height: 100%;
+    position: relative;
+}
+
+.banner-user {
+    background-color: #242538;
+    background-position: 50% 35%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 330px;
+    position: relative;
+}
+
+.banner-content {
+    align-items: flex-end;
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    
+}
+
+.name-wrapper {
+    padding: 22px 25px;
+    z-index: 2;
+}
+
+.name {
+    font-size: xx-large;
+    margin: 0px;
+}
+
+.header {
+    margin-top: -10px;
+    margin-bottom: 20px;
+    height: 330px;
+}
+
+.shadow-banner {
+    background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
+    background-clip: content-box;
+    height: 322px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    margin-top: 65px;
+    z-index: 1;
+}

@@ -25,7 +25,10 @@
                                 <th scope="col">Type-themeNum</th>
                                 <th scope="col">Song</th>
                                 <th scope="col">Artist</th>
-                                <th scope="col">Actions</th>
+                                <th scope="col">Status</th>
+                                @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
+                                    <th scope="col">Actions</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -63,14 +66,53 @@
                                                 href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
                                         @endisset
                                     </td>
-                                    <td>
-                                        <a href="{{ route('admin.post.edit', $post->id) }}"><button type="button"
+
+                                    @if (Auth::User()->isCreator())
+                                        <td>
+                                            @if ($post->status == null)
+                                                <button disabled class="btn btn-sm btn-secondary">N/A</button>
+                                            @endif
+                                            @if ($post->status == 'stagged')
+                                                <button disabled class="btn btn-warning btn-sm"> <i class="fa fa-clock-o"
+                                                        aria-hidden="true"></i></button>
+                                            @endif
+                                            @if ($post->status == 'published')
+                                                <button disabled class="btn btn-primary btn-sm"> <i class="fa fa-check"
+                                                        aria-hidden="true"></i></button>
+                                            @endif
+                                        </td>
+                                    @endif
+                                    @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
+                                        <td>
+                                            @if ($post->status == null)
+                                                <button disabled="disabled" class="btn btn-sm btn-secondary">N/A</button>
+                                            @endif
+                                            @if ($post->status == 'stagged')
+                                                <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
+                                                    @csrf
+                                                    <button class="btn btn-warning btn-sm"> <i class="fa fa-clock-o"
+                                                            aria-hidden="true"> {{ $post->id }}</i></button>
+                                                </form>
+                                            @endif
+                                            @if ($post->status == 'published')
+                                                <form action="{{ route('admin.post.unapprove', $post->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    <button class="btn btn-primary btn-sm"> <i class="fa fa-check"
+                                                            aria-hidden="true"> {{ $post->id }}</i></button>
+                                                </form>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.post.edit', $post->id) }}"
                                                 class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o"
-                                                    aria-hidden="true"></i> Edit {{ $post->id }}</button></a>
-                                        <a href="{{ route('admin.post.destroy', $post->id) }}"><button type="button"
+                                                    aria-hidden="true"></i> {{ $post->id }}</a>
+                                            <a href="{{ route('admin.post.destroy', $post->id) }}"
                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i>
-                                                Delete {{ $post->id }}</button></a>
-                                    </td>
+                                                {{ $post->id }}</a>
+
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -83,8 +125,6 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
 @endsection

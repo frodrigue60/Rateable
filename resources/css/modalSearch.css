@@ -6,6 +6,15 @@
     padding: 2px;
     border-radius: 3px;
 }
+.displayNone {
+    display: none;
+}
+.modal-header{
+    border-bottom: none;
+}
+.modal-footer{
+border-top: none ;
+}
 
 .catTitle {
     margin-left: 5px;

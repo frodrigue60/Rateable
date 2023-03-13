@@ -26,12 +26,12 @@
                         <br>
                         <div class="form-group">
                             <label for="userPass">Password</label>
-                            <input type="text" id="userPass" name="password" class="form-control" required="true" placeholder="Type a new password">
+                            <input type="text" id="userPass" name="password" class="form-control"  placeholder="Type a new password">
                         </div>
                         <br>
-                        <label for="userType" class="form-label">Artist</label>
+                        <label for="userType" class="form-label">User Type</label>
                         <select class="form-select" name="userType" id="userType">
-                            <option value="">Select a artist</option>
+                            <option value="">Select a user type</option>
                             @foreach ($type as $item)
                                 <option value="{{ $item['value'] }}" {{ $user->type == $item['value'] ? 'selected' : '' }}>
                                     {{ $item['name'] }}

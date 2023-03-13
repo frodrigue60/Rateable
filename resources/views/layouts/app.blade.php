@@ -39,9 +39,10 @@
 
 
     {{-- <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
+   {{--  <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
     <link rel="stylesheet" href="{{ asset('build/assets/modalSearch.css') }}"> --}}
-    @vite([/* 'resources/sass/app.scss','resources/js/app.js', */ 'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css'])
+    @vite([/* 'resources/sass/app.scss','resources/js/app.js', */ 'resources/js/ajaxSearch.js', 'resources/css/app.css', 'resources/css/modalSearch.css','resources/css/userProfile.css'])
+
 </head>
 
 <body id="body" class="color2 hidden">

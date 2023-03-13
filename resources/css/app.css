@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap'); */
 
 @keyframes spin-anim {
 	0% {
@@ -536,6 +536,23 @@ h4 {
 	flex-direction: column;
 	justify-content: space-between;
 }
+.contenedor-filtro {
+	width: 100%;
+	margin: auto;
+	padding: 0px 0;
+
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	gap: 10px;
+}
+
+.contenedor-tarjetas-filtro {
+	display: grid;
+	/*grid-template-columns: repeat(7, 1fr);*/
+	grid-template-columns: repeat(auto-fill, 150px);
+	grid-template-rows: repeat(auto-fill, 220px);
+	gap: 15px;
+}
 
 @media screen and (max-width: 1920px) {
 	.container-items-seasonal {
@@ -687,7 +704,7 @@ h4 {
 	}
 
 	.card {
-		width: 1000px;
+		width: 100%;
 	}
 
 	.contenedor-filtro {
@@ -880,7 +897,7 @@ h4 {
 }
 
 /* RESPONSIVE CAROUSEL */
-@media screen and (max-width: 991px) {
+@media screen and (max-width: 992px) {
 	.container-items-seasonal {
 		background-color: #0C2638;
 		max-width: 100%;

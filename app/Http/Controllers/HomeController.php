@@ -36,6 +36,7 @@ class HomeController extends Controller
             ['name' => '10 Point (5/10)','value'=>'POINT_10'],
             ['name' => '5 Star (3/5)','value'=>'POINT_5'],
         ];
+        
         return view('home', compact('score_formats'));
     }
 

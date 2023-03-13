@@ -281,9 +281,9 @@ class PostController extends Controller
         $post = Post::find($id);
 
         if ($post->delete()) {
-            return Redirect::route('admin.post.index')->with('success','Post deleted successfully');
+            return 'Post deleted successfully';
         } else {
-            return Redirect::route('admin.post.index')->with('warning','Post was wrong!');
+            return 'Post was wrong!';
         }
     }
 

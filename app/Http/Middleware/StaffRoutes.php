@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AdminRoutes
+class StaffRoutes
 {
     /**
      * Handle an incoming request.
@@ -18,13 +18,13 @@ class AdminRoutes
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            if (Auth::user()->type == 'admin') {
+            if (Auth::user()->type == 'admin' || Auth::user()->type == 'editor' || Auth::user()->type == 'creator') {
                 return $next($request);
             }else {
-                return redirect()->route('/')->with('error', 'ONLY ADMINS (MIDDLEWARE)');
+                return redirect()->route('/')->with('error', 'ONLY STAFF MEMBERS (MIDDLEWARE)');
             }
         }else {
-            return redirect()->route('/')->with('error', 'ONLY ADMINS (MIDDLEWARE)');
+            return redirect()->route('/')->with('error', 'ONLY STAFF MEMBERS (MIDDLEWARE)');
         }
     }
 }

@@ -25,6 +25,7 @@ class Post extends Model
         'type',
         'thumbnail',
         'viewCount',
+        'status',
     ];
 
     public function artist()
