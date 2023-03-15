@@ -24,7 +24,7 @@ class AdminRoutes
                 return redirect()->route('/')->with('error', 'ONLY ADMINS (MIDDLEWARE)');
             }
         }else {
-            return redirect()->route('/')->with('error', 'ONLY ADMINS (MIDDLEWARE)');
+            return redirect()->route('/')->with('error', 'PLEASE LOGGIN WITH AN ADMIN ACCOUNT (MIDDLEWARE)');
         }
     }
 }

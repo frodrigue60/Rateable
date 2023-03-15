@@ -105,7 +105,7 @@ class PostController extends Controller
                     return Redirect::back()->with('error', $errors);
                 }
                 //$file_extension = $request->file->extension();
-                $file_name = Str::slug($request->title) . '_' . time() . '.' . 'webp';
+                $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
                 $post->thumbnail = $file_name;
 
                 $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
@@ -118,7 +118,7 @@ class PostController extends Controller
 
                 $image_file_data = file_get_contents($request->imageSrc);
                 //$ext = pathinfo($request->imageSrc, PATHINFO_EXTENSION);
-                $file_name = Str::slug($request->title) . '_' . time() . '.' . 'webp';
+                $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
                 $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
                 Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
                 //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
@@ -169,7 +169,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        if (Auth::check() && Auth::user()->type == 'admin') {
+        if (Auth::check() && Auth::user()->type == 'admin' || Auth::user()->type == 'editor') {
 
             $score_format = Auth::user()->score_format;
 
@@ -177,7 +177,7 @@ class PostController extends Controller
             $artist = $post->artist;
             $tags = $post->tagged;
             //dd($post);
-            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+            return view('admin.posts.show', compact('post', 'tags', 'score_format', 'artist'));
         }
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
@@ -345,9 +345,9 @@ class PostController extends Controller
 
     public function home()
     {
-        $recently = Post::all()->sortByDesc('created_at')/* ->take(10) */;
-        $popular = Post::all()->sortByDesc('likeCount')/* ->take(10) */;
-        $viewed = Post::all()->sortByDesc('viewCount')/* ->take(10) */;
+        $recently = Post::where('status', '=', 'published')->get()->sortByDesc('created_at')->take(20);
+        $popular = Post::where('status', '=', 'published')->get()->sortByDesc('likeCount')->take(15);
+        $viewed = Post::where('status', '=', 'published')->get()->sortByDesc('viewCount')->take(15);
 
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
@@ -355,9 +355,11 @@ class PostController extends Controller
             $score_format = null;
         }
 
-        $allOpenings = Post::where('type', 'op')
+        $allOpenings = Post::where('status', 'published')
+            ->where('type', 'op')
             ->get();
-        $allEndings = Post::where('type', 'ed')
+        $allEndings = Post::where('status', 'published')
+            ->where('type', 'ed')
             ->get();
         $openings = $allOpenings->sortByDesc('averageRating')->take(10);
         $endings = $allEndings->sortByDesc('averageRating')->take(10);
@@ -376,7 +378,8 @@ class PostController extends Controller
 
         if ($currentSeason == null) {
 
-            $posts = Post::where('type', 'op')
+            $posts = Post::where('status', '=', 'published')
+                ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
 
@@ -389,6 +392,7 @@ class PostController extends Controller
         } else {
 
             $posts = Post::withAnyTag($currentSeason->name)
+                ->where('status', '=', 'published')
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
@@ -412,7 +416,8 @@ class PostController extends Controller
 
         if ($currentSeason == null) {
 
-            $posts = Post::where('type', 'ed')
+            $posts = Post::where('status', '=', 'published')
+                ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
 
@@ -425,6 +430,7 @@ class PostController extends Controller
         } else {
 
             $posts = Post::withAnyTag($currentSeason->name)
+                ->where('status', '=', 'published')
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
@@ -569,6 +575,7 @@ class PostController extends Controller
                     if ($type != null) {
                         if ($char != null) {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('type', $type)
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
@@ -576,6 +583,7 @@ class PostController extends Controller
                                 ->get();
                         } else {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
                                 ->with('likeCounter')
@@ -584,12 +592,14 @@ class PostController extends Controller
                     } else {
                         if ($char != null) {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
                                 ->with('likeCounter')
                                 ->get();
                         } else {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
                                 ->with('likeCounter')
                                 ->get();
@@ -599,6 +609,7 @@ class PostController extends Controller
                     if ($type != null) {
                         if ($char != null) {
                             $posts = Post::where('type', $type)
+                                ->where('status', '=', 'published')
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
 
@@ -606,22 +617,22 @@ class PostController extends Controller
                                 ->get();
                         } else {
                             $posts = Post::where('type', $type)
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
-
                                 ->with('likeCounter')
                                 ->get();
                         }
                     } else {
                         if ($char != null) {
                             $posts = Post::where('title', 'LIKE', "{$char}%")
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
-
                                 ->with('likeCounter')
                                 ->get();
                         } else {
                             //DEFAULT POSTS
                             $posts = Post::whereLikedBy($user->id)
-
+                                ->where('status', '=', 'published')
                                 ->with('likeCounter')->get();
                         }
                     }
@@ -632,6 +643,7 @@ class PostController extends Controller
                     if ($type != null) {
                         if ($char != null) {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('type', $type)
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
@@ -641,6 +653,7 @@ class PostController extends Controller
                                 ->get();
                         } else {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
                                 ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
@@ -651,6 +664,7 @@ class PostController extends Controller
                     } else {
                         if ($char != null) {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
                                 ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
@@ -659,6 +673,7 @@ class PostController extends Controller
                                 ->get();
                         } else {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
                                 ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
@@ -670,6 +685,7 @@ class PostController extends Controller
                     if ($type != null) {
                         if ($char != null) {
                             $posts = Post::where('type', $type)
+                                ->where('status', '=', 'published')
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
                                 ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
@@ -678,6 +694,7 @@ class PostController extends Controller
                                 ->get();
                         } else {
                             $posts = Post::where('type', $type)
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
                                 ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
@@ -687,6 +704,7 @@ class PostController extends Controller
                     } else {
                         if ($char != null) {
                             $posts = Post::where('title', 'LIKE', "{$char}%")
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
                                 ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
@@ -695,6 +713,7 @@ class PostController extends Controller
                         } else {
                             //DEFAULT POSTS
                             $posts = Post::whereLikedBy($user->id)
+                                ->where('status', '=', 'published')
                                 ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
                                 ->with('likeCounter')->get();
@@ -707,6 +726,7 @@ class PostController extends Controller
                     if ($type != null) {
                         if ($char != null) {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('type', $type)
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
@@ -715,6 +735,7 @@ class PostController extends Controller
                                 ->get();
                         } else {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
 
@@ -724,6 +745,7 @@ class PostController extends Controller
                     } else {
                         if ($char != null) {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
 
@@ -731,6 +753,7 @@ class PostController extends Controller
                                 ->get();
                         } else {
                             $posts = Post::withAnyTag($tag)
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
 
                                 ->with('likeCounter')
@@ -741,6 +764,7 @@ class PostController extends Controller
                     if ($type != null) {
                         if ($char != null) {
                             $posts = Post::where('type', $type)
+                                ->where('status', '=', 'published')
                                 ->where('title', 'LIKE', "{$char}%")
                                 ->whereLikedBy($user->id)
 
@@ -748,6 +772,7 @@ class PostController extends Controller
                                 ->get();
                         } else {
                             $posts = Post::where('type', $type)
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
 
                                 ->with('likeCounter')
@@ -756,6 +781,7 @@ class PostController extends Controller
                     } else {
                         if ($char != null) {
                             $posts = Post::where('title', 'LIKE', "{$char}%")
+                                ->where('status', '=', 'published')
                                 ->whereLikedBy($user->id)
 
                                 ->with('likeCounter')
@@ -763,7 +789,7 @@ class PostController extends Controller
                         } else {
                             //DEFAULT POSTS
                             $posts = Post::whereLikedBy($user->id)
-
+                                ->where('status', '=', 'published')
                                 ->with('likeCounter')->get();
                         }
                     }
@@ -888,39 +914,47 @@ class PostController extends Controller
             if ($type != null) {
                 if ($char != null) {
                     $posts = Post::withAnyTag($tag)
+                        ->where('status', '=', 'published')
                         ->where('type', $type)
                         ->where('title', 'LIKE', "{$char}%")
                         ->get();
                 } else {
                     $posts = Post::withAnyTag($tag)
+                        ->where('status', '=', 'published')
                         ->where('type', $type)
                         ->get();
                 }
             } else {
                 if ($char != null) {
                     $posts = Post::withAnyTag($tag)
+                        ->where('status', '=', 'published')
                         ->where('title', 'LIKE', "{$char}%")
                         ->get();
                 } else {
-                    $posts = Post::withAnyTag($tag)->get();
+                    $posts = Post::withAnyTag($tag)
+                        ->where('status', '=', 'published')
+                        ->get();
                 }
             }
         } else {
             if ($type != null) {
                 if ($char != null) {
                     $posts = Post::where('type', $type)
+                        ->where('status', '=', 'published')
                         ->where('title', 'LIKE', "{$char}%")
                         ->get();
                 } else {
                     $posts = Post::where('type', $type)
+                        ->where('status', '=', 'published')
                         ->get();
                 }
             } else {
                 if ($char != null) {
                     $posts = Post::where('title', 'LIKE', "{$char}%")
+                        ->where('status', '=', 'published')
                         ->get();
                 } else {
-                    $posts = Post::all();
+                    $posts = Post::where('status', '=', 'published')->get();
                 }
             }
         }
@@ -992,29 +1026,31 @@ class PostController extends Controller
             $score_format = null;
         }
         if ($currentSeason == null) {
-            $op_count = Post::where('type', 'op')->count();
-            $ed_count = Post::where('type', 'ed')->count();
+            $op_count = Post::where('status', '=', 'published')->where('type', 'op')->count();
+            $ed_count = Post::where('status', '=', 'published')->where('type', 'ed')->count();
 
-            $openings = Post::where('type', 'op')
+            $openings = Post::where('status', '=', 'published')->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
 
-            $endings = Post::where('type', 'ed')
+            $endings = Post::where('status', '=', 'published')->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
 
             return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
         } else {
             //search the current season and the posts
-            $currentSeason = DB::table('current_season')->first();
+
 
             $openings = Post::withAnyTag($currentSeason->name)
+                ->where('status', '=', 'published')
                 ->where('type', 'op')
                 ->orderBy('title', 'asc')
                 ->get();
             $op_count = $openings->count();
 
             $endings = Post::withAnyTag($currentSeason->name)
+                ->where('status', '=', 'published')
                 ->where('type', 'ed')
                 ->orderBy('title', 'asc')
                 ->get();
@@ -1033,14 +1069,14 @@ class PostController extends Controller
         } else {
             $score_format = null;
         }
-        $getOpenings = Post::where('type', 'op')
+        $getOpenings = Post::where('status', '=', 'published')->where('type', 'op')
             ->orderBy('title', 'asc')
             ->get();
         $op_count = $getOpenings->count();
 
         $openings = $getOpenings->sortByDesc('averageRating')->take(100);
 
-        $getEndings = Post::where('type', 'ed')
+        $getEndings = Post::where('status', '=', 'published')->where('type', 'ed')
             ->orderBy('title', 'asc')
             ->get();
         $ed_count = $getEndings->count();
@@ -1089,6 +1125,10 @@ class PostController extends Controller
     }
     public function forceUpdate()
     {
-        dd(true);
+        if (Auth::check()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -24,7 +24,7 @@ class CreatorRoutes
                 return redirect()->route('/')->with('error', 'ONLY CREATORS (MIDDLEWARE)');
             }
         }else {
-            return redirect()->route('/')->with('error', 'ONLY CREATORS (MIDDLEWARE)');
+            return redirect()->route('/')->with('error', 'PLEASE LOGGIN WITH A CREATOR,EDITOR OR ADMIN ACCOUNT (MIDDLEWARE)');
         }
     }
 }

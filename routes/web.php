@@ -46,54 +46,68 @@ Route::get('/artist/{slug}',    [ArtistController::class, 'artist_slug'])->name(
 
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {
-        Route::get('/post/index',       [PostController::class, 'index'])->name('admin.post.index');
-        Route::get('/post/create',      [PostController::class, 'create'])->name('admin.post.create');
-        Route::get('/post/{id}/edit',   [PostController::class, 'edit'])->name('admin.post.edit')->middleware('editor');
-        Route::put('/post/{id}/update', [PostController::class, 'update'])->name('admin.post.update')->middleware('editor');
-        Route::get('/post/{id}/destroy', [PostController::class, 'destroy'])->name('admin.post.destroy')->middleware('editor');
-        Route::post('/post/store',      [PostController::class, 'store'])->name('admin.post.store');
-        Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('admin.post.show');
-        Route::post('/post/{id}/approve', [PostController::class, 'approve'])->name('admin.post.approve')->middleware('editor');
-        Route::post('/post/{id}/unapprove', [PostController::class, 'unapprove'])->name('admin.post.unapprove')->middleware('editor');
-
-        Route::get('/searchpost', [PostController::class, 'searchPost'])->name('searchpost');
+        //POSTS
+        Route::group(['middleware' => 'creator'], function () {
+            Route::get('/post/index',       [PostController::class, 'index'])->name('admin.post.index');
+            Route::get('/post/create',      [PostController::class, 'create'])->name('admin.post.create');
+            Route::post('/post/store',      [PostController::class, 'store'])->name('admin.post.store');
+            Route::get('/post/{id}/show',   [PostController::class, 'show'])->name('admin.post.show');
+            Route::get('/searchpost', [PostController::class, 'searchPost'])->name('searchpost');
+        });
+        Route::group(['middleware' => 'editor'], function () {
+            Route::get('/post/{id}/edit',   [PostController::class, 'edit'])->name('admin.post.edit');
+            Route::put('/post/{id}/update', [PostController::class, 'update'])->name('admin.post.update');
+            Route::get('/post/{id}/destroy', [PostController::class, 'destroy'])->name('admin.post.destroy');
+            Route::post('/post/{id}/approve', [PostController::class, 'approve'])->name('admin.post.approve');
+            Route::post('/post/{id}/unapprove', [PostController::class, 'unapprove'])->name('admin.post.unapprove');
+        });
         Route::get('/forceupdate', [PostController::class, 'forceUpdate'])->name('forceupdate')->middleware('admin');
 
         //TAGS
-        Route::get('/tags/index',           [TagController::class, 'index'])->name('admin.tags.index');
-        Route::get('/tags/create',          [TagController::class, 'create'])->name('admin.tags.create');
-        Route::get('/tags/{id}/edit',       [TagController::class, 'edit'])->name('admin.tags.edit')->middleware('editor');
-        Route::put('/tags/{id}/update',    [TagController::class, 'update'])->name('admin.tags.update')->middleware('editor');
-        Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy')->middleware('editor');
-        Route::post('/tags/store',          [TagController::class, 'store'])->name('admin.tags.store');
-        Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
-        //END TAGS
+        Route::group(['middleware' => 'creator'], function () {
+            Route::get('/tags/index',           [TagController::class, 'index'])->name('admin.tags.index');
+            Route::get('/tags/create',          [TagController::class, 'create'])->name('admin.tags.create');
+            Route::post('/tags/store',          [TagController::class, 'store'])->name('admin.tags.store');
+            Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
+        });
+        Route::group(['middleware' => 'editor'], function () {
+            Route::get('/tags/{id}/edit',       [TagController::class, 'edit'])->name('admin.tags.edit')->middleware('editor');
+            Route::put('/tags/{id}/update',    [TagController::class, 'update'])->name('admin.tags.update')->middleware('editor');
+            Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy')->middleware('editor');
+        });
 
-        //CURRENT SEASON OP
-        Route::get('/season/create',          [CurrentSeasonController::class, 'create'])->name('admin.season.create');
-        Route::post('/season/store',          [CurrentSeasonController::class, 'store'])->name('admin.season.store');
-        Route::get('/season/index',           [CurrentSeasonController::class, 'index'])->name('admin.season.index');
-        Route::get('/season/{id}/destroy',    [CurrentSeasonController::class, 'destroy'])->name('admin.season.destroy')->middleware('editor');
-        Route::get('/season/{id}/edit',       [CurrentSeasonController::class, 'edit'])->name('admin.season.edit')->middleware('editor');
-        Route::put('/season/{id}/update',    [CurrentSeasonController::class, 'update'])->name('admin.season.update')->middleware('editor');
+        //CURRENT SEASON
+        Route::group(['middleware' => 'admin'], function () {
+            Route::get('/season/create',          [CurrentSeasonController::class, 'create'])->name('admin.season.create');
+            Route::post('/season/store',          [CurrentSeasonController::class, 'store'])->name('admin.season.store');
+            Route::get('/season/index',           [CurrentSeasonController::class, 'index'])->name('admin.season.index');
+            Route::get('/season/{id}/destroy',    [CurrentSeasonController::class, 'destroy'])->name('admin.season.destroy');
+            Route::get('/season/{id}/edit',       [CurrentSeasonController::class, 'edit'])->name('admin.season.edit');
+            Route::put('/season/{id}/update',    [CurrentSeasonController::class, 'update'])->name('admin.season.update');
+        });
 
         //ARTISTS
-        Route::get('/artist/create',          [ArtistController::class, 'create'])->name('admin.artist.create');
-        Route::post('/artist/store',          [ArtistController::class, 'store'])->name('admin.artist.store');
-        Route::get('/artist/index',           [ArtistController::class, 'index'])->name('admin.artist.index');
-        Route::get('/artist/{id}/destroy',    [ArtistController::class, 'destroy'])->name('admin.artist.destroy')->middleware('editor');
-        Route::get('/artist/{id}/edit',       [ArtistController::class, 'edit'])->name('admin.artist.edit')->middleware('editor');
-        Route::put('/artist/{id}/update',    [ArtistController::class, 'update'])->name('admin.artist.update')->middleware('editor');
-        //END ARTISTS 
+        Route::group(['middleware' => 'creator'], function () {
+            Route::get('/artist/create',          [ArtistController::class, 'create'])->name('admin.artist.create');
+            Route::post('/artist/store',          [ArtistController::class, 'store'])->name('admin.artist.store');
+            Route::get('/artist/index',           [ArtistController::class, 'index'])->name('admin.artist.index');
+        });
+        Route::group(['middleware' => 'editor'], function () {
+            Route::get('/artist/{id}/destroy',    [ArtistController::class, 'destroy'])->name('admin.artist.destroy');
+            Route::get('/artist/{id}/edit',       [ArtistController::class, 'edit'])->name('admin.artist.edit');
+            Route::put('/artist/{id}/update',    [ArtistController::class, 'update'])->name('admin.artist.update');
+        });
 
-        //START USERS
-        Route::get('/users/create',          [UserController::class, 'create'])->name('admin.users.create');
-        Route::post('/users/store',          [UserController::class, 'store'])->name('admin.users.store');
-        Route::get('/users/index',           [UserController::class, 'index'])->name('admin.users.index');
-        Route::get('/users/{id}/destroy',    [UserController::class, 'destroy'])->name('admin.users.destroy')->middleware('editor');
-        Route::get('/users/{id}/edit',       [UserController::class, 'edit'])->name('admin.users.edit')->middleware('editor');
-        Route::put('/users/{id}/update',    [UserController::class, 'update'])->name('admin.users.update')->middleware('editor');
-        Route::get('/searchUser', [UserController::class, 'searchUser'])->name('searchuser');
+        //USERS
+        Route::group(['middleware' => 'admin'], function () {
+            Route::get('/users/create',          [UserController::class, 'create'])->name('admin.users.create');
+            Route::post('/users/store',          [UserController::class, 'store'])->name('admin.users.store');
+            Route::get('/users/index',           [UserController::class, 'index'])->name('admin.users.index');
+            Route::get('/users/{id}/destroy',    [UserController::class, 'destroy'])->name('admin.users.destroy');
+            Route::get('/users/{id}/edit',       [UserController::class, 'edit'])->name('admin.users.edit');
+            Route::put('/users/{id}/update',    [UserController::class, 'update'])->name('admin.users.update');
+            Route::get('/searchUser', [UserController::class, 'searchUser'])->name('searchuser');
+        });
     });
 });
 
@@ -104,12 +118,7 @@ Auth::routes();
 Route::post('/scoreformat', [App\Http\Controllers\HomeController::class, 'scoreFormat'])->name('scoreformat');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');
-
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
-
-
-Route::post('/upthumbnail', [App\Http\Controllers\PostController::class, 'upload'])->name('upthumbnail');
-
 Route::post('/like-post/{id}', [PostController::class, 'likePost'])->name('like.post');
 Route::post('/unlike-post/{id}', [PostController::class, 'unlikePost'])->name('unlike.post');
 Route::post('/post/{id}/ratepost', [PostController::class, 'ratePost'])->name('post.addrate');

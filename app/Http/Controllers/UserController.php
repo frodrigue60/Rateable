@@ -126,7 +126,9 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->type = $request->userType;
-            //$user->password = Hash::make($request['password']);
+            if ($request->password != null) {
+                $user->password = Hash::make($request['password']);
+            }
             if ($user->update()) {
                 return Redirect::route('admin.users.index')->with('success', 'User Updated Successfully');
             } else {

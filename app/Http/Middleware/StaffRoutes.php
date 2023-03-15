@@ -24,7 +24,7 @@ class StaffRoutes
                 return redirect()->route('/')->with('error', 'ONLY STAFF MEMBERS (MIDDLEWARE)');
             }
         }else {
-            return redirect()->route('/')->with('error', 'ONLY STAFF MEMBERS (MIDDLEWARE)');
+            return redirect()->route('/')->with('error', 'PLEASE LOGGIN WITH A STAFF MEMBER ACCOUNT (MIDDLEWARE)');
         }
     }
 }

@@ -2,11 +2,7 @@
 @section('meta')
     <title>
         {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
-    <meta name="title"
-        content="{{ $post->title }} {{ $post->suffix == true ? $post->suffix : $post->type }}
-    {{-- @isset($post->themeNum)
-        {{ $post->themeNum }}
-    @endisset --}}">
+    <meta name="title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
 
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
 
@@ -49,6 +45,85 @@
     <meta name="twitter:data2" content="2 minutos"> --}}
 @endsection
 @section('content')
+    @if ((Auth::User() && Auth::User()->isEditor()) || Auth::User()->isAdmin())
+        <div class="container mb-4">
+            <div class="post-data">
+                <div class="preview-thumbnail">
+                    <img src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="" style="width: 150px">
+                </div>
+                <div class="text-light">
+                    <p>Title: {{ $post->title }}</p>
+                    <p>Tags: @foreach ($post->tags as $item)
+                            {{ $item->name }}
+                        @endforeach
+                    </p>
+                    <p>Type: {{ $post->type }}</p>
+                    <p>Theme No. {{ $post->themeNum != null ? $post->themeNum : 'N/A' }}</p>
+                    <p>
+                        @isset($post->song->song_romaji)
+                        <p>Song title (romaji): <strong>{{ $post->song->song_romaji }}</strong></p>
+                    @endisset
+                    @isset($post->song->song_jp)
+                        <p>Song title (JP): <strong>{{ $post->song->song_jp }}</strong></p>
+                    @endisset
+                    @isset($post->song->song_en)
+                        <p>Song title (EN): <strong>{{ $post->song->song_en }}</strong></p>
+                    @endisset
+                    @isset($post->artist->name)
+                        <p>Song artist: <strong><a href="{{ route('fromartist', $artist->name_slug) }}"
+                                    class="no-deco">{{ $post->artist->name }}</a></strong></p>
+                    @endisset
+                    @isset($post->artist->name_jp)
+                        <p>Song artist (JP): <strong><a href="{{ route('fromartist', $artist->name_slug) }}"
+                                    class="no-deco">{{ $post->artist->name_jp }}</a></strong></p>
+                    @endisset
+                    </p>
+                    <p>First link: {{ $post->ytlink != null ? 'true' : 'N/A' }}</p>
+                    <p>Second link: {{ $post->scndlink != null ? 'true' : 'N/A' }}</p>
+                    <p>thumbnail: {{ $post->imageSrc != null ? 'from url' : 'from file' }} </p>
+
+                </div>
+            </div>
+            <div>
+                <div id="videos">
+                    <div class="video-container ratio ratio-16x9">
+                        {!! $post->ytlink !!}
+                    </div>
+                    <div class="video-container ratio ratio-16x9">
+                        {!! $post->scndlink !!}
+                    </div>
+                </div>
+            </div>
+
+            @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
+                <div class="container d-flex justify-content-center m-2">
+                    @if ($post->status == null)
+                        <button disabled="disabled" class="btn btn-secondary">N/A</button>
+                    @endif
+                    @if ($post->status == 'stagged')
+                            <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
+                                @csrf
+                                <button class="btn btn-warning"> <i class="fa fa-clock-o" aria-hidden="true">
+                                        {{ $post->id }}</i></button>
+                            </form>
+                    @endif
+                    @if ($post->status == 'published')
+                            <form action="{{ route('admin.post.unapprove', $post->id) }}" method="post">
+                                @csrf
+                                <button class="btn btn-primary"> <i class="fa fa-check" aria-hidden="true">
+                                        {{ $post->id }}</i></button>
+                            </form>
+                    @endif
+                        <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-success"><i
+                            class="fa fa-pencil-square-o" aria-hidden="true"></i> {{ $post->id }}</a>
+                        <a href="{{ route('admin.post.destroy', $post->id) }}" class="btn btn-danger"><i
+                            class="fa fa-trash" aria-hidden="true"></i>
+                        {{ $post->id }}</a>
+                    
+                </div>
+            @endif
+        </div>
+    @endif
     <div class="container">
         <h1 class="text-light text-center" hidden>{{ $post->title }}</h1>
         <div class="row justify-content-center">
@@ -100,7 +175,8 @@
                                             1</button></li>
                                 @endif
                                 @if ($post->scndlink != null)
-                                    <li><button class="dropdown-item" value="{{ $post->scndlink }}" id="option2">Option
+                                    <li><button class="dropdown-item" value="{{ $post->scndlink }}"
+                                            id="option2">Option
                                             2</button></li>
                                 @endif
                             </ul>

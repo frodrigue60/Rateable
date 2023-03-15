@@ -24,7 +24,7 @@ class EditorRoutes
                 return redirect()->route('/')->with('error', 'ONLY EDITORS OR ADMINS (MIDDLEWARE)');
             }
         }else {
-            return redirect()->route('/')->with('error', 'ONLY EDITORS OR ADMINS (MIDDLEWARE)');
+            return redirect()->route('/')->with('error', 'PLEASE LOGGIN WITH AN EDITOR OR ADMIN ACCOUNT (MIDDLEWARE)');
         }
     }
 }
