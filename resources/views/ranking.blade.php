@@ -144,12 +144,31 @@
                                         @endif
                                     </a></span>
                             </div>
-                            @isset($post->song->song_romaji)
+                            @if (isset($post->song->song_romaji))
                                 <div class="item-song-info">
-                                    <span><strong>{{ $post->song->song_romaji }}</strong> By
-                                        <strong>{{ $post->artist->name }}</strong></span>
+                                    <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
+                                        @isset($post->artist->name)
+                                            By
+                                            <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                    class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                        @endisset
+                                    </span>
                                 </div>
-                            @endisset
+                            @else
+                                @if (isset($post->song->song_en))
+                                    <div class="item-song-info">
+                                        <span><strong><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                                    class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
+                                            @isset($post->artist->name)
+                                                By
+                                                <strong><a href="{{ route('fromartist', $post->artist->name_slug) }}"
+                                                        class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                            @endisset
+                                        </span>
+                                    </div>
+                                @endif
+                            @endif
                         </div>
                         <div class="item-score">
                             <span>

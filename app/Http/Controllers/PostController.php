@@ -374,7 +374,7 @@ class PostController extends Controller
         } else {
             $score_format = null;
         }
-        $currentSeason = DB::table('current_season')->first();
+        $currentSeason = DB::table('tagging_tags')->where('flag','1')->first();
 
         if ($currentSeason == null) {
 
@@ -412,7 +412,7 @@ class PostController extends Controller
         } else {
             $score_format = null;
         }
-        $currentSeason = DB::table('current_season')->first();
+        $currentSeason = DB::table('tagging_tags')->where('flag','1')->first();
 
         if ($currentSeason == null) {
 
@@ -1019,7 +1019,7 @@ class PostController extends Controller
 
     public function seasonalranking()
     {
-        $currentSeason = DB::table('current_season')->first();
+        $currentSeason = DB::table('tagging_tags')->where('flag','1')->first();
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {
@@ -1040,8 +1040,6 @@ class PostController extends Controller
             return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
         } else {
             //search the current season and the posts
-
-
             $openings = Post::withAnyTag($currentSeason->name)
                 ->where('status', '=', 'published')
                 ->where('type', 'op')
