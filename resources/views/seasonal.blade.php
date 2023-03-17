@@ -104,13 +104,13 @@
                                 <span>Seasons</span>
                             </div>
                             <div>
-                                <a href="{{ route('tags') }}" class="btn btn-sm color4">More</a>
+                                <a href="{{ route('filter') }}" class="btn btn-sm color4">More</a>
                             </div>
                         </div>
                         <div class="seasons-content">
                             @foreach ($tags as $item)
                                 <article class="season-item color4">
-                                    <span><a href="{{ route('fromtag', $item->slug) }}"
+                                    <span><a href="{{ route('filter', 'tag='.str_replace(' ', '+', $item->name)) }}"
                                             class="no-deco text-light">{{ $item->name }}</a></span>
                                 </article>
                             @endforeach

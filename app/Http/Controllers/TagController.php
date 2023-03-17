@@ -114,37 +114,6 @@ class TagController extends Controller
         return redirect(route('admin.tags.index'))->with('success', 'Data deleted');
     }
 
-    public function tag_slug($slug)
-    {
-        $tagName = DB::table('tagging_tags')->where('slug', '=', $slug)->first();
-        //dd($tagName);
-
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-        } else {
-            $score_format = null;
-        }
-        $openings = Post::withAnyTag([$slug])
-            ->where('type', 'op')
-            ->orderby('title', 'asc')
-            ->get();
-
-        $endings = Post::withAnyTag([$slug])
-            ->where('type', 'ed')
-            ->orderby('title', 'asc')
-            ->get();
-
-
-        return view('fromTags', compact('openings', 'endings', 'score_format', 'tagName'));
-    }
-
-    public function alltags()
-    {
-        $tags = DB::table('tagging_tags')->get();
-
-        return view('tags', compact('tags'));
-    }
-
     public function searchTag(Request $request)
     {
         $tags = DB::table('tagging_tags')

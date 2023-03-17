@@ -37,10 +37,6 @@ Route::get('/offline', function () {
     return view('offline');
 });
 
-//TAGS PUBLIC 
-Route::get('/tags',          [TagController::class, 'alltags'])->name('tags');
-Route::get('/tag/{slug}',           [TagController::class, 'tag_slug'])->name('fromtag');
-
 //ARTIST PUBLIC
 Route::get('/artist/{slug}',    [ArtistController::class, 'artist_slug'])->name('fromartist');
 
