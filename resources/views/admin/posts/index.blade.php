@@ -42,7 +42,7 @@
                                     </td>
                                     <td>
                                         @foreach ($post->tags as $tag)
-                                            <span class="badge rounded-pill text-bg-dark">{{ $tag->name }}</span>
+                                            <span class="badge rounded-pill text-bg-dark">{{ isset($tag)?$tag->name : 'N/A' }}</span>
                                         @endforeach
 
                                     </td>

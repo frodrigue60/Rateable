@@ -71,9 +71,13 @@ Route::group(['middleware' => 'staff'], function () {
             Route::get('/searchtag', [TagController::class, 'searchTag'])->name('searchtag');
         });
         Route::group(['middleware' => 'editor'], function () {
-            Route::get('/tags/{id}/edit',       [TagController::class, 'edit'])->name('admin.tags.edit')->middleware('editor');
-            Route::put('/tags/{id}/update',    [TagController::class, 'update'])->name('admin.tags.update')->middleware('editor');
-            Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy')->middleware('editor');
+            Route::get('/tags/{id}/edit',       [TagController::class, 'edit'])->name('admin.tags.edit');
+            Route::put('/tags/{id}/update',    [TagController::class, 'update'])->name('admin.tags.update');
+            Route::get('/tags/{id}/destroy',    [TagController::class, 'destroy'])->name('admin.tags.destroy');
+        });
+        Route::group(['middleware' => 'admin'], function () {
+            Route::get('/tags/{id}/set',    [TagController::class, 'set'])->name('admin.tags.set');
+            Route::get('/tags/{id}/unset',    [TagController::class, 'unset'])->name('admin.tags.unset');
         });
 
         //CURRENT SEASON

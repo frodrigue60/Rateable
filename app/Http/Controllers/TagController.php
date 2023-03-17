@@ -152,4 +152,24 @@ class TagController extends Controller
             ->paginate(10);
         return view('admin.tags.index', compact('tags'));
     }
+    public function set($id)
+    {
+        DB::table('tagging_tags')
+            ->where('flag', '1')
+            ->update(['flag' => '0']);
+
+        DB::table('tagging_tags')
+            ->where('id', $id)
+            ->update(['flag' => '1']);
+
+        return redirect(route('admin.tags.index'))->with('status', 'Data has been updated');
+    }
+    public function unset($id)
+    {
+        DB::table('tagging_tags')
+            ->where('id', $id)
+            ->update(['flag' => '0']);
+
+        return redirect(route('admin.tags.index'))->with('status', 'Data has been updated');
+    }
 }

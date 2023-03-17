@@ -29,26 +29,42 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Slug</th>
+                                <th scope="col">Current season</th>
                                 <th scope="col">Options</th>
                             </tr>
                         </thead>
                         <tbody>
-
                             @foreach ($tags as $tag)
                                 <tr>
                                     <td>{{ $tag->id }}</td>
                                     <td><a href="{{ route('fromtag', $tag->slug) }}" class="no-deco">{{ $tag->name }}</a>
                                     </td>
                                     <td>{{ $tag->slug }}</td>
+                                    @if (Auth::User()->isEditor() || Auth::User()->isAdmin())
+                                        <td>
+                                            @if ($tag->flag == '0')
+                                                <a class="btn btn-secondary btn-sm" href="{{ route('admin.tags.set', $tag->id) }}" role="button"><i
+                                                        class="fa fa-clock-o" aria-hidden="true"></i> Set
+                                                    {{ $tag->id }}</a>
+                                            @endif
+                                            @if ($tag->flag == '1')
+                                                <a class="btn btn-primary btn-sm" href="{{ route('admin.tags.unset', $tag->id) }}" role="button"><i
+                                                        class="fa fa-check" aria-hidden="true"></i> Unset
+                                                    {{ $tag->id }}</a>
+                                            @endif
+                                        </td>
+                                    @endif
                                     <td>
-                                        @auth
+                                        @if (Auth::User()->isEditor() || Auth::User()->isAdmin())
                                             <a class="btn btn-success btn-sm" href="/admin/tags/{{ $tag->id }}/edit"
                                                 role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
                                                 {{ $tag->id }}</a>
                                             <a class="btn btn-danger btn-sm" href="/admin/tags/{{ $tag->id }}/destroy"
                                                 role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete
                                                 {{ $tag->id }}</a>
-                                        @endauth
+                                        @endif
+
+
                                     </td>
                             @endforeach
 

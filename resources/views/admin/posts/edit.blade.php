@@ -109,7 +109,9 @@
                         <select class="form-select chzn-select" multiple name="tags[]" id="seasonsTags"
                             style="width:100%;">
                             @foreach ($post->tags as $tag)
-                                <option selected value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                @if (isset($tag->name))
+                                    <option selected value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                @endif
                             @endforeach
                             @foreach ($tags as $tag)
                                 <option value="{{ $tag->name }}">{{ $tag->name }}</option>
