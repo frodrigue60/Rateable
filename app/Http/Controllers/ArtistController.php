@@ -121,7 +121,13 @@ class ArtistController extends Controller
     public function destroy($id)
     {
         $artist = Artist::find($id);
+
+        DB::table('posts')
+            ->where('artist_id', $artist->id)
+            ->update(['artist_id' => null]);
+
         $artist->delete();
+
         return redirect(route('admin.artist.index'))->with('success', 'Data deleted');
     }
 
@@ -145,7 +151,7 @@ class ArtistController extends Controller
 
         return view('fromtags', compact('openings', 'endings', 'score_format', 'artist'));
     }
-    
+
     public function paginate($artists, $perPage = 10, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();

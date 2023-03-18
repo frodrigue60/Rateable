@@ -109,8 +109,15 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
+        $tag = DB::table('tagging_tags')->where('id', '=', $id)->first();
+        
+        $posts = Post::withAnyTag($tag->name)->get();
+        
+        foreach ($posts as $post) {
+            $post->untag($tag->name);
+        }
+        
         DB::table('tagging_tags')->where('id', '=', $id)->delete();
-
         return redirect(route('admin.tags.index'))->with('success', 'Data deleted');
     }
 

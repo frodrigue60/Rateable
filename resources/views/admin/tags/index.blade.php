@@ -37,23 +37,37 @@
                             @foreach ($tags as $tag)
                                 <tr>
                                     <td>{{ $tag->id }}</td>
-                                    <td><a href="{{ route('fromtag', $tag->slug) }}" class="no-deco">{{ $tag->name }}</a>
+                                    <td><a href="{{ route('filter', 'tag=' . str_replace(' ', '+', $tag->name)) }}"
+                                            class="no-deco">{{ $tag->name }}</a>
                                     </td>
                                     <td>{{ $tag->slug }}</td>
-                                    @if (Auth::User()->isEditor() || Auth::User()->isAdmin())
-                                        <td>
+                                    <td>
+                                        @if (Auth::User()->isEditor() || Auth::User()->isAdmin())
                                             @if ($tag->flag == '0')
-                                                <a class="btn btn-secondary btn-sm" href="{{ route('admin.tags.set', $tag->id) }}" role="button"><i
+                                                <a class="btn btn-secondary btn-sm"
+                                                    href="{{ route('admin.tags.set', $tag->id) }}" role="button"><i
                                                         class="fa fa-clock-o" aria-hidden="true"></i> Set
                                                     {{ $tag->id }}</a>
                                             @endif
                                             @if ($tag->flag == '1')
-                                                <a class="btn btn-primary btn-sm" href="{{ route('admin.tags.unset', $tag->id) }}" role="button"><i
+                                                <a class="btn btn-primary btn-sm"
+                                                    href="{{ route('admin.tags.unset', $tag->id) }}" role="button"><i
                                                         class="fa fa-check" aria-hidden="true"></i> Unset
                                                     {{ $tag->id }}</a>
                                             @endif
-                                        </td>
-                                    @endif
+                                        @else
+                                            @if ($tag->flag == '0')
+                                                <button disabled="disabled" class="btn btn-secondary btn-sm"><i
+                                                        class="fa fa-clock-o" aria-hidden="true"></i> Set
+                                                    {{ $tag->id }}</button>
+                                            @endif
+                                            @if ($tag->flag == '1')
+                                                <button disabled="disabled" class="btn btn-primary btn-sm"><i
+                                                        class="fa fa-check" aria-hidden="true"></i> Unset
+                                                    {{ $tag->id }}</button>
+                                            @endif
+                                        @endif
+                                    </td>
                                     <td>
                                         @if (Auth::User()->isEditor() || Auth::User()->isAdmin())
                                             <a class="btn btn-success btn-sm" href="/admin/tags/{{ $tag->id }}/edit"
@@ -62,9 +76,12 @@
                                             <a class="btn btn-danger btn-sm" href="/admin/tags/{{ $tag->id }}/destroy"
                                                 role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete
                                                 {{ $tag->id }}</a>
+                                        @else
+                                            <button disabled="disabled" class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
+                                                {{ $tag->id }}</button>
+                                            <button disabled="disabled" class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                                {{ $tag->id }}</button>
                                         @endif
-
-
                                     </td>
                             @endforeach
 

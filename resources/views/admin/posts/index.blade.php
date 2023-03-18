@@ -42,13 +42,14 @@
                                     </td>
                                     <td>
                                         @foreach ($post->tags as $tag)
-                                            <span class="badge rounded-pill text-bg-dark">{{ isset($tag)?$tag->name : 'N/A' }}</span>
+                                            <span
+                                                class="badge rounded-pill text-bg-dark">{{ isset($tag) ? $tag->name : 'N/A' }}</span>
                                         @endforeach
 
                                     </td>
                                     <td>{{ $post->type }}-{{ $post->themeNum }}</td>
                                     <td>
-                                        @isset($post->song_id)
+                                        @if (isset($post->song_id))
                                             @if (isset($post->song->song_romaji))
                                                 {{ $post->song->song_romaji }}
                                             @else
@@ -58,13 +59,19 @@
                                                     N/A
                                                 @endif
                                             @endif
-                                        @endisset
+                                        @else
+                                            N/A
+                                        @endif
                                     </td>
                                     <td>
-                                        @isset($post->artist->name)
-                                            <a
-                                                href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
-                                        @endisset
+                                        @if (isset($post->artist_id))
+                                            @isset($post->artist->name)
+                                                <a
+                                                    href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
+                                            @endisset
+                                        @else
+                                        N/A
+                                        @endif
                                     </td>
 
                                     @if (Auth::User()->isCreator())

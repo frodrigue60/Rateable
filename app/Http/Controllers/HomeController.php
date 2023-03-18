@@ -31,13 +31,22 @@ class HomeController extends Controller
     public function index()
     {
         $score_formats = [
-            ['name' => ' 100 Point (55/100)','value'=>'POINT_100'],
-            ['name' => '10 Point Decimal (5.5/10)','value'=>'POINT_10_DECIMAL'],
-            ['name' => '10 Point (5/10)','value'=>'POINT_10'],
-            ['name' => '5 Star (3/5)','value'=>'POINT_5'],
+            ['name' => ' 100 Point (55/100)', 'value' => 'POINT_100'],
+            ['name' => '10 Point Decimal (5.5/10)', 'value' => 'POINT_10_DECIMAL'],
+            ['name' => '10 Point (5/10)', 'value' => 'POINT_10'],
+            ['name' => '5 Star (3/5)', 'value' => 'POINT_5'],
         ];
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            return view('home', compact('score_formats','user'));
+        }
+        else {
+            return redirect()->route('/')->with('warning', 'Please login');
+        }
         
-        return view('home', compact('score_formats'));
+
+        
     }
 
     public function upload(Request $request)
@@ -71,7 +80,38 @@ class HomeController extends Controller
         }
         return redirect(route('home'))->with('warning', 'File not found');
     }
+    public function uploadBanner(Request $request)
+    {
+        if ($request->hasFile('banner')) {
 
+            $validator = Validator::make($request->all(), [
+                'banner' => 'mimes:png,jpg,jpeg,webp|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->getMessageBag();
+                return redirect(route('home'))->with('error', $errors);
+            }
+
+            $user_id = Auth::user()->id;
+
+            $file_type = $request->banner->extension();
+            $file_name = 'banner_' . time() . '.' . $file_type;
+
+            if (Auth::user()->banner != null) {
+                Storage::disk('public')->delete('/banner/' . Auth::user()->banner);
+            }
+
+            $request->banner->storeAs('banner', $file_name, 'public');
+
+            DB::table('users')
+                ->where('id', $user_id)
+                ->update(['banner' => $file_name]);
+
+            return redirect(route('home'))->with('success', 'Image uploaded successfully!');
+        }
+        return redirect(route('home'))->with('warning', 'File not found');
+    }
     public function scoreFormat(Request $request)
     {
         if ($request->score_format == 'null') {
@@ -96,7 +136,7 @@ class HomeController extends Controller
         }
         //return Redirect::back()->with('error', '¡Ooops!');
     }
-    
+
     public function welcome()
     {
         return view('welcome');

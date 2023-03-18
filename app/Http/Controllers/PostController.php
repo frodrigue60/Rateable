@@ -138,12 +138,18 @@ class PostController extends Controller
                 $post->artist_id = $request->artist_id;
             }
             $song = new Song;
-            $song->song_romaji = $request->song_romaji;
-            $song->song_jp = $request->song_jp;
-            $song->song_en = $request->song_en;
-            $song->save();
 
-            $post->song_id = $song->id;
+            if ($request->song_romaji != null || $request->song_en != null) {
+                $song->song_romaji = $request->song_romaji;
+                $song->song_jp = $request->song_jp;
+                $song->song_en = $request->song_en;
+                if ($song->save()) {
+                    $post->song_id = $song->id;
+                }
+                else{
+                    $post->song_id = null;
+                }
+            }
 
             if ($post->save()) {
                 $tags = $request->tags;
@@ -335,7 +341,7 @@ class PostController extends Controller
 
         Storage::disk('public')->delete('/thumbnails/' . $file);
         $post->delete();
-        $song = Song::find($post->song->id);
+        $song = Song::find($post->song_id);
         $song->delete();
 
         return Redirect::back()->with('success', 'Post Deleted successfully!');
@@ -374,7 +380,7 @@ class PostController extends Controller
         } else {
             $score_format = null;
         }
-        $currentSeason = DB::table('tagging_tags')->where('flag','1')->first();
+        $currentSeason = DB::table('tagging_tags')->where('flag', '1')->first();
 
         if ($currentSeason == null) {
 
@@ -412,7 +418,7 @@ class PostController extends Controller
         } else {
             $score_format = null;
         }
-        $currentSeason = DB::table('tagging_tags')->where('flag','1')->first();
+        $currentSeason = DB::table('tagging_tags')->where('flag', '1')->first();
 
         if ($currentSeason == null) {
 
@@ -1019,7 +1025,7 @@ class PostController extends Controller
 
     public function seasonalranking()
     {
-        $currentSeason = DB::table('tagging_tags')->where('flag','1')->first();
+        $currentSeason = DB::table('tagging_tags')->where('flag', '1')->first();
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {

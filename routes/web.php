@@ -118,6 +118,7 @@ Auth::routes();
 Route::post('/scoreformat', [App\Http\Controllers\HomeController::class, 'scoreFormat'])->name('scoreformat');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::post('/upload', [App\Http\Controllers\HomeController::class, 'upload'])->name('upload');
+Route::post('/upload-banner', [App\Http\Controllers\HomeController::class, 'uploadBanner'])->name('upload.banner');
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
 Route::post('/like-post/{id}', [PostController::class, 'likePost'])->name('like.post');
 Route::post('/unlike-post/{id}', [PostController::class, 'unlikePost'])->name('unlike.post');

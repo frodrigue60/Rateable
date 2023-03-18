@@ -17,14 +17,13 @@
                 <li><a class="nav-link {{ Request::is('endings') ? 'active' : '' }}"
                         href="{{ route('endings') }}">Endings</a></li>
                 <li><a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"
-                        href="{{ route('globalranking') }}">Global Ranking</a></li>
+                        href="{{ route('globalranking') }}">Ranking</a></li>
                 <li><a class="nav-link {{ Request::is('filter') ? 'active' : '' }}"
                         href="{{ route('filter') }}">Filter</a></li>
                 @auth
                     <li><a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}"
                             href="{{ route('favorites') }}">My Favorites</a></li>
                 @endauth
-                @auth
                     @if (Auth::user()->isStaff())
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button"
@@ -36,14 +35,10 @@
                                 @if (Auth::User()->isAdmin())
                                     <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
                                     </li>
-                                    <li> <a class="dropdown-item"
-                                            href="{{ route('admin.season.index') }}">CurrentSeason</a></li>
                                 @endif
                             </ul>
                         </li>
                     @endif
-                @endauth
-
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">

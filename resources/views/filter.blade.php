@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-    @if (Request::routeIs('userlist'))
+    @if (Request::routeIs('userlist') || Request::routeIs('favorites'))
         @include('layouts.userBanner')
     @endif
     <div class="container">

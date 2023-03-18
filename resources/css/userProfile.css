@@ -1,12 +1,13 @@
 .avatar {
     border-radius: 50%;
     display: inline-block;
-    max-height: 230px;
+    max-height: 160px;
     max-width: 160px;
     width: 100%;
     z-index: 2;
 }
-.data-container{
+
+.data-container {
     align-items: flex-end;
     display: flex;
     height: 100%;
@@ -27,7 +28,7 @@
     display: flex;
     width: 100%;
     padding: 20px;
-    
+
 }
 
 .name-wrapper {
@@ -56,4 +57,246 @@
     width: 100%;
     margin-top: 65px;
     z-index: 1;
+}
+
+@media screen and (max-width: 1920px) {}
+
+@media screen and (max-width: 1440px) {}
+
+@media screen and (max-width: 1280px) {
+    .header {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        height: 250px;
+    }
+    .name-wrapper {
+        padding: 10px 15px;
+        z-index: 2;
+    }
+    .avatar {
+        border-radius: 50%;
+        display: inline-block;
+        max-height: 100px;
+        max-width: 100px;
+        width: 100%;
+        z-index: 2;
+    }
+    .banner-user {
+        background-color: #242538;
+        background-position: 50% 35%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 250px;
+        position: relative;
+    }
+    .shadow-banner {
+        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
+        background-clip: content-box;
+        height: 240px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        margin-top: 66px;
+        z-index: 1;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .header {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        height: 250px;
+    }
+    .name-wrapper {
+        padding: 10px 15px;
+        z-index: 2;
+    }
+    .avatar {
+        border-radius: 50%;
+        display: inline-block;
+        max-height: 100px;
+        max-width: 100px;
+        width: 100%;
+        z-index: 2;
+    }
+    .banner-user {
+        background-color: #242538;
+        background-position: 50% 35%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 250px;
+        position: relative;
+    }
+    .shadow-banner {
+        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
+        background-clip: content-box;
+        height: 240px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        margin-top: 90px;
+        z-index: 1;
+    }
+}
+@media screen and (max-width: 992px) {
+    .header {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        height: 250px;
+    }
+    .name-wrapper {
+        padding: 10px 15px;
+        z-index: 2;
+    }
+    .avatar {
+        border-radius: 50%;
+        display: inline-block;
+        max-height: 100px;
+        max-width: 100px;
+        width: 100%;
+        z-index: 2;
+    }
+    .banner-user {
+        background-color: #242538;
+        background-position: 50% 35%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 250px;
+        position: relative;
+    }
+    .shadow-banner {
+        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
+        background-clip: content-box;
+        height: 240px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        margin-top: 65px;
+        z-index: 1;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .header {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        height: 260px;
+    }
+    .name-wrapper {
+        padding: 10px 15px;
+        z-index: 2;
+    }
+    .avatar {
+        border-radius: 50%;
+        display: inline-block;
+        max-height: 100px;
+        max-width: 100px;
+        width: 100%;
+        z-index: 2;
+    }
+    .banner-user {
+        background-color: #242538;
+        background-position: 50% 35%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 250px;
+        position: relative;
+    }
+    .shadow-banner {
+        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
+        background-clip: content-box;
+        height: 240px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        margin-top: 65px;
+        z-index: 1;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    
+}
+
+@media screen and (max-width: 768px) {}
+
+@media screen and (max-width: 600px) {
+    .header {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        height: 220px;
+    }
+    .name-wrapper {
+        padding: 10px 15px;
+        z-index: 2;
+    }
+    .avatar {
+        border-radius: 50%;
+        display: inline-block;
+        max-height: 100px;
+        max-width: 100px;
+        width: 100%;
+        z-index: 2;
+    }
+    .banner-user {
+        background-color: #242538;
+        background-position: 50% 35%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 220px;
+        position: relative;
+    }
+    .shadow-banner {
+        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
+        background-clip: content-box;
+        height: 210px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        margin-top: 65px;
+        z-index: 1;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .header {
+        margin-top: -10px;
+        margin-bottom: 20px;
+        height: 200px;
+    }
+    .name-wrapper {
+        padding: 10px 15px;
+        z-index: 2;
+    }
+    .avatar {
+        border-radius: 50%;
+        display: inline-block;
+        max-height: 75px;
+        max-width: 75px;
+        width: 100%;
+        z-index: 2;
+    }
+    .banner-user {
+        background-color: #242538;
+        background-position: 50% 35%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 200px;
+        position: relative;
+    }
+    .shadow-banner {
+        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
+        background-clip: content-box;
+        height: 190px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        margin-top: 65px;
+        z-index: 1;
+    }
 }

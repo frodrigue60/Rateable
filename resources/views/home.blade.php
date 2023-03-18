@@ -5,33 +5,23 @@
         <meta title="Profile">
     @endif
 @endsection
+
 @section('content')
+    @if (Request::routeIs('home'))
+        @include('layouts.userBanner')
+    @endif
     <div class="container">
         <div class="row justify-content-center">
             <div class="card text-light">
-                <div class="card-header"><strong>{{ Auth::user()->name }}</strong>'s Dashboard</div>
+                <div class="card-header"><strong>{{ $user->name }}</strong>'s Dashboard</div>
                 <div class="card-body">
                     <div>
-                        You are logged in!
-                    </div>
-                    <div>
-                        @if (Auth::user()->image)
-                            <img class="image rounded-circle" src="{{ asset('/storage/profile/' . Auth::user()->image) }}"
-                                alt="profile_image" style="width: 95px;height: 95px; padding: 5px; margin: 0px; ">
-                        @else
-                            <div>
-                                <h2>You dont have profile pic</h2>
-                            </div>
-                        @endif
-                    </div>
-                    <br>
-                    <div>
+                        <label for="profilePic" class="form-label">Upload a profile pic</label>
                         <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
                             @method('post')
                             @csrf
-
                             <div class="input-group">
-                                <input type="file" class="form-control" id="inputGroupFile04"
+                                <input type="file" class="form-control" id="profilePic"
                                     aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image">
                                 <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Submit profile
                                     pic</button>
@@ -40,11 +30,26 @@
                     </div>
                     <br>
                     <div>
+                        <label for="bannerPic" class="form-label">Upload a banner pic</label>
+                        <form action="{{ route('upload.banner') }}" method="POST" enctype="multipart/form-data">
+                            @method('post')
+                            @csrf
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="bannerPic"
+                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="banner">
+                                <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Submit banner
+                                    pic</button>
+                            </div>
+                        </form>
+                    </div>
+                    <br>
+                    <div>
+                        <label for="selectScoreFormat" class="form-label">Change score format</label>
                         <form action="{{ route('scoreformat') }}" method="POST" enctype="multipart/form-data">
                             @method('post')
                             @csrf
                             <div class="input-group">
-                                <select name="score_format" class="form-select" id="inputGroupSelect04"
+                                <select name="score_format" class="form-select" id="selectScoreFormat"
                                     aria-label="Example select with button addon">
                                     <option value="">Select Scoring System</option>
                                     @foreach ($score_formats as $item)
