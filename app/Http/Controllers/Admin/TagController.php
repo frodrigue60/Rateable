@@ -123,7 +123,7 @@ class TagController extends Controller
     public function searchTag(Request $request)
     {
         $tags = DB::table('tagging_tags')
-            ->where('name', 'LIKE', "%{$request->input('search')}%")
+            ->where('name', 'LIKE', "%{$request->input('q')}%")
             ->paginate(10);
         return view('admin.tags.index', compact('tags'));
     }
@@ -137,7 +137,7 @@ class TagController extends Controller
             ->where('id', $id)
             ->update(['flag' => '1']);
 
-        return redirect(route('admin.tags.index'))->with('status', 'Data has been updated');
+        return redirect()->back()->with('success', 'Data has been updated');
     }
     public function unset($id)
     {
@@ -145,6 +145,6 @@ class TagController extends Controller
             ->where('id', $id)
             ->update(['flag' => '0']);
 
-        return redirect(route('admin.tags.index'))->with('status', 'Data has been updated');
+        return redirect()->back()->with('status', 'Data has been updated');
     }
 }

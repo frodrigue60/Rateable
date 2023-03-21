@@ -7,7 +7,7 @@
         <meta name="description" content="Search Openings & Endings by type, season, order as you want, and filter by letter">
         <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
     @endif
-    @if (Request::routeIs('userlist'))
+    @if (Request::routeIs('user.list'))
         <title>{{ $user->name }} - list</title>
         <meta title="{{ $user->name }} - Themes list">
         <link rel="canonical" href="{{ url()->current() }}">
@@ -17,7 +17,7 @@
 @endsection
 
 @section('content')
-    @if (Request::routeIs('userlist') || Request::routeIs('favorites'))
+    @if (Request::routeIs('user.list') || Request::routeIs('favorites'))
         @include('layouts.userBanner')
     @endif
     <div class="container">
@@ -39,7 +39,7 @@
                     @if (Request::routeIs('filter'))
                         @include('filter.search')
                     @endif
-                    @if (Request::routeIs('userlist'))
+                    @if (Request::routeIs('user.list'))
                         @include('filter.user')
                     @endif
                     @if (Request::routeIs('favorites'))
@@ -52,7 +52,7 @@
                 @if (Request::routeIs('filter'))
                     @include('filter.searchTarjetas')
                 @endif
-                @if (Request::routeIs('userlist'))
+                @if (Request::routeIs('user.list'))
                     @include('filter.userTarjetas')
                 @endif
                 @if (Request::routeIs('favorites'))
@@ -65,19 +65,19 @@
             </section>
         </div>
     </div>
-@section('script')
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#chzn-filterBy").chosen();
-            $("#chzn-type").chosen();
-            $("#chzn-tag").chosen();
-            $("#chzn-sort").chosen();
-            $("#chzn-char").chosen();
-        });
-    </script>
-@endsection
+    @section('script')
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#chzn-filterBy").chosen();
+                $("#chzn-type").chosen();
+                $("#chzn-tag").chosen();
+                $("#chzn-sort").chosen();
+                $("#chzn-char").chosen();
+            });
+        </script>
+    @endsection
 @endsection

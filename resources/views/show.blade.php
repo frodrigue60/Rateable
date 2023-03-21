@@ -110,12 +110,12 @@
                         @endguest
                         @auth
                             @if ($post->liked())
-                                <form action="{{ route('unlike.post', $post->id) }}" method="post">
+                                <form action="{{ route('post.unlike', $post->id) }}" method="post">
                                     @csrf
                                     <button class="button-liked" id="like"> <i class="fa fa-heart"></i></button>
                                 </form>
                             @else
-                                <form action="{{ route('like.post', $post->id) }}" method="post">
+                                <form action="{{ route('post.like', $post->id) }}" method="post">
                                     @csrf
                                     <button class="button2" id="like"><i class="fa fa-heart"></i></button>
                                 </form>

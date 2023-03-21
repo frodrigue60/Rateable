@@ -45,7 +45,7 @@
                         </div>
                         <div class="item-info">
                             <div class="item-post-info">
-                                <span><a href="{{ route('show', [$post->id, $post->slug]) }}"
+                                <span><a href="{{ route('post.show', [$post->id, $post->slug]) }}"
                                         class="text-light no-deco text-uppercase">{{ $post->title }}
                                         @if ($post->themeNum != null)
                                             ({{ $post->type }}{{ $post->themeNum }})
@@ -54,7 +54,7 @@
                             </div>
                             @if (isset($post->song->song_romaji))
                                 <div class="item-song-info">
-                                    <span><strong><a href="{{ route('show', [$post->id, $post->slug]) }}"
+                                    <span><strong><a href="{{ route('post.show', [$post->id, $post->slug]) }}"
                                                 class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
                                         @isset($post->artist->name)
                                             By
@@ -66,7 +66,7 @@
                             @else
                                 @if (isset($post->song->song_en))
                                     <div class="item-song-info">
-                                        <span><strong><a href="{{ route('show', [$post->id, $post->slug]) }}"
+                                        <span><strong><a href="{{ route('post.show', [$post->id, $post->slug]) }}"
                                                     class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
                                             @isset($post->artist->name)
                                                 By
@@ -137,7 +137,7 @@
                         </div>
                         <div class="item-info">
                             <div class="item-post-info">
-                                <span><a href="{{ route('show', [$post->id, $post->slug]) }}"
+                                <span><a href="{{ route('post.show', [$post->id, $post->slug]) }}"
                                         class="text-light no-deco text-uppercase">{{ $post->title }}
                                         @if ($post->themeNum != null)
                                             ({{ $post->type }}{{ $post->themeNum }})
@@ -146,7 +146,7 @@
                             </div>
                             @if (isset($post->song->song_romaji))
                                 <div class="item-song-info">
-                                    <span><strong><a href="{{ route('show', [$post->id, $post->slug]) }}"
+                                    <span><strong><a href="{{ route('post.show', [$post->id, $post->slug]) }}"
                                                 class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
                                         @isset($post->artist->name)
                                             By
@@ -158,7 +158,7 @@
                             @else
                                 @if (isset($post->song->song_en))
                                     <div class="item-song-info">
-                                        <span><strong><a href="{{ route('show', [$post->id, $post->slug]) }}"
+                                        <span><strong><a href="{{ route('post.show', [$post->id, $post->slug]) }}"
                                                     class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
                                             @isset($post->artist->name)
                                                 By

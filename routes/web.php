@@ -23,8 +23,8 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 |
 */
 //POST PUBLIC
-Route::get('/',       [PostController::class, 'home'])->name('/');
-Route::get('/show/{id}/{slug}',   [PostController::class, 'show'])->name('show');
+Route::get('/',       [PostController::class, 'index'])->name('/');
+Route::get('/show/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalranking'])->name('seasonalranking');
@@ -32,7 +32,7 @@ Route::get('/global-ranking',       [PostController::class, 'globalrank'])->name
 Route::get('/filter', [PostController::class, 'filter'])->name('filter');
 
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
-Route::get('/user/{user}', [UserController::class, 'userList'])->name('userlist');
+Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');
 
 
 Route::get('/offline', function () {
@@ -50,7 +50,7 @@ Route::group(['middleware' => 'staff'], function () {
             Route::get('/post/create',      [AdminPostController::class, 'create'])->name('admin.post.create');
             Route::post('/post/store',      [AdminPostController::class, 'store'])->name('admin.post.store');
             Route::get('/post/{id}/show',   [AdminPostController::class, 'show'])->name('admin.post.show');
-            Route::get('/searchpost', [AdminPostController::class, 'searchPost'])->name('searchpost');
+            Route::get('/post/search', [AdminPostController::class, 'search'])->name('admin.post.search');
         });
         Route::group(['middleware' => 'editor'], function () {
             Route::get('/post/{id}/edit',   [AdminPostController::class, 'edit'])->name('admin.post.edit');
@@ -66,7 +66,7 @@ Route::group(['middleware' => 'staff'], function () {
             Route::get('/tags/index',           [AdminTagController::class, 'index'])->name('admin.tags.index');
             Route::get('/tags/create',          [AdminTagController::class, 'create'])->name('admin.tags.create');
             Route::post('/tags/store',          [AdminTagController::class, 'store'])->name('admin.tags.store');
-            Route::get('/searchtag', [AdminTagController::class, 'searchTag'])->name('searchtag');
+            Route::get('/tags/search', [AdminTagController::class, 'searchTag'])->name('search.tag');
         });
         Route::group(['middleware' => 'editor'], function () {
             Route::get('/tags/{id}/edit',       [AdminTagController::class, 'edit'])->name('admin.tags.edit');
@@ -83,6 +83,7 @@ Route::group(['middleware' => 'staff'], function () {
             Route::get('/artist/create',          [AdminArtistController::class, 'create'])->name('admin.artist.create');
             Route::post('/artist/store',          [AdminArtistController::class, 'store'])->name('admin.artist.store');
             Route::get('/artist/index',           [AdminArtistController::class, 'index'])->name('admin.artist.index');
+            Route::get('/artist/search', [AdminArtistController::class, 'searchArtist'])->name('admin.artist.search');
         });
         Route::group(['middleware' => 'editor'], function () {
             Route::get('/artist/{id}/destroy',    [AdminArtistController::class, 'destroy'])->name('admin.artist.destroy');
@@ -98,7 +99,7 @@ Route::group(['middleware' => 'staff'], function () {
             Route::get('/users/{id}/destroy',    [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
             Route::get('/users/{id}/edit',       [AdminUserController::class, 'edit'])->name('admin.users.edit');
             Route::put('/users/{id}/update',    [AdminUserController::class, 'update'])->name('admin.users.update');
-            Route::get('/searchUser', [AdminUserController::class, 'searchUser'])->name('searchuser');
+            Route::get('/users/search', [AdminUserController::class, 'searchUser'])->name('admin.users.search');
         });
     });
 });
@@ -113,6 +114,6 @@ Route::post('/upload-profile-pic', [App\Http\Controllers\UserController::class, 
 Route::post('/upload-banner-pic', [App\Http\Controllers\UserController::class, 'uploadBannerPic'])->name('upload.banner.pic');
 //POST ROUTES
 Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
-Route::post('/like-post/{id}', [PostController::class, 'likePost'])->name('like.post');
-Route::post('/unlike-post/{id}', [PostController::class, 'unlikePost'])->name('unlike.post');
+Route::post('/post/{id}/like', [PostController::class, 'likePost'])->name('post.like');
+Route::post('/post/{id}/unlike', [PostController::class, 'unlikePost'])->name('post.unlike');
 Route::post('/post/{id}/ratepost', [PostController::class, 'ratePost'])->name('post.addrate');

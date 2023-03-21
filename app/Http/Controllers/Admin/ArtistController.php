@@ -11,6 +11,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Laravel\Ui\Presets\React;
 
 class ArtistController extends Controller
 {
@@ -128,6 +129,13 @@ class ArtistController extends Controller
         $artist->delete();
 
         return redirect(route('admin.artist.index'))->with('success', 'Data deleted');
+    }
+    public function searchArtist(Request $request){
+
+        $artists = DB::table('artists')
+            ->where('name', 'LIKE', "%{$request->input('q')}%")
+            ->paginate(10);
+        return view('admin.artists.index', compact('artists'));
     }
     public function paginate($artists, $perPage = 10, $page = null, $options = [])
     {

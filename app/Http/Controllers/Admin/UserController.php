@@ -156,7 +156,7 @@ class UserController extends Controller
     public function searchUser(Request $request)
     {
         $users = User::query()
-            ->where('name', 'LIKE', "%{$request->input('search')}%")
+            ->where('name', 'LIKE', "%{$request->input('q')}%")
             ->paginate(10);
 
         return view('admin.users.index', compact('users'));

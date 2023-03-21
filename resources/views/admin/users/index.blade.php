@@ -14,8 +14,8 @@
                 {{-- CARD BODY --}}
                 <div class="card-body">
                     {{-- search form --}}
-                    <form class="d-flex" action="{{ route('searchuser') }}" method="GET">
-                        <input class="form-control me-2" type="text" name="search" placeholder="Search" required />
+                    <form class="d-flex" action="{{ route('admin.users.search') }}" method="GET">
+                        <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     <table class="table table-dark">
@@ -33,7 +33,7 @@
                             @foreach ($users as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td><a href="{{route('userlist',$item->id)}}">{{ $item->name }}</a></td>
+                                    <td><a href="{{route('user.list',$item->id)}}">{{ $item->name }}</a></td>
                                     <td>{{$item->email}}</td>
                                     <td>{{$item->type}}</td>
                                     <td>

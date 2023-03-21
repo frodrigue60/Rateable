@@ -14,8 +14,8 @@
                 {{-- CARD BODY --}}
                 <div class="card-body">
                     {{-- search form --}}
-                    <form class="d-flex" action="" method="GET">
-                        <input class="form-control me-2" type="text" name="search" placeholder="Search" required />
+                    <form class="d-flex" action="{{route('admin.artist.search')}}" method="GET">
+                        <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     <table class="table table-dark">

@@ -33,7 +33,26 @@ class PostController extends Controller
      */
     public function index()
     {
-        
+        $recently = Post::where('status', '=', 'published')->get()->sortByDesc('created_at')->take(20);
+        $popular = Post::where('status', '=', 'published')->get()->sortByDesc('likeCount')->take(15);
+        $viewed = Post::where('status', '=', 'published')->get()->sortByDesc('viewCount')->take(15);
+
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+
+        $allOpenings = Post::where('status', 'published')
+            ->where('type', 'op')
+            ->get();
+        $allEndings = Post::where('status', 'published')
+            ->where('type', 'ed')
+            ->get();
+        $openings = $allOpenings->sortByDesc('averageRating')->take(10);
+        $endings = $allEndings->sortByDesc('averageRating')->take(10);
+
+        return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));
     }
 
     /**
@@ -114,32 +133,6 @@ class PostController extends Controller
     public function destroy($id)
     {
         
-    }
-
-    //return index view with all openings
-
-    public function home()
-    {
-        $recently = Post::where('status', '=', 'published')->get()->sortByDesc('created_at')->take(20);
-        $popular = Post::where('status', '=', 'published')->get()->sortByDesc('likeCount')->take(15);
-        $viewed = Post::where('status', '=', 'published')->get()->sortByDesc('viewCount')->take(15);
-
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-        } else {
-            $score_format = null;
-        }
-
-        $allOpenings = Post::where('status', 'published')
-            ->where('type', 'op')
-            ->get();
-        $allEndings = Post::where('status', 'published')
-            ->where('type', 'ed')
-            ->get();
-        $openings = $allOpenings->sortByDesc('averageRating')->take(10);
-        $endings = $allEndings->sortByDesc('averageRating')->take(10);
-
-        return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));
     }
 
     public function openings()

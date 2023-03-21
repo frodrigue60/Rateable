@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Artist;
 use App\Models\Song;
 use Conner\Tagging\Model\Tag;
+use App\Models\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -330,17 +331,13 @@ class PostController extends Controller
     }
 
     //seach posts in admin pannel
-    public function searchPost(Request $request)
+    public function search(Request $request)
     {
-        if (Auth::check() && Auth::user()->type == 'admin') {
             $posts = Post::query()
-                ->where('title', 'LIKE', "%{$request->input('search')}%")
+                ->where('title', 'LIKE', "%{$request->input('q')}%")
                 ->paginate(10);
 
             return view('admin.posts.index', compact('posts'));
-        } else {
-            return redirect()->route('/')->with('error', 'Only admins');
-        }
     }
     public function approve($id)
     {

@@ -51,8 +51,9 @@
             <div class="spinner"></div>
         </div>
         @include('layouts.navbar')
+        @include('layouts.alerts')
         <main class="py-2">
-            @include('layouts.alerts')
+            
             @yield('content')
             {{-- Modal Search --}}
             @include('layouts.modalSearch')

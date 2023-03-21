@@ -4,12 +4,6 @@
 
 @section('content')
     <div class="container">
-        @if (session('status'))
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>Holy guacamole!</strong> {{ session('status') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
         <div class="row justify-content-center">
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
@@ -19,8 +13,8 @@
                 {{-- CARD BODY --}}
                 <div class="card-body">
                     {{-- search form --}}
-                    <form class="d-flex" action="{{ route('searchtag') }}" method="GET">
-                        <input class="form-control me-2" type="text" name="search" placeholder="Search" required />
+                    <form class="d-flex" action="{{ route('search.tag') }}" method="GET">
+                        <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     <table class="table table-dark">
