@@ -55,7 +55,7 @@
                             <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
                                 <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                             </div>
-                            <a class="no-deco" href="{{ route('showbyslug', [$post->id, $post->slug]) }}">
+                            <a class="no-deco" href="{{ route('show', [$post->id, $post->slug]) }}">
                                 <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}" title="{{ $post->title }}">
                             </a>
@@ -146,7 +146,7 @@
                                 </div>
                                 <div class="item-info-seasonal">
                                     <div class="item-post-info-seasonal">
-                                        <span><a href="{{ route('showbyslug', [$post->id, $post->slug]) }}"
+                                        <span><a href="{{ route('show', [$post->id, $post->slug]) }}"
                                                 class="text-light no-deco">{{ $post->title }}</a></span>
                                     </div>
                                 </div>

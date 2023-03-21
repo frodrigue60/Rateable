@@ -7,7 +7,7 @@
 @endsection
 
 @section('content')
-    @if (Request::routeIs('home'))
+    @if (Request::routeIs('profile'))
         @include('layouts.userBanner')
     @endif
     <div class="container">
@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <div>
                         <label for="profilePic" class="form-label">Upload a profile pic</label>
-                        <form action="{{ route('upload') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('upload.profile.pic') }}" method="POST" enctype="multipart/form-data">
                             @method('post')
                             @csrf
                             <div class="input-group">
@@ -31,7 +31,7 @@
                     <br>
                     <div>
                         <label for="bannerPic" class="form-label">Upload a banner pic</label>
-                        <form action="{{ route('upload.banner') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('upload.banner.pic') }}" method="POST" enctype="multipart/form-data">
                             @method('post')
                             @csrf
                             <div class="input-group">
@@ -45,7 +45,7 @@
                     <br>
                     <div>
                         <label for="selectScoreFormat" class="form-label">Change score format</label>
-                        <form action="{{ route('scoreformat') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('change.score.format') }}" method="POST" enctype="multipart/form-data">
                             @method('post')
                             @csrf
                             <div class="input-group">

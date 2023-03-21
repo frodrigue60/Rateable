@@ -10,8 +10,8 @@
                     Create artist
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('admin.users.update',$user->id) }}">
-                        @method('PUT')
+                    <form method="POST" action="{{ route('admin.users.store') }}">
+                        @method('POST')
                         @csrf
                         <div class="form-group">
                             <label for="nameUser">Name</label>

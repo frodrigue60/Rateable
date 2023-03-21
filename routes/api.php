@@ -21,10 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::controller(apiPostController::class)->group(function(){
-    Route::get('/posts','index');
-    Route::post('/post','store');
-    Route::get('/post/{id}','show');
-    Route::put('/post/{id}','update');
-    Route::delete('/post/{id}','destroy');
     Route::get('/search','search');
 });

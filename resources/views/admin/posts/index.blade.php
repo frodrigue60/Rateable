@@ -67,7 +67,7 @@
                                         @if (isset($post->artist_id))
                                             @isset($post->artist->name)
                                                 <a
-                                                    href="{{ route('fromartist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
+                                                    href="{{ route('from.artist', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
                                             @endisset
                                         @else
                                         N/A

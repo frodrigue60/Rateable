@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Post;
 use Conner\Tagging\Model\Tag;
 use stdClass;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -24,10 +27,19 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users =  User::all();
-        $users = $users->sortByDesc('created_at');
-        $users = $this->paginate($users);
-        return view('admin.users.index', compact('users'));
+        $score_formats = [
+            ['name' => ' 100 Point (55/100)', 'value' => 'POINT_100'],
+            ['name' => '10 Point Decimal (5.5/10)', 'value' => 'POINT_10_DECIMAL'],
+            ['name' => '10 Point (5/10)', 'value' => 'POINT_10'],
+            ['name' => '5 Star (3/5)', 'value' => 'POINT_5'],
+        ];
+
+        if (Auth::check()) {
+            $user = Auth::user();
+            return view('profile', compact('score_formats', 'user'));
+        } else {
+            return redirect()->route('/')->with('warning', 'Please login');
+        }
     }
 
     /**
@@ -37,13 +49,6 @@ class UserController extends Controller
      */
     public function create()
     {
-        $type = [
-            ['name' => 'User', 'value' => 'user'],
-            ['name' => 'Admin', 'value' => 'admin'],
-            ['name' => 'Editor', 'value' => 'editor'],
-            ['name' => 'Creator', 'value' => 'creator']
-        ];
-        return view('admin.users.create',compact('type'));
     }
 
     /**
@@ -54,24 +59,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:4'],
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->getMessageBag();
-            return Redirect::back()->with('error', $errors);
-        } else {
-            User::create([
-                'name' => $request['name'],
-                'email' => $request['email'],
-                'password' => Hash::make($request['password']),
-            ]);
-
-            return Redirect::route('admin.users.index')->with('success', 'User Created Successfully');
-        }
     }
 
     /**
@@ -93,14 +80,6 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user = User::find($id);
-        $type = [
-            ['name' => 'User', 'value' => 'user'],
-            ['name' => 'Admin', 'value' => 'admin'],
-            ['name' => 'Editor', 'value' => 'editor'],
-            ['name' => 'Creator', 'value' => 'creator']
-        ];
-        return view('admin.users.edit',compact('user','type'));
     }
 
     /**
@@ -112,29 +91,6 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user=User::find($id);
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            /* 'password' => ['required', 'string', 'min:4'], */
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->getMessageBag();
-            return Redirect::back()->with('error', $errors);
-        } else {
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->type = $request->userType;
-            if ($request->password != null) {
-                $user->password = Hash::make($request['password']);
-            }
-            if ($user->update()) {
-                return Redirect::route('admin.users.index')->with('success', 'User Updated Successfully');
-            } else {
-                return Redirect::route('admin.users.index')->with('error', 'Somethis was wrong!');
-            }
-        }
     }
 
     /**
@@ -145,16 +101,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        $deleteRatings = DB::table('ratings')->where('user_id', '=', $user->id)->delete();
-
-        if ($user->delete()) {
-            return Redirect::route('admin.users.index')->with('success', 'User deleted successfully');
-        } else {
-            return Redirect::route('admin.users.index')->with('warning', 'Somethis was wrong!');
-        }
     }
-    public function userList (Request $request, $userId){
+    public function userList(Request $request, $userId)
+    {
         $user = User::find($userId);
 
         $score_format = $user->score_format;
@@ -179,16 +128,16 @@ class UserController extends Controller
         ];
 
         $types = [
-            ['name' => 'Opening','value'=>'OP'],
-            ['name' => 'Ending','value'=>'ED']
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED']
         ];
 
         $sortMethods = [
-            ['name' => 'Recent','value'=>'recent'],
-            ['name' => 'Title','value'=>'title'],
-            ['name' => 'Score','value'=>'averageRating'],
-            ['name' => 'Views','value'=>'viewCount'],
-            ['name' => 'Popular','value'=>'likeCount']
+            ['name' => 'Recent', 'value' => 'recent'],
+            ['name' => 'Title', 'value' => 'title'],
+            ['name' => 'Score', 'value' => 'averageRating'],
+            ['name' => 'Views', 'value' => 'viewCount'],
+            ['name' => 'Popular', 'value' => 'likeCount']
         ];
 
         $characters = range('A', 'Z');
@@ -405,49 +354,135 @@ class UserController extends Controller
             case 'title':
                 $posts = $posts->sortBy('title');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format','user','filters'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
             case 'averageRating':
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format','user','filters'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
             case 'viewCount':
                 $posts = $posts->sortByDesc('viewCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format','user','filters'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format','user','filters'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
             case 'recent':
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format','user','filters'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
 
             default:
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested','sortMethods','types','characters','score_format','user','filters'));
+                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
         }
     }
-    public function paginate($artists, $perPage = 18, $page = null, $options = [])
+
+    public function paginate($posts, $perPage = 18, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();
         $options = ['path' => Paginator::resolveCurrentPath()];
-        $items = $artists instanceof Collection ? $artists : Collection::make($artists);
-        $artists = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-        return $artists;
+        $items = $posts instanceof Collection ? $posts : Collection::make($posts);
+        $posts = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return $posts;
     }
-    public function searchUser(Request $request)
+    public function uploadProfilePic(Request $request)
     {
-        $users = User::query()
-            ->where('name', 'LIKE', "%{$request->input('search')}%")
-            ->paginate(10);
+        if ($request->hasFile('image')) {
 
-        return view('admin.users.index', compact('users'));
+            $validator = Validator::make($request->all(), [
+                'image' => 'mimes:png,jpg,jpeg,webp|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->getMessageBag();
+                return redirect(route('profile'))->with('status', $errors);
+            }
+
+            //$user_email = Auth::user()->email;
+            $user_id = Auth::user()->id;
+            $old_user_image = Auth::user()->image;
+
+            $file_type = $request->image->extension();
+            $file_name = 'profile_' . time() . '.' . $file_type;
+
+            Storage::disk('public')->delete('/profile/' . $old_user_image);
+            $request->image->storeAs('profile', $file_name, 'public');
+
+            DB::table('users')
+                ->where('id', $user_id)
+                ->update(['image' => $file_name]);
+
+            return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
+        }
+        return redirect(route('profile'))->with('warning', 'File not found');
+    }
+    public function uploadBannerPic(Request $request)
+    {
+        if ($request->hasFile('banner')) {
+
+            $validator = Validator::make($request->all(), [
+                'banner' => 'mimes:png,jpg,jpeg,webp|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->getMessageBag();
+                return redirect(route('profile'))->with('error', $errors);
+            }
+
+            $user_id = Auth::user()->id;
+
+            $file_type = $request->banner->extension();
+            $file_name = 'banner_' . time() . '.' . $file_type;
+
+            if (Auth::user()->banner != null) {
+                Storage::disk('public')->delete('/banner/' . Auth::user()->banner);
+            }
+
+            $request->banner->storeAs('banner', $file_name, 'public');
+
+            DB::table('users')
+                ->where('id', $user_id)
+                ->update(['banner' => $file_name]);
+
+            return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
+        }
+        return redirect(route('profile'))->with('warning', 'File not found');
+    }
+    public function changeScoreFormat(Request $request)
+    {
+        if ($request->score_format == 'null') {
+            return redirect()->back()->with('warning', 'score method not changed');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'score_format' => 'required|in:POINT_100,POINT_10_DECIMAL,POINT_10,POINT_5'
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::back()->with('error', '¡Ooops!');
+        }
+
+        
+        if (Auth::check()) {
+            $user = Auth::user();
+            $user = User::find($user->id);
+            $user->score_format = $request->score_format;
+            $user->update();
+
+            return redirect()->back()->with('success', 'score method changed successfully');
+        }
+        //return Redirect::back()->with('error', '¡Ooops!');
+    }
+
+    public function welcome()
+    {
+        return view('welcome');
     }
 }

@@ -24,7 +24,7 @@
                     <li><a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}"
                             href="{{ route('favorites') }}">My Favorites</a></li>
                 @endauth
-                    @if (Auth::user()->isStaff())
+                    @if (Auth::check() && Auth::user()->isStaff())
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button"
                                 data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
@@ -74,7 +74,7 @@
                             {{ Auth::user()->name }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('home') }}"><i class="fa fa-user-circle-o"
+                            <a class="dropdown-item" href="{{ route('profile') }}"><i class="fa fa-user-circle-o"
                                     aria-hidden="true"></i>
                                 Profile
                             </a>
