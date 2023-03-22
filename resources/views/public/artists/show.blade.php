@@ -36,7 +36,7 @@
                                 <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                             </div>
                             <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
-                                <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                                <span class="tag-content ">{{ $post->theme_num >= 1 ? $post->suffix : $post->type }}</span>
                             </div>
                             <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug]) }}">
                                 <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
@@ -44,7 +44,7 @@
                             </a>
                             <div class="tarjeta-footer text-light">
                                 <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
+                                <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)
@@ -93,7 +93,7 @@
                                 <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                             </div>
                             <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
-                                <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
+                                <span class="tag-content ">{{ $post->theme_num >= 1 ? $post->suffix : $post->type }}</span>
                             </div>
                             <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug]) }}">
                                 <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
@@ -101,7 +101,7 @@
                             </a>
                             <div class="tarjeta-footer text-light">
                                 <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                <span>{{ $post->viewCount }} <i class="fa fa-eye"></i></span>
+                                <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)

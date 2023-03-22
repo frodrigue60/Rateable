@@ -106,24 +106,24 @@ class PostController extends Controller
                 Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
                 //$request->file->storeAs('thumbnails', $file_name, 'public');
             } else {
-                if ($request->imageSrc == null) {
+                if ($request->thumbnail_src == null) {
                     return Redirect::back()->with('error', "Post not created, images not founds");
                 }
 
-                $image_file_data = file_get_contents($request->imageSrc);
-                //$ext = pathinfo($request->imageSrc, PATHINFO_EXTENSION);
+                $image_file_data = file_get_contents($request->thumbnail_src);
+                //$ext = pathinfo($request->thumbnail_src, PATHINFO_EXTENSION);
                 $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
                 $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
                 Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
                 //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
                 $post->thumbnail = $file_name;
-                $post->imageSrc = $request->imageSrc;
+                $post->thumbnail_src = $request->thumbnail_src;
             }
-            if ($request->themeNum != true) {
-                $post->themeNum = null;
+            if ($request->theme_num != true) {
+                $post->theme_num = null;
             } else {
-                $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type . $request->themeNum;
+                $post->theme_num = $request->theme_num;
+                $post->suffix = $request->type . $request->theme_num;
             }
 
             if ($request->artist_id != true) {
@@ -241,11 +241,11 @@ class PostController extends Controller
                     break;
             }
 
-            if ($request->themeNum != true) {
-                $post->themeNum = null;
+            if ($request->theme_num != true) {
+                $post->theme_num = null;
             } else {
-                $post->themeNum = $request->themeNum;
-                $post->suffix = $request->type . $request->themeNum;
+                $post->theme_num = $request->theme_num;
+                $post->suffix = $request->type . $request->theme_num;
             }
             if ($request->artist_id != true) {
                 $post->artist_id = null;
@@ -274,18 +274,18 @@ class PostController extends Controller
                 $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
                 Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             } else {
-                if ($request->imageSrc == null) {
+                if ($request->thumbnail_src == null) {
                     return redirect(route('admin.post.index'))->with('error', 'Post not created, images not founds');
                 }
                 Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
-                $image_file_data = file_get_contents($request->imageSrc);
-                //$ext = pathinfo($request->imageSrc, PATHINFO_EXTENSION);
+                $image_file_data = file_get_contents($request->thumbnail_src);
+                //$ext = pathinfo($request->thumbnail_src, PATHINFO_EXTENSION);
                 $file_name = Str::slug($request->title) . time() . '.' . 'webp';
                 $encoded = Image::make($image_file_data)->resize(200, 293)->encode('webp', 100); //->resize(150, 212)
                 Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
                 //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
                 $post->thumbnail = $file_name;
-                $post->imageSrc = $request->imageSrc;
+                $post->thumbnail_src = $request->thumbnail_src;
             }
             $song = new Song;
             $song->song_romaji = $request->song_romaji;

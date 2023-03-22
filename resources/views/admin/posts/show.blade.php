@@ -58,7 +58,7 @@
                         @endforeach
                     </p>
                     <p>Type: {{ $post->type }}</p>
-                    <p>Theme No. {{ $post->themeNum != null ? $post->themeNum : 'N/A' }}</p>
+                    <p>Theme No. {{ $post->theme_num != null ? $post->theme_num : 'N/A' }}</p>
                     <p>
                         @isset($post->song->song_romaji)
                         <p>Song title (romaji): <strong>{{ $post->song->song_romaji }}</strong></p>
@@ -80,7 +80,7 @@
                     </p>
                     <p>First link: {{ $post->ytlink != null ? 'true' : 'N/A' }}</p>
                     <p>Second link: {{ $post->scndlink != null ? 'true' : 'N/A' }}</p>
-                    <p>thumbnail: {{ $post->imageSrc != null ? 'from url' : 'from file' }} </p>
+                    <p>thumbnail: {{ $post->thumbnail_src != null ? 'from url' : 'from file' }} </p>
 
                 </div>
             </div>

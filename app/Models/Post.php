@@ -24,7 +24,7 @@ class Post extends Model
         'scndlink',
         'type',
         'thumbnail',
-        'viewCount',
+        'view_count',
         'status',
     ];
 

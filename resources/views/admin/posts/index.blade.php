@@ -22,7 +22,7 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Tags</th>
-                                <th scope="col">Type-themeNum</th>
+                                <th scope="col">Type-theme_num</th>
                                 <th scope="col">Song</th>
                                 <th scope="col">Artist</th>
                                 <th scope="col">Status</th>
@@ -47,7 +47,7 @@
                                         @endforeach
 
                                     </td>
-                                    <td>{{ $post->type }}-{{ $post->themeNum }}</td>
+                                    <td>{{ $post->type }}-{{ $post->theme_num }}</td>
                                     <td>
                                         @if (isset($post->song_id))
                                             @if (isset($post->song->song_romaji))

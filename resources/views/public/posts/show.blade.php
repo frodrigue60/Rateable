@@ -4,8 +4,8 @@
         {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
     <meta name="title"
         content="{{ $post->title }} {{ $post->suffix == true ? $post->suffix : $post->type }}
-    {{-- @isset($post->themeNum)
-        {{ $post->themeNum }}
+    {{-- @isset($post->theme_num)
+        {{ $post->theme_num }}
     @endisset --}}">
 
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
@@ -98,7 +98,7 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-start">
                     <div class="text-light">
-                        <button class="button-border-1">{{ $post->viewCount }} <i class="fa fa-eye"></i></button>
+                        <button class="button-border-1">{{ $post->view_count }} <i class="fa fa-eye"></i></button>
                         <button class="button-border-1">{{ $post->averageRating / 1 }} <i class="fa fa-star"></i></button>
                     </div>
                     <div class="d-flex btn-group-show">

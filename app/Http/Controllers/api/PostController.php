@@ -80,7 +80,7 @@ class PostController extends Controller
         $posts = Post::where('title', 'LIKE', "%$q%")
         ->orWhere('suffix', 'LIKE', "%$q%")
         ->limit(5)
-        ->get(['id', 'title', 'slug', 'type', 'themeNum', 'suffix']);
+        ->get(['id', 'title', 'slug', 'type', 'theme_num', 'suffix']);
 
         $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'name_slug']);
 

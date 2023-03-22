@@ -18,9 +18,9 @@
                                     name="title" required value="{{ $post->title }}">
                             </div>
                             <div class="col-md-6">
-                                <label for="themeNum" class="form-label">Opening Number</label>
-                                <input type="text" class="form-control" placeholder="OP/ED Number" id="themeNum"
-                                    name="themeNum" value="{{ $post->themeNum }}">
+                                <label for="theme_num" class="form-label">Opening Number</label>
+                                <input type="text" class="form-control" placeholder="OP/ED Number" id="theme_num"
+                                    name="theme_num" value="{{ $post->theme_num }}">
                             </div>
                         </div>
                         <br>
@@ -88,9 +88,9 @@
                             </div>
                         </div>
                         <br>
-                        <label for="imageSrc" class="form-label">Image Source</label>
-                        <input type="text" class="form-control" placeholder="Image link" id="imageSrc" name="imageSrc"
-                            value="{{ $post->imageSrc }}">
+                        <label for="thumbnail_src" class="form-label">Image Source</label>
+                        <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src" name="thumbnail_src"
+                            value="{{ $post->thumbnail_src }}">
                         <br>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Default file input example</label>

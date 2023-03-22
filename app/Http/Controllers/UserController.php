@@ -136,7 +136,7 @@ class UserController extends Controller
             ['name' => 'Recent', 'value' => 'recent'],
             ['name' => 'Title', 'value' => 'title'],
             ['name' => 'Score', 'value' => 'averageRating'],
-            ['name' => 'Views', 'value' => 'viewCount'],
+            ['name' => 'Views', 'value' => 'view_count'],
             ['name' => 'Popular', 'value' => 'likeCount']
         ];
 
@@ -360,8 +360,8 @@ class UserController extends Controller
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
                 return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
-            case 'viewCount':
-                $posts = $posts->sortByDesc('viewCount');
+            case 'view_count':
+                $posts = $posts->sortByDesc('view_count');
                 $posts = $this->paginate($posts)->withQueryString();
                 return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
 

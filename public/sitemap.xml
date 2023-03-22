@@ -175,7 +175,7 @@
         <priority>0.8</priority>
         </url>
     <url>
-        <loc>https://anirank.ddns.net/filter?sort=viewCount</loc>
+        <loc>https://anirank.ddns.net/filter?sort=view_count</loc>
         <lastmod>2023-01-07T02:38:44+00:00</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.8</priority>

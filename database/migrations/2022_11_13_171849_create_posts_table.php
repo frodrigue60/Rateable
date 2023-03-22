@@ -17,17 +17,17 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->string('imageSrc')->nullable();
+            $table->string('thumbnail_src')->nullable();
             $table->unsignedBigInteger('song_id')->nullable();
             $table->unsignedBigInteger('artist_id')->nullable();
             $table->enum('type', ['OP', 'ED'])->nullable();
             $table->enum('status', ['stagged', 'published'])->nullable();
-            $table->string('themeNum')->nullable();
+            $table->string('theme_num')->nullable();
             $table->string('suffix')->nullable();
             $table->text('ytlink')->nullable();
             $table->text('scndlink')->nullable();
             $table->string('thumbnail')->nullable();
-            $table->bigInteger('viewCount')->default(0);
+            $table->bigInteger('view_count')->default(0);
             $table->timestamps();
 
             $table->foreign('artist_id')

@@ -16,9 +16,9 @@
                                     name="title" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="themeNum" class="form-label">OP/ED Number</label>
-                                <input type="text" class="form-control" placeholder="Opening Number" id="themeNum"
-                                    name="themeNum">
+                                <label for="theme_num" class="form-label">OP/ED Number</label>
+                                <input type="text" class="form-control" placeholder="Opening Number" id="theme_num"
+                                    name="theme_num">
                             </div>
                         </div>
                         <br>
@@ -67,8 +67,8 @@
                             </div>
                         @endif
                         <br>
-                        <label for="imageSrc" class="form-label">Image Source Url</label>
-                        <input type="text" class="form-control" placeholder="Image link" id="imageSrc" name="imageSrc">
+                        <label for="thumbnail_src" class="form-label">Image Source Url</label>
+                        <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src" name="thumbnail_src">
                         <br>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Upload Image Thumbnail</label>
