@@ -53,10 +53,9 @@
         @include('layouts.navbar')
         @include('layouts.alerts')
         <main class="py-2">
-            
             @yield('content')
             {{-- Modal Search --}}
-            @include('layouts.modalSearch')
+            @include('layouts.modal-search')
         </main>
 
         <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js"

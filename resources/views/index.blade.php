@@ -31,8 +31,8 @@
     <section class="container">
         <h1 hidden class="text-light">Best Anime Openings & Endings of All Time</h1>
         {{-- POSTS SECTION --}}
-        @include('layouts.recentsCarousel')
-        @include('layouts.postsIndex')
+        @include('layouts.recents-carousel')
+        @include('layouts.posts-index')
         {{--  @include('layouts.corousels') --}}
         {{-- TOP SECTION --}}
         <section class="contenedor-main">

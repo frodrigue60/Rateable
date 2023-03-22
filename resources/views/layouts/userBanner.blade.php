@@ -1,8 +1,9 @@
 <div class="header">
-    <div class="shadow-banner"></div>
+    
     @if (isset($user->banner))
         <div class="banner-user" style="background-image: url({{ asset('/storage/banner/' . $user->banner) }})">
             <div class="data-container">
+                <div class="shadow-banner"></div>
                 <div class="banner-content container">
                     @if (isset($user->image))
                         <img class="avatar" src="{{ asset('/storage/profile/' . $user->image) }}" alt="">

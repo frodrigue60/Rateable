@@ -1,9 +1,8 @@
 .avatar {
     border-radius: 50%;
     display: inline-block;
-    max-height: 160px;
-    max-width: 160px;
-    width: 100%;
+    height: 160px;
+    width: 160px;
     z-index: 2;
 }
 
@@ -50,12 +49,11 @@
 .shadow-banner {
     background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
     background-clip: content-box;
-    height: 322px;
+    height: 100%;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%;
-    margin-top: 65px;
     z-index: 1;
 }
 
@@ -89,17 +87,6 @@
         height: 250px;
         position: relative;
     }
-    .shadow-banner {
-        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
-        background-clip: content-box;
-        height: 240px;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        margin-top: 66px;
-        z-index: 1;
-    }
 }
 @media screen and (max-width: 1200px) {
     .header {
@@ -126,17 +113,6 @@
         background-size: cover;
         height: 250px;
         position: relative;
-    }
-    .shadow-banner {
-        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
-        background-clip: content-box;
-        height: 240px;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        margin-top: 90px;
-        z-index: 1;
     }
 }
 @media screen and (max-width: 992px) {
@@ -165,17 +141,7 @@
         height: 250px;
         position: relative;
     }
-    .shadow-banner {
-        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
-        background-clip: content-box;
-        height: 240px;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        margin-top: 65px;
-        z-index: 1;
-    }
+    
 }
 
 @media screen and (max-width: 960px) {
@@ -204,17 +170,7 @@
         height: 250px;
         position: relative;
     }
-    .shadow-banner {
-        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
-        background-clip: content-box;
-        height: 240px;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        margin-top: 65px;
-        z-index: 1;
-    }
+    
 }
 
 @media screen and (max-width: 800px) {
@@ -249,17 +205,7 @@
         height: 220px;
         position: relative;
     }
-    .shadow-banner {
-        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
-        background-clip: content-box;
-        height: 210px;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        margin-top: 65px;
-        z-index: 1;
-    }
+    
 }
 
 @media screen and (max-width: 400px) {
@@ -287,16 +233,5 @@
         background-size: cover;
         height: 200px;
         position: relative;
-    }
-    .shadow-banner {
-        background: linear-gradient(0deg, #000000 0%, #2d4f3700 40%);
-        background-clip: content-box;
-        height: 190px;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        margin-top: 65px;
-        z-index: 1;
     }
 }

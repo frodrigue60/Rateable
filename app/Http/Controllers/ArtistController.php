@@ -107,7 +107,7 @@ class ArtistController extends Controller
             ->where('type', '=', 'ed')
             ->get();
 
-        return view('fromtags', compact('openings', 'endings', 'score_format', 'artist'));
+        return view('public.artists.show', compact('openings', 'endings', 'score_format', 'artist'));
     }
 
     

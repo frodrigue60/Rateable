@@ -97,7 +97,7 @@ class PostController extends Controller
             $artist = $post->artist;
             $this->count_views($post);
 
-            return view('show', compact('post', 'tags', 'artist'));
+            return view('public.posts.show', compact('post', 'tags', 'artist'));
         }
     }
 
@@ -156,7 +156,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('seasonal', compact('posts', 'tags', 'score_format'));
+            return view('public.posts.seasonal', compact('posts', 'tags', 'score_format'));
         } else {
 
             $posts = Post::withAnyTag($currentSeason->name)
@@ -170,7 +170,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('seasonal', compact('posts', 'tags', 'score_format', 'currentSeason'));
+            return view('public.posts.seasonal', compact('posts', 'tags', 'score_format', 'currentSeason'));
         }
     }
     public function endings()
@@ -194,7 +194,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('seasonal', compact('posts', 'tags', 'score_format'));
+            return view('public.posts.seasonal', compact('posts', 'tags', 'score_format'));
         } else {
 
             $posts = Post::withAnyTag($currentSeason->name)
@@ -208,7 +208,7 @@ class PostController extends Controller
                 ->take(5)
                 ->get();
 
-            return view('seasonal', compact('posts', 'tags', 'score_format', 'currentSeason'));
+            return view('public.posts.seasonal', compact('posts', 'tags', 'score_format', 'currentSeason'));
         }
     }
 
@@ -569,32 +569,32 @@ class PostController extends Controller
             case 'title':
                 $posts = $posts->sortBy('title');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
             case 'averageRating':
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
             case 'viewCount':
                 $posts = $posts->sortByDesc('viewCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
             case 'recent':
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
 
             default:
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
         }
     }
@@ -711,37 +711,37 @@ class PostController extends Controller
             case 'title':
                 $posts = $posts->sortBy('title');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
                 break;
             case 'averageRating':
                 $posts = $posts->sortByDesc('averageRating');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
             case 'viewCount':
                 $posts = $posts->sortByDesc('viewCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
 
             case 'likeCount':
                 $posts = $posts->sortByDesc('likeCount');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
                 break;
             case 'recent':
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
                 break;
 
             default:
                 $posts = $posts->sortByDesc('created_at');
                 $posts = $this->paginate($posts)->withQueryString();
-                return view('filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
+                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
                 break;
         }
     }
 
-    public function paginate($posts, $perPage = 20, $page = null, $options = [])
+    public function paginate($posts, $perPage = 18, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();
         $options = ['path' => Paginator::resolveCurrentPath()];
@@ -770,7 +770,7 @@ class PostController extends Controller
                 ->orderBy('title', 'asc')
                 ->get();
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
+            return view('public.posts.ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
         } else {
             //search the current season and the posts
             $openings = Post::withAnyTag($currentSeason->name)
@@ -790,7 +790,7 @@ class PostController extends Controller
 
             //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
 
-            return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason', 'score_format'));
+            return view('public.posts.ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason', 'score_format'));
         }
     }
     public function globalrank()
@@ -814,7 +814,7 @@ class PostController extends Controller
 
         $endings = $getEndings->sortByDesc('averageRating')->take(100);
 
-        return view('ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
+        return view('public.posts.ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'score_format'));
     }
 
     public function count_views($post)

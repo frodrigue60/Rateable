@@ -36,7 +36,7 @@ class UserController extends Controller
 
         if (Auth::check()) {
             $user = Auth::user();
-            return view('profile', compact('score_formats', 'user'));
+            return view('public.users.profile', compact('score_formats', 'user'));
         } else {
             return redirect()->route('/')->with('warning', 'Please login');
         }
