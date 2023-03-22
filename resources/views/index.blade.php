@@ -70,7 +70,7 @@
                                         @isset($post->artist->name)
                                             <span style="margin-left: 4px;margin-right:4px;">By</span>
                                             <span id="song-artist"><strong><a
-                                                        href="{{ route('from.artist', $post->artist->name_slug) }}"
+                                                        href="{{ route('artist.show', $post->artist->name_slug) }}"
                                                         class="no-deco text-light">{{ $post->artist->name }}</a></strong></span>
                                         @endisset
 
@@ -85,7 +85,7 @@
                                                 @isset($post->artist->name)
                                                     <span style="margin-left: 4px;margin-right:4px;">By</span>
                                                     <strong><a id="song-artist"
-                                                            href="{{ route('from.artist', $post->artist->name_slug) }}"
+                                                            href="{{ route('artist.show', $post->artist->name_slug) }}"
                                                             class="no-deco text-light">{{ $post->artist->name }}</a></strong>
                                                 @endisset
                                             </span>
@@ -155,7 +155,7 @@
                                                     class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
                                             @isset($post->artist->name)
                                                 By
-                                                <strong><a href="{{ route('from.artist', $post->artist->name_slug) }}"
+                                                <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
                                                         class="no-deco text-light">{{ $post->artist->name }}</a></strong>
                                             @endisset
                                         </span>
@@ -167,7 +167,7 @@
                                                         class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
                                                 @isset($post->artist->name)
                                                     By
-                                                    <strong><a href="{{ route('from.artist', $post->artist->name_slug) }}"
+                                                    <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
                                                             class="no-deco text-light">{{ $post->artist->name }}</a></strong>
                                                 @endisset
                                             </span>

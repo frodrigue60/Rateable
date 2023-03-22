@@ -40,7 +40,7 @@ Route::get('/offline', function () {
 });
 
 //ARTIST PUBLIC
-Route::get('/artist/{slug}',    [ArtistController::class, 'artist_slug'])->name('from.artist');
+Route::get('/artist/{slug}',    [ArtistController::class, 'show'])->name('artist.show');
 
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {

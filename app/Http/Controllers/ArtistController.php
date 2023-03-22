@@ -48,11 +48,28 @@ class ArtistController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
+     * @param  mixed  $name_slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($name_slug)
     {
-        //
+        $artist = Artist::where('name_slug', $name_slug)->first();
+
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+
+        $openings = Post::where('artist_id', '=', $artist->id)
+            ->where('type', '=', 'op')
+            ->get();
+
+        $endings = Post::where('artist_id', '=', $artist->id)
+            ->where('type', '=', 'ed')
+            ->get();
+
+        return view('public.artists.show', compact('openings', 'endings', 'score_format', 'artist'));
     }
 
     /**
@@ -89,26 +106,4 @@ class ArtistController extends Controller
         
     }
 
-    public function artist_slug($name_slug)
-    {
-        $artist = Artist::where('name_slug', $name_slug)->first();
-
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-        } else {
-            $score_format = null;
-        }
-
-        $openings = Post::where('artist_id', '=', $artist->id)
-            ->where('type', '=', 'op')
-            ->get();
-
-        $endings = Post::where('artist_id', '=', $artist->id)
-            ->where('type', '=', 'ed')
-            ->get();
-
-        return view('public.artists.show', compact('openings', 'endings', 'score_format', 'artist'));
-    }
-
-    
 }

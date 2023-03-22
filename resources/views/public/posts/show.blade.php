@@ -205,12 +205,12 @@
                                             @endisset
                                             @isset($post->artist->name)
                                                 <h4>Song artist: <strong><a
-                                                            href="{{ route('from.artist', $artist->name_slug) }}"
+                                                            href="{{ route('artist.show', $artist->name_slug) }}"
                                                             class="no-deco">{{ $post->artist->name }}</a></strong></h4>
                                             @endisset
                                             @isset($post->artist->name_jp)
                                                 <h4>Song artist (JP): <strong><a
-                                                            href="{{ route('from.artist', $artist->name_slug) }}"
+                                                            href="{{ route('artist.show', $artist->name_slug) }}"
                                                             class="no-deco">{{ $post->artist->name_jp }}</a></strong></h4>
                                             @endisset
 

@@ -70,11 +70,11 @@
                         <p>Song title (EN): <strong>{{ $post->song->song_en }}</strong></p>
                     @endisset
                     @isset($post->artist->name)
-                        <p>Song artist: <strong><a href="{{ route('from.artist', $artist->name_slug) }}"
+                        <p>Song artist: <strong><a href="{{ route('artist.show', $artist->name_slug) }}"
                                     class="no-deco">{{ $post->artist->name }}</a></strong></p>
                     @endisset
                     @isset($post->artist->name_jp)
-                        <p>Song artist (JP): <strong><a href="{{ route('from.artist', $artist->name_slug) }}"
+                        <p>Song artist (JP): <strong><a href="{{ route('artist.show', $artist->name_slug) }}"
                                     class="no-deco">{{ $post->artist->name_jp }}</a></strong></p>
                     @endisset
                     </p>
