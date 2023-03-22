@@ -90,7 +90,7 @@ class PostController extends Controller
             $tags = $post->tagged;
             $artist = $post->artist;
             $this->count_views($post);
-            return view('show', compact('post', 'tags', 'score_format', 'artist'));
+            return view('public.posts.show', compact('post', 'tags', 'score_format', 'artist'));
         } else {
             $post = Post::findOrFail($id);
             $tags = $post->tagged;
@@ -750,7 +750,7 @@ class PostController extends Controller
         return $posts;
     }
 
-    public function seasonalranking()
+    public function seasonalRanking()
     {
         $currentSeason = DB::table('tagging_tags')->where('flag', '1')->first();
         if (Auth::check()) {
@@ -793,7 +793,7 @@ class PostController extends Controller
             return view('public.posts.ranking', compact('openings', 'endings', 'op_count', 'ed_count', 'currentSeason', 'score_format'));
         }
     }
-    public function globalrank()
+    public function globalRanking()
     {
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;

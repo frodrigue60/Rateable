@@ -17,7 +17,7 @@
                 <li><a class="nav-link {{ Request::is('endings') ? 'active' : '' }}"
                         href="{{ route('endings') }}">Endings</a></li>
                 <li><a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"
-                        href="{{ route('globalranking') }}">Ranking</a></li>
+                        href="{{ route('global.ranking') }}">Ranking</a></li>
                 <li><a class="nav-link {{ Request::is('filter') ? 'active' : '' }}"
                         href="{{ route('filter') }}">Filter</a></li>
                 @auth

@@ -133,7 +133,7 @@
                                 @endif
                             </div>
                             <div>
-                                <a href="{{ route('seasonalranking') }}" class="btn btn-sm color4">More</a>
+                                <a href="{{ route('seasonal.ranking') }}" class="btn btn-sm color4">More</a>
                             </div>
                         </div>
                         @php

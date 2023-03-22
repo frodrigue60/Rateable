@@ -33,7 +33,6 @@
         {{-- POSTS SECTION --}}
         @include('layouts.recents-carousel')
         @include('layouts.posts-index')
-        {{--  @include('layouts.corousels') --}}
         {{-- TOP SECTION --}}
         <section class="contenedor-main">
             <h2 hidden>TOP ANIME OPENINGS & ENDINGS OF ALL TIME</h2>
@@ -45,7 +44,7 @@
                             <span>Global Rank Openings</span>
                         </div>
                         <div>
-                            <a href="{{ route('globalranking') }}" class="btn btn-sm color4">Global Ranking</a>
+                            <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Global Ranking</a>
                         </div>
                     </div>
                     @php
@@ -133,7 +132,7 @@
                             <span>Global Rank Endings</span>
                         </div>
                         <div>
-                            <a href="{{ route('globalranking') }}" class="btn btn-sm color4">Global Ranking</a>
+                            <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Global Ranking</a>
                         </div>
                     </div>
                     @php
