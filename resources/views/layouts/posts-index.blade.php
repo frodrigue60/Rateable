@@ -7,6 +7,7 @@
             <a href="{{ route('filter', 'sort=likeCount') }}" class="btn btn-sm color4">Most Popular</a>
         </div>
     </div>
+    {{-- POPULAR POSTS --}}
     <section class="contenedor-tarjetas-main">
         @foreach ($popular->take(14) as $post)
             <article class="tarjeta">
@@ -17,7 +18,7 @@
                     <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
                         <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                     </div>
-                    <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug]) }}">
+                    <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug, $post->themeNum >= 1 ? $post->suffix : $post->type]) }}">
                         <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                             alt="{{ $post->title }}" title="{{ $post->title }}">
                     </a>
@@ -64,6 +65,7 @@
             <a href="{{ route('filter', 'sort=viewCount') }}" class="btn btn-sm color4">Most Viewed</a>
         </div>
     </div>
+    {{-- MOST VIEWED --}}
     <section class="contenedor-tarjetas-main">
         @foreach ($viewed->take(14) as $post)
             <article class="tarjeta">
@@ -74,7 +76,7 @@
                     <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
                         <span class="tag-content ">{{ $post->themeNum >= 1 ? $post->suffix : $post->type }}</span>
                     </div>
-                    <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug]) }}">
+                    <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug, $post->themeNum >= 1 ? $post->suffix : $post->type]) }}">
                         <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                             alt="{{ $post->title }}" title="{{ $post->title }}">
                     </a>

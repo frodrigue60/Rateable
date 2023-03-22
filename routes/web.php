@@ -24,7 +24,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 */
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'index'])->name('/');
-Route::get('/show/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
+Route::get('/show/{id}/{slug}-{suffix?}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalRanking'])->name('seasonal.ranking');
