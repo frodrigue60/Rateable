@@ -57,40 +57,37 @@
                             </div>
                             <div class="item-info">
                                 <div class="item-post-info">
-                                    <span><a href="{{ route('post.show', [$post->id, $post->slug,$post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
+                                    <span><a href="{{ route('post.show', [$post->id, $post->slug, $post->suffix != null ? $post->suffix : $post->type]) }}"
                                             class="text-light no-deco">{{ $post->title }}
                                             {{ $post->suffix != null ? $post->suffix : '' }}</a></span>
                                 </div>
                                 {{-- SONG ROMAJI --}}
-                                @if (isset($post->song->song_romaji))
+                                @if (isset($post->song->song_romaji) || isset($post->song->song_en) || isset($post->song->song_jp))
                                     <div class="item-song-info">
                                         <span id="song-title"><strong><a
-                                                    href="{{ route('post.show', [$post->id, $post->slug,$post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                                    class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong></span>
-                                        @isset($post->artist->name)
+                                                    href="{{ route('post.show', [$post->id, $post->slug, $post->suffix != null ? $post->suffix : $post->type]) }}"
+                                                    class="no-deco text-light">
+                                                    @if (isset($post->song->song_romaji))
+                                                        {{ $post->song->song_romaji }}
+                                                    @else
+                                                        @if (isset($post->song->song_en))
+                                                            {{ $post->song->song_en }}
+                                                        @else
+                                                            @if (isset($post->song->song_jp))
+                                                            {{ $post->song->song_jp }}
+                                                            @endif
+                                                        @endif
+                                                    @endif
+                                                </a></strong></span>
+                                        @if(isset($post->artist->name))
                                             <span style="margin-left: 4px;margin-right:4px;">By</span>
                                             <span id="song-artist"><strong><a
                                                         href="{{ route('artist.show', $post->artist->name_slug) }}"
-                                                        class="no-deco text-light">{{ $post->artist->name }}</a></strong></span>
-                                        @endisset
-
+                                                        class="no-deco text-light">
+                                                        {{ $post->artist->name }}
+                                                    </a></strong></span>
+                                        @endif
                                     </div>
-                                @else
-                                    {{-- SONG ENG --}}
-                                    @if (isset($post->song->song_en))
-                                        <div class="item-song-info">
-                                            <span><strong><a id="song-title"
-                                                        href="{{ route('post.show', [$post->id, $post->slug,$post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                                        class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
-                                                @isset($post->artist->name)
-                                                    <span style="margin-left: 4px;margin-right:4px;">By</span>
-                                                    <strong><a id="song-artist"
-                                                            href="{{ route('artist.show', $post->artist->name_slug) }}"
-                                                            class="no-deco text-light">{{ $post->artist->name }}</a></strong>
-                                                @endisset
-                                            </span>
-                                        </div>
-                                    @endif
                                 @endif
                             </div>
                             <div class="item-score">
@@ -146,12 +143,13 @@
                             </div>
                             <div class="item-info">
                                 <div class="item-post-info">
-                                    <span><a href="{{ route('post.show', [$post->id, $post->slug,$post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
+                                    <span><a href="{{ route('post.show', [$post->id, $post->slug, $post->suffix != null ? $post->suffix : $post->type]) }}"
                                             class="text-light no-deco">{{ $post->title }}</a></span>
                                 </div>
                                 @if (isset($post->song->song_romaji))
                                     <div class="item-song-info">
-                                        <span><strong><a href="{{ route('post.show', [$post->id, $post->slug,$post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
+                                        <span><strong><a
+                                                    href="{{ route('post.show', [$post->id, $post->slug, $post->suffix != null ? $post->suffix : $post->type]) }}"
                                                     class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
                                             @isset($post->artist->name)
                                                 By
@@ -163,7 +161,8 @@
                                 @else
                                     @if (isset($post->song->song_en))
                                         <div class="item-song-info">
-                                            <span><strong><a href="{{ route('post.show', [$post->id, $post->slug,$post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
+                                            <span><strong><a
+                                                        href="{{ route('post.show', [$post->id, $post->slug, $post->suffix != null ? $post->suffix : $post->type]) }}"
                                                         class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
                                                 @isset($post->artist->name)
                                                     By
@@ -172,6 +171,20 @@
                                                 @endisset
                                             </span>
                                         </div>
+                                    @else
+                                        @if (isset($post->song->song_jp))
+                                            <div class="item-song-info">
+                                                <span><strong><a
+                                                            href="{{ route('post.show', [$post->id, $post->slug, $post->suffix != null ? $post->suffix : $post->type]) }}"
+                                                            class="no-deco text-light">{{ $post->song->song_jp }}</a></strong>
+                                                    @isset($post->artist->name)
+                                                        By
+                                                        <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
+                                                                class="no-deco text-light">{{ $post->artist->name }}</a></strong>
+                                                    @endisset
+                                                </span>
+                                            </div>
+                                        @endif
                                     @endif
                                 @endif
                             </div>

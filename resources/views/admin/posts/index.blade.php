@@ -22,7 +22,7 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Tags</th>
-                                <th scope="col">Type-theme_num</th>
+                                <th scope="col">Suffix</th>
                                 <th scope="col">Song</th>
                                 <th scope="col">Artist</th>
                                 <th scope="col">Status</th>
@@ -47,7 +47,7 @@
                                         @endforeach
 
                                     </td>
-                                    <td>{{ $post->type }}-{{ $post->theme_num }}</td>
+                                    <td>{{ $post->suffix != null ? $post->suffix : $post->type }}</td>
                                     <td>
                                         @if (isset($post->song_id))
                                             @if (isset($post->song->song_romaji))
@@ -56,7 +56,9 @@
                                                 @if (isset($post->song->song_en))
                                                     {{ $post->song->song_en }}
                                                 @else
-                                                    N/A
+                                                    @if (isset($post->song->song_jp))
+                                                        {{ $post->song->song_jp }}
+                                                    @endif
                                                 @endif
                                             @endif
                                         @else
@@ -70,7 +72,7 @@
                                                     href="{{ route('artist.show', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
                                             @endisset
                                         @else
-                                        N/A
+                                            N/A
                                         @endif
                                     </td>
 

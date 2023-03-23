@@ -3,7 +3,7 @@
     <title>
         {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
     <meta name="title"
-        content="{{ $post->title }} {{ $post->suffix == true ? $post->suffix : $post->type }}
+        content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}
     {{-- @isset($post->theme_num)
         {{ $post->theme_num }}
     @endisset --}}">

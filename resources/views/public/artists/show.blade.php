@@ -36,9 +36,9 @@
                                 <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                             </div>
                             <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
-                                <span class="tag-content ">{{ $post->theme_num >= 1 ? $post->suffix : $post->type }}</span>
+                                <span class="tag-content ">{{ $post->suffix != null ? $post->suffix : $post->type }}</span>
                             </div>
-                            <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug]) }}">
+                            <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug,$post->suffix != null ? $post->suffix : $post->type]) }}">
                                 <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}" title="{{ $post->title }}">
                             </a>
@@ -93,9 +93,9 @@
                                 <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                             </div>
                             <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
-                                <span class="tag-content ">{{ $post->theme_num >= 1 ? $post->suffix : $post->type }}</span>
+                                <span class="tag-content ">{{ $post->suffix != null ? $post->suffix : $post->type }}</span>
                             </div>
-                            <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug]) }}">
+                            <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug,$post->suffix != null ? $post->suffix : $post->type]) }}">
                                 <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                                     alt="{{ $post->title }}" title="{{ $post->title }}">
                             </a>
