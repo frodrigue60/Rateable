@@ -29,7 +29,7 @@
                             <a class="nav-link dropdown-toggle" href="#" role="button"
                                 data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('admin.post.index') }}">Postindex</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.post.index') }}">Post index</a></li>
                                 <li><a class="dropdown-item" href="{{ route('admin.tags.index') }}">Tags index</a></li>
                                 <li><a class="dropdown-item" href="{{ route('admin.artist.index') }}">Artist index</a></li>
                                 @if (Auth::User()->isAdmin())

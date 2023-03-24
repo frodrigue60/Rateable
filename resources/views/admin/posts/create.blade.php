@@ -51,24 +51,22 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-                        <br>
-                        @if (Auth::User()->type == 'admin')
-                            <div class="row">
+                            @if (Auth::User()->type == 'admin')
                                 <div class="col">
                                     <label for="statusId" class="form-label">Status</label>
-                                    <select class="" name="postStatus" id="statusId">
+                                    <select class="chzn-select" name="postStatus" id="statusId" style="width:100%;">
                                         <option value="">Selecte a post status</option>
                                         @foreach ($postStatus as $item)
                                             <option value="{{ $item['value'] }}">{{ $item['name'] }} </option>
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                        @endif
+                            @endif
+                        </div>
                         <br>
                         <label for="thumbnail_src" class="form-label">Image Source Url</label>
-                        <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src" name="thumbnail_src">
+                        <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src"
+                            name="thumbnail_src">
                         <br>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Upload Image Thumbnail</label>

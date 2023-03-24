@@ -18,7 +18,7 @@
                                     name="title" required value="{{ $post->title }}">
                             </div>
                             <div class="col-md-6">
-                                <label for="theme_num" class="form-label">Opening Number</label>
+                                <label for="theme_num" class="form-label">OP/ED Number</label>
                                 <input type="text" class="form-control" placeholder="OP/ED Number" id="theme_num"
                                     name="theme_num" value="{{ $post->theme_num }}">
                             </div>
@@ -74,15 +74,13 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-                        <br>
-                        <div class="row">
                             <div class="col">
                                 <label for="statusId" class="form-label">Status</label>
-                                <select class="" name="postStatus" id="statusId">
+                                <select class="chzn-select" name="postStatus" id="statusId" style="width:100%;">
                                     <option value="">Selecte a post status</option>
                                     @foreach ($postStatus as $item)
-                                        <option value="{{ $item['value'] }}">{{ $item['name'] }} </option>
+                                        <option value="{{ $item['value'] }}" 
+                                        {{ $post->status == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }} </option>
                                     @endforeach
                                 </select>
                             </div>
