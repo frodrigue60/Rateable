@@ -119,11 +119,10 @@ class PostController extends Controller
                 $post->thumbnail = $file_name;
                 $post->thumbnail_src = $request->thumbnail_src;
             }
-            if ($request->theme_num != true) {
-                $post->theme_num = null;
-            } else {
-                $post->theme_num = $request->theme_num;
+            if ($request->theme_num != null) {
                 $post->suffix = $request->type . $request->theme_num;
+            } else {
+                $post->theme_num = null;
             }
 
             if ($request->artist_id != true) {
@@ -131,9 +130,9 @@ class PostController extends Controller
             } else {
                 $post->artist_id = $request->artist_id;
             }
-            $song = new Song;
 
-            if ($request->song_romaji != null || $request->song_en != null) {
+            if ($request->song_romaji != null || $request->song_en != null || $request->song_en != null) {
+                $song = new Song;
                 $song->song_romaji = $request->song_romaji;
                 $song->song_jp = $request->song_jp;
                 $song->song_en = $request->song_en;
@@ -142,6 +141,8 @@ class PostController extends Controller
                 } else {
                     $post->song_id = null;
                 }
+            } else {
+                $post->song_id = null;
             }
 
             if ($post->save()) {
@@ -241,21 +242,20 @@ class PostController extends Controller
                     break;
             }
 
-            if ($request->theme_num != true) {
-                $post->theme_num = null;
-            } else {
-                $post->theme_num = $request->theme_num;
+            if ($request->theme_num != null) {
                 $post->suffix = $request->type . $request->theme_num;
-            }
-            if ($request->artist_id != true) {
-                $post->artist_id = null;
             } else {
+                $post->theme_num = null;
+            }
+            if ($request->artist_id != null) {
                 $post->artist_id = $request->artist_id;
+            } else {
+                $post->artist_id = null;
             }
 
             if ($request->hasFile('file')) {
                 $validator = Validator::make($request->all(), [
-                    'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
+                    'file' => 'mimes:png,jpg,jpeg,webp|max:1024'
                 ]);
 
                 if ($validator->fails()) {
@@ -287,13 +287,30 @@ class PostController extends Controller
                 $post->thumbnail = $file_name;
                 $post->thumbnail_src = $request->thumbnail_src;
             }
-            $song = new Song;
-            $song->song_romaji = $request->song_romaji;
-            $song->song_jp = $request->song_jp;
-            $song->song_en = $request->song_en;
-            $song->save();
 
-            $post->song_id = $song->id;
+            if ($post->song_id != null) {
+                if ($request->song_romaji != $post->song->song_romaji || $request->song_en != $post->song->song_en || $request->song_jp != $post->song->song_jp) {
+                    $song = Song::find($post->song_id);
+                    $song->song_romaji = $request->song_romaji;
+                    $song->song_jp = $request->song_jp;
+                    $song->song_en = $request->song_en;
+                    $song->update();
+                }
+            } else {
+                if ($request->song_romaji != null || $request->song_en != null || $request->song_en != null) {
+                    $song = new Song;
+                    $song->song_romaji = $request->song_romaji;
+                    $song->song_jp = $request->song_jp;
+                    $song->song_en = $request->song_en;
+                    if ($song->save()) {
+                        $post->song_id = $song->id;
+                    } else {
+                        $post->song_id = null;
+                    }
+                }
+            }
+
+
             if ($post->update()) {
                 $tags = $request->tags;
                 $post->retag($tags);
@@ -333,11 +350,11 @@ class PostController extends Controller
     //seach posts in admin pannel
     public function search(Request $request)
     {
-            $posts = Post::query()
-                ->where('title', 'LIKE', "%{$request->input('q')}%")
-                ->paginate(10);
+        $posts = Post::query()
+            ->where('title', 'LIKE', "%{$request->input('q')}%")
+            ->paginate(10);
 
-            return view('admin.posts.index', compact('posts'));
+        return view('admin.posts.index', compact('posts'));
     }
     public function approve($id)
     {

@@ -350,7 +350,7 @@ class UserController extends Controller
                 break;
         }
 
-        switch ($sort) {
+        /* switch ($sort) {
             case 'title':
                 $posts = $posts->sortBy('title');
                 $posts = $this->paginate($posts)->withQueryString();
@@ -381,7 +381,11 @@ class UserController extends Controller
                 $posts = $this->paginate($posts)->withQueryString();
                 return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
                 break;
-        }
+        } */
+
+        $posts = $this->sort($sort,$posts);
+        $posts = $this->paginate($posts)->withQueryString();
+        return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
     }
 
     public function paginate($posts, $perPage = 18, $page = null, $options = [])
@@ -392,6 +396,42 @@ class UserController extends Controller
         $posts = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
         return $posts;
     }
+    public function sort($sort, $posts)
+    {
+        switch ($sort) {
+            case 'title':
+                $posts = $posts->sortBy('title');
+                //$posts = $this->paginate($posts)->withQueryString();
+                return $posts;
+                break;
+            case 'averageRating':
+                $posts = $posts->sortByDesc('averageRating');
+                //$posts = $this->paginate($posts)->withQueryString();
+                return $posts;
+            case 'view_count':
+                $posts = $posts->sortByDesc('view_count');
+                //$posts = $this->paginate($posts)->withQueryString();
+                return $posts;
+
+            case 'likeCount':
+                $posts = $posts->sortByDesc('likeCount');
+                //$posts = $this->paginate($posts)->withQueryString();
+                return $posts;
+                break;
+            case 'recent':
+                $posts = $posts->sortByDesc('created_at');
+                //$posts = $this->paginate($posts)->withQueryString();
+                return $posts;
+                break;
+
+            default:
+                $posts = $posts->sortByDesc('created_at');
+                //$posts = $this->paginate($posts)->withQueryString();
+                return $posts;
+                break;
+        }
+    }
+
     public function uploadProfilePic(Request $request)
     {
         if ($request->hasFile('image')) {
