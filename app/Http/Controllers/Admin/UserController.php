@@ -60,8 +60,14 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $errors = $validator->getMessageBag();
-            return Redirect::back()->with('error', $errors);
+            $messageBag = $validator->getMessageBag();
+            return Redirect::back()
+                ->withInput([
+                    'name' => $request->input('name'),
+                    'email' => $request->input('email'),
+                    'userType' => $request->input('userType'),
+                ])
+                ->with('error', $messageBag);
         } else {
             User::create([
                 'name' => $request['name'],

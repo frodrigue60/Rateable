@@ -5,7 +5,6 @@
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
                 <div class="card-header">Edit.blade.php</div>
-
                 <div class="card-body">
                     <form name="add-blog-post-form" id="add-blog-post-form" method="POST"
                         action="{{ route('admin.post.update', $post->id) }}" enctype="multipart/form-data">
@@ -13,7 +12,7 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="titleAnime" class="form-label">Title</label>
+                                <label for="titleAnime" class="form-label">Post Title</label>
                                 <input type="text" class="form-control" placeholder="Anime Title" id="titleAnime"
                                     name="title" required value="{{ $post->title }}">
                             </div>
@@ -52,7 +51,7 @@
 
                         <br>
                         <div class="row">
-                            <div class="col">
+                            <div class="col-md">
                                 <label for="ArtistId" class="form-label">Artist</label>
                                 <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
                                     <option value="">Selecte an artist</option>
@@ -63,7 +62,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col">
+                            <div class="col-md">
                                 <label for="type" class="form-label">Type:</label>
                                 <select class="chzn-select" name="type" id="type" style="width:100%;">
                                     <option value="">Selecte a type</option>
@@ -74,21 +73,24 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col">
+                            @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
+                            <div class="col-md">
                                 <label for="statusId" class="form-label">Status</label>
                                 <select class="chzn-select" name="postStatus" id="statusId" style="width:100%;">
                                     <option value="">Selecte a post status</option>
                                     @foreach ($postStatus as $item)
-                                        <option value="{{ $item['value'] }}" 
-                                        {{ $post->status == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }} </option>
+                                        <option value="{{ $item['value'] }}"
+                                            {{ $post->status == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
+                            @endif
                         </div>
                         <br>
                         <label for="thumbnail_src" class="form-label">Image Source</label>
-                        <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src" name="thumbnail_src"
-                            value="{{ $post->thumbnail_src }}">
+                        <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src"
+                            name="thumbnail_src" value="{{ $post->thumbnail_src }}">
                         <br>
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Default file input example</label>
@@ -125,7 +127,7 @@
         </div>
     @section('script')
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+        {{-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> --}}
         <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">

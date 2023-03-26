@@ -15,25 +15,24 @@
                         @csrf
                         <div class="form-group">
                             <label for="nameUser">Name</label>
-                            <input type="text" id="nameUser" name="name" class="form-control" required="true">
-
+                            <input type="text" id="nameUser" name="name" class="form-control" required="true" value="{{ old('name') }}">
                         </div>
                         <br>
                         <div class="form-group">
                             <label for="emailUser">Email</label>
-                            <input type="text" id="emailUser" name="email" class="form-control" required="true">
+                            <input type="text" id="emailUser" name="email" class="form-control" required="true" value="{{ old('email') }}">
                         </div>
                         <br>
                         <div class="form-group">
                             <label for="userPass">Password</label>
-                            <input type="text" id="userPass" name="password" class="form-control" required="true">
+                            <input type="password" id="userPass" name="password" class="form-control" required="true">
                         </div>
                         <br>
                         <label for="userType" class="form-label">Artist</label>
                         <select class="form-select" name="userType" id="userType">
-                            <option value="">Select a artist</option>
+                            <option value="">Select a role</option>
                             @foreach ($type as $item)
-                                <option value="{{ $item['value'] }}">{{ $item['name'] }}</option>
+                                <option {{ old('userType') == $item['value'] ? 'selected' : '' }} value="{{ $item['value'] }}">{{ $item['name'] }}</option>
                             @endforeach
                         </select>
                         <br>

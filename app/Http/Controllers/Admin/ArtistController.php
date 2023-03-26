@@ -11,7 +11,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
-use Laravel\Ui\Presets\React;
+use Illuminate\Support\Facades\Validator;
 
 class ArtistController extends Controller
 {
@@ -46,19 +46,33 @@ class ArtistController extends Controller
      */
     public function store(Request $request)
     {
-        $name = $request->name;
-        $name_jp = $request->name_jp;
-        $name_slug = Str::slug($name);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:50',
+        ]);
 
-        if ($name != null) {
+        if ($validator->fails()) {
+            $messageBag = $validator->getMessageBag();
+            return redirect()
+                ->back()
+                ->withInput([
+                    'name' => $request->input('name'),
+                    'name_jp' => $request->input('name_jp')
+                    ])
+                ->with('error', $messageBag);
+        } else {
+            $name = preg_replace('/\s+/', ' ', $request->name);
+            $name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
+            $name_slug = Str::slug($name);
+
             $artist = new Artist();
             $artist->name = $name;
             $artist->name_jp = $name_jp;
             $artist->name_slug = $name_slug;
-            $artist->save();
-            return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Inserted Successfully');
-        } else {
-            return redirect(route('admin.artist.index'))->with('error', 'Artist not created, "name" has not be null');
+            if ($artist->save()) {
+                return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Inserted Successfully');
+            } else {
+                return redirect(route('admin.artist.index'))->with('error', 'Something has wrong');
+            }
         }
     }
 
@@ -130,7 +144,8 @@ class ArtistController extends Controller
 
         return redirect(route('admin.artist.index'))->with('success', 'Data deleted');
     }
-    public function searchArtist(Request $request){
+    public function searchArtist(Request $request)
+    {
 
         $artists = DB::table('artists')
             ->where('name', 'LIKE', "%{$request->input('q')}%")

@@ -26,11 +26,7 @@
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
-                <div class="card-footer d-flex justify-content-center">
-                        {{ $tags->links() }}
-                </div>
             </div>
-
         </div>
     </div>
 @endsection

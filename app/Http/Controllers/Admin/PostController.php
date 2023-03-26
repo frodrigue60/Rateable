@@ -96,7 +96,9 @@ class PostController extends Controller
 
                 if ($validator->fails()) {
                     $errors = $validator->getMessageBag();
-                    return Redirect::back()->with('error', $errors);
+                    $request->flash();
+                    return Redirect::back()
+                    ->with('error', $errors);
                 }
                 //$file_extension = $request->file->extension();
                 $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
@@ -107,7 +109,10 @@ class PostController extends Controller
                 //$request->file->storeAs('thumbnails', $file_name, 'public');
             } else {
                 if ($request->thumbnail_src == null) {
-                    return Redirect::back()->with('error', "Post not created, images not founds");
+                    //dd($request->all());
+                    $request->flash();
+                    return Redirect::back()
+                    ->with('error', "Post not created, images not founds");
                 }
 
                 $image_file_data = file_get_contents($request->thumbnail_src);
@@ -259,8 +264,8 @@ class PostController extends Controller
                 ]);
 
                 if ($validator->fails()) {
-                    $errors = $validator->getMessageBag();
-                    return Redirect::back()->with('error', $errors);
+                    $messageBag = $validator->getMessageBag();
+                    return Redirect::back()->with('error', $messageBag)->with('messageBag',$messageBag);
                 }
 
                 //$file_extension = $request->file->extension();

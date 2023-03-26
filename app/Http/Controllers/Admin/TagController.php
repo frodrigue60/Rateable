@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Post;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use stdClass;
 
 class TagController extends Controller
 {
@@ -40,22 +43,35 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        $name = $request->name;
-        $slug = Str::slug($request->name);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:50',
+        ]);
 
-        if ($name != null) {
-            DB::table('tagging_tags')->insert([
-                'slug' => $slug,
-                'name' => $name
-            ]);
-            return redirect(route('admin.tags.index'))->with('success', 'Data Has Been Inserted Successfully');
+        if ($validator->fails()) {
+            $messageBag = $validator->getMessageBag();
+            return redirect()
+                ->back()
+                ->withInput([
+                    'name' => $request->input('name')
+                ])
+                ->with('error', $messageBag);
         } else {
-            return redirect(route('admin.tags.index'))->with('error', 'Data Has Not Been Inserted');
+            $tag = new stdClass;
+            $tag->name = preg_replace('/\s+/', ' ', $request->name);
+            $tag->slug = Str::slug($request->name);
+
+            try {
+                DB::transaction(function () use ($tag) {
+                    DB::table('tagging_tags')->insert([
+                        'slug' => $tag->slug,
+                        'name' => $tag->name
+                    ]);
+                });
+                return redirect(route('admin.tags.index'))->with('success', 'Data Has Been Inserted Successfully');
+            } catch (\Throwable $e) {
+                return redirect(route('admin.tags.index'))->with('error', $e->getMessage());
+            }
         }
-        /* DB::table('tagging_tags')->insert([
-            'slug' => $slug,
-            'name' => $name
-        ]); */
     }
 
     /**
@@ -91,14 +107,23 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $name = $request->name;
-        $slug = Str::slug($request->name);
+        $tag = new stdClass;
+        $tag->name = preg_replace('/\s+/', ' ', $request->name);
+        $tag->slug = Str::slug($request->name);
 
-        DB::table('tagging_tags')
-            ->where('id', $id)
-            ->update(['name' => $name, 'slug' => $slug]);
-
-        return redirect(route('admin.tags.index'))->with('status', 'Data has been updated');
+        try {
+            DB::transaction(function () use ($tag,$id) {
+                DB::table('tagging_tags')
+                ->where('id', '=', $id)
+                ->update([
+                    'slug' => $tag->slug,
+                    'name' => $tag->name
+                ]);
+            });
+            return redirect(route('admin.tags.index'))->with('success', 'Data Has Been Updated Successfully');
+        } catch (\Throwable $e) {
+            return redirect(route('admin.tags.index'))->with('error', $e->getMessage());
+        }
     }
 
     /**

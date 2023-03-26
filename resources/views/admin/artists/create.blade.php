@@ -14,12 +14,12 @@
                         @csrf
                         <div class="form-group">
                             <label for="nameArtist">Artist Name</label>
-                            <input type="text" id="nameArtist" name="name" class="form-control" required="">
+                            <input type="text" id="nameArtist" name="name" class="form-control" required="true" value="{{ old('name') }}">
                         </div>
                         <br>
                         <div class="form-group">
                             <label for="nameArtistsJp">Artist Name (JP)</label>
-                            <input type="text" id="nameArtistsJp" name="name_jp" class="form-control">
+                            <input type="text" id="nameArtistsJp" name="name_jp" class="form-control" value="{{ old('name_jp') }}">
                         </div>
                         <br>
                         <button type="submit" class="btn btn-primary">Submit</button>

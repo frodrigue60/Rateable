@@ -14,7 +14,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="seasonName">Season Name</label>
-                            <input type="text" id="seasonName" name="name" class="form-control" required="">
+                            <input type="text" id="seasonName" name="name" class="form-control" required="" value="{{ old('name') }}">
                         </div>
                         <br>
                         <button type="submit" class="btn btn-primary">Submit</button>
