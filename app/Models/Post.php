@@ -37,4 +37,8 @@ class Post extends Model
     {
         return $this->belongsTo('App\Models\Song');
     }
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
 }

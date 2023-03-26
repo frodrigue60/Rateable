@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\ArtistController as AdminArtistController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController as UserController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\ReportController as ReportController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +36,6 @@ Route::get('/filter', [PostController::class, 'filter'])->name('filter');
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');
 
-
 Route::get('/offline', function () {
     return view('offline');
 });
@@ -44,6 +45,15 @@ Route::get('/artist/{slug}',    [ArtistController::class, 'show'])->name('artist
 
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {
+        //REPORTS
+        Route::group(['middleware' => 'creator'], function () {
+            Route::get('/reports/index',       [AdminReportController::class, 'index'])->name('admin.report.index');
+        });
+        Route::group(['middleware' => 'editor'], function () {
+            Route::get('/report/{id}/fixed', [AdminReportController::class, 'fixed'])->name('admin.report.fixed');
+            Route::get('/report/{id}/unfixed', [AdminReportController::class, 'unfixed'])->name('admin.report.unfixed');
+            Route::get('/report/{id}/destroy', [AdminReportController::class, 'destroy'])->name('admin.report.destroy');
+        });
         //POSTS
         Route::group(['middleware' => 'creator'], function () {
             Route::get('/post/index',       [AdminPostController::class, 'index'])->name('admin.post.index');
@@ -117,3 +127,4 @@ Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites'
 Route::post('/post/{id}/like', [PostController::class, 'likePost'])->name('post.like');
 Route::post('/post/{id}/unlike', [PostController::class, 'unlikePost'])->name('post.unlike');
 Route::post('/post/{id}/ratepost', [PostController::class, 'ratePost'])->name('post.addrate');
+Route::get('/post/{id}/report', [ReportController::class, 'createReport'])->name('post.create.report');

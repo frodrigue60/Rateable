@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->string('thumbnail_src')->nullable();
-            $table->unsignedBigInteger('song_id')->nullable();
-            $table->unsignedBigInteger('artist_id')->nullable();
+            $table->unsignedInteger('song_id')->nullable();
+            $table->unsignedInteger('artist_id')->nullable();
             $table->enum('type', ['OP', 'ED'])->nullable();
             $table->enum('status', ['stagged', 'published'])->nullable();
             $table->string('suffix')->nullable();

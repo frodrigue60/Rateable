@@ -36,6 +36,7 @@
                                     <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
                                     </li>
                                 @endif
+                                <li><a class="dropdown-item" href="{{ route('admin.report.index') }}">Reports index</a></li>
                             </ul>
                         </li>
                     @endif

@@ -102,6 +102,10 @@
                         <button class="button-border-1">{{ $post->averageRating / 1 }} <i class="fa fa-star"></i></button>
                     </div>
                     <div class="d-flex btn-group-show">
+                        @auth
+                        <a href="{{route('post.create.report', $post->id)}}" class="button2 no-deco"> Report <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                        </a>
+                        @endauth
                         <button class="button2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             Rate
                             <i class="fa fa-star"></i></button>
