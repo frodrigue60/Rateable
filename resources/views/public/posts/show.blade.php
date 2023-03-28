@@ -3,10 +3,7 @@
     <title>
         {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
     <meta name="title"
-        content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}
-    {{-- @isset($post->theme_num)
-        {{ $post->theme_num }}
-    @endisset --}}">
+        content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
 
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
 
@@ -25,12 +22,6 @@
             @endif
         @endif
     @endif
-
-    {{-- @if ($post->song->song_romaji != null and $post->artist->name != null)
-        <meta name="description" content="Song: {{ $post->song->song_romaji }} - Artist: {{ $post->artist->name }}">
-    @else
-        <meta name="description" content="Song: N/A - Artist: N/A">
-    @endif --}}
 
     <meta name="robots" content="index, follow, max-image-preview:standard">
     <link rel="canonical" href="{{ url()->current() }}">
@@ -53,11 +44,6 @@
             @endif
         @endif
     @endif
-    {{-- @if ($post->song->song_romaji != null and $post->artist->name != null)
-        <meta property="og:description" content="{{ $post->song->song_romaji }} - {{ $post->artist->name }}">
-    @else
-        <meta property="og:description" content="Song: N/A - Artist: N/A">
-    @endif --}}
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="article:section" content="{{ $post->type == 'OP' ? 'Opening' : 'Ending' }}">
     {{-- <meta property="og:updated_time" content="2022-09-04T20:03:37-05:00"> --}}

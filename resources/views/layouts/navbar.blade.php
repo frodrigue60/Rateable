@@ -24,22 +24,25 @@
                     <li><a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}"
                             href="{{ route('favorites') }}">My Favorites</a></li>
                 @endauth
-                    @if (Auth::check() && Auth::user()->isStaff())
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button"
-                                data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ route('admin.post.index') }}">Post index</a></li>
-                                <li><a class="dropdown-item" href="{{ route('admin.tags.index') }}">Tags index</a></li>
-                                <li><a class="dropdown-item" href="{{ route('admin.artist.index') }}">Artist index</a></li>
-                                @if (Auth::User()->isAdmin())
-                                    <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
-                                    </li>
-                                @endif
-                                <li><a class="dropdown-item" href="{{ route('admin.report.index') }}">Reports index</a></li>
-                            </ul>
-                        </li>
-                    @endif
+                @if (Auth::check() && Auth::user()->isStaff())
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('admin.post.index') }}">Post index</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.tags.index') }}">Tags index</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.artist.index') }}">Artist index</a></li>
+                            @if (Auth::User()->isAdmin())
+                                <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
+                                </li>
+                            @endif
+                            <li><a class="dropdown-item" href="{{ route('admin.report.index') }}">Reports index</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ route('admin.request.index') }}">Requests index</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
@@ -79,6 +82,8 @@
                                     aria-hidden="true"></i>
                                 Profile
                             </a>
+                            <a class="dropdown-item" href="{{ route('request.create') }}"><i class="fa fa-comment-o"
+                                    aria-hidden="true"></i> Create Request</a>
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><i

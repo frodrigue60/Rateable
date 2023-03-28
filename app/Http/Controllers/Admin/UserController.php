@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         $users =  User::all();
         $users = $users->sortByDesc('created_at');
-        $users = $this->paginate($users);
+        $users = $this->paginate($users,$perPage=5);
         return view('admin.users.index', compact('users'));
     }
 
@@ -167,7 +167,7 @@ class UserController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
-    public function paginate($posts, $perPage = 18, $page = null, $options = [])
+    public function paginate($posts, $perPage = null, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();
         $options = ['path' => Paginator::resolveCurrentPath()];

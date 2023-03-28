@@ -21,7 +21,7 @@
                             <tr>
                                 {{-- <th scope="col">ID</th> --}}
                                 <th scope="col">Post ID</th>
-                                <th scope="col">User ID</th>
+                                <th scope="col">Reports</th>
                                 <th scope="col">Source</th>
                                 <th scope="col">Status</th>
                                 @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
@@ -37,7 +37,7 @@
                                         {{ $report->post_id }}
                                     </td>
                                     <td>
-                                        {{ $report->user_id }}
+                                        {{ $report->nums }}
                                     </td>
                                     <td>
                                         <a href="{{ $report->source }}">{{ $report->source }}</a>

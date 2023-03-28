@@ -13,6 +13,8 @@ use App\Http\Controllers\UserController as UserController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ReportController as ReportController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
+use App\Http\Controllers\UserRequestController as UserRequestController;
+use App\Http\Controllers\Admin\UserRequestController as AdminUserRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +47,11 @@ Route::get('/artist/{slug}',    [ArtistController::class, 'show'])->name('artist
 
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {
+        Route::group(['middleware' => 'creator'], function () {
+            Route::get('/requests/index',       [AdminUserRequestController::class, 'index'])->name('admin.request.index');
+            Route::get('/requests/{id}/destroy',       [AdminUserRequestController::class, 'destroy'])->name('admin.request.destroy');
+            Route::get('/requests/{id}/show',       [AdminUserRequestController::class, 'show'])->name('admin.request.show');
+        });
         //REPORTS
         Route::group(['middleware' => 'creator'], function () {
             Route::get('/reports/index',       [AdminReportController::class, 'index'])->name('admin.report.index');
@@ -116,6 +123,11 @@ Route::group(['middleware' => 'staff'], function () {
 
 //AUTH ROUTES
 Auth::routes();
+
+//REQUEST ROUTES
+Route::get('/request/create', [App\Http\Controllers\UserRequestController::class, 'create'])->name('request.create');
+Route::post('/request/store', [App\Http\Controllers\UserRequestController::class, 'store'])->name('request.store');
+
 
 //USER ROUTES
 Route::post('/change-score-format', [App\Http\Controllers\UserController::class, 'changeScoreFormat'])->name('change.score.format');

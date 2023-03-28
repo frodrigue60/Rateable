@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Report;
+use App\Http\Controllers\Controller;
+use App\Models\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
-class ReportController extends Controller
+class UserRequestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +21,9 @@ class ReportController extends Controller
      */
     public function index()
     {
-        //
+        $requests = UserRequest::all();
+        $requests = $this->paginate($requests,$perPage=10);
+        return view('admin.requests.index', compact('requests'));
     }
 
     /**
@@ -50,7 +55,11 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        //
+        $userRequest = UserRequest::find($id);
+        $userRequest -> attended_by = Auth::user()->id;
+        $userRequest->status = 'attended';
+        $userRequest->update();
+        return view('admin.requests.show',compact('userRequest'));
     }
 
     /**
@@ -84,40 +93,17 @@ class ReportController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $userRequest = UserRequest::find($id);
+        //dd($userRequest);
+        $userRequest->delete();
+        return redirect()->back()->with('success','Request deleted successfully');
     }
-    /**
-     * Create a report
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function createReport(Request $request, $id)
+    public function paginate($posts, $perPage, $page = null, $options = [])
     {
-        if (Auth::check()) {
-
-            $exist = DB::table('reports')
-                ->where('post_id', $id)
-                ->exists();
-
-            if ($exist) {
-
-                if (!Session::has('post_reported_' . $id)) {
-                    DB::table('reports')
-                        ->where('post_id', $id)
-                        ->increment('nums');
-                    Session::put('post_reported_' . $id, true);
-                }
-                return redirect()->back()->with('success', 'Report already exist, thanks for report this problem');
-            } else {
-                $report = new Report();
-                $report->post_id = $id;
-                $report->source = $request->header('Referer');
-                $report->save();
-                return redirect()->back()->with('success', 'Thanks for report this problem');
-            }
-        } else {
-            return redirect('/')->with('warning', 'Please login to create a report');
-        }
+        $page = Paginator::resolveCurrentPage();
+        $options = ['path' => Paginator::resolveCurrentPath()];
+        $items = $posts instanceof Collection ? $posts : Collection::make($posts);
+        $posts = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return $posts;
     }
 }
