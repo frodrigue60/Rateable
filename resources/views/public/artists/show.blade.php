@@ -29,46 +29,46 @@
              </div>
              <section class="contenedor-favoritos">
                  @isset($openings)
-                     @foreach ($openings as $post)
+                     @foreach ($openings as $song)
                      <article class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
+                                <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
                             </div>
-                            <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
-                                <span class="tag-content ">{{ $post->suffix != null ? $post->suffix : $post->type }}</span>
+                            <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
+                                <span class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
                             </div>
-                            <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug,$post->suffix != null ? $post->suffix : $post->type]) }}">
-                                <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}" title="{{ $post->title }}">
+                            <a class="no-deco" href="{{ route('song.show', [$song->id,$song->post->slug,$song->suffix != null ? $song->suffix : $song->type ]) }}">
+                                <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $song->post->thumbnail) }}"
+                                    alt="{{ $song->post->title }}" title="{{ $song->post->title }}">
                             </a>
                             <div class="tarjeta-footer text-light">
-                                <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
+                                <span>{{ $song->likeCount }} <i class="fa fa-heart"></i></span>
+                                <span>{{ $song->view_count }} <i class="fa fa-eye"></i></span>
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)
                                             @case('POINT_100')
-                                                {{ round($post->averageRating) }}
+                                                {{ round($song->averageRating) }}
                                             @break
         
                                             @case('POINT_10_DECIMAL')
-                                                {{ round($post->averageRating / 10, 1) }}
+                                                {{ round($song->averageRating / 10, 1) }}
                                             @break
         
                                             @case('POINT_10')
-                                                {{ round($post->averageRating / 10) }}
+                                                {{ round($song->averageRating / 10) }}
                                             @break
         
                                             @case('POINT_5')
-                                                {{ round($post->averageRating / 20) }}
+                                                {{ round($song->averageRating / 20) }}
                                             @break
         
                                             @default
-                                                {{ round($post->averageRating) }}
+                                                {{ round($song->averageRating) }}
                                         @endswitch
                                     @else
-                                        {{ round($post->averageRating / 10, 1) }}
+                                        {{ round($song->averageRating / 10, 1) }}
                                     @endif
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                 </span>
@@ -86,46 +86,46 @@
              </div>
              <section class="contenedor-favoritos">
                  @isset($endings)
-                     @foreach ($endings as $post)
+                     @foreach ($endings as $song)
                      <article class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header text-light">
-                                <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
+                                <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
                             </div>
-                            <div class="{{ $post->type == 'OP' ? 'tag' : 'tag2' }}">
-                                <span class="tag-content ">{{ $post->suffix != null ? $post->suffix : $post->type }}</span>
+                            <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
+                                <span class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
                             </div>
-                            <a class="no-deco" href="{{ route('post.show', [$post->id, $post->slug,$post->suffix != null ? $post->suffix : $post->type]) }}">
-                                <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
-                                    alt="{{ $post->title }}" title="{{ $post->title }}">
+                            <a class="no-deco" href="{{ route('song.show', [$song->id,$song->post->slug,$song->suffix != null ? $song->suffix : $song->type ]) }}">
+                                <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $song->post->thumbnail) }}"
+                                    alt="{{ $song->post->title }}" title="{{ $song->post->title }}">
                             </a>
                             <div class="tarjeta-footer text-light">
-                                <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
-                                <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
+                                <span>{{ $song->likeCount }} <i class="fa fa-heart"></i></span>
+                                <span>{{ $song->view_count }} <i class="fa fa-eye"></i></span>
                                 <span>
                                     @if (isset($score_format))
                                         @switch($score_format)
                                             @case('POINT_100')
-                                                {{ round($post->averageRating) }}
+                                                {{ round($song->averageRating) }}
                                             @break
         
                                             @case('POINT_10_DECIMAL')
-                                                {{ round($post->averageRating / 10, 1) }}
+                                                {{ round($song->averageRating / 10, 1) }}
                                             @break
         
                                             @case('POINT_10')
-                                                {{ round($post->averageRating / 10) }}
+                                                {{ round($song->averageRating / 10) }}
                                             @break
         
                                             @case('POINT_5')
-                                                {{ round($post->averageRating / 20) }}
+                                                {{ round($song->averageRating / 20) }}
                                             @break
         
                                             @default
-                                                {{ round($post->averageRating) }}
+                                                {{ round($song->averageRating) }}
                                         @endswitch
                                     @else
-                                        {{ round($post->averageRating / 10, 1) }}
+                                        {{ round($song->averageRating / 10, 1) }}
                                     @endif
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                 </span>

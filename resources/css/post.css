@@ -1,0 +1,378 @@
+.pill-tag{
+    background-color: rgba(108, 140, 226, 0.809);
+    padding: 2px;
+    width: max-content;
+    min-width: 110px;
+    height: 30px;
+    text-align: center;
+}
+.description-post > p{
+    height: 200px;
+    overflow-y: scroll;
+}
+.tags-group{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    gap: 10px;
+    width: 304px;
+}
+.post-info{
+    background-color: rgba(255, 255, 255, 0.149);
+}
+.post-song{
+    background-color: rgba(53, 15, 47, 0.505);
+    height: 100%;
+    padding: 5px;
+    margin: 5px 0px 5px 0px;
+    display: flex;
+    align-items: center;
+}
+.container-songs{
+    background-color: rgba(255, 255, 255, 0.149);
+    padding-bottom: 10px;
+    padding-top: 5px;
+}
+.thumbnail-post{
+    width: 180px;
+}
+.themes{
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+@media screen and (max-width: 1920px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 200px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+    }
+    .title-post{
+        padding: 10px;
+        width: 100%;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        width: 1080px;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-width: 1440px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 110px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+    }
+    .title-post{
+        padding: 10px;
+        width: 100%;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        width: 578px;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-width: 1280px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 110px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+    }
+    .title-post{
+        padding: 10px;
+        width: 100%;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        width: 578px;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-width: 992px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 110px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+    }
+    .title-post{
+        padding: 10px;
+        width: 100%;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        width: 578px;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-width: 960px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 110px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+    }
+    .title-post{
+        padding: 10px;
+        width: 100%;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        width: 578px;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-width: 800px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 110px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+    }
+    .title-post{
+        padding: 10px;
+        width: 100%;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        width: 578px;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-width: 768px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 110px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+    }
+    .title-post{
+        padding: 10px;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        width: 406px;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-width: 600px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 110px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 160px;
+    }
+    .title-post{
+        padding: 10px;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}
+@media screen and (max-width: 400px) {
+    .post-song{
+        background-color: rgba(195, 42, 42, 0.505);
+        height: 100%;
+        padding: 5px;
+        margin: 5px 0px 5px 0px;
+        display: grid;
+        grid-template-columns: 6fr 1fr;
+    }
+    .post-header-info{
+        display: grid;
+        grid-template-columns: 1fr 5fr;
+    }
+    .thumbnail-post{
+        width: 110px;
+    }
+    .title-tags-container{
+        display: flex;
+        flex-direction: column;
+    }
+    .title-post{
+        padding: 10px;
+    }
+    .tags-group{
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        overflow-x: scroll;
+        width: 265px;
+    }
+    .description-post > p{
+        height: 120px;
+        overflow-y: scroll;
+    }
+}

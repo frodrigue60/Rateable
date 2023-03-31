@@ -28,14 +28,11 @@ class Post extends Model
         'status',
     ];
 
-    public function artist()
-    {
-        return $this->belongsTo('App\Models\Artist');
-    }
+    
 
-    public function song()
+    public function songs()
     {
-        return $this->belongsTo('App\Models\Song');
+        return $this->hasMany('App\Models\Song');
     }
     public function reports()
     {

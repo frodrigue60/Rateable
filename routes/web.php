@@ -15,6 +15,8 @@ use App\Http\Controllers\ReportController as ReportController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\UserRequestController as UserRequestController;
 use App\Http\Controllers\Admin\UserRequestController as AdminUserRequestController;
+use App\Http\Controllers\Admin\SongController as AdminSongController;
+use App\Http\Controllers\SongController as SongController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +30,8 @@ use App\Http\Controllers\Admin\UserRequestController as AdminUserRequestControll
 */
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'index'])->name('/');
-Route::get('/show/{id}/{slug}/{suffix}',   [PostController::class, 'show'])->name('post.show');
+Route::get('/show/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
+Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalRanking'])->name('seasonal.ranking');
@@ -43,10 +46,23 @@ Route::get('/offline', function () {
 });
 
 //ARTIST PUBLIC
-Route::get('/artist/{slug}',    [ArtistController::class, 'show'])->name('artist.show');
+Route::get('/artist/{id}/{slug}',    [ArtistController::class, 'show'])->name('artist.show');
 
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {
+        //SONGS
+        Route::group(['middleware' => 'editor'], function () {
+            Route::get('/song-post/{id}/create',       [AdminSongController::class, 'create'])->name('song.post.create');
+            Route::post('/song-post/store',       [AdminSongController::class, 'store'])->name('song.post.store');
+            
+        });
+        Route::group(['middleware' => 'editor'], function () {
+            Route::get('/songs-post/{id}/manage',       [AdminSongController::class, 'manage'])->name('song.post.manage');
+            Route::get('/songs-post/{id}/destroy',       [AdminSongController::class, 'destroy'])->name('song.post.destroy');
+            Route::get('/songs-post/{id}/edit',       [AdminSongController::class, 'edit'])->name('song.post.edit');
+            Route::put('/songs-post/{id}/update',       [AdminSongController::class, 'update'])->name('song.post.update');
+        });
+        //REQUESTS
         Route::group(['middleware' => 'creator'], function () {
             Route::get('/requests/index',       [AdminUserRequestController::class, 'index'])->name('admin.request.index');
             Route::get('/requests/{id}/destroy',       [AdminUserRequestController::class, 'destroy'])->name('admin.request.destroy');
@@ -128,6 +144,9 @@ Auth::routes();
 Route::get('/request/create', [App\Http\Controllers\UserRequestController::class, 'create'])->name('request.create');
 Route::post('/request/store', [App\Http\Controllers\UserRequestController::class, 'store'])->name('request.store');
 
+//SONGS ROUTES
+Route::post('/song/{id}/like', [SongController::class, 'likeSong'])->name('song.like');
+Route::post('/song/{id}/unlike', [SongController::class, 'unlikeSong'])->name('song.unlike');
 
 //USER ROUTES
 Route::post('/change-score-format', [App\Http\Controllers\UserController::class, 'changeScoreFormat'])->name('change.score.format');
@@ -139,4 +158,5 @@ Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites'
 Route::post('/post/{id}/like', [PostController::class, 'likePost'])->name('post.like');
 Route::post('/post/{id}/unlike', [PostController::class, 'unlikePost'])->name('post.unlike');
 Route::post('/post/{id}/ratepost', [PostController::class, 'ratePost'])->name('post.addrate');
+Route::post('/song/{id}/ratesong', [SongController::class, 'rateSong'])->name('song.addrate');
 Route::get('/post/{id}/report', [ReportController::class, 'createReport'])->name('post.create.report');

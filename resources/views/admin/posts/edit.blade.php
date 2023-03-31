@@ -4,127 +4,121 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
-                <div class="card-header">Edit.blade.php</div>
+                <div class="card-header">Create Post</div>
                 <div class="card-body">
-                    <form name="add-blog-post-form" id="add-blog-post-form" method="POST"
-                        action="{{ route('admin.post.update', $post->id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('admin.post.update', $post->id) }}" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md">
                                 <label for="titleAnime" class="form-label">Post Title</label>
                                 <input type="text" class="form-control" placeholder="Anime Title" id="titleAnime"
-                                    name="title" required value="{{ $post->title }}">
+                                    name="title" required value="{{ old('title') ? old('title') : $post->title }}">
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <label for="theme_num" class="form-label">OP/ED Number</label>
-                                <input type="text" class="form-control" placeholder="OP/ED Number" id="theme_num"
-                                    name="theme_num" value="{{ $post->theme_num }}">
-                            </div>
+                                <input type="text" class="form-control" placeholder="Opening Number" id="theme_num"
+                                    name="theme_num" value="{{old('theme_num')}}">
+                            </div> --}}
                         </div>
                         <br>
+                        <div>
+                            <div class="mb-3">
+                                <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3">{{ old('description') ? old('title') : $post->description }}</textarea>
+                            </div>
+                        </div>
 
-                        <label for="songRomaji" class="form-label">Song name (romaji)</label>
-                        @if (isset($post->song->song_romaji))
-                            <input type="text" class="form-control" value="{{ $post->song->song_romaji }}"
-                                id="songRomaji" name="song_romaji">
-                        @else
-                            <input type="text" class="form-control" value="" id="songRomaji" name="song_romaji">
-                        @endif
-                        <br>
-                        <label for="songJp" class="form-label">Song name (JP)</label>
-                        @if (isset($post->song->song_jp))
-                            <input type="text" class="form-control" value="{{ $post->song->song_jp }}" id="songJp"
-                                name="song_jp">
-                        @else
-                            <input type="text" class="form-control" value="" id="songJp" name="song_jp">
-                        @endif
 
-                        <br>
-                        <label for="songEn" class="form-label">Song name (EN)</label>
-                        @if (isset($post->song->song_en))
-                            <input type="text" class="form-control" value="{{ $post->song->song_en }}" id="songEn"
-                                name="song_en">
-                        @else
-                            <input type="text" class="form-control" value="" id="songEn" name="song_en">
-                        @endif
+                        {{-- <div>
+                             <label for="songRomaji" class="form-label">Song name (romaji)</label>
+                            <input type="text" class="form-control" placeholder="Song Name Romaji" id="songRomaji"
+                                name="song_romaji" value="{{ old('song_romaji') }}">
+                            <br>
+                            <label for="songJp" class="form-label">Song name (JP)</label>
+                            <input type="text" class="form-control" placeholder="Song Name JP" id="songJp"
+                                name="song_jp" value="{{ old('song_jp') }}">
+                            <br>
+                            <label for="songEn" class="form-label">Song name (EN)</label>
+                            <input type="text" class="form-control" placeholder="Song Name EN" id="songEn"
+                                name="song_en" value="{{ old('song_en') }}"> 
+                        </div> --}}
 
-                        <br>
-                        <div class="row">
-                            <div class="col-md">
+                        {{-- <div class="row">
+                             <div class="col-md">
                                 <label for="ArtistId" class="form-label">Artist</label>
                                 <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
-                                    <option value="">Selecte an artist</option>
+                                    <option value="">Select a artist</option>
                                     @foreach ($artists as $artist)
-                                        <option value="{{ $artist->id }}"
-                                            {{ $artist->id == $post->artist_id ? 'selected' : '' }}>
-                                            {{ $artist->name }} </option>
+                                        <option {{ old('artist_id') == $artist->id ? 'selected' : '' }}
+                                            value="{{ $artist->id }}">{{ $artist->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md">
                                 <label for="type" class="form-label">Type:</label>
                                 <select class="chzn-select" name="type" id="type" style="width:100%;">
-                                    <option value="">Selecte a type</option>
                                     @foreach ($types as $item)
-                                        <option value="{{ $item['value'] }}"
-                                            {{ $post->type == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
-                                        </option>
+                                        <option {{ old('type') == $item['value'] ? 'selected' : '' }}
+                                            value="{{ $item['value'] }}">{{ $item['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
+                            
+                        </div> --}}
+                        <div>
                             @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
-                            <div class="col-md">
-                                <label for="statusId" class="form-label">Status</label>
-                                <select class="chzn-select" name="postStatus" id="statusId" style="width:100%;">
-                                    <option value="">Selecte a post status</option>
-                                    @foreach ($postStatus as $item)
-                                        <option value="{{ $item['value'] }}"
-                                            {{ $post->status == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                <div class="col-md">
+                                    <label for="statusId" class="form-label">Status</label>
+                                    <select class="form-select" name="postStatus" id="statusId" style="width:100%;">
+                                        <option value="">Selecte a post status</option>
+                                        @foreach ($postStatus as $item)
+                                            <option {{ $post->status == $item['value'] ? 'selected' : '' }}
+                                                value="{{ $item['value'] }}">{{ $item['name'] }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             @endif
                         </div>
                         <br>
-                        <label for="thumbnail_src" class="form-label">Image Source</label>
+                        <label for="thumbnail_src" class="form-label">Image Source Url</label>
                         <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src"
-                            name="thumbnail_src" value="{{ $post->thumbnail_src }}">
+                            name="thumbnail_src"
+                            value="{{ old('thumbnail_src') ? old('thumbnail_src') : $post->thumbnail_src }}">
                         <br>
                         <div class="mb-3">
-                            <label for="formFile" class="form-label">Default file input example</label>
+                            <label for="formFile" class="form-label">Upload Image Thumbnail</label>
                             <input class="form-control" type="file" id="formFile" name="file">
                         </div>
-                        <br>
-                        <label for="ytlink" class="form-label">Youtube Embed</label>
-                        <input type="text" class="form-control" value="{{ $post->ytlink }}" id="ytlink"
-                            name="ytlink">
+
+                        {{-- <label for="ytlink" class="form-label">Youtube Embed</label>
+                        <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink" name="ytlink"
+                            value="{{ old('ytlink') }}">
                         <br>
                         <label for="scndlink" class="form-label">Second Embed (optional)</label>
-                        <input type="text" class="form-control" value="{{ $post->scndlink }}"
-                            placeholder="Second Embed (optional)" id="scndlink" name="scndlink">
-                        <br>
+                        <input type="text" class="form-control" placeholder="Second Embed (optional)" id="scndlink"
+                            name="scndlink" value="{{ old('scndlink') }}"> --}}
+
                         <label for="seasonsTags">Select season</label>
-                        <select class="form-select chzn-select" multiple name="tags[]" id="seasonsTags"
-                            style="width:100%;">
-                            @foreach ($post->tags as $tag)
-                                @if (isset($tag->name))
-                                    <option selected value="{{ $tag->name }}">{{ $tag->name }}</option>
-                                @endif
-                            @endforeach
+                        <select class="chzn-select" multiple="true" name="tags[]" id="seasonsTags"
+                            style="width:100%;display:flex;flex-direction:column;">
                             @foreach ($tags as $tag)
-                                <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                @foreach ($post->tags as $item)
+                                    <option {{ $item->name == $tag->name ? 'selected' : '' }} value="{{ $tag->name }}">
+                                        {{ $tag->name }}</option>
+                                @endforeach
+                               {{--  <option value="{{ $tag->name }}">{{ $tag->name }}</option> --}}
                             @endforeach
                         </select>
                         <br>
                         <br>
                         <button class="btn btn-primary" type="submit">Submit</button>
-                        <br>
                 </div>
+                </form>
             </div>
 
         </div>
+
     @section('script')
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
         {{-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> --}}
@@ -132,7 +126,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
 
-        <script>
+        <script type="text/javascript">
             $(function() {
                 $(".chzn-select").chosen();
             });

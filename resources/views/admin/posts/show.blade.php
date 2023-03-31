@@ -52,48 +52,86 @@
                     <img src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="" style="width: 150px">
                 </div>
                 <div class="text-light">
+
                     <p>Title: {{ $post->title }}</p>
-                    <p>Tags: @foreach ($post->tags as $item)
+                    <p>Description: {{ $post->description }}</p>
+                    <p>Tags:
+                        @foreach ($post->tags as $item)
                             {{ $item->name }}
                         @endforeach
                     </p>
-                    <p>Type: {{ $post->type }}</p>
-                    <p>Theme No. {{ $post->theme_num != null ? $post->theme_num : 'N/A' }}</p>
-                    <p>
-                        @isset($post->song->song_romaji)
-                        <p>Song title (romaji): <strong>{{ $post->song->song_romaji }}</strong></p>
-                    @endisset
-                    @isset($post->song->song_jp)
-                        <p>Song title (JP): <strong>{{ $post->song->song_jp }}</strong></p>
-                    @endisset
-                    @isset($post->song->song_en)
-                        <p>Song title (EN): <strong>{{ $post->song->song_en }}</strong></p>
-                    @endisset
-                    @isset($post->artist->name)
-                        <p>Song artist: <strong><a href="{{ route('artist.show', $artist->name_slug) }}"
-                                    class="no-deco">{{ $post->artist->name }}</a></strong></p>
-                    @endisset
-                    @isset($post->artist->name_jp)
-                        <p>Song artist (JP): <strong><a href="{{ route('artist.show', $artist->name_slug) }}"
-                                    class="no-deco">{{ $post->artist->name_jp }}</a></strong></p>
-                    @endisset
-                    </p>
-                    <p>First link: {{ $post->ytlink != null ? 'true' : 'N/A' }}</p>
-                    <p>Second link: {{ $post->scndlink != null ? 'true' : 'N/A' }}</p>
                     <p>thumbnail: {{ $post->thumbnail_src != null ? 'from url' : 'from file' }} </p>
-
                 </div>
             </div>
             <div>
-                <div id="videos">
-                    <div class="video-container ratio ratio-16x9">
-                        {!! $post->ytlink !!}
+                @foreach ($ops as $item)
+                    <div class="card bg-light mb-2 mt-2">
+                        @isset($item->song_romaji)
+                            <p>{{ $item->song_romaji }}</p>
+                        @endisset
+                        @isset($item->song_jp)
+                            <p>{{ $item->song_jp }}</p>
+                        @endisset
+                        @isset($item->song_en)
+                            <p>{{ $item->song_en }}</p>
+                        @endisset
+                        @isset($item->artist_id)
+                            <p>Artist: {{ $item->artist->name }}
+                                {{ $item->artist->name_jp != null ? $item->artist->name_jp : '' }}</p>
+                        @endisset
+                        @if (isset($item->suffix))
+                            <p>{{ $item->suffix }}</p>
+                        @else
+                            <p>{{ $item->type }}</p>
+                        @endif
+                        <div>
+                            <div id="videos">
+                                <div class="video-container ratio ratio-16x9">
+                                    {!! $item->ytlink !!}
+                                </div>
+                                <div class="video-container ratio ratio-16x9">
+                                    {!! $item->scndlink !!}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="video-container ratio ratio-16x9">
-                        {!! $post->scndlink !!}
-                    </div>
-                </div>
+                @endforeach
             </div>
+            <div>
+                @foreach ($eds as $item)
+                    <div class="card bg-light mb-2 mt-2">
+                        @isset($item->song_romaji)
+                            <p>{{ $item->song_romaji }}</p>
+                        @endisset
+                        @isset($item->song_jp)
+                            <p>{{ $item->song_jp }}</p>
+                        @endisset
+                        @isset($item->song_en)
+                            <p>{{ $item->song_en }}</p>
+                        @endisset
+                        @isset($item->artist_id)
+                            <p>Artist: {{ $item->artist->name }}
+                                {{ $item->artist->name_jp != null ? $item->artist->name_jp : '' }}</p>
+                        @endisset
+                        @if (isset($item->suffix))
+                            <p>{{ $item->suffix }}</p>
+                        @else
+                            <p>{{ $item->type }}</p>
+                        @endif
+                        <div>
+                            <div id="videos">
+                                <div class="video-container ratio ratio-16x9">
+                                    {!! $item->ytlink !!}
+                                </div>
+                                <div class="video-container ratio ratio-16x9">
+                                    {!! $item->scndlink !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
 
             @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                 <div class="container d-flex justify-content-center m-2">
@@ -101,23 +139,23 @@
                         <button disabled="disabled" class="btn btn-secondary">N/A</button>
                     @endif
                     @if ($post->status == 'stagged')
-                            <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
-                                @csrf
-                                <button class="btn btn-warning"> <i class="fa fa-clock-o" aria-hidden="true">
-                                        {{ $post->id }}</i></button>
-                            </form>
+                        <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
+                            @csrf
+                            <button class="btn btn-warning"> <i class="fa fa-clock-o" aria-hidden="true">
+                                    {{ $post->id }}</i></button>
+                        </form>
                     @endif
                     @if ($post->status == 'published')
-                            <form action="{{ route('admin.post.unapprove', $post->id) }}" method="post">
-                                @csrf
-                                <button class="btn btn-primary"> <i class="fa fa-check" aria-hidden="true">
-                                        {{ $post->id }}</i></button>
-                            </form>
+                        <form action="{{ route('admin.post.unapprove', $post->id) }}" method="post">
+                            @csrf
+                            <button class="btn btn-primary"> <i class="fa fa-check" aria-hidden="true">
+                                    {{ $post->id }}</i></button>
+                        </form>
                     @endif
-                        <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-success"><i
+                    <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-success"><i
                             class="fa fa-pencil-square-o" aria-hidden="true"></i> {{ $post->id }}</a>
-                        <a href="{{ route('admin.post.destroy', $post->id) }}" class="btn btn-danger"><i
-                            class="fa fa-trash" aria-hidden="true"></i>
+                    <a href="{{ route('admin.post.destroy', $post->id) }}" class="btn btn-danger"><i class="fa fa-trash"
+                            aria-hidden="true"></i>
                         {{ $post->id }}</a>
                 </div>
             @endif

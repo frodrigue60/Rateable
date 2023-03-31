@@ -18,6 +18,15 @@ return new class extends Migration
             $table->string('song_romaji')->nullable();
             $table->string('song_jp')->nullable();
             $table->string('song_en')->nullable();
+            $table->unsignedBigInteger('artist_id')->nullable();
+            $table->unsignedBigInteger('post_id');
+            $table->string('theme_num')->nullable();
+            $table->enum('type', ['OP', 'ED'])->nullable();
+            $table->string('suffix')->nullable();
+            $table->text('ytlink')->nullable();
+            $table->text('scndlink')->nullable();
+            
+            $table->bigInteger('view_count')->default(0);
             $table->timestamps();
         });
     }

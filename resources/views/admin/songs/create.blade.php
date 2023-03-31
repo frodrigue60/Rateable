@@ -6,31 +6,19 @@
             <div class="card bg-dark text-light">
                 <div class="card-header">Create Post</div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.post.store') }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('song.post.store') }}" enctype="multipart/form-data">
                         @csrf
+                        <input id="post_id" name="post_id" type="hidden" value="{{ $id }}">
                         <div class="row">
-                            <div class="col-md">
-                                <label for="titleAnime" class="form-label">Post Title</label>
-                                <input type="text" class="form-control" placeholder="Anime Title" id="titleAnime"
-                                    name="title" required value="{{ old('title') }}">
-                            </div>
-                            {{-- <div class="col-md-6">
+                            <div class="col">
                                 <label for="theme_num" class="form-label">OP/ED Number</label>
                                 <input type="text" class="form-control" placeholder="Opening Number" id="theme_num"
-                                    name="theme_num" value="{{old('theme_num')}}">
-                            </div> --}}
+                                    name="theme_num" value="{{ old('theme_num') }}">
+                            </div>
                         </div>
                         <br>
                         <div>
-                            <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" name="description" rows="3">{{ old('description') }}</textarea>
-                            </div>
-                        </div>
-                        
-
-                        {{--<div>
-                             <label for="songRomaji" class="form-label">Song name (romaji)</label>
+                            <label for="songRomaji" class="form-label">Song name (romaji)</label>
                             <input type="text" class="form-control" placeholder="Song Name Romaji" id="songRomaji"
                                 name="song_romaji" value="{{ old('song_romaji') }}">
                             <br>
@@ -40,11 +28,11 @@
                             <br>
                             <label for="songEn" class="form-label">Song name (EN)</label>
                             <input type="text" class="form-control" placeholder="Song Name EN" id="songEn"
-                                name="song_en" value="{{ old('song_en') }}"> 
-                        </div>--}}
-                        
-                        {{-- <div class="row">
-                             <div class="col-md">
+                                name="song_en" value="{{ old('song_en') }}">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md">
                                 <label for="ArtistId" class="form-label">Artist</label>
                                 <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
                                     <option value="">Select a artist</option>
@@ -63,50 +51,31 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
-                        </div> --}}
-                        <div>
-                            @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
-                                <div class="col-md">
-                                    <label for="statusId" class="form-label">Status</label>
-                                    <select class="form-select" name="postStatus" id="statusId" style="width:100%;">
-                                        <option value="">Selecte a post status</option>
-                                        @foreach ($postStatus as $item)
-                                            <option {{ old('type') == $item['value'] ? 'selected' : '' }}
-                                                value="{{ $item['value'] }}">{{ $item['name'] }} </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endif
+                            <div class="col-md">
+                                <label for="seasonsTags">Select season</label>
+                                <select class="chzn-select" multiple="true" name="tags[]" id="seasonsTags"
+                                    style="width:100%;display:flex;flex-direction:column;">
+                                    @foreach ($tags as $tag)
+                                        <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                         <br>
-                        <label for="thumbnail_src" class="form-label">Image Source Url</label>
-                        <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src"
-                            name="thumbnail_src" value="{{ old('thumbnail_src') }}">
-                        <br>
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label">Upload Image Thumbnail</label>
-                            <input class="form-control" type="file" id="formFile" name="file">
-                        </div>
-                        
-                        {{-- <label for="ytlink" class="form-label">Youtube Embed</label>
+
+
+                        <label for="ytlink" class="form-label">Youtube Embed</label>
                         <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink" name="ytlink"
                             value="{{ old('ytlink') }}">
                         <br>
                         <label for="scndlink" class="form-label">Second Embed (optional)</label>
                         <input type="text" class="form-control" placeholder="Second Embed (optional)" id="scndlink"
-                            name="scndlink" value="{{ old('scndlink') }}"> --}}
-                        
-                        <label for="seasonsTags">Select season</label>
-                        <select class="chzn-select" multiple="true" name="tags[]" id="seasonsTags"
-                            style="width:100%;display:flex;flex-direction:column;">
-                            @foreach ($tags as $tag)
-                                <option {{ in_array($tag->name, old('tags', [])) ? 'selected' : '' }}
-                                    value="{{ $tag->name }}">{{ $tag->name }}</option>
-                            @endforeach
-                        </select>
+                            name="scndlink" value="{{ old('scndlink') }}">
+
+
                         <br>
-                        <br>
+
                         <button class="btn btn-primary" type="submit">Submit</button>
                 </div>
                 </form>

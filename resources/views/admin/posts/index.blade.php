@@ -22,9 +22,7 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">Tags</th>
-                                <th scope="col">Suffix</th>
-                                <th scope="col">Song</th>
-                                <th scope="col">Artist</th>
+                                <th scope="col">Themes</th>
                                 <th scope="col">Status</th>
                                 @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                     <th scope="col">Actions</th>
@@ -47,34 +45,10 @@
                                         @endforeach
 
                                     </td>
-                                    <td>{{ $post->suffix != null ? $post->suffix : $post->type }}</td>
                                     <td>
-                                        @if (isset($post->song_id))
-                                            @if (isset($post->song->song_romaji))
-                                                {{ $post->song->song_romaji }}
-                                            @else
-                                                @if (isset($post->song->song_en))
-                                                    {{ $post->song->song_en }}
-                                                @else
-                                                    @if (isset($post->song->song_jp))
-                                                        {{ $post->song->song_jp }}
-                                                    @endif
-                                                @endif
-                                            @endif
-                                        @else
-                                            N/A
-                                        @endif
+                                        {{ $post->songs->count() }}
                                     </td>
-                                    <td>
-                                        @if (isset($post->artist_id))
-                                            @isset($post->artist->name)
-                                                <a
-                                                    href="{{ route('artist.show', $post->artist->name_slug) }}">{{ $post->artist->name }}</a>
-                                            @endisset
-                                        @else
-                                            N/A
-                                        @endif
-                                    </td>
+                                    
 
                                     @if (Auth::User()->isCreator())
                                         <td>
@@ -119,6 +93,10 @@
                                             <a href="{{ route('admin.post.destroy', $post->id) }}"
                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i>
                                                 {{ $post->id }}</a>
+                                            <a class="btn btn-sm btn-primary"
+                                                href="{{ route('song.post.create', $post->id) }}">Add song</a>
+                                                <a class="btn btn-sm btn-success"
+                                                href="{{ route('song.post.manage', $post->id) }}">Manage</a>
 
                                         </td>
                                     @endif

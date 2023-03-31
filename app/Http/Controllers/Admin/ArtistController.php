@@ -66,7 +66,9 @@ class ArtistController extends Controller
 
             $artist = new Artist();
             $artist->name = $name;
-            $artist->name_jp = $name_jp;
+            if ($request->name_jp != null) {
+                $artist->name_jp = $name_jp;
+            }
             $artist->name_slug = $name_slug;
             if ($artist->save()) {
                 return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Inserted Successfully');

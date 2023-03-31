@@ -4,10 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use willvincent\Rateable\Rateable;
+use Conner\Tagging\Taggable;
+use Conner\Likeable\Likeable;
+use App\Models\Post;
 
 class Song extends Model
 {
     use HasFactory;
+    use Rateable;
+    use Taggable;
+    use Likeable;
 
     protected $fillable = [
         'id',
@@ -16,8 +23,12 @@ class Song extends Model
         'song_song_en',
     ];
 
-    public function posts()
+    public function post()
     {
-        return $this->hasMany('App\Models\Post');
+        return $this->belongsTo(Post::class);
+    }
+    public function artist()
+    {
+        return $this->belongsTo(Artist::class);
     }
 }

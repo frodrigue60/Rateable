@@ -3,11 +3,13 @@
     <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
     @if (Request::routeIs('seasonal.ranking'))
         <link rel="canonical" href="{{ url()->current() }}">
-        <title>Ranking Best Openings & Endings {{ $currentSeason->name }}</title>
-        <meta title="Ranking Openings & Endings {{ $currentSeason->name }}">
-        <meta name="description" content="Ranking Best Openings & Endings {{ $currentSeason->name }}">
-        <meta name="keywords"
-            content="ranking, top, anime openings {{ $currentSeason->name }}, openings anime {{ $currentSeason->name }}, anime endings {{ $currentSeason->name }}, endings anime {{ $currentSeason->name }}, of {{ $currentSeason->name }}">
+        @isset($currentSeason)
+            <title>Ranking Best Openings & Endings {{ $currentSeason->name }}</title>
+            <meta title="Ranking Openings & Endings {{ $currentSeason->name }}">
+            <meta name="description" content="Ranking Best Openings & Endings {{ $currentSeason->name }}">
+            <meta name="keywords"
+                content="ranking, top, anime openings {{ $currentSeason->name }}, openings anime {{ $currentSeason->name }}, anime endings {{ $currentSeason->name }}, endings anime {{ $currentSeason->name }}, of {{ $currentSeason->name }}">
+        @endisset
     @else
         @if (Request::routeIs('global.ranking'))
             <link rel="canonical" href="{{ url()->current() }}">
@@ -26,10 +28,11 @@
                 <div class="top-header">
                     <div>
                         @if (Request::routeIs('seasonal.ranking'))
-                            <h2 class="text-light mb-0">Top Openings @isset($currentSeason)
-                                    {{ $currentSeason->name }}
-                                @endisset
-                            </h2>
+                            @if (isset($currentSeason))
+                                <h2 class="text-light mb-0">Top Openings {{ $currentSeason->name }}</h2>
+                            @else
+                                <h2 class="text-light mb-0">Top Openings</h2>
+                            @endif
                         @endif
                         @if (Request::routeIs('global.ranking'))
                             <h2 class="text-light mb-0">Global Rank Openings
@@ -41,103 +44,91 @@
                     $j = 1;
                 @endphp
                 {{-- OPENINGS --}}
-                @foreach ($openings->sortByDesc('averageRating') as $post)
-                    <article class="top-item">
-                        <div class="item-place">
-                            <span><strong>{{ $j++ }}</strong></span>
-                        </div>
-                        <div class="item-info">
-                            <div class="item-post-info">
-                                <span><a href="{{ route('post.show', [$post->id, $post->slug, $post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                        class="text-light no-deco text-uppercase">{{ $post->title }}
-                                        @if ($post->theme_num >= 1)
-                                            ({{ $post->suffix }})
-                                        @endif
-                                    </a></span>
+                @foreach ($openings as $song)
+                    @isset($song->post)
+                        <article class="top-item">
+                            <div class="item-place">
+                                <span><strong>{{ $j++ }}</strong></span>
                             </div>
-                            @if (isset($post->song->song_romaji))
-                                <div class="item-song-info">
-                                    <span><strong><a
-                                                href="{{ route('post.show', [$post->id, $post->slug, $post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                                class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
-                                        @isset($post->artist->name)
-                                            By
-                                            <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
-                                                    class="no-deco text-light">{{ $post->artist->name }}</a></strong>
-                                        @endisset
-                                    </span>
+                            <div class="item-info">
+                                <div class="item-post-info">
+                                    <span><a href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
+                                            class="text-light no-deco text-uppercase">{{ $song->post->title }}
+                                            @if (isset($song->suffix))
+                                                ({{ $song->suffix }})
+                                            @endif
+                                        </a></span>
                                 </div>
-                            @else
-                                @if (isset($post->song->song_en))
+                                @if (isset($song->song_romaji) || isset($song->song_en) || isset($song->song_jp))
                                     <div class="item-song-info">
-                                        <span><strong><a
-                                                    href="{{ route('post.show', [$post->id, $post->slug, $post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                                    class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
-                                            @isset($post->artist->name)
-                                                By
-                                                <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
-                                                        class="no-deco text-light">{{ $post->artist->name }}</a></strong>
-                                            @endisset
-                                        </span>
+                                        <span id="song-title"><strong><a
+                                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
+                                                    class="no-deco text-light">
+                                                    @if (isset($song->song_romaji))
+                                                        {{ $song->song_romaji }}
+                                                    @else
+                                                        @if (isset($song->song_en))
+                                                            {{ $song->song_en }}
+                                                        @else
+                                                            @if (isset($song->song_jp))
+                                                                {{ $song->song_jp }}
+                                                            @endif
+                                                        @endif
+                                                    @endif
+                                                </a></strong></span>
+                                        @if (isset($song->artist->name))
+                                            <span style="margin-left: 4px;margin-right:4px;">By</span>
+                                            <span id="song-artist"><strong><a
+                                                        href="{{ route('artist.show', $song->artist->name_slug) }}"
+                                                        class="no-deco text-light">
+                                                        {{ $song->artist->name }}
+                                                    </a></strong></span>
+                                        @endif
                                     </div>
-                                @else
-                                    @if (isset($post->song->song_jp))
-                                        <div class="item-song-info">
-                                            <span><strong><a
-                                                        href="{{ route('post.show', [$post->id, $post->slug, $post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                                        class="no-deco text-light">{{ $post->song->song_jp }}</a></strong>
-                                                @if (isset($post->artist->name))
-                                                    By
-                                                    <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
-                                                            class="no-deco text-light">{{ $post->artist->name }}</a></strong>
-                                                @endif
-                                            </span>
-                                        </div>
+                                @endif
+                            </div>
+                            <div class="item-score">
+                                <span>
+                                    @if (isset($score_format))
+                                        @switch($score_format)
+                                            @case('POINT_100')
+                                                {{ round($song->averageRating) }}
+                                            @break
+
+                                            @case('POINT_10_DECIMAL')
+                                                {{ round($song->averageRating / 10, 1) }}
+                                            @break
+
+                                            @case('POINT_10')
+                                                {{ round($song->averageRating / 10) }}
+                                            @break
+
+                                            @case('POINT_5')
+                                                {{ round($song->averageRating / 20) }}
+                                            @break
+
+                                            @default
+                                                {{ round($song->averageRating) }}
+                                        @endswitch
+                                    @else
+                                        {{ round($song->averageRating / 10, 1) }}
                                     @endif
-                                @endif
-                            @endif
-                        </div>
-                        <div class="item-score">
-                            <span>
-                                @if (isset($score_format))
-                                    @switch($score_format)
-                                        @case('POINT_100')
-                                            {{ round($post->averageRating) }}
-                                        @break
-
-                                        @case('POINT_10_DECIMAL')
-                                            {{ round($post->averageRating / 10, 1) }}
-                                        @break
-
-                                        @case('POINT_10')
-                                            {{ round($post->averageRating / 10) }}
-                                        @break
-
-                                        @case('POINT_5')
-                                            {{ round($post->averageRating / 20) }}
-                                        @break
-
-                                        @default
-                                            {{ round($post->averageRating) }}
-                                    @endswitch
-                                @else
-                                    {{ round($post->averageRating / 10, 1) }}
-                                @endif
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                    </article>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </article>
+                    @endisset
                 @endforeach
             </section>
             <section class="container-items">
                 <div class="top-header">
                     <div>
                         @if (Request::routeIs('seasonal.ranking'))
-                            <h2 class="text-light mb-0">Top Endings
-                                @isset($currentSeason)
-                                    {{ $currentSeason->name }}
-                                @endisset
-                            </h2>
+                            @if (isset($currentSeason))
+                                <h2 class="text-light mb-0">Top Endings {{ $currentSeason->name }}</h2>
+                            @else
+                                <h2 class="text-light mb-0">Top Endings</h2>
+                            @endif
                         @endif
                         @if (Request::routeIs('global.ranking'))
                             <h2 class="text-light mb-0">Global Rank Endings
@@ -149,92 +140,80 @@
                     $j = 1;
                 @endphp
                 {{-- ENDINGS --}}
-                @foreach ($endings->sortByDesc('averageRating') as $post)
-                    <article class="top-item">
-                        <div class="item-place">
-                            <span><strong>{{ $j++ }}</strong></span>
-                        </div>
-                        <div class="item-info">
-                            <div class="item-post-info">
-                                <span><a href="{{ route('post.show', [$post->id, $post->slug, $post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                        class="text-light no-deco text-uppercase">{{ $post->title }}
-                                        @if ($post->theme_num != null)
-                                            ({{ $post->type }}{{ $post->theme_num }})
-                                        @endif
-                                    </a></span>
+                @foreach ($endings as $song)
+                    @isset($song->post)
+                        <article class="top-item">
+                            <div class="item-place">
+                                <span><strong>{{ $j++ }}</strong></span>
                             </div>
-                            @if (isset($post->song->song_romaji))
-                                <div class="item-song-info">
-                                    <span><strong><a
-                                                href="{{ route('post.show', [$post->id, $post->slug, $post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                                class="no-deco text-light">{{ $post->song->song_romaji }}</a></strong>
-                                        @isset($post->artist->name)
-                                            By
-                                            <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
-                                                    class="no-deco text-light">{{ $post->artist->name }}</a></strong>
-                                        @endisset
-                                    </span>
+                            <div class="item-info">
+                                <div class="item-post-info">
+                                    <span><a href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
+                                            class="text-light no-deco text-uppercase">{{ $song->post->title }}
+                                            @if (isset($song->suffix))
+                                                ({{ $song->suffix }})
+                                            @endif
+                                        </a></span>
                                 </div>
-                            @else
-                                @if (isset($post->song->song_en))
+                                @if (isset($song->song_romaji) || isset($song->song_en) || isset($song->song_jp))
                                     <div class="item-song-info">
-                                        <span><strong><a
-                                                    href="{{ route('post.show', [$post->id, $post->slug, $post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                                    class="no-deco text-light">{{ $post->song->song_en }}</a></strong>
-                                            @isset($post->artist->name)
-                                                By
-                                                <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
-                                                        class="no-deco text-light">{{ $post->artist->name }}</a></strong>
-                                            @endisset
-                                        </span>
+                                        <span id="song-title"><strong><a
+                                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
+                                                    class="no-deco text-light">
+                                                    @if (isset($song->song_romaji))
+                                                        {{ $song->song_romaji }}
+                                                    @else
+                                                        @if (isset($song->song_en))
+                                                            {{ $song->song_en }}
+                                                        @else
+                                                            @if (isset($song->song_jp))
+                                                                {{ $song->song_jp }}
+                                                            @endif
+                                                        @endif
+                                                    @endif
+                                                </a></strong></span>
+                                        @if (isset($song->artist->name))
+                                            <span style="margin-left: 4px;margin-right:4px;">By</span>
+                                            <span id="song-artist"><strong><a
+                                                        href="{{ route('artist.show', $song->artist->name_slug) }}"
+                                                        class="no-deco text-light">
+                                                        {{ $song->artist->name }}
+                                                    </a></strong></span>
+                                        @endif
                                     </div>
-                                @else
-                                    @if (isset($post->song->song_jp))
-                                        <div class="item-song-info">
-                                            <span><strong><a
-                                                        href="{{ route('post.show', [$post->id, $post->slug, $post->theme_num >= 1 ? $post->suffix : $post->type]) }}"
-                                                        class="no-deco text-light">{{ $post->song->song_jp }}</a></strong>
-                                                @if (isset($post->artist->name))
-                                                    By
-                                                    <strong><a href="{{ route('artist.show', $post->artist->name_slug) }}"
-                                                            class="no-deco text-light">{{ $post->artist->name }}</a></strong>
-                                                @endif
-                                            </span>
-                                        </div>
+                                @endif
+                            </div>
+                            <div class="item-score">
+                                <span>
+                                    @if (isset($score_format))
+                                        @switch($score_format)
+                                            @case('POINT_100')
+                                                {{ round($song->averageRating) }}
+                                            @break
+
+                                            @case('POINT_10_DECIMAL')
+                                                {{ round($song->averageRating / 10, 1) }}
+                                            @break
+
+                                            @case('POINT_10')
+                                                {{ round($song->averageRating / 10) }}
+                                            @break
+
+                                            @case('POINT_5')
+                                                {{ round($song->averageRating / 20) }}
+                                            @break
+
+                                            @default
+                                                {{ round($song->averageRating) }}
+                                        @endswitch
+                                    @else
+                                        {{ round($song->averageRating / 10, 1) }}
                                     @endif
-                                @endif
-                            @endif
-                        </div>
-                        <div class="item-score">
-                            <span>
-                                @if (isset($score_format))
-                                    @switch($score_format)
-                                        @case('POINT_100')
-                                            {{ round($post->averageRating) }}
-                                        @break
-
-                                        @case('POINT_10_DECIMAL')
-                                            {{ round($post->averageRating / 10, 1) }}
-                                        @break
-
-                                        @case('POINT_10')
-                                            {{ round($post->averageRating / 10) }}
-                                        @break
-
-                                        @case('POINT_5')
-                                            {{ round($post->averageRating / 20) }}
-                                        @break
-
-                                        @default
-                                            {{ round($post->averageRating) }}
-                                    @endswitch
-                                @else
-                                    {{ round($post->averageRating / 10, 1) }}
-                                @endif
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                    </article>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </article>
+                    @endisset
                 @endforeach
             </section>
         </section>

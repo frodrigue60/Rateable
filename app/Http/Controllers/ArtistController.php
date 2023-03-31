@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use willvincent\Rateable\Rateable;
+use App\Models\Song;
 
 
 class ArtistController extends Controller
@@ -51,7 +52,7 @@ class ArtistController extends Controller
      * @param  mixed  $name_slug
      * @return \Illuminate\Http\Response
      */
-    public function show($name_slug)
+    public function show($id, $name_slug)
     {
         $artist = Artist::where('name_slug', $name_slug)->first();
 
@@ -61,11 +62,11 @@ class ArtistController extends Controller
             $score_format = null;
         }
 
-        $openings = Post::where('artist_id', '=', $artist->id)
+        $openings = Song::where('artist_id', '=', $artist->id)
             ->where('type', '=', 'op')
             ->get();
 
-        $endings = Post::where('artist_id', '=', $artist->id)
+        $endings = Song::where('artist_id', '=', $artist->id)
             ->where('type', '=', 'ed')
             ->get();
 
