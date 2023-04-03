@@ -72,7 +72,7 @@
 
                                     @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                         <td>
-                                            <a href="{{ route('admin.post.edit', $report->post_id) }}"
+                                            <a href="{{ route('song.post.edit', $report->post_id) }}"
                                                 class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i> {{ $report->post_id }}</a>
                                             <a class="btn btn-danger btn-sm"

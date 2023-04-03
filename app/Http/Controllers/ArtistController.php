@@ -21,7 +21,9 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        
+        $artists = Artist::all()->sortBy('name');
+        $characters = range('A', 'Z');
+        return view('public.artists.index',compact('artists','characters'));
     }
 
     /**

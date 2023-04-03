@@ -56,7 +56,11 @@
                                 <select class="chzn-select" multiple="true" name="tags[]" id="seasonsTags"
                                     style="width:100%;display:flex;flex-direction:column;">
                                     @foreach ($tags as $tag)
-                                        <option value="{{ $tag->name }}">{{ $tag->name }}</option>
+                                        <option
+                                            @foreach ($post->tags as $item)
+                                                {{ $item->name == $tag->name ? 'selected' : '' }} 
+                                            @endforeach
+                                            value="{{ $tag->name }}">{{ $tag->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

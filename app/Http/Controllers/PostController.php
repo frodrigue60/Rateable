@@ -935,11 +935,13 @@ class PostController extends Controller
                                 ->where('title', 'LIKE', "{$char}%");
                         })->get();
                 } else {
+                    //dd($request->all());
                     $songs = Song::with(['post'])
-                        ->withAnyTag($tag)
+                        ->withAnyTag([$tag])
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
-                        })->get();
+                        })
+                        ->get();
                 }
             }
         } else {
@@ -963,7 +965,8 @@ class PostController extends Controller
                     $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
-                        })->get();
+                            
+                        })->where('type', $type)->get();
                 }
             } else {
                 if ($char != null) {

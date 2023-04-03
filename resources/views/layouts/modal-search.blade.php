@@ -1,6 +1,9 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content customModal">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-header mt-2 customModal">
                 <form class="d-flex w-100" role="search">
                     <input id="searchInputModal" class="form-control" type="search" placeholder="Search"

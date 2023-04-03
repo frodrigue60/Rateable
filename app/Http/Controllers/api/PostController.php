@@ -76,13 +76,10 @@ class PostController extends Controller
     public function search(Request $request)
     {
         $q = $request->get('q');
-        //dd($q);
-        $posts = Post::where('title', 'LIKE', "%$q%")
-        ->orWhere('suffix', 'LIKE', "%$q%")
-        ->limit(5)
-        ->get(['id', 'title', 'slug', 'type', 'theme_num', 'suffix']);
+        
+        $posts = Post::where('title', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug']);
 
-        $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'name_slug']);
+        $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['id','name', 'name_slug']);
 
         $tags = Tag::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
 

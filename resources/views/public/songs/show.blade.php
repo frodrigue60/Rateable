@@ -81,7 +81,7 @@
                     </div>
                     <div class="d-flex btn-group-show">
                         @auth
-                            <a href="{{ route('post.create.report', $song->post->id) }}" class="button2 no-deco"> Report <i
+                            <a href="{{ route('post.create.report', $song->id) }}" class="button2 no-deco"> Report <i
                                     class="fa fa-exclamation-circle" aria-hidden="true"></i>
                             </a>
                         @endauth

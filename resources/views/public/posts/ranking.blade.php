@@ -79,7 +79,7 @@
                                         @if (isset($song->artist->name))
                                             <span style="margin-left: 4px;margin-right:4px;">By</span>
                                             <span id="song-artist"><strong><a
-                                                        href="{{ route('artist.show', $song->artist->name_slug) }}"
+                                                        href="{{ route('artist.show', [$song->artist->id,$song->artist->name_slug]) }}"
                                                         class="no-deco text-light">
                                                         {{ $song->artist->name }}
                                                     </a></strong></span>
@@ -175,7 +175,7 @@
                                         @if (isset($song->artist->name))
                                             <span style="margin-left: 4px;margin-right:4px;">By</span>
                                             <span id="song-artist"><strong><a
-                                                        href="{{ route('artist.show', $song->artist->name_slug) }}"
+                                                        href="{{ route('artist.show', [$song->artist->id,$song->artist->name_slug]) }}"
                                                         class="no-deco text-light">
                                                         {{ $song->artist->name }}
                                                     </a></strong></span>

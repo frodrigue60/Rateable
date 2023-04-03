@@ -127,7 +127,7 @@
                 </div>
                 <div style="display: flex;justify-content: center;
                 margin-top: 10px;">
-                    {{-- {{ $posts->links() }} --}}
+                    {{ $songs->links() }}
                 </div>
             </section>
         </div>

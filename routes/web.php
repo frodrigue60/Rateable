@@ -47,6 +47,8 @@ Route::get('/offline', function () {
 
 //ARTIST PUBLIC
 Route::get('/artist/{id}/{slug}',    [ArtistController::class, 'show'])->name('artist.show');
+Route::get('/artists',    [ArtistController::class, 'index'])->name('artist.index');
+
 
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {

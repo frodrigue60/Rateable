@@ -70,24 +70,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     usersDiv.innerHTML = "";
 
                     data.posts.forEach(element => {
-                        if (element.suffix != undefined) {
+                        
                             postsDiv.innerHTML +=
                             '<div class="result"><a href="http://127.0.0.1:8000/show/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
-                                .title + ' '+ element.suffix + '</span></a></div>';
-                        } else {
-                            postsDiv.innerHTML +=
-                            '<div class="result"><a href="http://127.0.0.1:8000/show/' +
-                            element.id + '/' + element.slug + '"><span>' +
-                            element
-                                .title + ' '+ element.type + '</span></a></div>';
-                        }
+                                .title + ' '+  '</span></a></div>';
+                        
                     });
 
                     data.artists.forEach(element => {
                         artistsDiv.innerHTML +=
-                            '<div class="result"><a href="http://127.0.0.1:8000/artist/' +
+                            '<div class="result"><a href="http://127.0.0.1:8000/artist/' +element.id +'/'+
                             element.name_slug + '"><span>' + element.name +
                             '</span></a></div>';
                     });

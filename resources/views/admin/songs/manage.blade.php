@@ -8,7 +8,8 @@
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
                 <div class="card-header">
-                    <a class="btn btn-primary btn-sm" href="" role="button">ADD SONG</a>
+                    <a class="btn btn-primary btn-sm" href="{{ route('song.post.create', $post->id) }}" role="button">ADD
+                        SONG</a>
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">
@@ -33,15 +34,17 @@
                             @foreach ($post->songs as $song)
                                 <tr>
                                     {{-- <td>{{ $song->id }}</td> --}}
-                                    <td>{{ $song->song_romaji != null ? $song->song_romaji : $song->song_en }}</td>
+                                    <td>
+                                        <a class="text-light" href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song->song_romaji != null ? $song->song_romaji : $song->song_en }}</a>
+                                    </td>
                                     <td>
                                         @isset($song->artist)
-                                            {{ $song->artist->name }}
+                                            <a class="text-light" href="{{route('artist.show',[$song->artist->id,$song->artist->name_slug])}}">{{ $song->artist->name }}</a>
                                         @endisset
                                     </td>
                                     <td>
                                         @foreach ($song->tags as $tag)
-                                            [{{$tag->name}}]
+                                            [{{ $tag->name }}]
                                         @endforeach
                                     </td>
                                     <td>

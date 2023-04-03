@@ -34,7 +34,8 @@ class SongController extends Controller
             ['name' => 'Ending', 'value' => 'ED']
         ];
         $artists = Artist::all();
-        return view('admin.songs.create',compact('id','artists','types','tags'));
+        $post = Post::find($id);
+        return view('admin.songs.create',compact('id','artists','types','tags','post'));
     }
 
     /**
@@ -57,6 +58,7 @@ class SongController extends Controller
         $song->scndlink = $request->scndlink;
         if ($request->theme_num >= 1) {
             $song->suffix = $song->type.$request->theme_num;
+            $song->theme_num = $request->theme_num;
         } else {
             $song->suffix = null;
         }
@@ -120,6 +122,7 @@ class SongController extends Controller
         $song->scndlink = $request->scndlink;
         if ($request->theme_num >= 1) {
             $song->suffix = $song->type.$request->theme_num;
+            $song->theme_num = $request->theme_num;
         } else {
             $song->suffix = null;
         }
