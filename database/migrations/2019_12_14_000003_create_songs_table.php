@@ -29,6 +29,12 @@ return new class extends Migration
             $table->bigInteger('view_count')->default(0);
             $table->timestamps();
         });
+
+        /* Schema::table('songs', function (Blueprint $table) {
+            $table->unsignedBigInteger('post_id');
+         
+            $table->foreign('post_id')->references('id')->on('posts');
+        }); */
     }
 
     /**
