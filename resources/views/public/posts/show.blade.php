@@ -68,13 +68,13 @@
     <meta name="twitter:data2" content="2 minutos"> --}}
 @endsection
 @section('content')
-<div>
-    <span id="media-query"></span>
-</div>
+    <div>
+        <span id="media-query"></span>
+    </div>
     <div class="container text-light">
         <div class="post-info">
-            <div class="thumbnail-post" >
-                    <img class="" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="">
+            <div class="thumbnail-post">
+                <img class="" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="">
             </div>
             <div id="post-data">
                 <div class="post-title">
@@ -190,7 +190,8 @@
                                         </div>
                                     @endisset
                                 </div>
-                                <div>
+                                <div style="display: inline;
+                        align-self: center;">
                                     <span>{{ $song->averageRating != null ? $song->averageRating / 1 : 'N/A' }}</span>
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                 </div>

@@ -95,7 +95,7 @@
                             @if ($song->liked())
                                 <form action="{{ route('song.unlike', $song->id) }}" method="post">
                                     @csrf
-                                    <button class="button-liked" id="like"> <i class="fa fa-heart"></i></button>
+                                    <button class="button-liked" id="unlike"> <i class="fa fa-heart"></i></button>
                                 </form>
                             @else
                                 <form action="{{ route('song.like', $song->id) }}" method="post">
@@ -186,12 +186,13 @@
                                                 <h4>Song title (EN): <strong>{{ $song->song_en }}</strong></h4>
                                             @endisset
                                             @isset($song->artist->name)
-                                                <h4>Artist: <strong><a href="{{ route('artist.show', [$song->artist->id,$song->artist->name_slug]) }}"
+                                                <h4>Artist: <strong><a
+                                                            href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
                                                             class="no-deco">{{ $song->artist->name }}</a></strong></h4>
                                             @endisset
                                             @isset($song->artist->name_jp)
                                                 <h4>Artist (JP): <strong><a
-                                                            href="{{ route('artist.show', [$song->artist->id,$song->artist->name_slug]) }}"
+                                                            href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
                                                             class="no-deco">{{ $song->artist->name_jp }}</a></strong></h4>
                                             @endisset
 

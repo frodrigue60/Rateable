@@ -66,7 +66,7 @@ class SongController extends Controller
 
         if ($song->save()) {
             $song->tag($request->tags);
-            return redirect(route('admin.post.index'))->with('success','success');
+            return redirect(route('song.post.manage',$request->post_id))->with('success','song added successfully');
         } else {
             return redirect(route('admin.post.index'))->with('error','error');
         }
@@ -143,7 +143,14 @@ class SongController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $song = Song::find($id);
+        if ($song->delete()) {
+            return redirect()->back()->with('success', 'Song '.$song->id.' has been deleted');
+        } else {
+            return redirect()->back()->with('error', 'A error has been ocurred');
+        }
+        
+
     }
     public function manage($id){
         $post= Post::with('songs')->find($id);
