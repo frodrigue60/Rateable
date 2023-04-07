@@ -140,6 +140,11 @@ div.artist-list-item>a {
     transition: all .15s ease-out;
 
 }
+.theme-info{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .post-song:hover {
     transform: scale(1.015);
