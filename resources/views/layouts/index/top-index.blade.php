@@ -1,9 +1,9 @@
 <section class="contenedor-main">
     <h2 hidden>TOP ANIME OPENINGS & ENDINGS OF ALL TIME</h2>
     <div class="container-top">
-        <section class="container-items">
+        <section class="container-items limit-items-index">
             <h3 hidden>TOP ANIME OPENINGS OF ALL TIME</h3>
-            <div class="top-header">
+            <div class="top-header-ranking">
                 <div>
                     <span>Global Rank Openings</span>
                 </div>
@@ -16,44 +16,57 @@
             @endphp
             @foreach ($openings as $song)
                 @isset($song->post)
-                    <article class="top-item">
+                    <div class="top-item">
                         <div class="item-place">
-                            <span><strong>{{ $j++ }}</strong></span>
+                            <span>{{ $j++ }}</span>
                         </div>
-                        <div class="item-info">
-                            <div class="item-post-info">
-                                <span><a href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
-                                        class="text-light no-deco">{{ $song->post->title }}
-                                        {{ $song->suffix != null ? $song->suffix : '' }}</a></span>
-                            </div>
-                            @if (isset($song->song_romaji) || isset($song->song_en) || isset($song->song_jp))
+
+                        <div class="item-info"
+                            @if (isset($song->post->banner)) style="background-image: url({{ asset('/storage/anime_banner/' . $song->post->banner) }})"
+                        @else
+                            style="background-image: url(https://s4.anilist.co/file/anilistcdn/media/anime/banner/98707-ZcFGfUAS4YwK.jpg);" @endif>
+                            <div class="item-info-filter"></div>
+                            @isset($song)
                                 <div class="item-song-info">
-                                    <span id="song-title"><strong><a
-                                                href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
-                                                class="no-deco text-light">
-                                                @if (isset($song->song_romaji))
-                                                    {{ $song->song_romaji }}
-                                                @else
-                                                    @if (isset($song->song_en))
-                                                        {{ $song->song_en }}
-                                                    @else
-                                                        @if (isset($song->song_jp))
-                                                            {{ $song->song_jp }}
-                                                        @endif
-                                                    @endif
+                                    @if (isset($song))
+                                        @if (isset($song->song_romaji))
+                                            <strong><a
+                                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song->song_romaji }}</a
+                                                    href=""></strong>
+                                        @else
+                                            @if (isset($song->song_en))
+                                                <strong><a
+                                                        href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song->song_en }}</a
+                                                        href=""></strong>
+                                            @else
+                                                @if (isset($song->song_jp))
+                                                    <strong><a
+                                                            href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song->song_jp }}</a
+                                                            href=""></strong>
                                                 @endif
-                                            </a></strong></span>
-                                    @if (isset($song->artist->name))
-                                        <span style="margin-left: 4px;margin-right:4px;">By</span>
-                                        <span id="song-artist"><strong><a
-                                                    href="{{ route('artist.show', [$song->id,$song->artist->name_slug]) }}"
-                                                    class="no-deco text-light">
-                                                    {{ $song->artist->name }}
-                                                </a></strong></span>
+                                            @endif
+                                        @endif
+                                    @else
+                                        <strong>N/A</strong>
+                                    @endif
+
+                                    @if (isset($song->artist))
+                                        <strong><a
+                                                href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">{{ $song->artist->name }}</a
+                                                href=""></strong>
+                                    @else
+                                        <strong>N/A</strong>
                                     @endif
                                 </div>
-                            @endif
+                            @endisset
+                            <div class="item-post-info">
+                                <span><a
+                                        href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song->post->title }}</a>
+                                    {{ $song->suffix ? '(' . $song->suffix . ')' : '' }}</span>
+                            </div>
+
                         </div>
+
                         <div class="item-score">
                             <span>
                                 @if (isset($score_format))
@@ -83,13 +96,13 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                             </span>
                         </div>
-                    </article>
+                    </div>
                 @endisset
             @endforeach
         </section>
-        <section class="container-items">
+        <section class="container-items limit-items-index">
             <h3 hidden>TOP ANIME ENDINGS OF ALL TIME</h3>
-            <div class="top-header">
+            <div class="top-header-ranking">
                 <div>
                     <span>Global Rank Endings</span>
                 </div>
@@ -102,43 +115,57 @@
             @endphp
             @foreach ($endings as $song)
                 @isset($song->post)
-                    <article class="top-item">
+                    <div class="top-item">
                         <div class="item-place">
-                            <span><strong>{{ $j++ }}</strong></span>
+                            <span>{{ $j++ }}</span>
                         </div>
-                        <div class="item-info">
-                            <div class="item-post-info">
-                                <span><a href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
-                                        class="text-light no-deco">{{ $song->post->title }}</a></span>
-                            </div>
-                            @if (isset($song->song_romaji) || isset($song->song_en) || isset($song->song_jp))
+
+                        <div class="item-info"
+                            @if (isset($song->post->banner)) style="background-image: url({{ asset('/storage/anime_banner/' . $song->post->banner) }})"
+                @else
+                    style="background-image: url(https://s4.anilist.co/file/anilistcdn/media/anime/banner/98707-ZcFGfUAS4YwK.jpg);" @endif>
+                            <div class="item-info-filter"></div>
+                            @isset($song)
                                 <div class="item-song-info">
-                                    <span id="song-title"><strong><a
-                                                href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
-                                                class="no-deco text-light">
-                                                @if (isset($song->song_romaji))
-                                                    {{ $song->song_romaji }}
-                                                @else
-                                                    @if (isset($song->song_en))
-                                                        {{ $song->song_en }}
-                                                    @else
-                                                        @if (isset($song->song_jp))
-                                                            {{ $song->song_jp }}
-                                                        @endif
-                                                    @endif
+                                    @if (isset($song))
+                                        @if (isset($song->song_romaji))
+                                            <strong><a
+                                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song->song_romaji }}</a
+                                                    href=""></strong>
+                                        @else
+                                            @if (isset($song->song_en))
+                                                <strong><a
+                                                        href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song->song_en }}</a
+                                                        href=""></strong>
+                                            @else
+                                                @if (isset($song->song_jp))
+                                                    <strong><a
+                                                            href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song->song_jp }}</a
+                                                            href=""></strong>
                                                 @endif
-                                            </a></strong></span>
-                                    @if (isset($song->artist->name))
-                                        <span style="margin-left: 4px;margin-right:4px;">By</span>
-                                        <span id="song-artist"><strong><a
-                                                    href="{{ route('artist.show', [$song->id,$song->artist->name_slug]) }}"
-                                                    class="no-deco text-light">
-                                                    {{ $song->artist->name }}
-                                                </a></strong></span>
+                                            @endif
+                                        @endif
+                                    @else
+                                        <strong>N/A</strong>
+                                    @endif
+
+                                    @if (isset($song->artist))
+                                        <strong><a
+                                                href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">{{ $song->artist->name }}</a
+                                                href=""></strong>
+                                    @else
+                                        <strong>N/A</strong>
                                     @endif
                                 </div>
-                            @endif
+                            @endisset
+                            <div class="item-post-info">
+                                <span><a
+                                        href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song->post->title }}</a>
+                                    {{ $song->suffix ? '(' . $song->suffix . ')' : '' }}</span>
+                            </div>
+
                         </div>
+
                         <div class="item-score">
                             <span>
                                 @if (isset($score_format))
@@ -168,7 +195,7 @@
                                 <i class="fa fa-star" aria-hidden="true"></i>
                             </span>
                         </div>
-                    </article>
+                    </div>
                 @endisset
             @endforeach
         </section>

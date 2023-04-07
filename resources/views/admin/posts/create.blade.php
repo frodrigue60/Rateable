@@ -80,6 +80,7 @@
                             @endif
                         </div>
                         <br>
+                        {{-- THUMBNAIL --}}
                         <label for="thumbnail_src" class="form-label">Image Source Url</label>
                         <input type="text" class="form-control" placeholder="Image link" id="thumbnail_src"
                             name="thumbnail_src" value="{{ old('thumbnail_src') }}">
@@ -87,6 +88,16 @@
                         <div class="mb-3">
                             <label for="formFile" class="form-label">Upload Image Thumbnail</label>
                             <input class="form-control" type="file" id="formFile" name="file">
+                        </div>
+                        {{-- BANNER --}}
+                        <br>
+                        <label for="thumbnail_src" class="form-label">Banner Source Url</label>
+                        <input type="text" class="form-control" placeholder="Image link" id="banner_src"
+                            name="banner_src" value="{{ old('banner_src') }}">
+                        <br>
+                        <div class="mb-3">
+                            <label for="formFileBanner" class="form-label">Upload Banner Thumbnail</label>
+                            <input class="form-control" type="file" id="formFileBanner" name="banner">
                         </div>
                         
                         {{-- <label for="ytlink" class="form-label">Youtube Embed</label>

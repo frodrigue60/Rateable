@@ -11,7 +11,8 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/css/modalSearch.css',
                 'resources/css/userProfile.css',
-                'resources/css/post.css'
+                'resources/css/post.css',
+                'resources/css/ranking.css'
             ],
             refresh: true,
         }),

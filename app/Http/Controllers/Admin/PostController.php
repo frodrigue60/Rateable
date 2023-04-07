@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Redirect;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Storage;
 
+//require __DIR__ . '/vendor/autoload.php';
+use Jikan\Helper\Constants;
+use Jikan\MyAnimeList\MalClient;
+
+
 class PostController extends Controller
 {
     /**
@@ -62,71 +67,106 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = new Post;
-        $post->title = $request->title;
-        $post->slug = Str::slug($request->title);
-        $post->description = $request->description;
+        $user = Auth::User()->type;
+        if ($user == 'admin' || $user == 'editor' || $user == 'creator') {
 
-        //STATUS
-        switch (Auth::user()->type) {
-            case 'creator':
-                $post->status = 'stagged';
-                break;
-            case 'admin' || 'editor':
-                if ($request->postStatus == null) {
+            $post = new Post;
+            $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
+            $post->description = $request->description;
+
+            switch (Auth::user()->type) {
+                case 'creator':
                     $post->status = 'stagged';
-                } else {
-                    $post->status = $request->postStatus;
+                    break;
+                case 'admin' || 'editor':
+                    if ($request->postStatus == null) {
+                        $post->status = 'stagged';
+                    } else {
+                        $post->status = $request->postStatus;
+                    }
+                    break;
+                default:
+                    $post->status = 'stagged';
+                    break;
+            }
+
+            if ($request->hasFile('file')) {
+                $validator = Validator::make($request->all(), [
+                    'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
+                ]);
+
+                if ($validator->fails()) {
+                    $errors = $validator->getMessageBag();
+                    $request->flash();
+                    return Redirect::back()
+                        ->with('error', $errors);
                 }
-                break;
-            default:
-                $post->status = 'stagged';
-                break;
-        }
+                //$file_extension = $request->file->extension();
+                $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
+                $post->thumbnail = $file_name;
 
-        if ($request->hasFile('file')) {
-            $validator = Validator::make($request->all(), [
-                'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
-            ]);
+                $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
+                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+                //$request->file->storeAs('thumbnails', $file_name, 'public');
+            } else {
+                if ($request->thumbnail_src == null) {
+                    //dd($request->all());
+                    $request->flash();
+                    return Redirect::back()
+                        ->with('error', "Post not created, images not founds");
+                }
 
-            if ($validator->fails()) {
-                $errors = $validator->getMessageBag();
-                $request->flash();
-                return Redirect::back()
-                    ->with('error', $errors);
+                $image_file_data = file_get_contents($request->thumbnail_src);
+                //$ext = pathinfo($request->thumbnail_src, PATHINFO_EXTENSION);
+                $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
+                $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
+                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+                //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+                $post->thumbnail = $file_name;
+                $post->thumbnail_src = $request->thumbnail_src;
             }
-            //$file_extension = $request->file->extension();
-            $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
-            $post->thumbnail = $file_name;
+            if ($request->hasFile('banner')) {
+                $validator = Validator::make($request->all(), [
+                    'banner' => 'mimes:png,jpg,jpeg,webp|max:2048'
+                ]);
 
-            $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
-            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-            //$request->file->storeAs('thumbnails', $file_name, 'public');
-        } else {
-            if ($request->thumbnail_src == null) {
-                //dd($request->all());
-                $request->flash();
-                return Redirect::back()
-                    ->with('error', "Post not created, images not founds");
+                if ($validator->fails()) {
+                    $errors = $validator->getMessageBag();
+                    $request->flash();
+                    return Redirect::back()
+                        ->with('error', $errors);
+                }
+                $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
+                $post->banner = $file_name;
+
+                $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
+                Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
+            } else {
+                if ($request->banner_src != null) {
+                    $banner_file_data = file_get_contents($request->banner_src);
+                    $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
+                    $encoded = Image::make($banner_file_data)->encode('webp', 100); //->resize(150, 212)
+                    Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
+                    $post->banner = $file_name;
+                    $post->banner_src = $request->banner_src;
+                } else {
+                    $post->banner_src = null;
+                }
             }
+            
+            if ($post->save()) {
+                $tags = $request->tags;
+                $post->tag($tags);
 
-            $image_file_data = file_get_contents($request->thumbnail_src);
-            //$ext = pathinfo($request->thumbnail_src, PATHINFO_EXTENSION);
-            $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
-            $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
-            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-            //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
-            $post->thumbnail = $file_name;
-            $post->thumbnail_src = $request->thumbnail_src;
-        }
-        if ($post->save()) {
-            $tags = $request->tags;
-            $post->tag($tags);
-
-            $success = 'Post created successfully';
-            return redirect(route('admin.post.index'))->with('success', $success);
+                $success = 'Post created successfully';
+                return redirect(route('admin.post.index'))->with('success', $success);
+            } else {
+                $error = 'Somethis was wrong!';
+                return redirect(route('admin.post.index'))->with('error', $error);
+            }
         } else {
-            $error = 'Somethis was wrong!';
+            $error = 'User is not authorized!';
             return redirect(route('admin.post.index'))->with('error', $error);
         }
     }
@@ -144,10 +184,18 @@ class PostController extends Controller
             $score_format = Auth::user()->score_format;
 
             $post = Post::findOrFail($id);
+
+            $ops = $post->songs->filter(function ($song) {
+                return $song->type === 'OP';
+            });
+            $eds = $post->songs->filter(function ($song) {
+                return $song->type === 'ED';
+            });
+
+            $artist = $post->artist;
             $tags = $post->tagged;
-            $eds = $post->songs->where('type', 'ED');
-            $ops = $post->songs->where('type', 'OP');
-            return view('admin.posts.show', compact('post', 'tags', 'score_format', 'ops', 'eds'));
+            //dd($post);
+            return view('admin.posts.show', compact('post', 'tags', 'score_format', 'artist', 'ops', 'eds'));
         }
     }
 
@@ -186,71 +234,110 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $post = Post::find($id);
-        $old_thumbnail = $post->thumbnail;
-        $post->title = $request->title;
-        $post->slug = Str::slug($request->title);
-        $post->description = $request->description;
+        $user = Auth::User()->type;
+        if ($user == 'admin' || $user == 'editor' || $user == 'creator') {
+            $post = Post::find($id);
+            $old_thumbnail = $post->thumbnail;
+            $old_banner = $post->banner;
+            $post->title = $request->title;
+            $post->slug = Str::slug($request->title);
+            $post->description = $request->description;
 
-        switch (Auth::user()->type) {
-            case 'creator':
-                $post->status = 'stagged';
-                break;
-            case 'admin' || 'editor':
-                if ($request->postStatus == null) {
+
+            switch (Auth::user()->type) {
+                case 'creator':
                     $post->status = 'stagged';
-                } else {
-                    $post->status = $request->postStatus;
+                    break;
+                case 'admin' || 'editor':
+                    if ($request->postStatus == null) {
+                        $post->status = 'stagged';
+                    } else {
+                        $post->status = $request->postStatus;
+                    }
+                    break;
+                default:
+                    $post->status = 'stagged';
+                    break;
+            }
+
+            if ($request->hasFile('file')) {
+                $validator = Validator::make($request->all(), [
+                    'file' => 'mimes:png,jpg,jpeg,webp|max:1024'
+                ]);
+
+                if ($validator->fails()) {
+                    $messageBag = $validator->getMessageBag();
+                    return Redirect::back()->with('error', $messageBag)->with('messageBag', $messageBag);
                 }
-                break;
-            default:
-                $post->status = 'stagged';
-                break;
-        }
 
-        if ($request->hasFile('file')) {
-            $validator = Validator::make($request->all(), [
-                'file' => 'mimes:png,jpg,jpeg,webp|max:1024'
-            ]);
+                //$file_extension = $request->file->extension();
+                //$file_mime_type = $request->file->getClientMimeType();
 
-            if ($validator->fails()) {
-                $messageBag = $validator->getMessageBag();
-                return Redirect::back()->with('error', $messageBag)->with('messageBag', $messageBag);
+                Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
+
+                $file_name = Str::slug($request->title) . '_' . time() . '.' . 'webp';
+                $post->thumbnail = $file_name;
+                //$request->file->storeAs('thumbnails', $file_name, 'public');
+                $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
+                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            } else {
+                if ($request->thumbnail_src == null) {
+                    return redirect(route('admin.post.index'))->with('error', 'Post not created, images not founds');
+                }
+                Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
+                $image_file_data = file_get_contents($request->thumbnail_src);
+                //$ext = pathinfo($request->thumbnail_src, PATHINFO_EXTENSION);
+                $file_name = Str::slug($request->title) . time() . '.' . 'webp';
+                $encoded = Image::make($image_file_data)->resize(200, 293)->encode('webp', 100); //->resize(150, 212)
+                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+                //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+                $post->thumbnail = $file_name;
+                $post->thumbnail_src = $request->thumbnail_src;
             }
 
-            //$file_extension = $request->file->extension();
-            //$file_mime_type = $request->file->getClientMimeType();
+            if ($request->hasFile('banner')) {
+                $validator = Validator::make($request->all(), [
+                    'banner' => 'mimes:png,jpg,jpeg,webp|max:2048'
+                ]);
 
-            Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
+                if ($validator->fails()) {
+                    $errors = $validator->getMessageBag();
+                    $request->flash();
+                    return Redirect::back()
+                        ->with('error', $errors);
+                }
+                Storage::disk('public')->delete('/anime_banner/' . $old_banner);
+                $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
+                $post->banner = $file_name;
 
-            $file_name = Str::slug($request->title) . '_' . time() . '.' . 'webp';
-            $post->thumbnail = $file_name;
-            //$request->file->storeAs('thumbnails', $file_name, 'public');
-            $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
-            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-        } else {
-            if ($request->thumbnail_src == null) {
-                return redirect(route('admin.post.index'))->with('error', 'Post not created, images not founds');
+                $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
+                Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
+            } else {
+                if ($request->banner_src != null) {
+                    Storage::disk('public')->delete('/anime_banner/' . $old_banner);
+                    $banner_file_data = file_get_contents($request->banner_src);
+                    $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
+                    $encoded = Image::make($banner_file_data)->encode('webp', 100); //->resize(150, 212)
+                    Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
+                    $post->banner = $file_name;
+                    $post->banner_src = $request->banner_src;
+                } else {
+                    $post->banner_src = null;
+                }
             }
-            Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
-            $image_file_data = file_get_contents($request->thumbnail_src);
-            //$ext = pathinfo($request->thumbnail_src, PATHINFO_EXTENSION);
-            $file_name = Str::slug($request->title) . time() . '.' . 'webp';
-            $encoded = Image::make($image_file_data)->resize(200, 293)->encode('webp', 100); //->resize(150, 212)
-            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-            //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
-            $post->thumbnail = $file_name;
-            $post->thumbnail_src = $request->thumbnail_src;
-        }
 
-        if ($post->update()) {
-            $tags = $request->tags;
-            $post->tag($tags);
+            
 
-            $success = 'Post created successfully';
-            return redirect(route('admin.post.index'))->with('success', $success);
+
+            if ($post->update()) {
+                $tags = $request->tags;
+                $post->retag($tags);
+                return redirect(route('admin.post.index'))->with('success', 'Post Updated Successfully');
+            } else {
+                return redirect(route('admin.post.index'))->with('error', 'Something has wrong');
+            }
         } else {
-            $error = 'Somethis was wrong!';
+            $error = 'User is not authorized!';
             return redirect(route('admin.post.index'))->with('error', $error);
         }
     }
@@ -309,10 +396,6 @@ class PostController extends Controller
     }
     public function forceUpdate()
     {
-        if (Auth::check()) {
-            return true;
-        } else {
-            return false;
-        }
+        return redirect(route('/'))->with('success', 'OK');
     }
 }

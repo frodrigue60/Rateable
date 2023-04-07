@@ -30,10 +30,11 @@
 @section('content')
     <section class="container">
         <h1 hidden class="text-light">Best Anime Openings & Endings of All Time</h1>
+        {{-- TOP SECTION --}}
+        @include('layouts.index.top-index')
         {{-- POSTS SECTION --}}
         @include('layouts.index.recents-carousel')
         @include('layouts.index.posts-index')
-        {{-- TOP SECTION --}}
-        @include('layouts.index.top-index')
+        
     </section>
 @endsection

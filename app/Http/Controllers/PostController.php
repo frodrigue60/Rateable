@@ -70,7 +70,7 @@ class PostController extends Controller
             })
             ->get()
             ->sortByDesc('averageRating')
-            ->take(10);
+            ->take(5);
 
         $endings = Song::with(['post'])
             ->where('type', 'ED')
@@ -79,7 +79,7 @@ class PostController extends Controller
             })
             ->get()
             ->sortByDesc('averageRating')
-            ->take(10);
+            ->take(5);
         //dd($openings,$endings);
 
         return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));

@@ -1,25 +1,28 @@
 /* ARTISTS VIEW */
-.artist-menu{
+.artist-menu {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
 }
-.artist-item{
+
+.artist-item {
     /* background-color: rgb(63, 80, 132); */
     min-width: fit-content;
-    height:35px;
+    height: 35px;
     display: flex;
     justify-content: center;
-    padding: 0px 5px 0px 5px ;
+    padding: 0px 5px 0px 5px;
 }
-.artist-char{
+
+.artist-char {
     /* background-color: rgba(0, 0, 0, 0.372); */
     color: bisque;
     text-align: start;
 }
-.artist-link{
+
+.artist-link {
     text-decoration: none;
     color: bisque;
     font-size: 24px;
@@ -27,12 +30,13 @@
     transition: ease-in-out;
     transition-duration: 150ms;
 }
-.artist-link:hover{
+
+.artist-link:hover {
     transform: scale(1.5);
     text-shadow: 2px 2px 10px rgb(143, 143, 16);
 }
 
-.artist-list{
+.artist-list {
     /* display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     justify-items: center; */
@@ -43,80 +47,103 @@
     justify-items: flex-start;
     gap: 16px;
 }
-.artist-list-item{
+
+.artist-list-item {
     text-decoration: none;
     /* background-color: rgba(255, 255, 255, 0.188); */
     width: fit-content;
     padding: 3px;
     font-size: 24px;
 }
-div.artist-list-item>a{
-    color:rgb(204, 190, 135);
+
+div.artist-list-item>a {
+    color: rgb(204, 190, 135);
 }
 
-/* POST VIEW */
-.pill-tag {
-    background-color: rgba(108, 140, 226, 0.809);
-    padding: 2px;
-    width: max-content;
-    min-width: 110px;
-    height: 30px;
-    text-align: center;
+/* -----------POST VIEW -----------*/
+.banner-anime {
+    height: 300px;
+    width: 100%;
+    background-color: rgb(52, 123, 99);
+    border-radius: 5px;
+    /* margin: 1%; */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
 }
 
-.post-title>h1 {
-    font-size: xx-large;
+.gradient {
+    background-image: linear-gradient(to top, #000000, #00000000);
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-}
-.description-post>p {
-    padding: 5px;
-    margin-bottom: unset;
-    min-height: 80px;
-    max-height: 140px;
-    overflow-y: scroll;
-    /* background-color: rgb(0, 0, 0); */
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.664) 100%);
+    border-radius: inherit;
 }
 
+
 .post-info {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: row;
-    gap: 10px;
-    padding: 10px;
-    /* height: 400px; */
-    background-size: cover;
-    background-color: #00000075;
-    border-radius: 5px;
-}
-#post-data {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-end;
-    margin-bottom: 5px;
+    /* gap: 20px;  */
+    color: #ffffff;
+    align-items: self-end;
 }
 
 .thumbnail-post {
-    align-self: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-div.thumbnail-post>img {
-    width: 200px;
-    border-radius: 5%;
+    width: auto;
+    height: 260px;
+    border-radius: 2%;
+    position: relative;
+    z-index: 1;
+    margin: 20px;
 }
 
+.title-post {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.post-data-anime {
+    display: flex;
+    flex-direction: column;
+    align-self: self-end;
+}
+
+.description-post {
+    max-height: 120px;
+    overflow: scroll;
+    background-color: rgba(255, 255, 255, 0.064);
+    padding: 5px 10px 0px 10px;
+    margin: 0px 20px 20px 0px;
+    border-radius: 5px;
+}
+
+/* --------------------------------- */
 .post-song {
     background-color: #0E3D5F;
     height: 100%;
     padding: 5px;
     margin: 10px 0px 5px 0px;
-    display: grid;
-    grid-template-columns: 15fr 1fr;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     border-bottom: 5px;
     border-bottom-color: #3877A3;
     border-bottom-style: solid;
     border-radius: 5px;
+    transform: scale(1);
+    transition: all .15s ease-out;
+
+}
+
+.post-song:hover {
+    transform: scale(1.015);
+    transition: all .15s ease-out;
 }
 
 .container-songs {
@@ -130,188 +157,64 @@ div.thumbnail-post>img {
     margin-left: 0px;
     margin-right: 0px;
 }
-.title-tags-container {
-    display: flex;
-    flex-direction: column;
-}
 
-@media screen and (max-width: 1920px) {
-    .thumbnail-post {
-        align-self: center;
-        margin-top: 5px;
-        margin-bottom: 5px;
-    }
-
-    .post-title>h1 {
-        font-size: xx-large;
-        width: 100%;
-        height: 100%;
-    }
-
-    .post-info {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        padding: 10px;
-        /* height: 400px; */
-        background-size: cover;
-        background-color: #00000075;
-    }
-
-    #post-data {
-        display: flex;
-        flex-direction: column;
-        align-self: flex-end;
-        margin-bottom: 5px;
-    }
-
-    
-
-    div.thumbnail-post>img {
-        width: 200px;
-        border-radius: 5%;
-    }
-
-    .title-tags-container {
-        display: flex;
-        flex-direction: column;
-    }
-}
+/* ----------------------------------- */
+@media screen and (max-width: 1920px) {}
 
 @media screen and (max-width: 1440px) {}
 
 @media screen and (max-width: 1280px) {}
 
-@media screen and (max-width: 992px) {
-    .thumbnail-post {
-        align-self: center;
-        margin-top: 5px;
-        margin-bottom: 5px;
-    }
+@media screen and (max-width: 992px) {}
 
-    .post-info {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        padding: 5px;
-        /* height: 400px; */
+@media screen and (max-width: 960px) {
+    .title-post {
+        font-size: 20px;
+        margin: 0px 10px;
     }
-
-    #post-data {
-        display: flex;
-        flex-direction: column;
-        align-self: flex-end;
-        margin-bottom: 5px;
-    }
-    .description-post>p {
-        max-height: 100px;
-        }
-
-    .post-song {
-        height: 100%;
-        /* padding: 5px;
-        margin: 5px 0px 5px 0px; */
-        display: grid;
-        grid-template-columns: 6fr 1fr;
-        border-bottom: 3px;
-        border-bottom-style: solid;
-        border-radius: 5px;
-    }
-
-    div.thumbnail-post>img {
-        width: 140px;
-        border-radius: 5%;
-    }
-
-    .title-tags-container {
-        display: flex;
-        flex-direction: column;
-    }
-
 }
-
-@media screen and (max-width: 960px) {}
 
 @media screen and (max-width: 800px) {}
 
-@media screen and (max-width: 768px) {}
+@media screen and (max-width: 768px) {
+    .post-info {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .thumbnail-post {
+        width: auto;
+        height: 180px;
+        margin: 10px;
+    }
+}
 
 @media screen and (max-width: 600px) {
-    .post-title>h1 {
-        font-size: larger;
-        width: 247px;
-        height: 100%;
-    }
-
-    .post-info {
-        display: flex;
-        flex-direction: column;
-        padding: 5px;
-        /* height: 400px; */
-    }
-
-    .post-song {
-        height: 100%;
-        /* padding: 5px;
-        margin: 5px 0px 5px 0px; */
-        display: grid;
-        grid-template-columns: 6fr 1fr;
-        border-bottom: 3px;
-        border-bottom-style: solid;
-        border-radius: 5px;
-    }
-
-    div.thumbnail-post>img {
-        width: 140px;
-        border-radius: 5%;
-    }
-
-    .title-tags-container {
-        display: flex;
-        flex-direction: column;
-    }
-}
-
-@media screen and (max-width: 400px) {
     .thumbnail-post {
-        align-self: center;
-        margin-top: 5px;
-        margin-bottom: 5px;
+        width: auto;
+        height: 160px;
+        margin: 10px;
     }
 
-    .post-title>h1 {
-        font-size: larger;
-        width: 247px;
+    .banner-anime {
         height: 100%;
     }
 
     .post-info {
-        display: flex;
         flex-direction: column;
+        align-items: center;
+    }
+
+    .description-post {
+        margin: 5px;
+        display: flex;
         padding: 5px;
-        /* height: 400px; */
     }
 
-    .post-song {
-        height: 100%;
-        /* padding: 5px;
-        margin: 5px 0px 5px 0px; */
-        display: grid;
-        grid-template-columns: 6fr 1fr;
-        border-bottom: 3px;
-        border-bottom-style: solid;
-        border-radius: 5px;
+    .title-post {
+        font-size: 18px;
+        margin: 0px 10px;
     }
-
-    div.thumbnail-post>img {
-        width: 140px;
-        border-radius: 5%;
-    }
-
-    .title-tags-container {
-        display: flex;
-        flex-direction: column;
-    }
-
-    
 }
+
+@media screen and (max-width: 400px) {}

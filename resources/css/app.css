@@ -56,24 +56,24 @@ footer{
 }
 
 /* width */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
 	width: 10px;
-}
+} */
 
 /* Track */
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
 	background: #00000034;
-}
+} */
 
 /* Handle */
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
 	background: #3877a3;
-}
+} */
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
+/* ::-webkit-scrollbar-thumb:hover {
 	background: #0e3d5f;
-}
+} */
 .form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
 	color: #7396af;
 	opacity: 1; /* Firefox */

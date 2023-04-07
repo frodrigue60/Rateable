@@ -1,7 +1,7 @@
 <section class="contenedor-main">
     {{-- RECENTS --}}
     <section class="carouselContainermain">
-        <div class="top-header mb-2 mt-2">
+        <div class="top-header">
             <div>
                 <h2 class="text-light mb-0">Recently added</h2>
             </div>

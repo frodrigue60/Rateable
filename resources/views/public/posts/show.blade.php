@@ -72,16 +72,21 @@
         <span id="media-query"></span>
     </div>
     <div class="container text-light">
-        <div class="post-info">
-            <div class="thumbnail-post">
-                <img class="" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="">
-            </div>
-            <div id="post-data">
-                <div class="post-title">
-                    <h1> {{ $post->title }}</h1>
-                </div>
-                <div class="description-post">
-                    <p>{{ $post->description != null ? $post->description : 'N/A' }}</p>
+        <div class="banner-anime"
+            style="background-image: url({{ asset('/storage/anime_banner/' . $post->banner) }});">
+            <div class="gradient"></div>
+            <div class="post-info">
+                <img class="thumbnail-post"
+                    src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                    alt="">
+
+                <div class="post-data-anime">
+                    <div class="title-post">
+                        <span>{{$post->title}}</span>
+                    </div>
+                    <div class="description-post">
+                        <p>{{$post->description}}</p>
+                    </div>
                 </div>
             </div>
         </div>

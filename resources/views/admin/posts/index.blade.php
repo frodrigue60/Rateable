@@ -35,7 +35,7 @@
 
                                     <th scope="row">{{ $post->id }}</th>
                                     <td>
-                                        <a href="{{ route('admin.post.show', $post->id) }}"
+                                        <a href="{{ route('post.show', [$post->id,$post->slug]) }}"
                                             class="no-deco">{{ $post->title }}</a>
                                     </td>
                                     <td>

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('thumbnail_src')->nullable();
             $table->enum('status', ['stagged', 'published'])->default('stagged');
             $table->string('thumbnail')->nullable();
+            $table->string('banner')->nullable()->default(null);
+            $table->string('banner_src')->nullable()->default(null);
             $table->timestamps();
         });
     }

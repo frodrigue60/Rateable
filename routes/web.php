@@ -30,7 +30,7 @@ use App\Http\Controllers\SongController as SongController;
 */
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'index'])->name('/');
-Route::get('/show/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
+Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
