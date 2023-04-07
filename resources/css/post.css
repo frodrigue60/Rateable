@@ -122,6 +122,9 @@ div.artist-list-item>a {
     margin: 0px 20px 20px 0px;
     border-radius: 5px;
 }
+.description-post::-webkit-scrollbar {
+    display: none;
+  }
 
 /* --------------------------------- */
 .post-song {
@@ -147,7 +150,8 @@ div.artist-list-item>a {
 }
 
 .post-song:hover {
-    transform: scale(1.015);
+    background-color: #205e8b;
+    transform: scale(1.01);
     transition: all .15s ease-out;
 }
 

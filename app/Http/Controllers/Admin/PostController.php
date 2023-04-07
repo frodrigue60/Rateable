@@ -353,12 +353,17 @@ class PostController extends Controller
         $post = Post::find($id);
 
         $file = $post->thumbnail;
+        $banner = $post->banner;
 
         Storage::disk('public')->delete('/thumbnails/' . $file);
-        if ($post->song_id != null) {
-            $song = Song::find($post->song_id);
-            $song->delete();
+        Storage::disk('public')->delete('/anime_banner/' . $banner);
+        if ($post->songs != null) {
+            $songs = $post->songs;
+            foreach ($songs as $song) {
+                Song::find($song->id)->delete();
+            }
         }
+        
         $post->delete();
 
 
