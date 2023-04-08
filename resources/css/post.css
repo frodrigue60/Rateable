@@ -181,6 +181,10 @@ div.artist-list-item>a {
         font-size: 20px;
         margin: 0px 10px;
     }
+    .title-post {
+        font-size: 24px;
+        margin: 0px 10px;
+    }
 }
 
 @media screen and (max-width: 800px) {}
@@ -221,7 +225,7 @@ div.artist-list-item>a {
     }
 
     .title-post {
-        font-size: 18px;
+        font-size: 24px;
         margin: 0px 10px;
     }
 }
