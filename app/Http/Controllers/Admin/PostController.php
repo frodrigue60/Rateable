@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Arr;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 
 class PostController extends Controller
@@ -397,8 +398,9 @@ class PostController extends Controller
         return redirect()->route('/')->with('warning', 'Please login');
     }
 
-    public function searchAnimes()
+    public function searchAnimes(Request $request)
     {
+        $q = $request->q;
         $client = new \GuzzleHttp\Client();
 
         $query = '
@@ -425,7 +427,7 @@ class PostController extends Controller
         ';
 
         $variables = [
-            'search' => 'bocchi',
+            'search' => $q,
         ];
 
         $response = $client->post('https://graphql.anilist.co', [
@@ -439,10 +441,16 @@ class PostController extends Controller
 
         $json = json_decode($body);
         $data = $json->data->Page->media;
-        dd($data);
+        $posts = [];
+        foreach ($data as $item) {
+            array_push($posts, $item);
+        }
+        //dd($posts);
+        return view('admin.posts.select', compact('posts'));
     }
-    public function getById()
+    public function getById(Request $request)
     {
+        //dd($request->all());
         // Here we define our query as a multi-line string
         $query = '
         query ($id: Int) { # Define which variables will be used in the query (id)
@@ -458,6 +466,7 @@ class PostController extends Controller
                 seasonYear
                 averageScore
                 coverImage {
+                    large
                     extraLarge
                 }
                 bannerImage
@@ -466,8 +475,9 @@ class PostController extends Controller
         ';
 
         $variables = [
-            "id" => 130003
+            "id" => $request->id
         ];
+        //dd($variables);
 
         $client = new \GuzzleHttp\Client;
         $response = $client->post('https://graphql.anilist.co', [
@@ -478,18 +488,31 @@ class PostController extends Controller
         ]);
         $body = $response->getBody()->__toString();
         $json = json_decode($body);
-        $data = $json->data->Media;
-
-        dd($data);
+        
+        $data[] = $json->data->Media;
+        $this->generateMassive($data);
+        $success = 'Posts created successfully';
+        return redirect(route('admin.post.index'))->with('success', $success);
     }
     public function getSeasonalAnimes(Request $request)
     {
-        //dd($request->all());
+
         $year = $request->year;
         $season = $request->season;
+
+        $validator = Validator::make($request->all(), [
+            'year' => 'required|integer|min_digits:4|max_digits:4',
+        ]);
+
+        if ($validator->fails()) {
+            $messageBag = $validator->getMessageBag();
+            return redirect(route('admin.post.index'))->with('error', $messageBag);
+        }
+
         $client = new \GuzzleHttp\Client();
 
-        $query = '
+        if ($season != null) {
+            $query = '
             query ($year: Int, $season: MediaSeason, $page: Int, $perPage: Int) {
                 Page (page: $page, perPage: $perPage) {
                     pageInfo {
@@ -518,26 +541,49 @@ class PostController extends Controller
                 }
             }
         ';
+        } else {
+            $query = '
+            query ($year: Int, $page: Int, $perPage: Int) {
+                Page (page: $page, perPage: $perPage) {
+                    pageInfo {
+                        total
+                        perPage
+                        currentPage
+                        lastPage
+                        hasNextPage
+                    }
+                    media (seasonYear: $year, type: ANIME, format: TV) {
+                        id
+                        title {
+                            romaji
+                            english
+                            native
+                        }
+                        description
+                        season
+                        seasonYear
+                        averageScore
+                        coverImage {
+                            extraLarge
+                        }
+                        bannerImage
+                    }
+                }
+            }
+        ';
+        }
 
-        $variables = ['year' => $year,    'season' => $season,    'page' => 1,    'perPage' => 50,];
+        $variables = [
+            'year' => $year,
+            'season' => $season,
+            'page' => 1,
+            'perPage' => 50,
+        ];
 
+        $hasNextPage = true;
 
-        $response = $client->post('https://graphql.anilist.co', [
-            'json' => [
-                'query' => $query,
-                'variables' => $variables,
-            ]
-        ]);
-
-        $body = $response->getBody()->__toString();
-
-        $json = json_decode($body);
-        $data = $json->data->Page->media;
-        $pageInfo = $json->data->Page->pageInfo;
-
-        if ($pageInfo->hasNextPage === true) {
-            $variables = ['year' => $year,    'season' => $season,    'page' => 2,    'perPage' => 50,];
-
+        $data = [];
+        while ($hasNextPage) {
             $response = $client->post('https://graphql.anilist.co', [
                 'json' => [
                     'query' => $query,
@@ -547,23 +593,31 @@ class PostController extends Controller
 
             $body = $response->getBody()->__toString();
             $json = json_decode($body);
-            $data_page_2 = $json->data->Page->media;
-            $data = array_merge($data, $data_page_2);
+
+            $collection = $json->data->Page->media;
+            $pageInfo = $json->data->Page->pageInfo;
+            $hasNextPage = $pageInfo->hasNextPage;
+            $variables['page']++;
+            foreach ($collection as $item) {
+                array_push($data, $item);
+            }
         }
-        dd($data);
+
+        //dd($data);
         $this->generateMassive($data);
-        $success = 'Posts created successfully';
+        $success = count($data) . ' Posts created successfully ';
         return redirect(route('admin.post.index'))->with('success', $success);
     }
+
     public function generateMassive($data)
     {
         $tag = $data[0]->season . ' ' . $data[0]->seasonYear;
         $tag_exist = DB::table('tagging_tags')->where('name', $tag)->first();
         if (!$tag_exist) {
-                DB::table('tagging_tags')->insert([
+            DB::table('tagging_tags')->insert([
                 'name' => $tag,
                 'slug' => Str::slug($tag)
-            ]);    
+            ]);
         }
         //dd($tag,$tag_exist);
         foreach ($data as $item) {
@@ -575,7 +629,8 @@ class PostController extends Controller
             $post->title = $item->title->romaji;
             $post->slug = Str::slug($post->title);
             $post->description = $item->description;
-
+            $post->anilist_id = $item->id;
+            /* $post->status = 'published'; */
             if ($item->coverImage->extraLarge != null) {
                 $image_file_data = file_get_contents($item->coverImage->extraLarge);
                 $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
@@ -604,5 +659,19 @@ class PostController extends Controller
                 $post->tag($tag);
             }
         }
+    }
+
+    public function forceUpdate()
+    {
+        return redirect(route('admin.post.index'))->with('warning', 'force update');
+    }
+    public function wipeAllPosts()
+    {
+        $posts = Post::all();
+        foreach ($posts as $post) {
+            $post->delete();
+        }
+        $success = 'All posts deleted';
+        return redirect(route('admin.post.index'))->with('success', $success);
     }
 }

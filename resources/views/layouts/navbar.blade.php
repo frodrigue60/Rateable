@@ -12,10 +12,12 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto">
-                <li><a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
+                {{-- <li><a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
                         href="{{ route('openings') }}">Openings</a></li>
                 <li><a class="nav-link {{ Request::is('endings') ? 'active' : '' }}"
-                        href="{{ route('endings') }}">Endings</a></li>
+                        href="{{ route('endings') }}">Endings</a></li> --}}
+                        <li><a class="nav-link {{ Request::is('animes') ? 'active' : '' }}"
+                            href="{{ route('animes') }}">Animes</a></li>
                 <li><a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"
                         href="{{ route('global.ranking') }}">Ranking</a></li>
                 <li><a class="nav-link {{ Request::is('filter') ? 'active' : '' }}"

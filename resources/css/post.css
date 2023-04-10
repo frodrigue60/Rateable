@@ -92,6 +92,7 @@ div.artist-list-item>a {
     /* gap: 20px;  */
     color: #ffffff;
     align-items: self-end;
+    width: -webkit-fill-available;
 }
 
 .thumbnail-post {
@@ -112,6 +113,7 @@ div.artist-list-item>a {
     display: flex;
     flex-direction: column;
     align-self: self-end;
+    width: 100%;
 }
 
 .description-post {

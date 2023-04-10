@@ -30,11 +30,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        /* Schema::table('songs', function (Blueprint $table) {
-            $table->unsignedBigInteger('post_id');
-         
+        Schema::table('songs', function (Blueprint $table) {
             $table->foreign('post_id')->references('id')->on('posts');
-        }); */
+        });
     }
 
     /**

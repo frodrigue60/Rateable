@@ -12,21 +12,45 @@
                 {{-- CARD BODY --}}
                 <div class="card-body">
                     {{-- search form --}}
+                    @if (Auth::user()->isAdmin())
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        API OPTIONS
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body bg-dark">
+                                        <form class="d-flex" action="{{ route('search.animes') }}" method="GET">
+                                            <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
+                                            <button class="btn btn-outline-success" type="submit">Search</button>
+                                        </form>
+                                        <br>
+                                        <form class="d-flex" action="{{ route('get.seasonal.animes') }}" method="GET">
+                                            <input class="form-control me-2 col-sm" type="number" name="year"
+                                                placeholder="YEAR" required />
+                                            <select class="form-select col-sm" aria-label="Default select example"
+                                                name="season">
+                                                <option selected value="">Select a season</option>
+                                                <option value="WINTER">WINTER</option>
+                                                <option value="SPRING">SPRING</option>
+                                                <option value="SUMMER">SUMMER</option>
+                                                <option value="FALL">FALL</option>
+                                            </select>
+                                            <button class="btn btn-outline-success" type="submit">Create loot</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    @endif
                     <form class="d-flex" action="{{ route('admin.post.search') }}" method="GET">
                         <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                    <br>
-                    <form class="d-flex" action="{{ route('get.seasonal.animes') }}" method="GET">
-                        <input class="form-control me-2 col-sm" type="number" name="year" placeholder="YEAR" required/>
-                        <select class="form-select col-sm" aria-label="Default select example" name="season" required>
-                            {{-- <option selected>Open this select menu</option> --}}
-                            <option value="WINTER">WINTER</option>
-                            <option value="SPRING">SPRING</option>
-                            <option value="SUMMER">SUMMER</option>
-                            <option value="FALL">FALL</option>
-                          </select>
-                        <button class="btn btn-outline-success" type="submit">Create loot</button>
                     </form>
                     <table class="table table-dark">
                         <thead>
@@ -47,7 +71,7 @@
 
                                     <th scope="row">{{ $post->id }}</th>
                                     <td>
-                                        <a href="{{ route('post.show', [$post->id,$post->slug]) }}"
+                                        <a href="{{ route('post.show', [$post->id, $post->slug]) }}"
                                             class="no-deco">{{ $post->title }}</a>
                                     </td>
                                     <td>
@@ -60,7 +84,7 @@
                                     <td>
                                         {{ $post->songs->count() }}
                                     </td>
-                                    
+
 
                                     @if (Auth::User()->isCreator())
                                         <td>
@@ -107,7 +131,7 @@
                                                 {{ $post->id }}</a>
                                             <a class="btn btn-sm btn-primary"
                                                 href="{{ route('song.post.create', $post->id) }}">Add song</a>
-                                                <a class="btn btn-sm btn-success"
+                                            <a class="btn btn-sm btn-success"
                                                 href="{{ route('song.post.manage', $post->id) }}">Manage</a>
 
                                         </td>

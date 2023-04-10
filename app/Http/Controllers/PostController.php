@@ -85,6 +85,52 @@ class PostController extends Controller
         return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));
     }
 
+    public function animes(Request $request)
+    {
+        $tag = $request->tag;
+        $char = $request->char;
+
+        $requested = new stdClass;
+        $requested->tag = $tag;
+        $requested->char = $char;
+
+        $posts = Post::all();
+        $tags = Tag::all();
+        $characters = range('A', 'Z');
+
+        if ($tag != null) {
+            if ($char != null) {
+                $posts = Post::withAnyTag($tag)
+                    ->where('status', 'published')
+                    ->where('title', 'LIKE', "{$char}%")
+                    ->get();
+            } else {
+                $posts = Post::withAnyTag($tag)
+                    ->where('status', 'published')
+                    ->get();
+            }
+        } else {
+            if ($char != null) {
+                $posts = Post::where('status', 'published')
+                    ->where('title', 'LIKE', "{$char}%")
+                    ->get();
+            } else {
+                $posts = Post::where('status', 'published')
+                    ->get();
+            }
+        }
+        $posts = $posts->sortBy(function ($post) {
+            return $post->title;
+        });
+        $songs = $posts;
+
+        $posts = $this->paginate($songs)->withQueryString();
+        //$posts = $songs;
+
+        return view('public.posts.filter-animes', compact('posts', 'tags', 'characters', 'requested'));
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -113,19 +159,19 @@ class PostController extends Controller
     public function show($id, $slug)
     {
         $post = Post::with('songs')->find($id);
-            $openings = $post->songs->filter(function ($song) {
-                return $song->type === 'OP';
-            });
-            $endings = $post->songs->filter(function ($song) {
-                return $song->type === 'ED';
-            });
+        $openings = $post->songs->filter(function ($song) {
+            return $song->type === 'OP';
+        });
+        $endings = $post->songs->filter(function ($song) {
+            return $song->type === 'ED';
+        });
 
-            $tags = $post->tagged;
+        $tags = $post->tagged;
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
-            return view('public.posts.show', compact('post', 'tags','openings','endings', 'score_format'));
+            return view('public.posts.show', compact('post', 'tags', 'openings', 'endings', 'score_format'));
         } else {
-            return view('public.posts.show', compact('post', 'tags','openings','endings'));
+            return view('public.posts.show', compact('post', 'tags', 'openings', 'endings'));
         }
     }
 
@@ -965,7 +1011,6 @@ class PostController extends Controller
                     $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
-                            
                         })->where('type', $type)->get();
                 }
             } else {

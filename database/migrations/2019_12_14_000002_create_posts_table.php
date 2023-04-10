@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->text('description')->nullable();
-            $table->string('thumbnail_src')->nullable();
+            $table->bigInteger('anilist_id')->nullable()->default(null);
+            $table->string('thumbnail_src')->nullable()->default(null);
             $table->enum('status', ['stagged', 'published'])->default('stagged');
-            $table->string('thumbnail')->nullable();
+            $table->string('thumbnail')->nullable()->default(null);
             $table->string('banner')->nullable()->default(null);
             $table->string('banner_src')->nullable()->default(null);
             $table->timestamps();

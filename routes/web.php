@@ -30,6 +30,7 @@ use App\Http\Controllers\SongController as SongController;
 */
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'index'])->name('/');
+Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
 Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
@@ -97,6 +98,8 @@ Route::group(['middleware' => 'staff'], function () {
         Route::get('/search-animes', [AdminPostController::class, 'searchAnimes'])->name('search.animes')->middleware('admin');
         Route::get('/get-by-id', [AdminPostController::class, 'getById'])->name('get.by.id')->middleware('admin');
         Route::get('/get-seasonal-animes', [AdminPostController::class, 'getSeasonalAnimes'])->name('get.seasonal.animes')->middleware('admin');
+        Route::get('/forceupdate', [AdminPostController::class, 'forceUpdate'])->name('forceupdate')->middleware('admin');
+        Route::get('/wipe-all-posts', [AdminPostController::class, 'wipeAllPosts'])->name('wipeallposts')->middleware('admin');
 
         //TAGS
         Route::group(['middleware' => 'creator'], function () {
