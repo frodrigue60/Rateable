@@ -94,7 +94,9 @@ Route::group(['middleware' => 'staff'], function () {
             Route::post('/post/{id}/approve', [AdminPostController::class, 'approve'])->name('admin.post.approve');
             Route::post('/post/{id}/unapprove', [AdminPostController::class, 'unapprove'])->name('admin.post.unapprove');
         });
-        Route::get('/forceupdate', [AdminPostController::class, 'forceUpdate'])->name('forceupdate')->middleware('admin');
+        Route::get('/search-animes', [AdminPostController::class, 'searchAnimes'])->name('search.animes')->middleware('admin');
+        Route::get('/get-by-id', [AdminPostController::class, 'getById'])->name('get.by.id')->middleware('admin');
+        Route::get('/get-seasonal-animes', [AdminPostController::class, 'getSeasonalAnimes'])->name('get.seasonal.animes')->middleware('admin');
 
         //TAGS
         Route::group(['middleware' => 'creator'], function () {

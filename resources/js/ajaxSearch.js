@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     data.posts.forEach(element => {
                         
                             postsDiv.innerHTML +=
-                            '<div class="result"><a href="http://127.0.0.1:8000/show/' +
+                            '<div class="result"><a href="http://127.0.0.1:8000/anime/' +
                             element.id + '/' + element.slug + '"><span>' +
                             element
                                 .title + ' '+  '</span></a></div>';

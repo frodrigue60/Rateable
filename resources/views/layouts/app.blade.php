@@ -16,7 +16,7 @@
 
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('resources/images/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('resources/images/favicon-16x16.png') }}">
-    <link rel="shortcut icon" sizes="512x512" href="{{ asset('resources/images/logo.svg') }}">
+    <link rel="shortcut icon" sizes="512x512" href="{{ asset('resources/images/logo3.svg') }}">
     {{-- <link rel="manifest" href="manifest.json"> --}}
     {{-- <link rel="manifest" href="{{ asset('build/manifest.json') }}"> --}}
     <meta name="mobile-web-app-capable" content="yes">

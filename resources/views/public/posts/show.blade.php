@@ -82,7 +82,7 @@
                         <span>{{ $post->title }}</span>
                     </div>
                     <div class="description-post">
-                        <p>{{ $post->description }}</p>
+                        <p>{!! $post->description !!}</p>
                     </div>
                 </div>
             </div>

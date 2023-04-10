@@ -6,7 +6,7 @@ use App\Models\Post;
 use App\Models\Artist;
 use App\Models\Song;
 use Conner\Tagging\Model\Tag;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,10 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Storage;
-
-//require __DIR__ . '/vendor/autoload.php';
-use Jikan\Helper\Constants;
-use Jikan\MyAnimeList\MalClient;
+use Illuminate\Support\Arr;
 
 
 class PostController extends Controller
@@ -154,7 +151,7 @@ class PostController extends Controller
                     $post->banner_src = null;
                 }
             }
-            
+
             if ($post->save()) {
                 $tags = $request->tags;
                 $post->tag($tags);
@@ -326,7 +323,7 @@ class PostController extends Controller
                 }
             }
 
-            
+
 
 
             if ($post->update()) {
@@ -363,7 +360,7 @@ class PostController extends Controller
                 Song::find($song->id)->delete();
             }
         }
-        
+
         $post->delete();
 
 
@@ -399,8 +396,213 @@ class PostController extends Controller
         }
         return redirect()->route('/')->with('warning', 'Please login');
     }
-    public function forceUpdate()
+
+    public function searchAnimes()
     {
-        return redirect(route('/'))->with('success', 'OK');
+        $client = new \GuzzleHttp\Client();
+
+        $query = '
+            query ($search: String) {
+                Page {
+                    media (search: $search, type: ANIME, format: TV) {
+                        id
+                        title {
+                            romaji
+                            english
+                            native
+                        }
+                        description
+                        season
+                        seasonYear
+                        averageScore
+                        coverImage {
+                            extraLarge
+                        }
+                        bannerImage
+                    }
+                }
+            }
+        ';
+
+        $variables = [
+            'search' => 'bocchi',
+        ];
+
+        $response = $client->post('https://graphql.anilist.co', [
+            'json' => [
+                'query' => $query,
+                'variables' => $variables,
+            ]
+        ]);
+
+        $body = $response->getBody()->__toString();
+
+        $json = json_decode($body);
+        $data = $json->data->Page->media;
+        dd($data);
+    }
+    public function getById()
+    {
+        // Here we define our query as a multi-line string
+        $query = '
+        query ($id: Int) { # Define which variables will be used in the query (id)
+            Media (id: $id, type: ANIME, format: TV) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+                id
+                title {
+                romaji
+                english
+                native
+                }
+                description
+                season
+                seasonYear
+                averageScore
+                coverImage {
+                    extraLarge
+                }
+                bannerImage
+            }
+        }
+        ';
+
+        $variables = [
+            "id" => 130003
+        ];
+
+        $client = new \GuzzleHttp\Client;
+        $response = $client->post('https://graphql.anilist.co', [
+            'json' => [
+                'query' => $query,
+                'variables' => $variables,
+            ]
+        ]);
+        $body = $response->getBody()->__toString();
+        $json = json_decode($body);
+        $data = $json->data->Media;
+
+        dd($data);
+    }
+    public function getSeasonalAnimes(Request $request)
+    {
+        //dd($request->all());
+        $year = $request->year;
+        $season = $request->season;
+        $client = new \GuzzleHttp\Client();
+
+        $query = '
+            query ($year: Int, $season: MediaSeason, $page: Int, $perPage: Int) {
+                Page (page: $page, perPage: $perPage) {
+                    pageInfo {
+                        total
+                        perPage
+                        currentPage
+                        lastPage
+                        hasNextPage
+                    }
+                    media (seasonYear: $year, season: $season, type: ANIME, format: TV) {
+                        id
+                        title {
+                            romaji
+                            english
+                            native
+                        }
+                        description
+                        season
+                        seasonYear
+                        averageScore
+                        coverImage {
+                            extraLarge
+                        }
+                        bannerImage
+                    }
+                }
+            }
+        ';
+
+        $variables = ['year' => $year,    'season' => $season,    'page' => 1,    'perPage' => 50,];
+
+
+        $response = $client->post('https://graphql.anilist.co', [
+            'json' => [
+                'query' => $query,
+                'variables' => $variables,
+            ]
+        ]);
+
+        $body = $response->getBody()->__toString();
+
+        $json = json_decode($body);
+        $data = $json->data->Page->media;
+        $pageInfo = $json->data->Page->pageInfo;
+
+        if ($pageInfo->hasNextPage === true) {
+            $variables = ['year' => $year,    'season' => $season,    'page' => 2,    'perPage' => 50,];
+
+            $response = $client->post('https://graphql.anilist.co', [
+                'json' => [
+                    'query' => $query,
+                    'variables' => $variables,
+                ]
+            ]);
+
+            $body = $response->getBody()->__toString();
+            $json = json_decode($body);
+            $data_page_2 = $json->data->Page->media;
+            $data = array_merge($data, $data_page_2);
+        }
+        dd($data);
+        $this->generateMassive($data);
+        $success = 'Posts created successfully';
+        return redirect(route('admin.post.index'))->with('success', $success);
+    }
+    public function generateMassive($data)
+    {
+        $tag = $data[0]->season . ' ' . $data[0]->seasonYear;
+        $tag_exist = DB::table('tagging_tags')->where('name', $tag)->first();
+        if (!$tag_exist) {
+                DB::table('tagging_tags')->insert([
+                'name' => $tag,
+                'slug' => Str::slug($tag)
+            ]);    
+        }
+        //dd($tag,$tag_exist);
+        foreach ($data as $item) {
+            $post_exist = Post::where('slug', Str::slug($item->title->romaji))->first();
+            if ($post_exist) {
+                continue;
+            }
+            $post = new Post;
+            $post->title = $item->title->romaji;
+            $post->slug = Str::slug($post->title);
+            $post->description = $item->description;
+
+            if ($item->coverImage->extraLarge != null) {
+                $image_file_data = file_get_contents($item->coverImage->extraLarge);
+                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
+                $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
+                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+                $post->thumbnail = $file_name;
+                $post->thumbnail_src = $item->coverImage->extraLarge;
+            } else {
+                $post->thumbnail = null;
+                $post->thumbnail_src = null;
+            }
+
+            if ($item->bannerImage != null) {
+                $banner_file_data = file_get_contents($item->bannerImage);
+                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
+                $encoded = Image::make($banner_file_data)->encode('webp', 100); //->resize(150, 212)
+                Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
+                $post->banner = $file_name;
+                $post->banner_src = $item->bannerImage;
+            } else {
+                $post->banner = null;
+                $post->banner_src = null;
+            }
+
+            if ($post->save()) {
+                $post->tag($tag);
+            }
+        }
     }
 }
