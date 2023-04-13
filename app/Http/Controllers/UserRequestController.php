@@ -6,6 +6,7 @@ use App\Models\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class UserRequestController extends Controller
 {
@@ -40,6 +41,17 @@ class UserRequestController extends Controller
         $userRequest = new UserRequest();
         $userRequest->content = $request->content;
         $userRequest->user_id = Auth::user()->id;
+
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            $messageBag = $validator->getMessageBag();
+            return redirect()
+                ->back()
+                ->with('error', $messageBag);
+        }
         
         if ($userRequest->save()) {
             return redirect('/')->with('success','Thank for your request');

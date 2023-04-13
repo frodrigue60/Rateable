@@ -74,7 +74,7 @@ div.artist-list-item>a {
 }
 
 .gradient {
-    background-image: linear-gradient(to top, #000000, #00000000);
+    background-image: linear-gradient(to top, #000000, #000000bc, #00000075, #00000000);
     position: absolute;
     top: 0;
     left: 0;
@@ -124,9 +124,10 @@ div.artist-list-item>a {
     margin: 0px 20px 20px 0px;
     border-radius: 5px;
 }
+
 .description-post::-webkit-scrollbar {
     display: none;
-  }
+}
 
 /* --------------------------------- */
 .post-song {
@@ -145,7 +146,8 @@ div.artist-list-item>a {
     transition: all .15s ease-out;
 
 }
-.theme-info{
+
+.theme-info {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -169,27 +171,247 @@ div.artist-list-item>a {
     margin-right: 0px;
 }
 
-/* ----------------------------------- */
-@media screen and (max-width: 1920px) {}
+/* BOTTOM BUTTONS */
+.buttons-container {
+    display: flex;
+    flex-direction: row;
+    /* background-color: #0e3d5f; */
+    color: aliceblue;
+    justify-content: space-between;
+    width: 100%;
+    gap: 5px;
+}
 
-@media screen and (max-width: 1440px) {}
+.options-container {
+    display: flex;
+    /* background-color: #0e3d5f; */
+    color: aliceblue;
+    gap: 5px;
+}
 
-@media screen and (max-width: 1280px) {}
+.button-cont {
+    display: flex;
+    width: 100%;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s ease-out;
+}
 
-@media screen and (max-width: 992px) {}
+.buttons-bottom {
+    gap: 5px;
+    width: 100%;
+    height: 100%;
+    color: aliceblue;
+    text-decoration: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0e3d5f;
+    border-radius: 5px;
+    border: none;
+}
+
+.buttons-bottom:hover {
+    color: aliceblue;
+    background-color: #365685;
+    border-radius: 5px;
+}
+
+/* .option-button{
+    display: flex;
+    text-decoration: none;
+    color: aliceblue;
+    width: 40px; 
+    align-items: center;
+    justify-content: center;
+} */
+.all-buttons-container {
+    margin: 10px 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* background-color: #0e3d5f;
+    border-radius: 5px; */
+    gap: 5px;
+}
+
+.button-option-cont {
+    display: flex;
+    width: 30px;
+    height: 100%;
+}
+
+.card {
+    margin: auto;
+}
+
+.father-container {
+    margin: auto;
+    width: 1300px;
+}
+/* STARS */
+.score-form{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+/* COMMENT FORM */
+
+.comment-form {
+    background-color: #0E3D5F;
+    padding: 10px 10px;
+    border-radius: 5px;
+}
+
+
+
+/* COMMENT */
+.comment-container {
+    width: inherit;
+    background-color: #0E3D5F;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    padding: 5px;
+}
+
+.comment-details {
+    padding: 5px;
+    /* display: flex; */
+    width: 100%;
+}
+
+div.profile-pic-container {
+    width: inherit;
+    height: auto;
+    /* border-radius: 50%;
+    overflow: hidden; */
+}
+
+img.user-profile-pic {
+    display: block;
+    height: 100px;
+    width: auto;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user-name {
+    color: #ffffff;
+}
+
+.user-score {
+    color: #ffc400;
+}
+
+.user-score>i.fa.fa-star-o {
+    color: #caa427;
+}
+
+.date {
+    color: #d4d4d4;
+    font-size: 12px;
+}
+
+.comment-content {
+    color: #d4d4d4;
+}
+
+.like-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-self: center;
+}
+
+.like-buttons>div>button {
+    background-color: #00000000;
+    color: #cacaca;
+    border: none;
+    /* font-size: 20px; */
+    transform: scale(1);
+    transition: all .15s ease-in-out;
+}
+
+.like-buttons>div>button:hover {
+    color: #41bcff;
+    transition: all .15s ease-in-out;
+    transform: scale(1.2);
+}
+
+/* --------------------- */
+
+
+@media screen and (max-width: 1920px) {
+    .father-container {
+        margin: auto;
+        width: 1280px;
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    .father-container {
+        margin: auto;
+        width: 900px;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .father-container {
+        margin: auto;
+        width: 900px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .father-container {
+        margin: auto;
+        width: 700px;
+    }
+}
 
 @media screen and (max-width: 960px) {
     .title-post {
         font-size: 20px;
         margin: 0px 10px;
     }
+
     .title-post {
         font-size: 24px;
         margin: 0px 10px;
     }
+
+    .father-container {
+        margin: auto;
+        width: 700px;
+    }
 }
 
-@media screen and (max-width: 800px) {}
+@media screen and (max-width: 800px) {
+    .father-container {
+        margin: auto;
+        width: 100%;
+    }
+
+    img.user-profile-pic {
+        display: block;
+        height: 80px;
+        width: auto;
+        border-radius: 50%;
+        padding: 10px;
+    }
+}
 
 @media screen and (max-width: 768px) {
     .post-info {
@@ -230,6 +452,38 @@ div.artist-list-item>a {
         font-size: 24px;
         margin: 0px 10px;
     }
+
+    
 }
 
-@media screen and (max-width: 400px) {}
+@media screen and (max-width: 400px) {
+    .buttons-bottom {
+        flex-direction: column;
+        padding: 5px 0px;
+    }
+
+    .button-cont {
+        height: auto;
+    }
+
+    /*-------- COMMENT -----------*/
+    img.user-profile-pic {
+        display: block;
+        height: 50px;
+        width: auto;
+        border-radius: 50%;
+        padding: 3px;
+    }
+
+    .comment-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .like-buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        align-self: flex-start;
+    }
+}

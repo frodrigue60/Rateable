@@ -4,7 +4,7 @@
         {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
     <meta name="title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
 
-    <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
+    
 
     @if (isset($post->song->song_romaji))
         @if (isset($post->artist->name))
@@ -88,35 +88,37 @@
             </div>
         </div>
 
-        @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
-            <div class="container d-flex pt-2 justify-content-center gap-2">
+        @auth
+            @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
+                <div class="container d-flex pt-2 justify-content-center gap-2">
 
-                @if ($post->status == 'stagged')
-                    <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
-                        @csrf
-                        <button class="btn btn-warning btn-sm"> <i class="fa fa-clock-o" aria-hidden="true">
-                                {{ $post->id }}</i></button>
-                    </form>
-                @endif
-                @if ($post->status == 'published')
-                    <form action="{{ route('admin.post.unapprove', $post->id) }}" method="post">
-                        @csrf
-                        <button class="btn btn-primary btn-sm"> <i class="fa fa-check" aria-hidden="true">
-                                {{ $post->id }}</i></button>
-                    </form>
-                @endif
+                    @if ($post->status == 'stagged')
+                        <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
+                            @csrf
+                            <button class="btn btn-warning btn-sm"> <i class="fa fa-clock-o" aria-hidden="true">
+                                    {{ $post->id }}</i></button>
+                        </form>
+                    @endif
+                    @if ($post->status == 'published')
+                        <form action="{{ route('admin.post.unapprove', $post->id) }}" method="post">
+                            @csrf
+                            <button class="btn btn-primary btn-sm"> <i class="fa fa-check" aria-hidden="true">
+                                    {{ $post->id }}</i></button>
+                        </form>
+                    @endif
 
 
-                <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-success btn-sm"><i
-                        class="fa fa-pencil-square-o" aria-hidden="true"></i> {{ $post->id }}</a>
-                <a href="{{ route('admin.post.destroy', $post->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"
-                        aria-hidden="true"></i>
-                    {{ $post->id }}</a>
-                <a class="btn btn-sm btn-primary" href="{{ route('song.post.create', $post->id) }}">Add song</a>
-                <a class="btn btn-sm btn-success" href="{{ route('song.post.manage', $post->id) }}">Manage</a>
+                    <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-success btn-sm"><i
+                            class="fa fa-pencil-square-o" aria-hidden="true"></i> {{ $post->id }}</a>
+                    <a href="{{ route('admin.post.destroy', $post->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                            aria-hidden="true"></i>
+                        {{ $post->id }}</a>
+                    <a class="btn btn-sm btn-primary" href="{{ route('song.post.create', $post->id) }}">Add song</a>
+                    <a class="btn btn-sm btn-success" href="{{ route('song.post.manage', $post->id) }}">Manage</a>
 
-            </div>
-        @endif
+                </div>
+            @endif
+        @endauth
 
         <div class="container text-light mt-2 container-songs">
             <div class="themes">

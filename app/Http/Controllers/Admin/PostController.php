@@ -30,7 +30,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderByDesc('id')->paginate(10);
+        $posts = Post::orderByDesc('id')->paginate(20);
         //dd($posts);
         return view('admin.posts.index', compact('posts'));
     }
@@ -621,7 +621,8 @@ class PostController extends Controller
         }
         //dd($tag,$tag_exist);
         foreach ($data as $item) {
-            $post_exist = Post::where('slug', Str::slug($item->title->romaji))->first();
+            $post_exist = Post::where('title', $item->title->romaji)->first();
+            
             if ($post_exist) {
                 continue;
             }

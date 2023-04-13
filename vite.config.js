@@ -12,7 +12,8 @@ export default defineConfig({
                 'resources/css/modalSearch.css',
                 'resources/css/userProfile.css',
                 'resources/css/post.css',
-                'resources/css/ranking.css'
+                'resources/css/ranking.css',
+                'resources/css/fivestars.css',
             ],
             refresh: true,
         }),

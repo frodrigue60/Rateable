@@ -58,15 +58,12 @@
 @endsection --}}
 @section('content')
     <div class="container">
-        {{-- @isset($song->post)
-            <h1 class="text-light text-center" hidden>{{ $song->post->title }}</h1>
-        @endisset --}}
         <div class="row justify-content-center">
             <div class="card-video card ">
                 <div class="card-body ratio ratio-16x9" id="id_iframe">
                     {!! $song->ytlink !!}
                 </div>
-                <div class="card-footer">
+                {{-- <div class="card-footer">
                     <h1 class="text-light show-view-title mb-0">
                         <a class="no-deco text-light"
                             href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song->post->title }}</a>
@@ -81,7 +78,7 @@
                     </div>
                     <div class="d-flex btn-group-show">
                         @auth
-                            <a href="{{ route('post.create.report', $song->id) }}" class="button2 no-deco"> Report <i
+                            <a href="{{ route('song.create.report', $song->id) }}" class="button2 no-deco"> Report <i
                                     class="fa fa-exclamation-circle" aria-hidden="true"></i>
                             </a>
                         @endauth
@@ -121,14 +118,365 @@
                             </ul>
                         </div>
                     </div>
+                </div> --}}
+            </div>
+        </div>
+
+        <div class="father-container ">
+            <div
+                style="background-color: #0e3d5f;
+                    border-bottom: #151C2E;margin: 10px 0px; border-radius: 5px;
+                    ">
+                <h3 class="mb-0 py-1 px-2 text-center text-light">
+                    <a class="text-light text-decoration-none" href="#">{{ $song->post->title }}</a>
+                    <span>{{ $song->suffix ? $song->suffix : '' }}</span>
+                </h3>
+            </div>
+            <div class="all-buttons-container">
+                <div class="buttons-container">
+                    <div class="button-cont">
+                        <button class="buttons-bottom">
+                            @if (Auth::user())
+                                @switch(Auth::user()->score_format)
+                                    @case('POINT_100')
+                                        {{ round($song->averageRating) }}
+                                    @break
+
+                                    @case('POINT_10_DECIMAL')
+                                        {{ round($song->averageRating / 10, 1) }}
+                                    @break
+
+                                    @case('POINT_10')
+                                        {{ round($song->averageRating / 10) }}
+                                    @break
+
+                                    @case('POINT_5')
+                                        {{ round($song->averageRating / 20) }}
+                                    @break
+
+                                    @default
+                                        {{ round($song->averageRating) }}
+                                @endswitch
+                            @else
+                                {{ round($song->averageRating / 10, 1) }}
+                            @endif
+                            <i class="fa fa-star" aria-hidden="true" style="color: rgb(240, 188, 43)"></i>
+                        </button>
+                    </div>
+                    <div class="button-cont">
+                        <button class="buttons-bottom">{{ $song->view_count }} <i class="fa fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="button-cont">
+                        @guest
+                            <a href="{{ route('login') }}" class="buttons-bottom">{{ $song->likeCount }} <i
+                                    class="fa fa-heart-o" aria-hidden="true"></i>
+                            </a>
+                        @endguest
+                        @auth
+                            @if ($song->liked())
+                                <form style="display: flex;width: 100%;height: 100%;"
+                                    action="{{ route('song.unlike', $song->id) }}" method="post">
+                                    @csrf
+                                    <button class="buttons-bottom">{{ $song->likeCount }} <i class="fa fa-heart"
+                                            aria-hidden="true" style="color: rgb(199, 59, 59)"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <form style="display: flex;width: 100%;height: 100%;"
+                                    action="{{ route('song.like', $song->id) }}" method="post">
+                                    @csrf
+                                    <button class="buttons-bottom">{{ $song->likeCount }} <i class="fa fa-heart-o"
+                                            aria-hidden="true"></i>
+                                    </button>
+                                </form>
+                            @endif
+                        @endauth
+
+                    </div>
+                </div>
+                <div class="options-container">
+                    <div class="dropdown">
+                        <button class="buttons-bottom dropdown-toggle border-0 px-3" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" type="button"><i class="fa fa-share-alt"
+                                        aria-hidden="true"></i> Share</button></li>
+                            <li><a href="{{ route('song.create.report', $song->id) }}" class="dropdown-item"
+                                    type="button"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Report</a>
+                            </li>
+                            <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop"><i class="fa fa-info-circle" aria-hidden="true"></i>
+                                    Info</button></li>
+                        </ul>
+                    </div>
+                    {{-- <div class="button-option-cont">
+                        <a class="buttons-bottom" href="#"><i class="fa fa-share-alt" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="button-option-cont">
+                        <a class="buttons-bottom" href="{{ route('song.create.report', $song->id) }}"><i
+                                class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="button-option-cont">
+                        <button class="buttons-bottom"><i class="fa fa-info-circle" aria-hidden="true"
+                                data-bs-toggle="modal" data-bs-target="#staticBackdrop"></i>
+                        </button>
+                    </div> --}}
                 </div>
             </div>
+
+            <div>
+                <h3 class="text-light">Comments</h3>
+            </div>
+            @guest
+                <div class="d-flex justify-content-center comment-form">
+                    <h3><a class="text-light" href="{{ route('login') }}">Please login for make a comment</a></h3>
+                </div>
+            @endguest
+            @auth
+                <div class="py-2">
+                    <div class="comment-form">
+                        <form action="{{ route('song.addrate', $song->id) }}" method="post" class="d-flex flex-column gap-2">
+                            @csrf
+                            <div class="score-form text-light">
+                                <span>Rate this theme:</span>
+                                <div class="stars">
+                                    <input class="star star-5" id="star-5" type="radio" name="score" value="100" />
+                                    <label class="star star-5" for="star-5"></label>
+
+                                    <input class="star star-4" id="star-4" type="radio" name="score" value="80" />
+                                    <label class="star star-4" for="star-4"></label>
+
+                                    <input class="star star-3" id="star-3" type="radio" name="score" value="60" />
+                                    <label class="star star-3" for="star-3"></label>
+
+                                    <input class="star star-2" id="star-2" type="radio" name="score" value="40" />
+                                    <label class="star star-2" for="star-2"></label>
+
+                                    <input class="star star-1" id="star-1" type="radio" name="score"
+                                        value="20" />
+                                    <label class="star star-1" for="star-1"></label>
+                                </div>
+                            </div>
+                            <textarea name="comment" class="form-control" id="exampleFormControlTextarea1" rows="2"
+                                placeholder="Comment ... (optional)" maxlength="255"></textarea>
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            @endauth
+
+            @isset($comments)
+                @foreach ($comments as $comment)
+                    <div class="py-2">
+                        <div class="comment-container">
+                            <div class="profile-pic-container">
+                                @if (isset($comment->user->image))
+                                    <img class="user-profile-pic"
+                                        src="{{ asset('/storage/profile/' . $comment->user->image) }}" alt="">
+                                @else
+                                    <img class="user-profile-pic" src="{{ asset('/storage/profile/' . 'default.jpg') }}"
+                                        alt="">
+                                @endif
+                            </div>
+                            <div class="comment-details">
+                                <div>
+                                    <div class="user-details">
+                                        <div style="display: flex; gap: 10px;">
+                                            <div class="user-name">
+                                                <a class="no-deco text-light"
+                                                    href="{{ route('user.list', $comment->user->id) }}">{{ $comment->user->name }}</a>
+                                            </div>
+                                            <div class="user-score">
+                                                @switch($comment->rating)
+                                                    @case($comment->rating <= 20)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 20 && $comment->rating <= 40)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 40 && $comment->rating <= 60)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 60 && $comment->rating <= 80)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @case($comment->rating >= 80)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @default
+                                                @endswitch
+
+                                            </div>
+                                        </div>
+                                        <div class="like-buttons">
+                                            @if ($comment->liked())
+                                                <form action="{{ route('comment.unlike', $comment->id) }}" method="post">
+                                                    @csrf
+                                                    <button class="no-deco text-light"
+                                                        style="background-color: transparent;border:none;">{{ $comment->likeCount }}
+                                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('comment.like', $comment->id) }}" method="post">
+                                                    @csrf
+                                                    <button class="no-deco text-light"
+                                                        style="background-color: transparent;border:none;">{{ $comment->likeCount }}
+                                                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="date">
+                                        <span>{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
+                                        </span>
+                                    </div>
+                                    <div class="comment-content">
+                                        <span>{{ $comment->comment }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                @endforeach
+            @endisset
+
+            @isset($comments_featured)
+                @foreach ($comments_featured as $comment)
+                    <div class="py-2">
+                        <div class="comment-container">
+                            <div class="profile-pic-container">
+                                @if (isset($comment->user->image))
+                                    <img class="user-profile-pic"
+                                        src="{{ asset('/storage/profile/' . $comment->user->image) }}" alt="">
+                                @else
+                                    <img class="user-profile-pic" src="{{ asset('/storage/profile/' . 'default.jpg') }}"
+                                        alt="">
+                                @endif
+                            </div>
+                            <div class="comment-details">
+                                <div>
+                                    <div class="user-details">
+                                        <div style="display: flex; gap: 10px;">
+                                            <div class="user-name">
+                                                <a class="no-deco text-light"
+                                                    href="{{ route('user.list', $comment->user->id) }}">{{ $comment->user->name }}</a>
+                                            </div>
+                                            <div class="user-score">
+                                                @switch($comment->rating)
+                                                    @case($comment->rating <= 20)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 20 && $comment->rating <= 40)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 40 && $comment->rating <= 60)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 60 && $comment->rating <= 80)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star-o" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @case($comment->rating >= 80)
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                                    @break
+
+                                                    @default
+                                                @endswitch
+
+                                            </div>
+                                        </div>
+                                        <div class="like-buttons">
+                                            @if ($comment->liked())
+                                                <form action="{{ route('comment.unlike', $comment->id) }}" method="post">
+                                                    @csrf
+                                                    <button class="no-deco text-light"
+                                                        style="background-color: transparent;border:none;">{{ $comment->likeCount }}
+                                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('comment.like', $comment->id) }}" method="post">
+                                                    @csrf
+                                                    <button class="no-deco text-light"
+                                                        style="background-color: transparent;border:none;">{{ $comment->likeCount }}
+                                                        <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class="date">
+                                        <span>{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
+                                        </span>
+                                    </div>
+                                    <div class="comment-content">
+                                        <span>{{ $comment->comment }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                @endforeach
+            @endisset
         </div>
 
         <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content customModal text-light">
+                <div class="modal-content bg-dark text-light">
                     <div class="modal-header">
                         <span class="modal-title fs-5" id="staticBackdropLabel">{{ $song->post->title }}</span>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -136,7 +484,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row text-center">
-                            <h2>Average Score: <strong>
+                            <h3>Average Score: <strong>
                                     @if (Auth::user())
                                         @switch(Auth::user()->score_format)
                                             @case('POINT_100')
@@ -163,143 +511,28 @@
                                     @endif
                                     <i class="fa fa-star" aria-hidden="true"></i>
                                 </strong>
-                            </h2>
+                            </h3>
 
-                            <div class="accordion" id="accordionExample">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingTwo">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Song info:
-                                        </button>
-                                    </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                                        data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            @isset($song->song_romaji)
-                                                <h4>Song title (romaji): <strong>{{ $song->song_romaji }}</strong></h4>
-                                            @endisset
-                                            @isset($song->song_jp)
-                                                <h4>Song title (JP): <strong>{{ $song->song_jp }}</strong></h4>
-                                            @endisset
-                                            @isset($song->song_en)
-                                                <h4>Song title (EN): <strong>{{ $song->song_en }}</strong></h4>
-                                            @endisset
-                                            @isset($song->artist->name)
-                                                <h4>Artist: <strong><a
-                                                            href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
-                                                            class="no-deco">{{ $song->artist->name }}</a></strong></h4>
-                                            @endisset
-                                            @isset($song->artist->name_jp)
-                                                <h4>Artist (JP): <strong><a
-                                                            href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
-                                                            class="no-deco">{{ $song->artist->name_jp }}</a></strong></h4>
-                                            @endisset
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @guest
-                                <hr>
-                                <h6>for voting</h6>
-                                <div>
-                                    <a class="btn btn-sm btn-primary" href="{{ route('login') }}" role="button">Login</a> or
-                                    <a class="btn btn-sm btn-primary" href="{{ route('register') }}"
-                                        role="button">Register</a>
-                                </div>
-                            @endguest
+                            @isset($song->song_romaji)
+                                <h4>Song title (romaji): <strong>{{ $song->song_romaji }}</strong></h4>
+                            @endisset
+                            @isset($song->song_jp)
+                                <h4>Song title (JP): <strong>{{ $song->song_jp }}</strong></h4>
+                            @endisset
+                            @isset($song->song_en)
+                                <h4>Song title (EN): <strong>{{ $song->song_en }}</strong></h4>
+                            @endisset
+                            @isset($song->artist->name)
+                                <h4>Artist: <strong><a
+                                            href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
+                                            class="no-deco">{{ $song->artist->name }}</a></strong></h4>
+                            @endisset
+                            @isset($song->artist->name_jp)
+                                <h4>Artist (JP): <strong><a
+                                            href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
+                                            class="no-deco">{{ $song->artist->name_jp }}</a></strong></h4>
+                            @endisset
                         </div>
-                        <br>
-
-                        @auth
-                            <div>
-                                <form action="{{ route('song.addrate', $song->id) }}" method="post">
-                                    @csrf
-                                    @if (Auth::user())
-                                        @switch($score_format)
-                                            @case('POINT_100')
-                                                <label for="inputNumber" class="form-label">Score</label>
-                                                <input name="score" type="number" id="inputNumber" class="form-control"
-                                                    aria-describedby="" min="1" max="100" step="1"
-                                                    placeholder="Your score: {{ round($song->userAverageRating) }}">
-                                                <div id="passwordHelpBlock" class="form-text text-light">
-                                                    Your score must be 1-100 values
-                                                </div>
-                                                <input type="hidden" name="score_format" value="{{ $score_format }}">
-                                            @break
-
-                                            @case('POINT_10_DECIMAL')
-                                                <label for="inputNumber" class="form-label">Score</label>
-                                                <input name="score" type="number" id="inputNumber" class="form-control"
-                                                    aria-describedby="" min="1" max="10" step=".1"
-                                                    placeholder="Your score: {{ round($song->userAverageRating / 10, 1) }}">
-                                                <div id="passwordHelpBlock" class="form-text  text-light">
-                                                    Your score must be 1-10 values (can use decimals)
-                                                </div>
-                                                <input type="hidden" name="score_format" value="{{ $score_format }}">
-                                            @break
-
-                                            @case('POINT_10')
-                                                <label for="inputNumber" class="form-label">Score</label>
-                                                <input name="score" type="number" id="inputNumber" class="form-control"
-                                                    aria-describedby="" min="1" max="10" step="1"
-                                                    placeholder="Your score: {{ round($song->userAverageRating / 10) }}">
-                                                <div id="passwordHelpBlock" class="form-text text-light">
-                                                    Your score must be 1-10 values (only integer values)
-                                                </div>
-                                                <input type="hidden" name="score_format" value="{{ $score_format }}">
-                                            @break
-
-                                            @case('POINT_5')
-                                                <div class="d-flex justify-content-center">
-                                                    <div class="stars">
-                                                        <input class="star star-5" id="star-5" type="radio" name="score"
-                                                            value="100" />
-                                                        <label class="star star-5" for="star-5"></label>
-
-                                                        <input class="star star-4" id="star-4" type="radio" name="score"
-                                                            value="80" />
-                                                        <label class="star star-4" for="star-4"></label>
-
-                                                        <input class="star star-3" id="star-3" type="radio" name="score"
-                                                            value="60" />
-                                                        <label class="star star-3" for="star-3"></label>
-
-                                                        <input class="star star-2" id="star-2" type="radio" name="score"
-                                                            value="40" />
-                                                        <label class="star star-2" for="star-2"></label>
-
-                                                        <input class="star star-1" id="star-1" type="radio" name="score"
-                                                            value="20" />
-                                                        <label class="star star-1" for="star-1"></label>
-
-                                                        <div class="row">
-                                                            <p class="text-center">click the stars</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @break
-
-                                            @default
-                                                <label for="inputNumber" class="form-label">Score</label>
-                                                <input name="score" type="number" id="inputNumber" class="form-control"
-                                                    aria-describedby="" min="1" max="100" step="1">
-                                                <div id="passwordHelpBlock" class="form-text text-light">
-                                                    Your score must be 1-100 values
-                                                </div>
-                                        @endswitch
-                                    @else
-                                        <strong>{{ round($song->averageRating) }}</strong>
-                                    @endif
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Send Score</button>
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                </form>
-                            </div>
-                        @endauth
                     </div>
                     @guest
                         <div class="modal-footer">

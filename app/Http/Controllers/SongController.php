@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Song;
 use App\Models\Artist;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Termwind\Components\Dd;
+use Illuminate\Support\Facades\Validator;
 
 class SongController extends Controller
 {
@@ -51,8 +52,23 @@ class SongController extends Controller
      */
     public function show($id)
     {
+        
         $song = Song::with(['post'])->find($id);
-        //dd($song);
+        $comments = Comment::with('user','likeCounter')
+        ->where('rateable_id','=',$id)
+        ->latest()
+        ->limit(10)
+        ->get();
+
+        $comments_featured = Comment::with('user','likeCounter')
+        ->where('rateable_id','=',$id)
+        ->get()
+        ->sortByDesc('likeCount')
+        ->take(3);
+        
+        //dd($comments_featured);
+
+        //dd($song,$comments);
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {
@@ -67,7 +83,7 @@ class SongController extends Controller
         $this->count_views($song);
 
         //dd($artist);
-        return view('public.songs.show', compact('song', 'score_format', 'artist'));
+        return view('public.songs.show', compact('song', 'score_format', 'artist','comments','comments_featured'));
     }
 
     public function likeSong($id)
@@ -138,9 +154,22 @@ class SongController extends Controller
     public function rateSong(Request $request, $id)
     {
         if (Auth::check()) {
+            //dd($request->all());
             $song = Song::find($id);
             $score = $request->score;
             $score_format = $request->score_format;
+
+            $validator = Validator::make($request->all(), [
+                'comment' => 'nullable|string|max:255',
+                'score' => 'required'
+            ]);
+    
+            if ($validator->fails()) {
+                $messageBag = $validator->getMessageBag();
+                return redirect()
+                    ->back()
+                    ->with('error', $messageBag);
+            }
 
             if (blank($score)) {
                 return redirect()->back()->with('warning', 'Score can not be null');
@@ -195,7 +224,7 @@ class SongController extends Controller
                         if ($score > 80) {
                             $score = 100;
                         }
-                        $song->rateOnce($score);
+                        $song->rateOnce($score,$request->comment);
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 100');
@@ -206,7 +235,7 @@ class SongController extends Controller
                 default:
                     settype($score, "integer");
                     if (($score >= 1) && ($score <= 100)) {
-                        $song->rateOnce($score);
+                        $song->rateOnce($score,$request->comment);
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 100');

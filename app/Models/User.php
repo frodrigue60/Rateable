@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserRequest;
+use App\Models\Comment;
 
 class User extends Authenticatable
 {
@@ -17,6 +18,11 @@ class User extends Authenticatable
     public function userRequests()
     {
         return $this->hasMany(UserRequest::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class,'user_id');
     }
 
     public function isStaff()

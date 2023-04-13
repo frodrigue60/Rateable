@@ -27,8 +27,14 @@ class Song extends Model
     {
         return $this->belongsTo(Post::class);
     }
+
     public function artist()
     {
         return $this->belongsTo(Artist::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class,'rateable_id');
     }
 }

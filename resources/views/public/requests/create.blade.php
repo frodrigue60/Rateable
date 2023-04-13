@@ -11,7 +11,7 @@
                     <form method="post" action="{{ route('request.store') }}">
                         @csrf
                         <div class="form-floating">
-                            <textarea name="content" class="form-control" placeholder="Write us your request" id="floatingTextarea"></textarea>
+                            <textarea name="content" class="form-control" placeholder="Write us your request" id="floatingTextarea" required></textarea>
                             <label for="floatingTextarea">Write us your request</label>
                           </div>
                         <br>

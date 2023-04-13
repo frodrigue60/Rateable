@@ -12,7 +12,9 @@ const filesToCache = [
     '/resources/owlcarousel/assets/owl.theme.default.min.css',
     '/resources/js/jquery-3.6.3.min.js',
     '/resources/bootstrap-5.2.3-dist/css/bootstrap.min.css',
-    '/resources/bootstrap-5.2.3-dist/js/bootstrap.min.js'
+    '/resources/bootstrap-5.2.3-dist/js/bootstrap.min.js',
+    'offline.html',
+    'offline.png'
 ];
 
 // Cache on install

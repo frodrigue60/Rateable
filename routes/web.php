@@ -31,7 +31,8 @@ use App\Http\Controllers\SongController as SongController;
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'index'])->name('/');
 Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
-Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
+Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('anime.show');
+Route::get('/post/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
@@ -147,6 +148,10 @@ Route::group(['middleware' => 'staff'], function () {
 //AUTH ROUTES
 Auth::routes();
 
+//COMMENT LIKE
+Route::post('/comment/{id}/like', [PostController::class, 'likeComment'])->name('comment.like');
+Route::post('/comment/{ipostd}/unlike', [PostController::class, 'unlikeComment'])->name('comment.unlike');
+
 //REQUEST ROUTES
 Route::get('/request/create', [App\Http\Controllers\UserRequestController::class, 'create'])->name('request.create');
 Route::post('/request/store', [App\Http\Controllers\UserRequestController::class, 'store'])->name('request.store');
@@ -154,6 +159,7 @@ Route::post('/request/store', [App\Http\Controllers\UserRequestController::class
 //SONGS ROUTES
 Route::post('/song/{id}/like', [SongController::class, 'likeSong'])->name('song.like');
 Route::post('/song/{id}/unlike', [SongController::class, 'unlikeSong'])->name('song.unlike');
+Route::post('/song/{id}/ratesong', [SongController::class, 'rateSong'])->name('song.addrate');
 
 //USER ROUTES
 Route::post('/change-score-format', [App\Http\Controllers\UserController::class, 'changeScoreFormat'])->name('change.score.format');
@@ -165,5 +171,5 @@ Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites'
 Route::post('/post/{id}/like', [PostController::class, 'likePost'])->name('post.like');
 Route::post('/post/{id}/unlike', [PostController::class, 'unlikePost'])->name('post.unlike');
 Route::post('/post/{id}/ratepost', [PostController::class, 'ratePost'])->name('post.addrate');
-Route::post('/song/{id}/ratesong', [SongController::class, 'rateSong'])->name('song.addrate');
-Route::get('/post/{id}/report', [ReportController::class, 'createReport'])->name('post.create.report');
+
+Route::get('/song/{id}/report', [ReportController::class, 'createReport'])->name('song.create.report');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Song;
@@ -1205,4 +1206,26 @@ class PostController extends Controller
             Session::put('page_visited_' . $post->id, true);
         }
     }
+
+    public function likeComment($id)
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            Comment::find($id)->like($user->id);
+            return Redirect::back()->with('success', 'Comment Like successfully!');
+        }
+        return redirect()->route('/')->with('warning', 'Please login');
+    }
+
+    public function unlikeComment($id)
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            Comment::find($id)->unlike($user->id);
+
+            return Redirect::back()->with('success', 'Comment Like undo successfully!');
+        }
+        return redirect()->route('/')->with('warning', 'Please login');
+    }
+
 }

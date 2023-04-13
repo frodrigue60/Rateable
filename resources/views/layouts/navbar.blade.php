@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark color1">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ asset('resources/images/image_adobe_express.svg') }}" alt="Logo" title="Anirank Logo" width="157"
-                height="45">
+            <img src="{{ asset('resources/images/image_adobe_express.svg') }}" alt="Logo" title="Anirank Logo"
+                width="157" height="45">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -12,16 +12,24 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto">
-                {{-- <li><a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
+                <li><a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
                         href="{{ route('openings') }}">Openings</a></li>
                 <li><a class="nav-link {{ Request::is('endings') ? 'active' : '' }}"
-                        href="{{ route('endings') }}">Endings</a></li> --}}
-                        <li><a class="nav-link {{ Request::is('animes') ? 'active' : '' }}"
-                            href="{{ route('animes') }}">Animes</a></li>
+                        href="{{ route('endings') }}">Endings</a></li>
+
                 <li><a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"
                         href="{{ route('global.ranking') }}">Ranking</a></li>
-                <li><a class="nav-link {{ Request::is('filter') ? 'active' : '' }}"
-                        href="{{ route('filter') }}">Filter</a></li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button"
+                        data-bs-toggle="dropdown"aria-expanded="false">Filter</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item"
+                                href="{{ route('animes') }}">Animes</a></li>
+                        <li><a class="dropdown-item"
+                                href="{{ route('filter') }}">Openings & Endings</a></li>
+                    </ul>
+                </li>
                 @auth
                     <li><a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}"
                             href="{{ route('favorites') }}">My Favorites</a></li>
@@ -84,8 +92,10 @@
                                     aria-hidden="true"></i>
                                 Profile
                             </a>
+                            @auth
                             <a class="dropdown-item" href="{{ route('request.create') }}"><i class="fa fa-comment-o"
-                                    aria-hidden="true"></i> Create Request</a>
+                                aria-hidden="true"></i> Request</a>
+                            @endauth
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><i

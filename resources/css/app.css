@@ -732,7 +732,7 @@ footer{
 		width: 100%;
 	}
 	.card-video {
-		width: 1000px;
+		width: 900px;
 	}
 
 	.contenedor-filtro {
@@ -1411,7 +1411,7 @@ footer{
 	}
 
 	.contenedor-main {
-		width: 480px;
+		width: 390px;
 		margin: auto;
 		padding: 0px 0;
 		gap: 10px;
@@ -1420,11 +1420,11 @@ footer{
 	.contenedor-tarjetas-main {
 		display: grid;
 		justify-items: center;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(2, 150px);
 		grid-template-rows: repeat(2, 1fr);
 		grid-template-areas:
-			"a b c"
-			"a b c";
+			"a b"
+			"a b";
 	}
 
 	.contenedor-tarjetas-main>*:nth-child(n+7) {
