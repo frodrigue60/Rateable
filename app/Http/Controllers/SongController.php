@@ -53,7 +53,8 @@ class SongController extends Controller
     public function show($id)
     {
         
-        $song = Song::with(['post'])->find($id);
+        $song = Song::with(['post','artist'])->find($id);
+        //dd($song);
         $comments = Comment::with('user','likeCounter')
         ->where('rateable_id','=',$id)
         ->latest()
@@ -66,16 +67,13 @@ class SongController extends Controller
         ->sortByDesc('likeCount')
         ->take(3);
         
-        //dd($comments_featured);
-
-        //dd($song,$comments);
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {
             $score_format = null;
         }
-        if ($song->artist_id != null) {
-            $artist = Artist::find($song->artist_id);
+        if (isset($song->artist->id)) {
+            $artist = Artist::find($song->artist->id);
         } else {
             $artist = null;
         }
@@ -110,11 +108,13 @@ class SongController extends Controller
 
     public function count_views($song)
     {
-        if (!Session::has('song_visited_' . $song->id)) {
+        $key = 'post_'.$song->post->id.'_'.'song_'.$song->id;
+       //dd($key);
+        if (!Session::has($key)) {
             DB::table('songs')
                 ->where('id', $song->id)
                 ->increment('view_count');
-            Session::put('song_visited_' . $song->id, true);
+            Session::put($key,true);
         }
     }
 

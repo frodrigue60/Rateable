@@ -160,9 +160,11 @@ class PostController extends Controller
     public function show($id, $slug)
     {
         $post = Post::with('songs')->find($id);
+
         $openings = $post->songs->filter(function ($song) {
             return $song->type === 'OP';
         });
+        
         $endings = $post->songs->filter(function ($song) {
             return $song->type === 'ED';
         });
@@ -1197,7 +1199,7 @@ class PostController extends Controller
         return view('public.posts.ranking', compact('openings', 'endings',  'score_format'));
     }
 
-    public function count_views($post)
+    /* public function count_views($post)
     {
         if (!Session::has('page_visited_' . $post->id)) {
             DB::table('posts')
@@ -1205,7 +1207,7 @@ class PostController extends Controller
                 ->increment('view_count');
             Session::put('page_visited_' . $post->id, true);
         }
-    }
+    } */
 
     public function likeComment($id)
     {

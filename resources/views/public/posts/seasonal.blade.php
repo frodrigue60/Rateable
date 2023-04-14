@@ -53,10 +53,19 @@
                                     <div class="tarjeta-header text-light">
                                         <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
                                     </div>
-                                    <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
-                                        <span
-                                            class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
-                                    </div>
+                                    @if ($song->type === 'OP' && $song->suffix != null)
+                                        <div class="tag">
+                                            <span
+                                                class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
+                                        </div>
+                                    @else
+                                        @if ($song->type === 'ED' && $song->suffix != null)
+                                        <div class="tag2">
+                                            <span
+                                                class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
+                                        </div>
+                                        @endif
+                                    @endif
                                     <a class="no-deco"
                                         href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
                                         <img class="thumb" loading="lazy"
@@ -144,16 +153,16 @@
                         @php
                             $j = 1;
                         @endphp
-                        @isset($test)
-                            @foreach ($posts->sortByDesc('averageRating')->take(15) as $post)
+                        @isset($songs)
+                            @foreach ($songs->sortByDesc('averageRating')->take(15) as $song)
                                 <article class="top-item-seasonal">
                                     <div class="item-place-seasonal">
                                         <span><strong>{{ $j++ }}</strong></span>
                                     </div>
                                     <div class="item-info-seasonal">
                                         <div class="item-post-info-seasonal">
-                                            <span><a href="{{ route('post.show', [$post->id, $post->slug, $post->suffix != null ? $post->suffix : $post->type]) }}"
-                                                    class="text-light no-deco">{{ $post->title }}</a></span>
+                                            <a href="{{ route('song.show', [$song->post->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
+                                                class="text-light no-deco">{{ $song->post->title }}</a>
                                         </div>
                                     </div>
                                     <div class="item-score-seasonal">
@@ -161,26 +170,26 @@
                                             @if (isset($score_format))
                                                 @switch($score_format)
                                                     @case('POINT_100')
-                                                        {{ round($post->averageRating) }}
+                                                        {{ round($song->averageRating) }}
                                                     @break
 
                                                     @case('POINT_10_DECIMAL')
-                                                        {{ round($post->averageRating / 10, 1) }}
+                                                        {{ round($song->averageRating / 10, 1) }}
                                                     @break
 
                                                     @case('POINT_10')
-                                                        {{ round($post->averageRating / 10) }}
+                                                        {{ round($song->averageRating / 10) }}
                                                     @break
 
                                                     @case('POINT_5')
-                                                        {{ round($post->averageRating / 20) }}
+                                                        {{ round($song->averageRating / 20) }}
                                                     @break
 
                                                     @default
-                                                        {{ round($post->averageRating) }}
+                                                        {{ round($song->averageRating) }}
                                                 @endswitch
                                             @else
-                                                {{ round($post->averageRating / 10, 1) }}
+                                                {{ round($song->averageRating / 10, 1) }}
                                             @endif
                                             <i class="fa fa-star" aria-hidden="true"></i>
                                         </span>

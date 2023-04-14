@@ -109,18 +109,18 @@ class PostController extends Controller
                 //$request->file->storeAs('thumbnails', $file_name, 'public');
             } else {
                 if ($request->thumbnail_src == null) {
-                    //dd($request->all());
+                    
                     $request->flash();
                     return Redirect::back()
                         ->with('error', "Post not created, images not founds");
                 }
 
                 $image_file_data = file_get_contents($request->thumbnail_src);
-                //$ext = pathinfo($request->thumbnail_src, PATHINFO_EXTENSION);
+                
                 $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
                 $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
                 Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-                //Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+                
                 $post->thumbnail = $file_name;
                 $post->thumbnail_src = $request->thumbnail_src;
             }

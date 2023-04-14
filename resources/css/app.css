@@ -239,13 +239,19 @@ footer{
 	background-color: #1e5983;
 	text-align: center;
 }
+.item-info-seasonal{
+	display: flex;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .item-post-info-seasonal {
 	display: flex;
-	max-width: 140px;
+	/* max-width: 140px;
 	white-space: nowrap;
 	overflow: hidden;
-	text-overflow: ellipsis;
+	text-overflow: ellipsis; */
 	padding-left: 5px;
 }
 
@@ -586,15 +592,6 @@ footer{
 		padding: 5px;
 	}
 
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 200px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		padding-left: 5px;
-	}
-
 	.carouselRecents {
 		width: 976px;
 		height: 220px;
@@ -706,14 +703,6 @@ footer{
 }
 
 @media screen and (max-width: 1440px) {
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 170px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
 	.container-items-seasonal {
 		background-color: #0C2638;
 		max-width: 270px;
@@ -823,14 +812,6 @@ footer{
 		padding: 5px;
 	}
 
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 175px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
 	.carouselRecents {
 		width: 647px;
 		height: 220px;
@@ -936,14 +917,6 @@ footer{
 		flex-direction: column;
 		align-items: center;
 		padding: 5px;
-	}
-
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 200px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 
 	.carouselRecents {
@@ -1052,14 +1025,6 @@ footer{
 		flex-direction: column;
 		align-items: center;
 		padding: 5px;
-	}
-
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 200px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 
 	.carouselRecents {
@@ -1189,14 +1154,6 @@ footer{
 		padding: 5px;
 	}
 
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 150px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
 	.carouselRecents {
 		width: 645px;
 		height: 220px;
@@ -1280,14 +1237,6 @@ footer{
 }
 
 @media screen and (max-width: 768px) {
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 150px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
 	.carouselRecents {
 		width: 484px;
 		height: 220px;
@@ -1358,14 +1307,6 @@ footer{
 }
 
 @media screen and (max-width: 600px) {
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 220px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
 	.carouselRecents {
 		width: 325px;
 		height: 220px;
@@ -1457,14 +1398,6 @@ footer{
 }
 
 @media screen and (max-width: 400px) {
-	#item-post-info-seasonal {
-		display: flex;
-		max-width: 220px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
 	.carouselRecents {
 		width: 325px;
 		height: 220px;

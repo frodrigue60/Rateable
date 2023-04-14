@@ -68,9 +68,6 @@
     <meta name="twitter:data2" content="2 minutos"> --}}
 @endsection
 @section('content')
-    <div>
-        <span id="media-query"></span>
-    </div>
     <div class="container text-light">
         <div class="banner-anime" style="background-image: url({{ asset('/storage/anime_banner/' . $post->banner) }});">
             <div class="gradient"></div>
