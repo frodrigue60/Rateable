@@ -1,4 +1,4 @@
-const staticCacheName = "pwa-v-" + "cache";
+const staticCacheName = "pwa-" + "cache";
 const filesToCache = [
     '/resources/css/app.css',
     '/resources/css/modalSearch.css',
