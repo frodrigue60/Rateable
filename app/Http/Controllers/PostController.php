@@ -133,25 +133,6 @@ class PostController extends Controller
 
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -176,27 +157,6 @@ class PostController extends Controller
         } else {
             return view('public.posts.show', compact('post', 'tags', 'openings', 'endings'));
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
     }
 
     /**
@@ -295,14 +255,13 @@ class PostController extends Controller
         if (Auth::check()) {
             $post = Post::find($id);
             $score = $request->score;
-            $score_format = $request->score_format;
 
             if (blank($score)) {
                 return redirect()->back()->with('warning', 'Score can not be null');
             }
-            switch ($score_format) {
+
+            switch (Auth::user()->score_format) {
                 case 'POINT_100':
-                    settype($score, "integer");
                     if (($score >= 1) && ($score <= 100)) {
                         $post->rateOnce($score);
                         return redirect()->back()->with('success', 'Post rated Successfully');
@@ -312,28 +271,24 @@ class PostController extends Controller
                     break;
 
                 case 'POINT_10_DECIMAL':
-                    settype($score, "float");
                     if (($score >= 1) && ($score <= 10)) {
-                        $int = intval($score * 10);
-                        $post->rateOnce($int);
+                        $post->rateOnce(intval($score * 10));
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 10 (can use decimals)');
                     }
                     break;
+
                 case 'POINT_10':
-                    settype($score, "integer");
                     if (($score >= 1) && ($score <= 10)) {
-                        $int = intval($score * 10);
-                        $post->rateOnce($int);
+                        $post->rateOnce(intval($score * 10));
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 10 (only integer numbers)');
                     }
                     break;
-                case 'POINT_5':
-                    settype($score, "integer");
 
+                case 'POINT_5':
                     if (($score >= 1) && ($score <= 100)) {
                         if ($score <= 20) {
                             $score = 20;
@@ -351,6 +306,7 @@ class PostController extends Controller
                             $score = 100;
                         }
                         $post->rateOnce($score);
+
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 100');
@@ -359,7 +315,6 @@ class PostController extends Controller
 
 
                 default:
-                    settype($score, "integer");
                     if (($score >= 1) && ($score <= 100)) {
                         $post->rateOnce($score);
                         return redirect()->back()->with('success', 'Post rated Successfully');
@@ -1121,7 +1076,6 @@ class PostController extends Controller
                 $songs = $songs->sortBy(function ($song) {
                     return $song->post->title;
                 });
-                return $songs;
                 return $songs;
                 break;
         }

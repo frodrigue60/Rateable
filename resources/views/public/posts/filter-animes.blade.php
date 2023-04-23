@@ -5,7 +5,7 @@
         <meta title="Search Openings & Endings">
         <link rel="canonical" href="{{ url()->current() }}">
         <meta name="description" content="Search Openings & Endings by type, season, order as you want, and filter by letter">
-        <meta name="robots" content="index, follow, max-snippet:20, max-image-preview:standard">
+        <meta name="robots" content="index, follow, max-image-preview:standard">
     @endif
     @if (Request::routeIs('user.list'))
         <title>{{ $user->name }} - list</title>

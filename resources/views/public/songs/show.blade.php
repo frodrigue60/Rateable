@@ -3,8 +3,6 @@
     <title>{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}</title>
     <meta name="title" content="{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}">
 
-    {{-- <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}"> --}}
-
     @if (isset($song->song_romaji))
         @if (isset($song->artist->name))
             <meta name="description" content="Song: {{ $song->song_romaji }} - Artist: {{ $song->artist->name }}">
@@ -63,9 +61,10 @@
             <div class="card-video card ">
                 <div class="card-body ratio ratio-16x9" id="id_iframe">
                     @if ($song->video_src != null)
-                        <iframe src="{{asset('/storage/videos/' . $song->video_src)}}" frameborder="0" type="video/webm" controls="" autoplay=""></iframe>
+                        <iframe src="{{ asset('/storage/videos/' . $song->video_src) }}" frameborder="0" type="video/webm"
+                            controls="" autoplay=""></iframe>
                     @else
-                    {!! $song->ytlink !!}
+                        {!! $song->ytlink !!}
                     @endif
                 </div>
             </div>
@@ -77,39 +76,16 @@
                     border-bottom: #151C2E;margin: 10px 0px; border-radius: 5px;
                     ">
                 <h3 class="mb-0 py-1 px-2 text-center text-light">
-                    <a class="text-light text-decoration-none" href="{{route('post.show', [$song->post->id,$song->post->slug])}}">{{ $song->post->title }}</a>
+                    <a class="text-light text-decoration-none"
+                        href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song->post->title }}</a>
                     <span>{{ $song->suffix ? $song->suffix : '' }}</span>
                 </h3>
             </div>
             <div class="all-buttons-container">
                 <div class="buttons-container">
                     <div class="button-cont">
-                        <button class="buttons-bottom">
-                            @if (Auth::user())
-                                @switch(Auth::user()->score_format)
-                                    @case('POINT_100')
-                                        {{ round($song->averageRating) }}
-                                    @break
-
-                                    @case('POINT_10_DECIMAL')
-                                        {{ round($song->averageRating / 10, 1) }}
-                                    @break
-
-                                    @case('POINT_10')
-                                        {{ round($song->averageRating / 10) }}
-                                    @break
-
-                                    @case('POINT_5')
-                                        {{ round($song->averageRating / 20) }}
-                                    @break
-
-                                    @default
-                                        {{ round($song->averageRating) }}
-                                @endswitch
-                            @else
-                                {{ round($song->averageRating / 10, 1) }}
-                            @endif
-                            <i class="fa fa-star" aria-hidden="true" style="color: rgb(240, 188, 43)"></i>
+                        <button class="buttons-bottom">{{ $score }} <i class="fa fa-star" aria-hidden="true"
+                                style="color: rgb(240, 188, 43)"></i>
                         </button>
                     </div>
                     <div class="button-cont">
@@ -150,15 +126,29 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><button class="dropdown-item" type="button"><i class="fa fa-share-alt"
-                                        aria-hidden="true"></i> Share</button></li>
+                        <ul class="dropdown-menu" id="dropdown-menu">
+                            <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#shareModal"><i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    Share</button></li>
                             <li><a href="{{ route('song.create.report', $song->id) }}" class="dropdown-item"
-                                    type="button"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Report</a>
+                                    type="button"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    Report</a>
                             </li>
                             <li><button class="dropdown-item" type="button" data-bs-toggle="modal"
                                     data-bs-target="#staticBackdrop"><i class="fa fa-info-circle" aria-hidden="true"></i>
                                     Info</button></li>
+                            <li>
+                                <div id="button-group">
+                                    <button type="button" onclick="rv('{{ $song->ytlink }}')" class="dropdown-item"><i
+                                            class="fa fa-play" aria-hidden="true"></i>
+                                        Option 1</button>
+                                    @if (isset($song->scndlink))
+                                        <button type="button" onclick="rv('{{ $song->scndlink }}')"
+                                            class="dropdown-item"><i class="fa fa-play" aria-hidden="true"></i>
+                                            Option 2</button>
+                                    @endif
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -168,8 +158,9 @@
                 <h3 class="text-light">Comments</h3>
             </div>
             @guest
-                <div class="d-flex justify-content-center comment-form">
-                    <h3><a class="text-light" href="{{ route('login') }}">Please login for make a comment</a></h3>
+                <div class="d-flex justify-content-center comment-form text-light">
+                    <h3>Please <a class="text-light" href="{{ route('login') }}">login</a> or <a class="text-light"
+                            href="{{ route('register') }}">register</a> for comment</h3>
                 </div>
             @endguest
             @auth
@@ -209,7 +200,7 @@
                     </div>
                 </div>
             @endauth
-                <h4 class="text-light my-2">Featured comments</h4>
+            <h4 class="text-light my-2">Featured comments</h4>
             @isset($comments_featured)
                 @foreach ($comments_featured as $comment)
                     <div class="py-2">
@@ -310,7 +301,7 @@
                     </div>
                 @endforeach
             @endisset
-                <h4 class="text-light my-2">Recents comments</h4>
+            <h4 class="text-light my-2">Recents comments</h4>
             @isset($comments)
                 @foreach ($comments as $comment)
                     <div class="py-2">
@@ -412,7 +403,7 @@
                 @endforeach
             @endisset
 
-            
+
         </div>
 
         <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
@@ -485,27 +476,38 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="shareModal" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-light">
+                    <div class="modal-header">
+                        <span class="modal-title fs-5" id="staticBackdropLabel">Share</span>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex gap-2 justify-content-center">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}" target="_blank"
+                                class="btn btn-primary">FaceBook</a>
+                            <a href="https://twitter.com/intent/tweet?url={{ url()->current() }}" target="_blank"
+                                class="btn btn-primary">Twitter</a>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         @section('script')
             <script>
-                const buttonGroup = document.getElementById("button-group");
-                const buttonGroupPressed = e => {
+                const id_iframe = document.getElementById("id_iframe");
 
-                    var isButton = e.target.nodeName === 'BUTTON';
-
-                    if (!isButton) {
-                        return
-                    }
-
-                    var option = document.getElementById(e.target.id);
-                    var link = option.getAttribute('value');
-
-                    const id_iframe = document.getElementById("id_iframe");
-                    //id_iframe.setAttribute("src", link);
+                function rv(link) {
                     id_iframe.innerHTML = link;
-                    //console.log(e.target.id);
-                    //console.log(link);
                 }
-                buttonGroup.addEventListener("click", buttonGroupPressed);
             </script>
         @endsection
     </div>

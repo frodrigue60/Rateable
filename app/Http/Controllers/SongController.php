@@ -52,25 +52,46 @@ class SongController extends Controller
      */
     public function show($id)
     {
-        
-        $song = Song::with(['post','artist'])->find($id);
-        //dd($song);
-        $comments = Comment::with('user','likeCounter')
-        ->where('rateable_id','=',$id)
-        ->latest()
-        ->limit(10)
-        ->get();
 
-        $comments_featured = Comment::with('user','likeCounter')
-        ->where('rateable_id','=',$id)
-        ->get()
-        ->sortByDesc('likeCount')
-        ->take(3);
-        
+        $song = Song::with(['post', 'artist'])->find($id);
+        //dd($song);
+        $comments = Comment::with('user', 'likeCounter')
+            ->where('rateable_id', '=', $id)
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        $comments_featured = Comment::with('user', 'likeCounter')
+            ->where('rateable_id', '=', $id)
+            ->get()
+            ->sortByDesc('likeCount')
+            ->take(3);
+
         if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
+            
+            switch (Auth::user()->score_format) {
+                case 'POINT_100':
+                    $score = round($song->averageRating);
+                    break;
+
+                case 'POINT_10_DECIMAL':
+                    $score = round($song->averageRating / 10, 1);
+                    break;
+
+                case 'POINT_10':
+                    $score = round($song->averageRating / 10);
+                    break;
+
+                case 'POINT_5':
+                    $score = round($song->averageRating / 20);
+                    break;
+
+                default:
+                    $score = round($song->averageRating/10);
+                    break;
+            }
         } else {
-            $score_format = null;
+            $score = round($song->averageRating/10);
         }
         if (isset($song->artist->id)) {
             $artist = Artist::find($song->artist->id);
@@ -81,7 +102,7 @@ class SongController extends Controller
         $this->count_views($song);
 
         //dd($artist);
-        return view('public.songs.show', compact('song', 'score_format', 'artist','comments','comments_featured'));
+        return view('public.songs.show', compact('song', 'score', 'artist', 'comments', 'comments_featured'));
     }
 
     public function likeSong($id)
@@ -108,13 +129,13 @@ class SongController extends Controller
 
     public function count_views($song)
     {
-        $key = 'post_'.$song->post->id.'_'.'song_'.$song->id;
-       //dd($key);
+        $key = 'post_' . $song->post->id . '_' . 'song_' . $song->id;
+        //dd($key);
         if (!Session::has($key)) {
             DB::table('songs')
                 ->where('id', $song->id)
                 ->increment('view_count');
-            Session::put($key,true);
+            Session::put($key, true);
         }
     }
 
@@ -163,7 +184,7 @@ class SongController extends Controller
                 'comment' => 'nullable|string|max:255',
                 'score' => 'required'
             ]);
-    
+
             if ($validator->fails()) {
                 $messageBag = $validator->getMessageBag();
                 return redirect()
@@ -176,7 +197,6 @@ class SongController extends Controller
             }
             switch ($score_format) {
                 case 'POINT_100':
-                    settype($score, "integer");
                     if (($score >= 1) && ($score <= 100)) {
                         $song->rateOnce($score);
                         return redirect()->back()->with('success', 'Post rated Successfully');
@@ -186,28 +206,22 @@ class SongController extends Controller
                     break;
 
                 case 'POINT_10_DECIMAL':
-                    settype($score, "float");
                     if (($score >= 1) && ($score <= 10)) {
-                        $int = intval($score * 10);
-                        $song->rateOnce($int);
+                        $song->rateOnce(intval($score * 10));
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 10 (can use decimals)');
                     }
                     break;
                 case 'POINT_10':
-                    settype($score, "integer");
                     if (($score >= 1) && ($score <= 10)) {
-                        $int = intval($score * 10);
-                        $song->rateOnce($int);
+                        $song->rateOnce(intval($score * 10));
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 10 (only integer numbers)');
                     }
                     break;
                 case 'POINT_5':
-                    settype($score, "integer");
-
                     if (($score >= 1) && ($score <= 100)) {
                         if ($score <= 20) {
                             $score = 20;
@@ -224,7 +238,7 @@ class SongController extends Controller
                         if ($score > 80) {
                             $score = 100;
                         }
-                        $song->rateOnce($score,$request->comment);
+                        $song->rateOnce($score, $request->comment);
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 100');
@@ -233,9 +247,8 @@ class SongController extends Controller
 
 
                 default:
-                    settype($score, "integer");
                     if (($score >= 1) && ($score <= 100)) {
-                        $song->rateOnce($score,$request->comment);
+                        $song->rateOnce($score, $request->comment);
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 100');
