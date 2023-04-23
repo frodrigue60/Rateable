@@ -38,25 +38,5 @@ class UserRequestController extends Controller
         } else {
             return redirect('/')->with('error','Something has been wrong');
         }
-        
-        /* $content = $request->content;
-        $user_id = Auth::user()->id;
-        $attended_by = null;
-        $status = 'pending';
-
-        try {
-            DB::table('requests')->insert([
-                'content' => $content,
-                'user_id' => $user_id,
-                'attended_by' => $attended_by,
-                'status' => $status,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-        } catch (\Throwable $th) {
-            //throw $th;
-            return redirect('/')->with('error',$th->getMessage());
-        }*/
-        
     }
 }

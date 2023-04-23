@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Artist;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Song;
-use App\Models\User;
 use Conner\Tagging\Model\Tag;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -15,15 +13,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Session;
+
 use stdClass;
-use Intervention\Image\ImageManagerStatic as Image;
-
-
-use function PHPSTORM_META\type;
 
 class PostController extends Controller
 {
@@ -375,13 +366,6 @@ class PostController extends Controller
                 if ($tag != null) {
                     if ($type != null) {
                         if ($char != null) {
-                            /* $posts = Post::withAnyTag($tag)
-                                ->where('status', '=', 'published')
-                                ->where('type', $type)
-                                ->where('title', 'LIKE', "{$char}%")
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) use ($char) {
@@ -393,12 +377,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::withAnyTag($tag)
-                                ->where('status', '=', 'published')
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
@@ -411,12 +389,6 @@ class PostController extends Controller
                         }
                     } else {
                         if ($char != null) {
-                            /* $posts = Post::withAnyTag($tag)
-                                ->where('status', '=', 'published')
-                                ->where('title', 'LIKE', "{$char}%")
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) use ($char) {
@@ -427,11 +399,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::withAnyTag($tag)
-                                ->where('status', '=', 'published')
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
@@ -445,12 +412,6 @@ class PostController extends Controller
                 } else {
                     if ($type != null) {
                         if ($char != null) {
-                            /* $posts = Post::where('type', $type)
-                                ->where('status', '=', 'published')
-                                ->where('title', 'LIKE', "{$char}%")
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query->where('status', 'published')
@@ -461,11 +422,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::where('type', $type)
-                                ->where('status', '=', 'published')
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
@@ -477,11 +433,6 @@ class PostController extends Controller
                         }
                     } else {
                         if ($char != null) {
-                            /* $posts = Post::where('title', 'LIKE', "{$char}%")
-                                ->where('status', '=', 'published')
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query
@@ -492,10 +443,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            //DEFAULT POSTS
-                            /* $posts = Post::whereLikedBy($user->id)
-                                ->where('status', '=', 'published')
-                                ->with('likeCounter')->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
@@ -511,15 +458,6 @@ class PostController extends Controller
                 if ($tag != null) {
                     if ($type != null) {
                         if ($char != null) {
-                            /* $posts = Post::withAnyTag($tag)
-                                ->where('status', '=', 'published')
-                                ->where('type', $type)
-                                ->where('title', 'LIKE', "{$char}%")
-                                ->whereLikedBy($user->id)
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) use ($char) {
@@ -533,14 +471,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::withAnyTag($tag)
-                                ->where('status', '=', 'published')
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
@@ -554,14 +484,6 @@ class PostController extends Controller
                         }
                     } else {
                         if ($char != null) {
-                            /* $posts = Post::withAnyTag($tag)
-                                ->where('status', '=', 'published')
-                                ->where('title', 'LIKE', "{$char}%")
-                                ->whereLikedBy($user->id)
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) use ($char) {
@@ -573,13 +495,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::withAnyTag($tag)
-                                ->where('status', '=', 'published')
-                                ->whereLikedBy($user->id)
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
@@ -594,14 +509,6 @@ class PostController extends Controller
                 } else {
                     if ($type != null) {
                         if ($char != null) {
-                            /* $posts = Post::where('type', $type)
-                                ->where('status', '=', 'published')
-                                ->where('title', 'LIKE', "{$char}%")
-                                ->whereLikedBy($user->id)
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query->where('status', 'published')
@@ -613,13 +520,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::where('type', $type)
-                                ->where('status', '=', 'published')
-                                ->whereLikedBy($user->id)
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
@@ -631,13 +531,6 @@ class PostController extends Controller
                         }
                     } else {
                         if ($char != null) {
-                            /* $posts = Post::where('title', 'LIKE', "{$char}%")
-                                ->where('status', '=', 'published')
-                                ->whereLikedBy($user->id)
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query
@@ -649,12 +542,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            //DEFAULT POSTS
-                            /* $posts = Post::whereLikedBy($user->id)
-                                ->where('status', '=', 'published')
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
@@ -671,13 +558,6 @@ class PostController extends Controller
                 if ($tag != null) {
                     if ($type != null) {
                         if ($char != null) {
-                            /* $posts = Post::withAnyTag($tag)
-                            ->where('status', '=', 'published')
-                            ->where('type', $type)
-                            ->where('title', 'LIKE', "{$char}%")
-                            ->whereLikedBy($user->id)
-                            ->with('likeCounter')
-                            ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) use ($char) {
@@ -689,12 +569,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::withAnyTag($tag)
-                            ->where('status', '=', 'published')
-                            ->where('type', $type)
-                            ->whereLikedBy($user->id)
-                            ->with('likeCounter')
-                            ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
@@ -707,12 +581,6 @@ class PostController extends Controller
                         }
                     } else {
                         if ($char != null) {
-                            /* $posts = Post::withAnyTag($tag)
-                            ->where('status', '=', 'published')
-                            ->where('title', 'LIKE', "{$char}%")
-                            ->whereLikedBy($user->id)
-                            ->with('likeCounter')
-                            ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) use ($char) {
@@ -723,11 +591,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::withAnyTag($tag)
-                            ->where('status', '=', 'published')
-                            ->whereLikedBy($user->id)
-                            ->with('likeCounter')
-                            ->get(); */
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
@@ -741,12 +604,6 @@ class PostController extends Controller
                 } else {
                     if ($type != null) {
                         if ($char != null) {
-                            /* $posts = Post::where('type', $type)
-                            ->where('status', '=', 'published')
-                            ->where('title', 'LIKE', "{$char}%")
-                            ->whereLikedBy($user->id)
-                            ->with('likeCounter')
-                            ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query->where('status', 'published')
@@ -757,11 +614,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            /* $posts = Post::where('type', $type)
-                            ->where('status', '=', 'published')
-                            ->whereLikedBy($user->id)
-                            ->with('likeCounter')
-                            ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
@@ -773,11 +625,6 @@ class PostController extends Controller
                         }
                     } else {
                         if ($char != null) {
-                            /* $posts = Post::where('title', 'LIKE', "{$char}%")
-                            ->where('status', '=', 'published')
-                            ->whereLikedBy($user->id)
-                            ->with('likeCounter')
-                            ->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query
@@ -788,10 +635,6 @@ class PostController extends Controller
                                 ->with('likeCounter')
                                 ->get();
                         } else {
-                            //DEFAULT POSTS
-                            /* $posts = Post::whereLikedBy($user->id)
-                            ->where('status', '=', 'published')
-                            ->with('likeCounter')->get(); */
                             $songs = Song::with(['post'])
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
@@ -804,39 +647,7 @@ class PostController extends Controller
                 }
                 break;
         }
-        //SWITCH ORDER THE POSTS
-        /* switch ($sort) {
-            case 'title':
-                $posts = $posts->sortBy('title');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
-                break;
-            case 'averageRating':
-                $posts = $posts->sortByDesc('averageRating');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
-            case 'view_count':
-                $posts = $posts->sortByDesc('view_count');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
-
-            case 'likeCount':
-                $posts = $posts->sortByDesc('likeCount');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
-                break;
-            case 'recent':
-                $posts = $posts->sortByDesc('created_at');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
-                break;
-
-            default:
-                $posts = $posts->sortByDesc('created_at');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
-                break;
-        } */
+        
         $songs = $this->sort($sort, $songs);
         $songs = $this->paginate($songs)->withQueryString();
         return view('public.posts.filter', compact('songs', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
@@ -903,11 +714,6 @@ class PostController extends Controller
         if ($tag != null) {
             if ($type != null) {
                 if ($char != null) {
-                    /* $posts = Post::withAnyTag($tag)
-                        ->where('status', '=', 'published')
-                        ->where('type', $type)
-                        ->where('title', 'LIKE', "{$char}%")
-                        ->get(); */
 
                     $songs = Song::with(['post'])
                         ->withAnyTag($tag)
@@ -918,10 +724,6 @@ class PostController extends Controller
                         ->where('type', $type)
                         ->get();
                 } else {
-                    /* $posts = Post::withAnyTag($tag)
-                        ->where('status', '=', 'published')
-                        ->where('type', $type)
-                        ->get(); */
                     $songs = Song::with(['post'])
                         ->withAnyTag($tag)
                         ->whereHas('post', function ($query) {
@@ -951,10 +753,6 @@ class PostController extends Controller
         } else {
             if ($type != null) {
                 if ($char != null) {
-                    /* $posts = Post::where('type', $type)
-                        ->where('status', '=', 'published')
-                        ->where('title', 'LIKE', "{$char}%")
-                        ->get(); */
                     $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) use ($char) {
                             $query->where('status', 'published')
@@ -963,9 +761,6 @@ class PostController extends Controller
                         ->where('type', $type)
                         ->get();
                 } else {
-                    /* $posts = Post::where('type', $type)
-                        ->where('status', '=', 'published')
-                        ->get(); */
                     $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
@@ -973,9 +768,6 @@ class PostController extends Controller
                 }
             } else {
                 if ($char != null) {
-                    /* $posts = Post::where('title', 'LIKE', "{$char}%")
-                        ->where('status', '=', 'published')
-                        ->get(); */
                     $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) use ($char) {
                             $query
@@ -983,7 +775,7 @@ class PostController extends Controller
                                 ->where('title', 'LIKE', "{$char}%");
                         })->get();
                 } else {
-                    /* $posts = Post::where('status', '=', 'published')->get(); */
+                    
                     $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
@@ -992,39 +784,7 @@ class PostController extends Controller
             }
         }
 
-        //SWITCH ORDER THE POSTS
-        /* switch ($sort) {
-            case 'title':
-                $posts = $posts->sortBy('title');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
-                break;
-            case 'averageRating':
-                $posts = $posts->sortByDesc('averageRating');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
-            case 'view_count':
-                $posts = $posts->sortByDesc('view_count');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
-
-            case 'likeCount':
-                $posts = $posts->sortByDesc('likeCount');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
-                break;
-            case 'recent':
-                $posts = $posts->sortByDesc('created_at');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
-                break;
-
-            default:
-                $posts = $posts->sortByDesc('created_at');
-                $posts = $this->paginate($posts)->withQueryString();
-                return view('public.posts.filter', compact('posts', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
-                break;
-        } */
+        
         $songs = $this->sort($sort, $songs);
         $songs = $this->paginate($songs)->withQueryString();
         return view('public.posts.filter', compact('songs', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format'));
@@ -1043,8 +803,7 @@ class PostController extends Controller
     {
         switch ($sort) {
             case 'title':
-                //$songs = $songs->sortBy('title');
-                //$posts = $this->paginate($posts)->withQueryString();
+                
                 $songs = $songs->sortBy(function ($song) {
                     return $song->post->title;
                 });
@@ -1052,27 +811,21 @@ class PostController extends Controller
                 break;
             case 'averageRating':
                 $songs = $songs->sortByDesc('averageRating');
-                //$posts = $this->paginate($posts)->withQueryString();
                 return $songs;
             case 'view_count':
                 $songs = $songs->sortByDesc('view_count');
-                //$posts = $this->paginate($posts)->withQueryString();
                 return $songs;
 
             case 'likeCount':
                 $songs = $songs->sortByDesc('likeCount');
-                //$posts = $this->paginate($posts)->withQueryString();
                 return $songs;
                 break;
             case 'recent':
                 $songs = $songs->sortByDesc('created_at');
-                //$posts = $this->paginate($posts)->withQueryString();
                 return $songs;
                 break;
 
             default:
-                //$songs = $songs->sortByDesc('created_at');
-                //$posts = $this->paginate($posts)->withQueryString();
                 $songs = $songs->sortBy(function ($song) {
                     return $song->post->title;
                 });
@@ -1124,9 +877,6 @@ class PostController extends Controller
                 ->get()
                 ->sortByDesc('averageRating')
                 ->take(100);
-
-
-            //dd($currentSeason, $op_count, $ed_count, $openings, $endings);
 
             return view('public.posts.ranking', compact('openings', 'endings', 'currentSeason', 'score_format'));
         }
