@@ -38,7 +38,7 @@ Route::get('/openings',       [PostController::class, 'openings'])->name('openin
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalRanking'])->name('seasonal.ranking');
 Route::get('/global-ranking',       [PostController::class, 'globalRanking'])->name('global.ranking');
-Route::get('/filter', [PostController::class, 'filter'])->name('filter');
+Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');

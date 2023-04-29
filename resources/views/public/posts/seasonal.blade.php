@@ -61,12 +61,9 @@
                             </h2>
                         </div>
                     @endif
-                    @if (Request::is('endings'))
+                    @if (Request::is('endings') && isset($currentSeason))
                         <div>
-                            <h2 class="text-light mb-0">Endings @isset($currentSeason)
-                                    {{ $currentSeason->name }}
-                                @endisset
-                            </h2>
+                            <h2 class="text-light mb-0">Endings {{ $currentSeason->name }}</h2>
                         </div>
                     @endif
 
@@ -105,32 +102,7 @@
                                     <div class="tarjeta-footer text-light">
                                         <span>{{ $song->likeCount }} <i class="fa fa-heart"></i></span>
                                         <span>{{ $song->view_count }} <i class="fa fa-eye"></i></span>
-                                        <span>
-                                            @if (isset($score_format))
-                                                @switch($score_format)
-                                                    @case('POINT_100')
-                                                        {{ round($song->averageRating) }}
-                                                    @break
-
-                                                    @case('POINT_10_DECIMAL')
-                                                        {{ round($song->averageRating / 10, 1) }}
-                                                    @break
-
-                                                    @case('POINT_10')
-                                                        {{ round($song->averageRating / 10) }}
-                                                    @break
-
-                                                    @case('POINT_5')
-                                                        {{ round($song->averageRating / 20) }}
-                                                    @break
-
-                                                    @default
-                                                        {{ round($song->averageRating) }}
-                                                @endswitch
-                                            @else
-                                                {{ round($song->averageRating / 10, 1) }}
-                                            @endif
-                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        <span>{{$song->score != null ? $song->score : 'n/a'}} <i class="fa fa-star" aria-hidden="true"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -148,13 +120,13 @@
                                 <span>Seasons</span>
                             </div>
                             <div>
-                                <a href="{{ route('filter') }}" class="btn btn-sm color4">More</a>
+                                <a href="{{ route('themes') }}" class="btn btn-sm color4">More</a>
                             </div>
                         </div>
                         <div class="seasons-content">
                             @foreach ($tags as $item)
                                 <article class="season-item color4">
-                                    <span><a href="{{ route('filter', 'tag=' . str_replace(' ', '+', $item->name)) }}"
+                                    <span><a href="{{ route('themes', 'tag=' . str_replace(' ', '+', $item->name)) }}"
                                             class="no-deco text-light">{{ $item->name }}</a></span>
                                 </article>
                             @endforeach
@@ -191,37 +163,12 @@
                                     </div>
                                     <div class="item-info-seasonal">
                                         <div class="item-post-info-seasonal">
-                                            <a href="{{ route('song.show', [$song->post->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
+                                            <a href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
                                                 class="text-light no-deco">{{ $song->post->title }}</a>
                                         </div>
                                     </div>
                                     <div class="item-score-seasonal">
-                                        <span>
-                                            @if (isset($score_format))
-                                                @switch($score_format)
-                                                    @case('POINT_100')
-                                                        {{ round($song->averageRating) }}
-                                                    @break
-
-                                                    @case('POINT_10_DECIMAL')
-                                                        {{ round($song->averageRating / 10, 1) }}
-                                                    @break
-
-                                                    @case('POINT_10')
-                                                        {{ round($song->averageRating / 10) }}
-                                                    @break
-
-                                                    @case('POINT_5')
-                                                        {{ round($song->averageRating / 20) }}
-                                                    @break
-
-                                                    @default
-                                                        {{ round($song->averageRating) }}
-                                                @endswitch
-                                            @else
-                                                {{ round($song->averageRating / 10, 1) }}
-                                            @endif
-                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        <span>{{$song->score != null ? $song->score : 'n/a'}} <i class="fa fa-star" aria-hidden="true"></i>
                                         </span>
                                     </div>
                                 </article>

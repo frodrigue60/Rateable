@@ -28,7 +28,7 @@
             </div>
             <div class="modal-footer justify-content-center customModal">
                 <div class="d-flex">
-                    <a href="{{ route('filter') }}" class="btn btn-primary color3">More
+                    <a href="{{ route('themes') }}" class="btn btn-primary color3">More
                         options</a>
                 </div>
             </div>

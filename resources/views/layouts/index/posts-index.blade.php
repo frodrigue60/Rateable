@@ -28,32 +28,7 @@
                         <div class="tarjeta-footer text-light">
                             <span>{{ $song->likeCount }} <i class="fa fa-heart"></i></span>
                             <span>{{ $song->view_count }} <i class="fa fa-eye"></i></span>
-                            <span>
-                                @if (isset($score_format))
-                                    @switch($score_format)
-                                        @case('POINT_100')
-                                            {{ round($song->averageRating) }}
-                                        @break
-
-                                        @case('POINT_10_DECIMAL')
-                                            {{ round($song->averageRating / 10, 1) }}
-                                        @break
-
-                                        @case('POINT_10')
-                                            {{ round($song->averageRating / 10) }}
-                                        @break
-
-                                        @case('POINT_5')
-                                            {{ round($song->averageRating / 20) }}
-                                        @break
-
-                                        @default
-                                            {{ round($song->averageRating) }}
-                                    @endswitch
-                                @else
-                                    {{ round($song->averageRating / 10, 1) }}
-                                @endif
-                                <i class="fa fa-star" aria-hidden="true"></i>
+                            <span>{{$song->score != null ? $song->score : 'n/a'}} <i class="fa fa-star" aria-hidden="true"></i>
                             </span>
                         </div>
                     </div>
@@ -89,33 +64,7 @@
                         <div class="tarjeta-footer text-light">
                             <span>{{ $song->likeCount }} <i class="fa fa-heart"></i></span>
                             <span>{{ $song->view_count }} <i class="fa fa-eye"></i></span>
-                            <span>
-                                @if (isset($score_format))
-                                    @switch($score_format)
-                                        @case('POINT_100')
-                                            {{ round($song->averageRating) }}
-                                        @break
-
-                                        @case('POINT_10_DECIMAL')
-                                            {{ round($song->averageRating / 10, 1) }}
-                                        @break
-
-                                        @case('POINT_10')
-                                            {{ round($song->averageRating / 10) }}
-                                        @break
-
-                                        @case('POINT_5')
-                                            {{ round($song->averageRating / 20) }}
-                                        @break
-
-                                        @default
-                                            {{ round($song->averageRating) }}
-                                    @endswitch
-                                @else
-                                    {{ round($song->averageRating / 10, 1) }}
-                                @endif
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                            </span>
+                            <span>{{$song->score != null ? $song->score : 'n/a'}} <i class="fa fa-star" aria-hidden="true"></i></span>
                         </div>
                     </div>
                 </article>

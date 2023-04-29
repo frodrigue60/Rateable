@@ -61,8 +61,7 @@
             <div class="card-video card ">
                 <div class="card-body ratio ratio-16x9" id="id_iframe">
                     @if ($song->video_src != null)
-                        <iframe src="{{ asset('/storage/videos/' . $song->video_src) }}" frameborder="0" type="video/webm"
-                            controls="" autoplay=""></iframe>
+                        <iframe src="{{ asset('/storage/videos/' . $song->video_src) }}" frameborder="0" type="video/webm"></iframe>
                     @else
                         {!! $song->ytlink !!}
                     @endif
@@ -84,7 +83,7 @@
             <div class="all-buttons-container">
                 <div class="buttons-container">
                     <div class="button-cont">
-                        <button class="buttons-bottom">{{ $score }} <i class="fa fa-star" aria-hidden="true"
+                        <button class="buttons-bottom">{{ $score != null ? $score : 'n/a' }} <i class="fa fa-star" aria-hidden="true"
                                 style="color: rgb(240, 188, 43)"></i>
                         </button>
                     </div>

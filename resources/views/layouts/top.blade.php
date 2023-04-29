@@ -47,28 +47,6 @@
                             }
                         }
                     }
-                    
-                    $score = null;
-                    
-                    switch ($score_format) {
-                        case 'POINT_100':
-                            $score = round($song->averageRating);
-                            break;
-                        case 'POINT_10_DECIMAL':
-                            $score = round($song->averageRating / 10, 1);
-                            break;
-                        case 'POINT_10':
-                            $score = round($song->averageRating / 10);
-                            break;
-                        case 'POINT_5':
-                            $score = round($song->averageRating / 20);
-                            break;
-                    
-                        default:
-                            $score = round($song->averageRating);
-                            break;
-                    }
-                    
                     $img_url = null;
                     if ($song->post->banner != null) {
                         $img_url = asset('/storage/anime_banner/' . $song->post->banner);
@@ -109,7 +87,7 @@
                     </div>
 
                     <div class="item-score">
-                        <span>{{ $score != null ? $score : '0' }} <i class="fa fa-star" aria-hidden="true"></i></span>
+                        <span>{{ $song->score != null ? $song->score : 'n/a' }} <i class="fa fa-star" aria-hidden="true"></i></span>
                     </div>
                 </div>
             @endisset
@@ -163,27 +141,6 @@
                         }
                     }
                     
-                    $score = null;
-                    
-                    switch ($score_format) {
-                        case 'POINT_100':
-                            $score = round($song->averageRating);
-                            break;
-                        case 'POINT_10_DECIMAL':
-                            $score = round($song->averageRating / 10, 1);
-                            break;
-                        case 'POINT_10':
-                            $score = round($song->averageRating / 10);
-                            break;
-                        case 'POINT_5':
-                            $score = round($song->averageRating / 20);
-                            break;
-                    
-                        default:
-                            $score = round($song->averageRating);
-                            break;
-                    }
-                    
                     $img_url = null;
                     if ($song->post->banner != null) {
                         $img_url = asset('/storage/anime_banner/' . $song->post->banner);
@@ -224,7 +181,7 @@
                     </div>
 
                     <div class="item-score">
-                        <span>{{ $score != null ? $score : '0' }} <i class="fa fa-star" aria-hidden="true"></i></span>
+                        <span>{{ $song->score != null ? $song->score : 'n/a' }} <i class="fa fa-star" aria-hidden="true"></i></span>
                     </div>
                 </div>
             @endisset

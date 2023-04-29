@@ -57,18 +57,21 @@ class SongController extends Controller
         //dd($song);
         $comments = Comment::with('user', 'likeCounter')
             ->where('rateable_id', '=', $id)
+            ->where('comment', '!=', "")
             ->latest()
             ->limit(10)
             ->get();
 
         $comments_featured = Comment::with('user', 'likeCounter')
             ->where('rateable_id', '=', $id)
+            ->where('comment', '!=', "")
             ->get()
             ->sortByDesc('likeCount')
             ->take(3);
 
-        if (Auth::check()) {
-            
+
+        if (Auth::check() == true && $song->averageRating == true) {
+
             switch (Auth::user()->score_format) {
                 case 'POINT_100':
                     $score = round($song->averageRating);
@@ -87,11 +90,11 @@ class SongController extends Controller
                     break;
 
                 default:
-                    $score = round($song->averageRating/10);
+                    $score = round($song->averageRating / 10);
                     break;
             }
         } else {
-            $score = round($song->averageRating/10);
+            $score = null;
         }
         if (isset($song->artist->id)) {
             $artist = Artist::find($song->artist->id);

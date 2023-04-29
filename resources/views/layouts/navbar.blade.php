@@ -27,7 +27,7 @@
                         <li><a class="dropdown-item"
                                 href="{{ route('animes') }}">Animes</a></li>
                         <li><a class="dropdown-item"
-                                href="{{ route('filter') }}">Openings & Endings</a></li>
+                                href="{{ route('themes') }}">Openings & Endings</a></li>
                     </ul>
                 </li>
                 @auth
