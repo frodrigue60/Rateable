@@ -123,10 +123,8 @@ class PostController extends Controller
         $posts = $posts->sortBy(function ($post) {
             return $post->title;
         });
-        $songs = $posts;
 
-        $posts = $this->paginate($songs)->withQueryString();
-        //$posts = $songs;
+        $posts = $this->paginate($posts)->withQueryString();
 
         return view('public.posts.filter', compact('posts', 'tags', 'characters', 'requested'));
     }
@@ -549,7 +547,7 @@ class PostController extends Controller
                                         ->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
-                                ->join('ratings', 'posts.id', '=', 'ratings.rateable_id')
+                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
                                 ->with('likeCounter')
                                 ->get();
@@ -562,7 +560,7 @@ class PostController extends Controller
                                 ->where('ratings.user_id', '=', $user->id)
                                 ->with('likeCounter')
                                 ->get();
-                        //dd($songs);
+                            //dd($songs);
                         }
                     }
                 }
@@ -663,7 +661,7 @@ class PostController extends Controller
 
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs)->withQueryString();
+        $songs = $this->paginate($songs)->withQueryString();    
         //dd($songs);
         return view('public.songs.filter', compact('songs', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
     }
@@ -798,19 +796,13 @@ class PostController extends Controller
                 }
             }
         }
-        
+
 
         $songs = $this->setScore($songs, $score_format);
         //dd($songs);
         $songs = $this->sort($sort, $songs);
         $songs = $this->paginate($songs)->withQueryString();
         //dd($songs);
-        if ($request->ajax()) {
-            $view = view('public.songs.songs-cards', compact('songs'))->render();
-            $output = new ConsoleOutput();
-            $output->writeln("new request");
-            return response()->json(['html' => $view,'lastPage' => $songs->lastPage()]);
-        }
         return view('public.songs.filter', compact('songs', 'tags', 'requested', 'sortMethods', 'types', 'characters'));
     }
     public function setScore($songs, $score_format)
@@ -859,7 +851,7 @@ class PostController extends Controller
         return $songs;
     }
 
-    public function paginate($songs, $perPage = 15, $page = null, $options = [])
+    public function paginate($songs, $perPage = 18, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();
         $options = ['path' => Paginator::resolveCurrentPath()];
@@ -967,14 +959,17 @@ class PostController extends Controller
             ->get();
 
         $openings = $getOpenings->sortByDesc('averageRating')->take(100);
-        $this->setScore($openings,$score_format);
+        $openings = $this->setScore($openings, $score_format);
+        //$openings = $this->paginate($openings, 10)->withQueryString();
 
         $getEndings = Song::with(['post'])
             ->where('type', 'ED')
             ->get();
 
         $endings = $getEndings->sortByDesc('averageRating')->take(100);
-        $this->setScore($endings,$score_format);
+        $endings = $this->setScore($endings, $score_format);
+        //$endings = $this->paginate($endings, 10)->withQueryString();
+        //dd($openings,$endings);
 
         return view('public.posts.ranking', compact('openings', 'endings',  'score_format'));
     }

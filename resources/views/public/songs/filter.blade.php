@@ -117,7 +117,7 @@
                 </div>
             </aside>
             {{-- POSTS --}}
-            <section>
+            <section class="text-light">
                 <div class="contenedor-tarjetas-filtro" id="post-data">
                     @include('public.songs.songs-cards')
                 </div>
@@ -125,44 +125,17 @@
                 margin-top: 10px;">
                     {{ $songs->links() }}
                 </div> --}}
-                
+
             </section>
         </div>
     </div>
-    @if (Request::routeIs('themes'))
-        <script type="text/javascript">
-            let page = 1;
 
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset + window.innerHeight >= document.documentElement.scrollHeight) {
-                    page++;
-                    loadMoreData(page);
-                }
-            });
 
-            function loadMoreData(page) {
-                fetch('http://127.0.0.1:8000/themes' + '?page=' + page, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        
-                        if (data.html == " ") {
-                            console.log("No data from the backend");
-                            return;
-                        }
-                        console.log(data);
-                        document.querySelector("#post-data").innerHTML += data.html;
-
-                    })
-                    .catch(error => console.log(error));
-            }
-        </script>
-    @endif
+@endsection
 @section('script')
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+    
+    
+          <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
@@ -175,5 +148,4 @@
             $("#chzn-char").chosen();
         });
     </script>
-@endsection
 @endsection

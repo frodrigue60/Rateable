@@ -31,7 +31,7 @@
                             @foreach ($tags as $tag)
                                 <tr>
                                     <td>{{ $tag->id }}</td>
-                                    <td><a href="{{ route('filter', 'tag=' . str_replace(' ', '+', $tag->name)) }}"
+                                    <td><a href="{{ route('animes', 'tag=' . str_replace(' ', '+', $tag->name)) }}"
                                             class="no-deco">{{ $tag->name }}</a>
                                     </td>
                                     <td>{{ $tag->slug }}</td>

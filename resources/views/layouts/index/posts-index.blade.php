@@ -4,14 +4,14 @@
             <h2 class="text-light mb-0">Most Pupular</h2>
         </div>
         <div>
-            <a href="{{ route('filter', 'sort=likeCount') }}" class="btn btn-sm color4">Most Popular</a>
+            <a href="{{ route('themes', 'sort=likeCount') }}" class="btn btn-sm color4">Most Popular</a>
         </div>
     </div>
     {{-- POPULAR POSTS --}}
     <section class="contenedor-tarjetas-main">
         @foreach ($popular->take(14) as $song)
             @isset($song->post)
-                <article class="tarjeta">
+                {{-- <article class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
@@ -32,7 +32,8 @@
                             </span>
                         </div>
                     </div>
-                </article>
+                </article> --}}
+                @include('layouts.song-card')
             @endisset
         @endforeach
     </section>
@@ -41,14 +42,14 @@
             <h2 class="text-light mb-0">Most Viewed</h2>
         </div>
         <div>
-            <a href="{{ route('filter', 'sort=view_count') }}" class="btn btn-sm color4">Most Viewed</a>
+            <a href="{{ route('themes', 'sort=view_count') }}" class="btn btn-sm color4">Most Viewed</a>
         </div>
     </div>
     {{-- MOST VIEWED --}}
     <section class="contenedor-tarjetas-main">
         @foreach ($viewed->take(14) as $song)
             @isset($song->post)
-                <article class="tarjeta">
+                {{-- <article class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
                             <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
@@ -67,7 +68,8 @@
                             <span>{{$song->score != null ? $song->score : 'n/a'}} <i class="fa fa-star" aria-hidden="true"></i></span>
                         </div>
                     </div>
-                </article>
+                </article> --}}
+                @include('layouts.song-card')
             @endisset
         @endforeach
     </section>

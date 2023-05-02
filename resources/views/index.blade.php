@@ -29,15 +29,85 @@
 @endsection
 @section('content')
     <section class="container">
-        
+
         {{-- TOP SECTION --}}
         <section class="contenedor-main">
-            @include('layouts.top')
+            <div class="container-top">
+                <section class="container-items limit-items-index">
+                    @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
+                        <h2 hidden class="text-light">Best Anime Openings of All Time</h2>
+                    @else
+                        @if (Request::routeIs('seasonal.ranking') && isset($currentSeason))
+                            <h2 hidden>Top Anime Openings {{ $currentSeason->name }}</h2>
+                        @endif
+                    @endif
+                    <div class="top-header-ranking">
+                        <div>
+                            <span>Top Openings</span>
+                        </div>
+                        <div>
+                            @if (Request::routeIs('/'))
+
+                                <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Ranking</a>
+                            @else
+                                @if (Request::routeIs('global.ranking'))
+                                    <a href="{{ route('seasonal.ranking') }}" class="btn btn-sm color4">Seasonal Ranking</a>
+                                @else
+                                    @if (Request::routeIs('seasonal.ranking'))
+                                        <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Global Ranking</a>
+                                    @endif
+                                @endif
+                            @endif
+                        </div>
+
+
+                    </div>
+                    @php
+                        $j = 1;
+                    @endphp
+                    @include('layouts.top.openings')
+                </section>
+
+                <section class="container-items limit-items-index">
+                    @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
+                        <h2 hidden class="text-light">Best Anime Endings of All Time</h2>
+                    @else
+                        @if (Request::routeIs('seasonal.ranking') && isset($currentSeason))
+                            <h2 hidden>Top Anime Endings {{ $currentSeason->name }}</h2>
+                        @endif
+                    @endif
+                    <div class="top-header-ranking">
+                        <div>
+                            <span>Top Endings</span>
+                        </div>
+                        <div>
+                            @if (Request::routeIs('/'))
+
+                                <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Ranking</a>
+                            @else
+                                @if (Request::routeIs('global.ranking'))
+                                    <a href="{{ route('seasonal.ranking') }}" class="btn btn-sm color4">Seasonal
+                                        Ranking</a>
+                                @else
+                                    @if (Request::routeIs('seasonal.ranking'))
+                                        <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Global
+                                            Ranking</a>
+                                    @endif
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+                    @php
+                        $j = 1;
+                    @endphp
+                    @include('layouts.top.endings')
+                </section>
+            </div>
         </section>
-        
+
         {{-- POSTS SECTION --}}
         @include('layouts.index.recents-carousel')
         @include('layouts.index.posts-index')
-        
+
     </section>
 @endsection

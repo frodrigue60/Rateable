@@ -59,6 +59,115 @@
                 <h1 class="text-center text-light">Ranking Openings & Endings {{ $currentSeason->name }}</h1>
             @endif
         @endif
-        @include('layouts.top')
+        <div class="container-top">
+            <section class="container-items" id="openings">
+                @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
+                    <h2 hidden class="text-light">Best Anime Openings of All Time</h2>
+                @else
+                    @if (Request::routeIs('seasonal.ranking') && isset($currentSeason))
+                        <h2 hidden>Top Anime Openings {{ $currentSeason->name }}</h2>
+                    @endif
+                @endif
+                <div class="top-header-ranking">
+                    <div>
+                        <span>Top Openings</span>
+                    </div>
+                    <div>
+                        @if (Request::routeIs('/'))
+
+                            <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Ranking</a>
+                        @else
+                            @if (Request::routeIs('global.ranking'))
+                                <a href="{{ route('seasonal.ranking') }}" class="btn btn-sm color4">Seasonal Ranking</a>
+                            @else
+                                @if (Request::routeIs('seasonal.ranking'))
+                                    <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Global Ranking</a>
+                                @endif
+                            @endif
+                        @endif
+                    </div>
+
+
+                </div>
+                @include('layouts.top.openings')
+            </section>
+            {{-- ENDINGS --}}
+            <section class="container-items">
+                @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
+                    <h2 hidden class="text-light">Best Anime Endings of All Time</h2>
+                @else
+                    @if (Request::routeIs('seasonal.ranking') && isset($currentSeason))
+                        <h2 hidden>Top Anime Endings {{ $currentSeason->name }}</h2>
+                    @endif
+                @endif
+                <div class="top-header-ranking">
+                    <div>
+                        <span>Top Endings</span>
+                    </div>
+                    <div>
+                        @if (Request::routeIs('/'))
+
+                            <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Ranking</a>
+                        @else
+                            @if (Request::routeIs('global.ranking'))
+                                <a href="{{ route('seasonal.ranking') }}" class="btn btn-sm color4">Seasonal Ranking</a>
+                            @else
+                                @if (Request::routeIs('seasonal.ranking'))
+                                    <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Global Ranking</a>
+                                @endif
+                            @endif
+                        @endif
+                    </div>
+                </div>
+                @include('layouts.top.endings')
+            </section>
+        </div>
+
     </div>
+
 @endsection
+{{-- @section('script')
+    @if (Request::routeIs('global.ranking'))
+        <script type="text/javascript">
+            let pageOp = 1;
+            let lastPageOp = undefined;
+
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset + window.innerHeight >= document.documentElement.scrollHeight) {
+                    console.log("Scrolled");
+                    if (lastPageOp != undefined) {
+                        if (pageOp <= lastPageOp) {
+                            pageOp++;
+                            loadMoreData(pageOp);
+                        }
+                    } else {
+                        pageOp++;
+                        loadMoreData(pageOp);
+                    }
+                }
+            });
+
+            function loadMoreData(pageOp) {
+                fetch('http://127.0.0.1:8000/global-ranking' + '?openings_page=' + pageOp, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.openings == " ") {
+                            console.log("No data from the backend");
+                            lastPageOp = 1;
+                            return;
+                        }
+                        console.log("new request");
+                        console.log(data);
+                        lastPageOp = data.lastPageOp;
+                        document.querySelector("#openings").innerHTML += data.openings;
+
+                    })
+                    .catch(error => console.log(error));
+            }
+        </script>
+    @endif
+@endsection --}}

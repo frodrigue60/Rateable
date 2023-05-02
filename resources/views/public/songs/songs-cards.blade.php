@@ -11,7 +11,7 @@
             <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
                 <span class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
             </div>
-            <a class="no-deco" href="{{ $url }}">
+            <a class="no-deco" target="blank_" href="{{ $url }}">
                 <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $song->post->title }}"
                     title="{{ $song->post->title }}">
             </a>

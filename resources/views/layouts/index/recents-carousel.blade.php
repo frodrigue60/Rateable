@@ -6,7 +6,7 @@
                 <h2 class="text-light mb-0">Recently added</h2>
             </div>
             <div>
-                <a href="{{ route('filter', 'sort=recent') }}" class="btn btn-sm color4">All Recently Posts</a>
+                <a href="{{ route('themes', 'sort=recent') }}" class="btn btn-sm color4">All Recently Posts</a>
             </div>
         </div>
         <div class="owl-carousel carousel-recents-main">

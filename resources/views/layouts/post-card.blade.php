@@ -7,7 +7,7 @@
             <span
                 class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
         </div> --}}
-        <a class="no-deco"
+        <a class="no-deco" target="blank_"
             href="{{ route('post.show', [$post->id, $post->slug]) }}">
             <img class="thumb" loading="lazy"
                 src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
