@@ -486,11 +486,12 @@ class PostController extends Controller
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
                                 })
-                                ->where('type', $type)
+                                ->where('type','=', $type)
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
                                 ->with('likeCounter')
                                 ->get();
+                            
                         }
                     } else {
                         if ($char != null) {
@@ -534,10 +535,12 @@ class PostController extends Controller
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
                                 })
+                                ->where('type',$type)
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
                                 ->with('likeCounter')
                                 ->get();
+                        //dd($songs);
                         }
                     } else {
                         if ($char != null) {
@@ -799,7 +802,6 @@ class PostController extends Controller
 
 
         $songs = $this->setScore($songs, $score_format);
-        //dd($songs);
         $songs = $this->sort($sort, $songs);
         $songs = $this->paginate($songs)->withQueryString();
         //dd($songs);

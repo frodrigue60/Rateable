@@ -70,75 +70,15 @@
                 <div class="contenedor-tarjetas-filtro" id="post-data">
                     @include('public.posts.posts-cards')
                 </div>
-                {{-- <div style="display: flex;justify-content: center;
+                <div style="display: flex;justify-content: center;
                 margin-top: 10px;">
                     {{ $posts->links() }}
-                </div> --}}
+                </div>
             </section>
         </div>
     </div>
 @endsection
 @section('script')
-    @if (Request::routeIs('animes'))
-        <script type="text/javascript">
-            let page = 1;
-            let lastPage = undefined;
-            let currentUrl = undefined;
-            let pageName = undefined;
-            let retryFetch = true;
-
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset + window.innerHeight >= document.documentElement.scrollHeight) {
-                    currentUrl = window.location.href;
-                    //console.log("Scrolled");
-                    if (lastPage != undefined) {
-                        if (page > 1) {
-                            page++;
-                            loadMoreData(page);
-                        } else {
-                            console.log("Limit reached");
-                        }
-                    } else {
-                        
-                            page++;
-                            loadMoreData(page);
-                        
-                    }
-                }
-            });
-
-            if (currentUrl === 'http://127.0.0.1:8000/animes') {
-                pageName = '?page=';
-            } else {
-                pageName = '&page=';
-            }
-
-            function loadMoreData(page) {
-                console.log("fetch to: " + currentUrl + pageName + page);
-                if (retryFetch == true) {
-                    fetch(currentUrl + pageName + page, {
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest'
-                            }
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.html == "") {
-                                retryFetch = false;
-                                console.log("No data from the backend");
-                                return;
-                            }
-                            console.log("new request");
-                            console.log(data);
-                            lastPage = data.lastPage;
-                            document.querySelector("#post-data").innerHTML += data.html;
-
-                        })
-                        .catch(error => console.log(error));
-                }
-            }
-        </script>
-    @endif
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>

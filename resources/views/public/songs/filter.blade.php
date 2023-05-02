@@ -121,11 +121,10 @@
                 <div class="contenedor-tarjetas-filtro" id="post-data">
                     @include('public.songs.songs-cards')
                 </div>
-                {{-- <div style="display: flex;justify-content: center;
+                <div style="display: flex;justify-content: center;
                 margin-top: 10px;">
                     {{ $songs->links() }}
-                </div> --}}
-
+                </div>
             </section>
         </div>
     </div>
