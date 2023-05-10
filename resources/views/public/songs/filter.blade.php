@@ -20,8 +20,10 @@
     @if (Request::routeIs('user.list') || Request::routeIs('favorites'))
         @include('layouts.userBanner')
     @endif
-    <div class="container">
+    <div class="container text-light">
+        <div id="log">
 
+        </div>
         @if (Request::routeIs('themes'))
             <div class="top-header color1 mb-1 mt-1">
                 <h2 class="text-light mb-0">Filter Themes</h2>
@@ -121,10 +123,11 @@
                 <div class="contenedor-tarjetas-filtro" id="post-data">
                     @include('public.songs.songs-cards')
                 </div>
-                <div style="display: flex;justify-content: center;
+                {{-- PAGINATOR --}}
+                {{-- <div style="display: flex;justify-content: center;
                 margin-top: 10px;">
                     {{ $songs->links() }}
-                </div>
+                </div> --}}
             </section>
         </div>
     </div>
@@ -132,9 +135,142 @@
 
 @endsection
 @section('script')
-    
-    
-          <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+    {{-- FAVORITES --}}
+    @if (Request::routeIs('favorites'))
+    <script>
+        let currentUrl = window.location.href;
+        let pageName = undefined;
+        let page = 1;
+        let lastPage = undefined;
+
+        window.addEventListener("scroll", function() {
+            if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
+
+                if (lastPage == undefined) {
+                    page++;
+                    loadMoreData(page);
+                } else {
+                    if (page <= lastPage) {
+                        page++;
+                        loadMoreData(page);
+                    }
+                }
+            }
+        });
+
+        function loadMoreData(page) {
+            let urlParams = new URLSearchParams(window.location.search);
+
+            if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
+                urlParams.has('char')) {
+                pageName = "&page=";
+            } else {
+                pageName = "?page=";
+            }
+
+            url = currentUrl + pageName + page;
+            console.log("fetch to: " + url);
+
+            fetch(url, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        lastPage = 0;
+                        //console.log(response.status);
+                        return;
+                    }else{
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    if (data.html === "") {
+                        lastPage = 0;
+                        //console.log("No data from backend");
+                        return;
+                    } else {
+                        //console.log(data);
+                        lastPage = data.lastPage;
+                        document.querySelector("#post-data").innerHTML += data.html;
+                    }
+                })
+                .catch(error => console.error(error));
+        }
+    </script>
+    @endif
+    {{-- USER LIST --}}
+    @if (Request::routeIs('user.list'))
+        <script>
+            let currentUrl = window.location.href;
+            let pageName = undefined;
+            let page = 1;
+            let lastPage = undefined;
+
+            window.addEventListener("scroll", function() {
+                if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
+
+                    if (lastPage == undefined) {
+                        page++;
+                        loadMoreData(page);
+                    } else {
+                        if (page <= lastPage) {
+                            page++;
+                            loadMoreData(page);
+                        }
+                    }
+                }
+            });
+
+            function loadMoreData(page) {
+                let urlParams = new URLSearchParams(window.location.search);
+
+                if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
+                    urlParams.has('char')) {
+                    pageName = "&page=";
+                } else {
+                    pageName = "?page=";
+                }
+
+                url = currentUrl + pageName + page;
+                console.log("fetch to: " + url);
+
+                fetch(url, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            lastPage = 0;
+                            //console.log(response.status);
+                            return;
+                        }else{
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        if (data.html === "") {
+                            lastPage = 0;
+                            //console.log("No data from backend");
+                            return;
+                        } else {
+                            //console.log(data);
+                            lastPage = data.lastPage;
+                            document.querySelector("#post-data").innerHTML += data.html;
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+        </script>
+    @endif
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">

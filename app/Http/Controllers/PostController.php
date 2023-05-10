@@ -468,43 +468,49 @@ class PostController extends Controller
                 if ($tag != null) {
                     if ($type != null) {
                         if ($char != null) {
-                            $songs = Song::with(['post'])
+                            /* ONLY RATED, HAS TYPE, HAS SEASON */
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
                                 ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) use ($char) {
+                                ->with(['post' => function ($query) use ($char) {
                                     $query->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
-                                })
+                                }])
                                 ->where('type', $type)
-                                ->whereLikedBy($user->id)
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
+                                ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
+                                //->with('likeCounter')
+                                //->with('post')
                                 ->get();
+                                //dd($songs);
                         } else {
-                            $songs = Song::with(['post'])
+                            /* ONLY RATED, TYPE, SEASON */
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
                                 ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) {
+                                ->with(['post' => function ($query) {
                                     $query->where('status', 'published');
-                                })
-                                ->where('type','=', $type)
+                                }])
+                                ->where('type', $type)
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
+                                ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
+                                //->with('likeCounter')
                                 ->get();
-                            
                         }
                     } else {
                         if ($char != null) {
-                            $songs = Song::with(['post'])
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
+                                ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
+                                //->with('likeCounter')
                                 ->get();
+                                
                         } else {
                             $songs = Song::with(['post'])
                                 ->withAnyTag($tag)
@@ -513,55 +519,64 @@ class PostController extends Controller
                                 })
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
+                                //->with('likeCounter')
                                 ->get();
                         }
                     }
                 } else {
                     if ($type != null) {
                         if ($char != null) {
-                            $songs = Song::with(['post'])
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
                                 ->where('type', $type)
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
+                                ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
+                                //->with('likeCounter')
                                 ->get();
                         } else {
-                            $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) {
+                            /* ONLY RATED, TYPE */
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
+                                ->with(['post' => function ($query) {
                                     $query->where('status', 'published');
-                                })
-                                ->where('type',$type)
+                                }])
+                                ->where('type', $type)
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
+                                ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
+                                //->with('likeCounter')
                                 ->get();
-                        //dd($songs);
+
+                            //dd($songs);
                         }
                     } else {
                         if ($char != null) {
-                            $songs = Song::with(['post'])
+                            /* ONLY RATED, CHAR SELECT */
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
                                 ->whereHas('post', function ($query) use ($char) {
                                     $query
                                         ->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
+                                ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
+                                //->with('likeCounter')
                                 ->get();
+                                //dd($songs);
                         } else {
-                            $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) {
+                            /* ONLY RATED */
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
+                                ->with(['post' => function ($query) {
                                     $query->where('status', 'published');
-                                })
+                                }])
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
+                                ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
+                                //->with('likeCounter')
                                 ->get();
                             //dd($songs);
                         }
@@ -664,7 +679,14 @@ class PostController extends Controller
 
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs)->withQueryString();    
+        $songs = $this->paginate($songs)->withQueryString();
+
+        //dd($songs);
+        if ($request->ajax()) {
+            //error_log('new ajax request');
+            $view = view('public.songs.songs-cards', compact('songs'))->render();
+            return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
+        }
         //dd($songs);
         return view('public.songs.filter', compact('songs', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
     }
