@@ -512,12 +512,13 @@ class PostController extends Controller
                                 ->get();
                                 
                         } else {
-                            $songs = Song::with(['post'])
+                                $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
                                 })
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
+                                ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
                                 //->with('likeCounter')
                                 ->get();
