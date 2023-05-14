@@ -482,7 +482,7 @@ class PostController extends Controller
                                 //->with('likeCounter')
                                 //->with('post')
                                 ->get();
-                                //dd($songs);
+                            //dd($songs);
                         } else {
                             /* ONLY RATED, TYPE, SEASON */
                             $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
@@ -510,9 +510,8 @@ class PostController extends Controller
                                 ->where('ratings.user_id', '=', $user->id)
                                 //->with('likeCounter')
                                 ->get();
-                                
                         } else {
-                                $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
@@ -567,7 +566,7 @@ class PostController extends Controller
                                 ->where('ratings.user_id', '=', $user->id)
                                 //->with('likeCounter')
                                 ->get();
-                                //dd($songs);
+                            //dd($songs);
                         } else {
                             /* ONLY RATED */
                             $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
@@ -689,7 +688,7 @@ class PostController extends Controller
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
         //dd($songs);
-        return view('public.songs.filter', compact('songs', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+        return view('public.songs.filter', compact(/* 'songs', */ 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
     }
 
     public function likePost($id)

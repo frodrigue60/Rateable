@@ -39,13 +39,13 @@
             <aside>
                 <div class="searchPanel">
                     @if (Request::routeIs('favorites'))
-                        <form action="{{ route('favorites') }}" method="get">
+                        <form id="myForm" action="{{ route('favorites') }}" method="get">
                     @endif
                     @if (Request::routeIs('themes'))
-                        <form action="{{ route('themes') }}" method="get">
+                        <form id="myForm" action="{{ route('themes') }}" method="get">
                     @endif
                     @if (Request::routeIs('user.list'))
-                        <form action="{{ route('user.list', $user->id) }}" method="get">
+                        <form id="myForm" action="{{ route('user.list', $user->id) }}" method="get">
                     @endif
                     @if (Request::routeIs('favorites') || Request::routeIs('user.list'))
                         {{-- FILTER BY --}}
@@ -120,8 +120,8 @@
             </aside>
             {{-- POSTS --}}
             <section class="text-light">
-                <div class="contenedor-tarjetas-filtro" id="post-data">
-                    @include('public.songs.songs-cards')
+                <div class="contenedor-tarjetas-filtro" id="data">
+                    {{--  @include('public.songs.songs-cards') --}}
                 </div>
                 {{-- PAGINATOR --}}
                 {{-- <div style="display: flex;justify-content: center;
@@ -137,78 +137,66 @@
 @section('script')
     {{-- FAVORITES --}}
     @if (Request::routeIs('favorites'))
-    <script>
-        let currentUrl = window.location.href;
-        let pageName = undefined;
-        let page = 1;
-        let lastPage = undefined;
-
-        window.addEventListener("scroll", function() {
-            if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
-
-                if (lastPage == undefined) {
-                    page++;
-                    loadMoreData(page);
-                } else {
-                    if (page <= lastPage) {
-                        page++;
-                        loadMoreData(page);
-                    }
-                }
-            }
-        });
-
-        function loadMoreData(page) {
-            let urlParams = new URLSearchParams(window.location.search);
-
-            if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
-                urlParams.has('char')) {
-                pageName = "&page=";
-            } else {
-                pageName = "?page=";
-            }
-
-            url = currentUrl + pageName + page;
-            console.log("fetch to: " + url);
-
-            fetch(url, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Requested-With": "XMLHttpRequest"
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        lastPage = 0;
-                        //console.log(response.status);
-                        return;
-                    }else{
-                        return response.json();
-                    }
-                })
-                .then(data => {
-                    if (data.html === "") {
-                        lastPage = 0;
-                        //console.log("No data from backend");
-                        return;
-                    } else {
-                        //console.log(data);
-                        lastPage = data.lastPage;
-                        document.querySelector("#post-data").innerHTML += data.html;
-                    }
-                })
-                .catch(error => console.error(error));
-        }
-    </script>
-    @endif
-    {{-- USER LIST --}}
-    @if (Request::routeIs('user.list'))
+        {{-- INFINITE SCROLL --}}
         <script>
             let currentUrl = window.location.href;
             let pageName = undefined;
             let page = 1;
             let lastPage = undefined;
+
+            document.body.onload = function() {
+                let urlParams = new URLSearchParams(window.location.search);
+
+                if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
+                    urlParams.has('char')) {
+                    pageName = "&page=";
+                } else {
+                    pageName = "?page=";
+                }
+
+                url = currentUrl + pageName + page;
+                console.log("fetch to: " + url);
+
+                fetch(url, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            lastPage = 0;
+                            //console.log(response.status);
+                            return;
+                        } else {
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        if (data.html === "") {
+                            lastPage = 0;
+                            //console.log("No data from backend");
+                            return;
+                        } else {
+                            //console.log(data);
+                            lastPage = data.lastPage;
+                            document.querySelector("#data").innerHTML += data.html;
+
+                            let titles = document.querySelectorAll('.post-titles');
+
+                            function cutTitles() {
+                                titles.forEach(title => {
+                                    if (title.textContent.length > 25) {
+                                        title.textContent = title.textContent.substr(0, 25) + "...";
+                                    }
+                                });
+                            }
+                            cutTitles();
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
 
             window.addEventListener("scroll", function() {
                 if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
@@ -250,7 +238,7 @@
                             lastPage = 0;
                             //console.log(response.status);
                             return;
-                        }else{
+                        } else {
                             return response.json();
                         }
                     })
@@ -262,7 +250,139 @@
                         } else {
                             //console.log(data);
                             lastPage = data.lastPage;
-                            document.querySelector("#post-data").innerHTML += data.html;
+                            document.querySelector("#data").innerHTML += data.html;
+
+                            let titles = document.querySelectorAll('.post-titles');
+
+                            function cutTitles() {
+                                titles.forEach(title => {
+                                    if (title.textContent.length > 25) {
+                                        title.textContent = title.textContent.substr(0, 25) + "...";
+                                    }
+                                });
+                            }
+                            cutTitles();
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+        </script>
+    @endif
+    {{-- USER LIST --}}
+    @if (Request::routeIs('user.list'))
+        <script>
+            let currentUrl = window.location.href;
+            let pageName = undefined;
+            let page = 1;
+            let lastPage = undefined;
+
+            document.body.onload = function() {
+                let urlParams = new URLSearchParams(window.location.search);
+
+                if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
+                    urlParams.has('char')) {
+                    pageName = "&page=";
+                } else {
+                    pageName = "?page=";
+                }
+
+                url = currentUrl + pageName + page;
+                console.log("fetch to: " + url);
+
+                fetch(url, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            lastPage = 0;
+                            //console.log(response.status);
+                            return;
+                        } else {
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        if (data.html === "") {
+                            lastPage = 0;
+                            //console.log("No data from backend");
+                            return;
+                        } else {
+                            //console.log(data);
+                            lastPage = data.lastPage;
+                            document.querySelector("#data").innerHTML += data.html;
+
+                            let titles = document.querySelectorAll('.post-titles');
+
+                            function cutTitles() {
+                                titles.forEach(title => {
+                                    if (title.textContent.length > 25) {
+                                        title.textContent = title.textContent.substr(0, 25) + "...";
+                                    }
+                                });
+                            }
+                            cutTitles();
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+
+            window.addEventListener("scroll", function() {
+                if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
+
+                    if (lastPage == undefined) {
+                        page++;
+                        loadMoreData(page);
+                    } else {
+                        if (page <= lastPage) {
+                            page++;
+                            loadMoreData(page);
+                        }
+                    }
+                }
+            });
+
+            function loadMoreData(page) {
+                let urlParams = new URLSearchParams(window.location.search);
+
+                if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
+                    urlParams.has('char')) {
+                    pageName = "&page=";
+                } else {
+                    pageName = "?page=";
+                }
+
+                url = currentUrl + pageName + page;
+                console.log("fetch to: " + url);
+
+                fetch(url, {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            lastPage = 0;
+                            //console.log(response.status);
+                            return;
+                        } else {
+                            return response.json();
+                        }
+                    })
+                    .then(data => {
+                        if (data.html === "") {
+                            lastPage = 0;
+                            //console.log("No data from backend");
+                            return;
+                        } else {
+                            //console.log(data);
+                            lastPage = data.lastPage;
+                            document.querySelector("#data").innerHTML += data.html;
                         }
                     })
                     .catch(error => console.error(error));

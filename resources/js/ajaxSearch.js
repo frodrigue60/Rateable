@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function doneTyping() {
             try {
-                fetch('https://anirank.co/api/search?q=' + input.value, {
+                fetch('http://localhost:8000/api/search?q=' + input.value, {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     data.posts.forEach(element => {
                         
                             postsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank.co/anime/' +
+                            '<div class="result"><a href="http://localhost:8000/anime/' +
                             element.id + '/' + element.slug +'"><span>' +
                             element.title+'</span></a></div>';
                         
@@ -80,20 +80,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     data.artists.forEach(element => {
                         artistsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank.co/artist/' +element.id +'/'+
+                            '<div class="result"><a href="http://localhost:8000/artist/' +element.id +'/'+
                             element.name_slug + '"><span>' + element.name +
                             '</span></a></div>';
                     });
 
                     data.tags.forEach(element => {
                         tagsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank.co/filter?tag=' +
+                            '<div class="result"><a href="http://localhost:8000/filter?tag=' +
                             element.name.replace(/ /g, '+') + '"><span>' + element.name +
                             '</span></a></div>';
                     });
                     data.users.forEach(element => {
                         usersDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank.co/user/' +
+                            '<div class="result"><a href="http://localhost:8000/user/' +
                             element.id + '"><span>' + element.name +
                             '</span></a></div>';
                     });

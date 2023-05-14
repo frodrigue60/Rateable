@@ -459,7 +459,7 @@ class UserController extends Controller
             $view = view('public.songs.songs-cards', compact('songs'))->render();
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
-        return view('public.songs.filter', compact('songs', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+        return view('public.songs.filter', compact(/* 'songs', */ 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
     }
 
     public function paginate($songs, $perPage = 18, $page = null, $options = [])
