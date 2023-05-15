@@ -126,7 +126,13 @@ class PostController extends Controller
 
         $posts = $this->paginate($posts)->withQueryString();
 
-        return view('public.posts.filter', compact('posts', 'tags', 'characters', 'requested'));
+        if ($request->ajax()) {
+            //error_log('new ajax request');
+            $view = view('public.posts.posts-cards', compact('posts'))->render();
+            return response()->json(['html' => $view, "lastPage" => $posts->lastPage()]);
+        }
+
+        return view('public.posts.filter', compact(/* 'posts', */ 'tags', 'characters', 'requested'));
     }
 
 
