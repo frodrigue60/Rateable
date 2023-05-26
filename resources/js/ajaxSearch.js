@@ -9,6 +9,7 @@ const titles = document.querySelectorAll('.post-titles');
 const loaderContainer = document.querySelector('.loader-container');
 const siteBody = document.querySelector('#body');
 const modalBody = document.querySelector('#modalBody');
+const resDiv = document.querySelector('.res');
 
 let typingTimer; //timer identifier
 let doneTypingInterval = 500; //time in ms (5 seconds)
@@ -64,6 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }).then(response => {
                     return response.json()
                 }).then((data) => {
+
                     postsDiv.innerHTML = "";
                     artistsDiv.innerHTML = "";
                     tagsDiv.innerHTML = "";
@@ -97,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             element.id + '"><span>' + element.name +
                             '</span></a></div>';
                     });
+                    resDiv.classList.remove('hidden');
                 });
             } catch (error) {
                 console.log(error)

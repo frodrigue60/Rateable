@@ -124,7 +124,7 @@ class PostController extends Controller
             return $post->title;
         });
 
-        $posts = $this->paginate($posts)->withQueryString();
+        $posts = $this->paginate($posts,24)->withQueryString();
 
         if ($request->ajax()) {
             //error_log('new ajax request');
@@ -685,7 +685,7 @@ class PostController extends Controller
 
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs)->withQueryString();
+        $songs = $this->paginate($songs,24)->withQueryString();
 
         //dd($songs);
         if ($request->ajax()) {
@@ -831,9 +831,15 @@ class PostController extends Controller
 
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs)->withQueryString();
+        $songs = $this->paginate($songs,24)->withQueryString();
+
+        if ($request->ajax()) {
+            //error_log('new ajax request');
+            $view = view('public.songs.songs-cards', compact('songs'))->render();
+            return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
+        }
         //dd($songs);
-        return view('public.songs.filter', compact('songs', 'tags', 'requested', 'sortMethods', 'types', 'characters'));
+        return view('public.songs.filter', compact(/* 'songs', */ 'tags', 'requested', 'sortMethods', 'types', 'characters'));
     }
     public function setScore($songs, $score_format)
     {

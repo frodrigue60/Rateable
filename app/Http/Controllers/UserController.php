@@ -452,7 +452,7 @@ class UserController extends Controller
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
 
-        $songs = $this->paginate($songs, 18)->withQueryString();
+        $songs = $this->paginate($songs, 24)->withQueryString();
         //dd($songs);
         if ($request->ajax()) {
             //error_log('new ajax request');

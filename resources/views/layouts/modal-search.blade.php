@@ -1,7 +1,7 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content customModal">
-            <div class="modal-header">
+            <div class="modal-header" data-bs-theme="dark">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-header mt-2 customModal">
@@ -11,7 +11,7 @@
                 </form>
             </div>
             <div id="modalBody" class="modal-body p-2 customModal">
-                <div class="res">
+                <div class="res hidden">
                     <span class="catTitle">Anime</span>
                     <div id="posts">
                     </div>

@@ -14,6 +14,13 @@
         <meta name="description" content="Openings & Endings from {{ $user->name }}">
         <meta name="robots" content="index, follow, max-image-preview:standard">
     @endif
+    @if (Request::routeIs('animes'))
+        <title>Filter Animes</title>
+        <meta title="Filter Animes">
+        <link rel="canonical" href="{{ url()->current() }}">
+        <meta name="description" content="Filter Animes">
+        <meta name="robots" content="index, follow, max-image-preview:standard">
+    @endif
 @endsection
 
 @section('content')
@@ -79,7 +86,7 @@
     </div>
 @endsection
 @section('script')
-    {{-- FAVORITES --}}
+    {{-- ANIMES --}}
     @if (Request::routeIs('animes'))
         {{-- INFINITE SCROLL --}}
         <script>
@@ -87,6 +94,7 @@
             let pageName = undefined;
             let page = 1;
             let lastPage = undefined;
+            let dataDiv = document.querySelector("#data");
 
             document.body.onload = function() {
                 let urlParams = new URLSearchParams(window.location.search);
@@ -98,7 +106,7 @@
                 }
 
                 url = currentUrl + pageName + page;
-                console.log("fetch to: " + url);
+                //console.log("fetch to: " + url);
 
                 fetch(url, {
                         method: "GET",
@@ -110,7 +118,7 @@
                     .then(response => {
                         if (!response.ok) {
                             lastPage = 0;
-                            console.log("response status: "+response.status);
+                            //console.log("response status: "+response.status);
                             return;
                         } else {
                             return response.json();
@@ -119,12 +127,12 @@
                     .then(data => {
                         if (data.html === "") {
                             lastPage = 0;
-                            console.log("No data from backend");
+                            //console.log("No data from backend");
                             return;
                         } else {
-                            console.log("data html: "+data);
+                            //console.log("data html: "+data);
                             lastPage = data.lastPage;
-                            document.querySelector("#data").innerHTML += data.html;
+                            dataDiv.innerHTML += data.html;
 
                             let titles = document.querySelectorAll('.post-titles');
 
@@ -193,7 +201,7 @@
                         } else {
                             //console.log(data);
                             lastPage = data.lastPage;
-                            document.querySelector("#data").innerHTML += data.html;
+                            dataDiv.innerHTML += data.html;
 
                             let titles = document.querySelectorAll('.post-titles');
 
@@ -210,18 +218,15 @@
                     .catch(error => console.error(error));
             }
         </script>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#chzn-tag").chosen();
+                $("#chzn-char").chosen();
+            });
+        </script>
     @endif
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#chzn-filterBy").chosen();
-            $("#chzn-type").chosen();
-            $("#chzn-tag").chosen();
-            $("#chzn-sort").chosen();
-            $("#chzn-char").chosen();
-        });
-    </script>
 @endsection

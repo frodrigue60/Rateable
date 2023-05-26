@@ -12,8 +12,11 @@
                 <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
                     alt="{{ $post->title }}" title="{{ $post->title }}">
             </a>
-            {{-- <div class="tarjeta-footer text-light">
-            <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
+            <div class="tarjeta-footer justify-content-center">
+                <a class="no-deco text-light" href="{{ route('post.show', [$post->id, $post->slug]) }}" target="_blank" rel="noopener noreferrer">
+                    {{ $post->songs->count() }} <i class="fa fa-music"></i>
+                </a>
+            {{-- <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>
             <span>{{ $post->view_count }} <i class="fa fa-eye"></i></span>
             @if (isset($post->rating))
                 <span style="color: rgb(162, 240, 181)">
@@ -71,8 +74,8 @@
                     @endif
                     <i class="fa fa-star" aria-hidden="true"></i>
                 </span>
-            @endif
-        </div> --}}
+            @endif --}}
+        </div>
         </div>
     </article>
 @endforeach
