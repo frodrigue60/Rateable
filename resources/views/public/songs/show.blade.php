@@ -61,7 +61,8 @@
             <div class="card-video card ">
                 <div class="card-body ratio ratio-16x9" id="id_iframe">
                     @if ($song->video_src != null)
-                        <iframe src="{{ asset('/storage/videos/' . $song->video_src) }}" frameborder="0" type="video/webm"></iframe>
+                        <iframe src="{{ asset('/storage/videos/' . $song->video_src) }}" frameborder="0"
+                            type="video/webm"></iframe>
                     @else
                         {!! $song->ytlink !!}
                     @endif
@@ -83,8 +84,8 @@
             <div class="all-buttons-container">
                 <div class="buttons-container">
                     <div class="button-cont">
-                        <button class="buttons-bottom">{{ $score != null ? $score : 'n/a' }} <i class="fa fa-star" aria-hidden="true"
-                                style="color: rgb(240, 188, 43)"></i>
+                        <button class="buttons-bottom">{{ $score != null ? $score : 'n/a' }} <i class="fa fa-star"
+                                aria-hidden="true" style="color: rgb(240, 188, 43)"></i>
                         </button>
                     </div>
                     <div class="button-cont">
@@ -170,27 +171,77 @@
                             @csrf
                             <div class="score-form text-light">
                                 <span>Rate this theme:</span>
-                                <div class="stars">
-                                    <input class="star star-5" id="star-5" type="radio" name="score"
-                                        value="100" />
-                                    <label class="star star-5" for="star-5"></label>
+                                @if (Auth::check())
+                                    @switch(Auth::user()->score_format)
+                                        @case('POINT_100')
+                                            <div class="">
+                                                <input type="number" max="100" min="0" step="1"
+                                                    class="form-control" id="exampleFormControlInput1" placeholder="1 to 100" required>
+                                            </div>
+                                        @break
 
-                                    <input class="star star-4" id="star-4" type="radio" name="score"
-                                        value="80" />
-                                    <label class="star star-4" for="star-4"></label>
+                                        @case('POINT_10_DECIMAL')
+                                            <div class="">
+                                                <input type="number" max="10" min="0" step=".1"
+                                                    class="form-control" id="exampleFormControlInput1" placeholder="1 to 10" required>
+                                            </div>
+                                        @break
 
-                                    <input class="star star-3" id="star-3" type="radio" name="score"
-                                        value="60" />
-                                    <label class="star star-3" for="star-3"></label>
+                                        @case('POINT_10')
+                                            <div class="">
+                                                <input type="number" max="10" min="0" step="1"
+                                                    class="form-control" id="exampleFormControlInput1" placeholder="1 to 10" required>
+                                            </div>
+                                        @break
 
-                                    <input class="star star-2" id="star-2" type="radio" name="score"
-                                        value="40" />
-                                    <label class="star star-2" for="star-2"></label>
+                                        @case('POINT_5')
+                                            <div class="stars">
+                                                <input class="star star-5" id="star-5" type="radio" name="score"
+                                                    value="100" />
+                                                <label class="star star-5" for="star-5"></label>
 
-                                    <input class="star star-1" id="star-1" type="radio" name="score"
-                                        value="20" />
-                                    <label class="star star-1" for="star-1"></label>
-                                </div>
+                                                <input class="star star-4" id="star-4" type="radio" name="score"
+                                                    value="80" />
+                                                <label class="star star-4" for="star-4"></label>
+
+                                                <input class="star star-3" id="star-3" type="radio" name="score"
+                                                    value="60" />
+                                                <label class="star star-3" for="star-3"></label>
+
+                                                <input class="star star-2" id="star-2" type="radio" name="score"
+                                                    value="40" />
+                                                <label class="star star-2" for="star-2"></label>
+
+                                                <input class="star star-1" id="star-1" type="radio" name="score"
+                                                    value="20" />
+                                                <label class="star star-1" for="star-1"></label>
+                                            </div>
+                                        @break
+
+                                        @default
+                                            <div class="stars">
+                                                <input class="star star-5" id="star-5" type="radio" name="score"
+                                                    value="100" />
+                                                <label class="star star-5" for="star-5"></label>
+
+                                                <input class="star star-4" id="star-4" type="radio" name="score"
+                                                    value="80" />
+                                                <label class="star star-4" for="star-4"></label>
+
+                                                <input class="star star-3" id="star-3" type="radio" name="score"
+                                                    value="60" />
+                                                <label class="star star-3" for="star-3"></label>
+
+                                                <input class="star star-2" id="star-2" type="radio" name="score"
+                                                    value="40" />
+                                                <label class="star star-2" for="star-2"></label>
+
+                                                <input class="star star-1" id="star-1" type="radio" name="score"
+                                                    value="20" />
+                                                <label class="star star-1" for="star-1"></label>
+                                            </div>
+                                    @endswitch
+                                @endif
                             </div>
                             <textarea name="comment" class="form-control" id="exampleFormControlTextarea1" rows="2"
                                 placeholder="Comment ... (optional)" maxlength="255"></textarea>
