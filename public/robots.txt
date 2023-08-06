@@ -4,4 +4,4 @@ Disallow: /admin
 
 Allow: /
 
-Sitemap: https://anirank.ddns.net/sitemap.xml
+Sitemap: http://anirank.co/sitemap.xml
