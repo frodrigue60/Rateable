@@ -176,21 +176,21 @@
                                         @case('POINT_100')
                                             <div class="">
                                                 <input type="number" max="100" min="0" step="1"
-                                                    class="form-control" id="exampleFormControlInput1" placeholder="1 to 100" required>
+                                                    class="form-control" id="exampleFormControlInput1" name="score" placeholder="1 to 100" required>
                                             </div>
                                         @break
 
                                         @case('POINT_10_DECIMAL')
                                             <div class="">
                                                 <input type="number" max="10" min="0" step=".1"
-                                                    class="form-control" id="exampleFormControlInput1" placeholder="1 to 10" required>
+                                                    class="form-control" id="exampleFormControlInput1" name="score" placeholder="1 to 10" required>
                                             </div>
                                         @break
 
                                         @case('POINT_10')
                                             <div class="">
                                                 <input type="number" max="10" min="0" step="1"
-                                                    class="form-control" id="exampleFormControlInput1" placeholder="1 to 10" required>
+                                                    class="form-control" id="exampleFormControlInput1" name="score" placeholder="1 to 10" required>
                                             </div>
                                         @break
 

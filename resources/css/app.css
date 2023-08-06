@@ -597,6 +597,9 @@ h4 {
 }
 
 @media screen and (max-width: 1920px) {
+	.father-container{
+		max-width: 1100px;
+	}
 	.container-items-seasonal {
 		background-color: #0C2638;
 		max-width: 306px;
@@ -616,7 +619,7 @@ h4 {
 	}
 
 	.card-video {
-		width: 1280px;
+		width: 1100px;
 	}
 
 	.ellipsis {

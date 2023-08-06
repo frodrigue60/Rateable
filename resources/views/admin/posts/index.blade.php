@@ -24,21 +24,40 @@
                                 <div id="collapseOne" class="accordion-collapse collapse"
                                     data-bs-parent="#accordionExample">
                                     <div class="accordion-body bg-dark">
-                                        <form class="d-flex" action="{{ route('search.animes') }}" method="GET">
-                                            <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
+                                        <form class="d-flex gap-1" action="{{ route('search.animes') }}" method="GET">
+                                            <input class="form-control" type="text" name="q"
+                                                placeholder="Search" required />
+                                            <select class="form-select" aria-label="Default select example"
+                                                name="types">
+                                                <option selected value="TV">TV</option>
+                                                <option value="TV_SHORT">TV SHORT</option>
+                                                <option value="MOVIE">MOVIE</option>
+                                                <option value="SPECIAL">SPECIAL</option>
+                                                <option value="OVA">OVA</option>
+                                                <option value="ONA">ONA</option>
+                                            </select>
                                             <button class="btn btn-outline-success" type="submit">Search</button>
                                         </form>
                                         <br>
-                                        <form class="d-flex" action="{{ route('get.seasonal.animes') }}" method="GET">
-                                            <input class="form-control me-2 col-sm" type="number" name="year"
+                                        <form class="d-flex gap-1" action="{{ route('get.seasonal.animes') }}" method="GET">
+                                            <input class="form-control" type="number" name="year"
                                                 placeholder="YEAR" required />
-                                            <select class="form-select col-sm" aria-label="Default select example"
+                                            <select class="form-select" aria-label="Default select example"
                                                 name="season">
                                                 <option selected value="">Select a season</option>
                                                 <option value="WINTER">WINTER</option>
                                                 <option value="SPRING">SPRING</option>
                                                 <option value="SUMMER">SUMMER</option>
                                                 <option value="FALL">FALL</option>
+                                            </select>
+                                            <select class="form-select" aria-label="Default select example"
+                                                name="types">
+                                                <option selected value="TV">TV</option>
+                                                <option value="TV_SHORT">TV SHORT</option>
+                                                <option value="MOVIE">MOVIE</option>
+                                                <option value="SPECIAL">SPECIAL</option>
+                                                <option value="OVA">OVA</option>
+                                                <option value="ONA">ONA</option>
                                             </select>
                                             <button class="btn btn-outline-success" type="submit">Create loot</button>
                                         </form>
@@ -127,7 +146,8 @@
                                                 class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o"
                                                     aria-hidden="true"></i> {{ $post->id }}</a>
                                             <a href="{{ route('admin.post.destroy', $post->id) }}"
-                                                class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i>
+                                                class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                                                    aria-hidden="true"></i>
                                                 {{ $post->id }}</a>
                                             <a class="btn btn-sm btn-primary"
                                                 href="{{ route('song.post.create', $post->id) }}">Add song</a>

@@ -109,18 +109,18 @@ class PostController extends Controller
                 //$request->file->storeAs('thumbnails', $file_name, 'public');
             } else {
                 if ($request->thumbnail_src == null) {
-                    
+
                     $request->flash();
                     return Redirect::back()
                         ->with('error', "Post not created, images not founds");
                 }
 
                 $image_file_data = file_get_contents($request->thumbnail_src);
-                
+
                 $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
                 $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
                 Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-                
+
                 $post->thumbnail = $file_name;
                 $post->thumbnail_src = $request->thumbnail_src;
             }
@@ -400,35 +400,17 @@ class PostController extends Controller
 
     public function searchAnimes(Request $request)
     {
+        //dd($request->all());
         $q = $request->q;
+        $arr_types = $request->types;
         $client = new \GuzzleHttp\Client();
-
-        $query = '
-            query ($search: String) {
-                Page {
-                    media (search: $search, type: ANIME, format: TV) {
-                        id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        description
-                        season
-                        seasonYear
-                        averageScore
-                        coverImage {
-                            extraLarge
-                        }
-                        bannerImage
-                    }
-                }
-            }
-        ';
 
         $variables = [
             'search' => $q,
+            'format_in' => $arr_types,
         ];
+
+        $query = $this->buildGraphQLQuerySearch();
 
         $response = $client->post('https://graphql.anilist.co', [
             'json' => [
@@ -488,7 +470,7 @@ class PostController extends Controller
         ]);
         $body = $response->getBody()->__toString();
         $json = json_decode($body);
-        
+
         $data[] = $json->data->Media;
         $this->generateMassive($data);
         $success = 'Posts created successfully';
@@ -497,8 +479,10 @@ class PostController extends Controller
     public function getSeasonalAnimes(Request $request)
     {
 
+        //dd($request->all());
         $year = $request->year;
-        $season = $request->season;
+        $season = Str::upper($request->season);
+        $arr_types = $request->types;
 
         $validator = Validator::make($request->all(), [
             'year' => 'required|integer|min_digits:4|max_digits:4',
@@ -506,71 +490,15 @@ class PostController extends Controller
 
         if ($validator->fails()) {
             $messageBag = $validator->getMessageBag();
-            return redirect(route('admin.post.index'))->with('error', $messageBag);
+            return redirect(route('admin.animes.index'))->with('error', $messageBag);
         }
 
         $client = new \GuzzleHttp\Client();
 
         if ($season != null) {
-            $query = '
-            query ($year: Int, $season: MediaSeason, $page: Int, $perPage: Int) {
-                Page (page: $page, perPage: $perPage) {
-                    pageInfo {
-                        total
-                        perPage
-                        currentPage
-                        lastPage
-                        hasNextPage
-                    }
-                    media (seasonYear: $year, season: $season, type: ANIME, format: TV) {
-                        id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        description
-                        season
-                        seasonYear
-                        averageScore
-                        coverImage {
-                            extraLarge
-                        }
-                        bannerImage
-                    }
-                }
-            }
-        ';
+            $query = $this->buildGraphQLQuerySeasonal();
         } else {
-            $query = '
-            query ($year: Int, $page: Int, $perPage: Int) {
-                Page (page: $page, perPage: $perPage) {
-                    pageInfo {
-                        total
-                        perPage
-                        currentPage
-                        lastPage
-                        hasNextPage
-                    }
-                    media (seasonYear: $year, type: ANIME, format: TV) {
-                        id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        description
-                        season
-                        seasonYear
-                        averageScore
-                        coverImage {
-                            extraLarge
-                        }
-                        bannerImage
-                    }
-                }
-            }
-        ';
+            dd('error');
         }
 
         $variables = [
@@ -578,6 +506,7 @@ class PostController extends Controller
             'season' => $season,
             'page' => 1,
             'perPage' => 50,
+            'format_in' => $arr_types,
         ];
 
         $hasNextPage = true;
@@ -622,7 +551,7 @@ class PostController extends Controller
         //dd($tag,$tag_exist);
         foreach ($data as $item) {
             $post_exist = Post::where('title', $item->title->romaji)->first();
-            
+
             if ($post_exist) {
                 continue;
             }
@@ -671,8 +600,124 @@ class PostController extends Controller
         $posts = Post::all();
         foreach ($posts as $post) {
             $post->delete();
+            $post->untag();
         }
+        //DB::table('likeable_likes')->delete();
+        //DB::table('likeable_like_counters')->delete();
         $success = 'All posts deleted';
         return redirect(route('admin.post.index'))->with('success', $success);
+    }
+    function buildGraphQLQuerySearch()
+    {
+        $query = '
+            query ($search: String, $format_in: [MediaFormat]) {
+                Page {
+                    media (search: $search, type: ANIME, format_in: $format_in) {
+                        id
+                        title {
+                            romaji
+                            english
+                            native
+                        }
+                        description
+                        season
+                        seasonYear
+                        averageScore
+                        studios {
+                            nodes {
+                                name
+                            }
+                        }
+                        coverImage {
+                            extraLarge
+                        }
+                        bannerImage
+                    }
+                }
+            }
+        ';
+        return $query;
+    }
+    function buildGraphQLQuerySeasonal()
+    {
+        $query = '
+            query ($year: Int, $season: MediaSeason, $page: Int, $perPage: Int, $format_in: [MediaFormat]) {
+                Page (page: $page, perPage: $perPage) {
+                    pageInfo {
+                        total
+                        perPage
+                        currentPage
+                        lastPage
+                        hasNextPage
+                    }
+                    media (seasonYear: $year, season: $season, type: ANIME,format_in: $format_in) {
+                        id
+                        title {
+                            romaji
+                            english
+                            native
+                        }
+                        description
+                        season
+                        seasonYear
+                        averageScore
+                        format
+                        genres
+                        studios {
+                            nodes {
+                                name
+                            }
+                        }
+                        coverImage {
+                            extraLarge
+                        }
+                        bannerImage
+                        trailer{
+                            id
+                            site
+                            thumbnail
+                        }
+                    }
+                }
+            }';
+        return $query;
+    }
+    function buildGraphQLQueryId()
+    {
+        $query = '
+        query ($id: Int) { # Define which variables will be used in the query (id)
+            Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+                id
+                title {
+                romaji
+                english
+                native
+                }
+                description
+                season
+                seasonYear
+                format
+                genres
+                averageScore
+                studios {
+                    nodes {
+                        name
+                    }
+                }
+                coverImage {
+                    large
+                    extraLarge
+                }
+                bannerImage
+                episodes
+                trailer{
+                    id
+                    site
+                    thumbnail
+                }
+            }
+        }
+        ';
+        return $query;
     }
 }

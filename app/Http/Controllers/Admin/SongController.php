@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use Conner\Tagging\Model\Tag;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -160,7 +161,7 @@ class SongController extends Controller
             $post = Post::find($request->post_id);
             $file_name = $post->slug . '-' . time() . '.' . 'webm';
             $song->video_src = $file_name;
-            Storage::disk('public')->delete('/videos/'.$old_video);
+            Storage::disk('public')->delete('/videos/' . $old_video);
             $request->video->storeAs('videos', $file_name, 'public');
         } else {
             $song->video_src = null;
@@ -192,7 +193,14 @@ class SongController extends Controller
         $song = Song::find($id);
         $old_video = $song->video_src;
         if ($song->delete()) {
-            Storage::disk('public')->delete('/videos/'.$old_video);
+            DB::table('ratings')
+                ->where('rateable_id', '=', $id)->delete();
+            DB::table('likeable_likes')
+                ->where('likeable_id', '=', $id)->delete();
+            DB::table('likeable_like_counters')
+                ->where('likeable_id', '=', $id)->delete();
+
+            Storage::disk('public')->delete('/videos/' . $old_video);
             return redirect()->back()->with('success', 'Song ' . $song->id . ' has been deleted');
         } else {
             return redirect()->back()->with('error', 'A error has been ocurred');

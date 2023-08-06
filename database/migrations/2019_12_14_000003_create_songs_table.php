@@ -32,7 +32,7 @@ return new class extends Migration
         });
 
         Schema::table('songs', function (Blueprint $table) {
-            $table->foreign('post_id')->references('id')->on('posts');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 
