@@ -21,25 +21,38 @@
                     <table class="table table-dark">
                         <thead>
                             <tr>
-                                {{-- <th scope="col">ID</th> --}}
+                                <th scope="col">ID</th>
                                 <th scope="col">Song Name</th>
                                 <th scope="col">Songs Artist</th>
                                 <th scope="col">Tags</th>
-                                <th scope="col">Src1 | Src 2</th>
+                                <th scope="col">Videos</th>
                                 <th scope="col">Theme</th>
                                 <th scope="col">Options</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($post->songs as $song)
+                                @php
+                                    if ($song->song_romaji != null) {
+                                        $song_name = $song->song_romaji;
+                                    } else {
+                                        if ($song->song_en != null) {
+                                            $song_name = $song->song_en;
+                                        } else {
+                                            $song_name = $song->song_jp;
+                                        }
+                                    }
+                                @endphp
                                 <tr>
-                                    {{-- <td>{{ $song->id }}</td> --}}
+                                    <td>{{ $song->id }}</td>
                                     <td>
-                                        <a class="text-light" href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song->song_romaji != null ? $song->song_romaji : $song->song_en }}</a>
+                                        <a class="text-light"
+                                            href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song_name }}</a>
                                     </td>
                                     <td>
                                         @isset($song->artist)
-                                            <a class="text-light" href="{{route('artist.show',[$song->artist->id,$song->artist->name_slug])}}">{{ $song->artist->name }}</a>
+                                            <a class="text-light"
+                                                href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">{{ $song->artist->name }}</a>
                                         @endisset
                                     </td>
                                     <td>
@@ -48,16 +61,10 @@
                                         @endforeach
                                     </td>
                                     <td>
-                                        @if (isset($song->ytlink))
-                                            OK
+                                        @if (isset($song->videos))
+                                            {{ count($song->videos) }}
                                         @else
-                                            N/A
-                                        @endif
-                                        |
-                                        @if (isset($song->scndlink))
-                                            OK
-                                        @else
-                                            N/A
+                                            "N/A"
                                         @endif
                                     </td>
                                     <td>{{ $song->suffix != null ? $song->suffix : $song->type }}</td>
@@ -67,6 +74,8 @@
                                                 href="{{ route('song.post.edit', $song->id) }}">Edit</a>
                                             <a class="btn btn-sm btn-danger"
                                                 href="{{ route('song.post.destroy', $song->id) }}">Delete</a>
+                                            <a class="btn btn-sm btn-primary"
+                                                href="{{ route('admin.videos.index', $song->id) }}">Videos</a>
                                         @endif
                                     </td>
 

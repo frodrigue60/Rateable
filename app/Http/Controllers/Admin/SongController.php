@@ -58,6 +58,7 @@ class SongController extends Controller
         $song->artist_id = $request->artist_id;
         $song->post_id = $request->post_id;
         $song->type = $request->type;
+        /* 
         $song->ytlink = $request->ytlink;
         $song->scndlink = $request->scndlink;
 
@@ -79,7 +80,7 @@ class SongController extends Controller
             $request->video->storeAs('videos', $file_name, 'public');
         } else {
             $song->video_src = null;
-        }
+        } */
 
         if ($request->theme_num >= 1) {
             $song->suffix = $song->type . $request->theme_num;

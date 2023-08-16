@@ -23,10 +23,6 @@ return new class extends Migration
             $table->string('theme_num')->nullable();
             $table->enum('type', ['OP', 'ED'])->nullable();
             $table->string('suffix')->nullable();
-            $table->text('ytlink')->nullable();
-            $table->text('scndlink')->nullable();
-            $table->text('video_src')->nullable()->default(null);
-            
             $table->bigInteger('view_count')->default(0);
             $table->timestamps();
         });

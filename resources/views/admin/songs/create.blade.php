@@ -67,21 +67,6 @@
 
                         </div>
                         <br>
-                        <div class="mb-3">
-                            <label for="formFileBanner" class="form-label">Upload Video File</label>
-                            <input class="form-control" type="file" id="formFileBanner" name="video">
-                        </div>
-                        <br>
-                        <label for="ytlink" class="form-label">Youtube Embed</label>
-                        <input type="text" class="form-control" placeholder="Youtube Embed" id="ytlink" name="ytlink"
-                            value="{{ old('ytlink') }}">
-                        <br>
-                        <label for="scndlink" class="form-label">Second Embed (optional)</label>
-                        <input type="text" class="form-control" placeholder="Second Embed (optional)" id="scndlink"
-                            name="scndlink" value="{{ old('scndlink') }}">
-
-
-                        <br>
 
                         <button class="btn btn-primary" type="submit">Submit</button>
                 </div>

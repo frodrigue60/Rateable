@@ -4,7 +4,7 @@
         {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
     <meta name="title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
 
-    
+
 
     @if (isset($post->song->song_romaji))
         @if (isset($post->artist->name))
@@ -124,54 +124,64 @@
                 </div>
                 <div>
                     @isset($openings)
-                        @foreach ($openings->sortByDesc('theme_num') as $song)
-                            <div class="post-song">
-                                <div style="overflow: hidden">
-                                    <div class="theme-info">
-                                        <strong>
-                                            <i class="fa fa-music" aria-hidden="true"></i>
-                                            <a class="no-deco text-light"
-                                                href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
-                                                @if (isset($song->song_romaji))
-                                                    {{ $song->song_romaji }}
-                                                @else
-                                                    @if (isset($song->song_en))
-                                                        {{ $song->song_en }}
-                                                    @else
-                                                        @if (isset($song->song_jp))
-                                                            {{ $song->song_jp }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    @endif
-                                                @endif
-                                            </a>
-                                        </strong>
-                                        <span
-                                            style="padding-left: 5px; padding-right: 5px;">({{ $song->suffix != null ? $song->suffix : $song->type }})</span>
-                                    </div>
-                                    @isset($song->artist->name)
-                                        <div>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
+                        @if ($openings->count() != null)
+                            @foreach ($openings->sortByDesc('theme_num') as $song)
+                                <div class="post-song">
+                                    <div style="overflow: hidden">
+                                        <div class="theme-info">
                                             <strong>
+                                                <i class="fa fa-music" aria-hidden="true"></i>
                                                 <a class="no-deco text-light"
-                                                    href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">
-                                                    {{ $song->artist->name }}
-                                                    @if ($song->artist->name_jp)
-                                                        ({{ $song->artist->name_jp }})
+                                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
+                                                    @if (isset($song->song_romaji))
+                                                        {{ $song->song_romaji }}
+                                                    @else
+                                                        @if (isset($song->song_en))
+                                                            {{ $song->song_en }}
+                                                        @else
+                                                            @if (isset($song->song_jp))
+                                                                {{ $song->song_jp }}
+                                                            @else
+                                                                N/A
+                                                            @endif
+                                                        @endif
                                                     @endif
                                                 </a>
                                             </strong>
+                                            <span
+                                                style="padding-left: 5px; padding-right: 5px;">({{ $song->suffix != null ? $song->suffix : $song->type }})</span>
                                         </div>
-                                    @endisset
-                                </div>
-                                <div style="display: inline;
+                                        @isset($song->artist->name)
+                                            <div>
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                <strong>
+                                                    <a class="no-deco text-light"
+                                                        href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">
+                                                        {{ $song->artist->name }}
+                                                        @if ($song->artist->name_jp)
+                                                            ({{ $song->artist->name_jp }})
+                                                        @endif
+                                                    </a>
+                                                </strong>
+                                            </div>
+                                        @endisset
+                                    </div>
+                                    <div style="display: inline;
                                 align-self: center;">
-                                    <span>{{ $song->averageRating != null ? $song->averageRating / 1 : 'N/A' }}</span>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                        <span>{{ $song->averageRating != null ? $song->averageRating / 1 : 'N/A' }}</span>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
                                 </div>
+                            @endforeach
+                        @else
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <h4 class="">Nothing here</h4>
+                                <figure class="">
+                                    <img style="max-width:200px" src="{{ asset('resources/images/sad-cat-5.png') }}"
+                                        alt="">
+                                </figure>
                             </div>
-                        @endforeach
+                        @endif
                     @endisset
                 </div>
             </div>
@@ -181,54 +191,64 @@
                 </div>
                 <div>
                     @isset($endings)
-                        @foreach ($endings->sortByDesc('theme_num') as $song)
-                            <div class="post-song">
-                                <div style="overflow: hidden">
-                                    <div class="theme-info">
-                                        <strong>
-                                            <i class="fa fa-music" aria-hidden="true"></i>
-                                            <a class="no-deco text-light"
-                                                href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
-                                                @if (isset($song->song_romaji))
-                                                    {{ $song->song_romaji }}
-                                                @else
-                                                    @if (isset($song->song_en))
-                                                        {{ $song->song_en }}
-                                                    @else
-                                                        @if (isset($song->song_jp))
-                                                            {{ $song->song_jp }}
-                                                        @else
-                                                            N/A
-                                                        @endif
-                                                    @endif
-                                                @endif
-                                            </a>
-                                        </strong>
-                                        <span
-                                            style="padding-left: 5px; padding-right: 5px;">({{ $song->suffix != null ? $song->suffix : $song->type }})</span>
-                                    </div>
-                                    @isset($song->artist->name)
-                                        <div>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
+                        @if ($openings->count() != null)
+                            @foreach ($endings->sortByDesc('theme_num') as $song)
+                                <div class="post-song">
+                                    <div style="overflow: hidden">
+                                        <div class="theme-info">
                                             <strong>
+                                                <i class="fa fa-music" aria-hidden="true"></i>
                                                 <a class="no-deco text-light"
-                                                    href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">
-                                                    {{ $song->artist->name }}
-                                                    @if ($song->artist->name_jp)
-                                                        ({{ $song->artist->name_jp }})
+                                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
+                                                    @if (isset($song->song_romaji))
+                                                        {{ $song->song_romaji }}
+                                                    @else
+                                                        @if (isset($song->song_en))
+                                                            {{ $song->song_en }}
+                                                        @else
+                                                            @if (isset($song->song_jp))
+                                                                {{ $song->song_jp }}
+                                                            @else
+                                                                N/A
+                                                            @endif
+                                                        @endif
                                                     @endif
                                                 </a>
                                             </strong>
+                                            <span
+                                                style="padding-left: 5px; padding-right: 5px;">({{ $song->suffix != null ? $song->suffix : $song->type }})</span>
                                         </div>
-                                    @endisset
-                                </div>
-                                <div style="display: inline;
+                                        @isset($song->artist->name)
+                                            <div>
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                <strong>
+                                                    <a class="no-deco text-light"
+                                                        href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">
+                                                        {{ $song->artist->name }}
+                                                        @if ($song->artist->name_jp)
+                                                            ({{ $song->artist->name_jp }})
+                                                        @endif
+                                                    </a>
+                                                </strong>
+                                            </div>
+                                        @endisset
+                                    </div>
+                                    <div style="display: inline;
                             align-self: center;">
-                                    <span>{{ $song->averageRating != null ? $song->averageRating / 1 : 'N/A' }}</span>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                        <span>{{ $song->averageRating != null ? $song->averageRating / 1 : 'N/A' }}</span>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
                                 </div>
+                            @endforeach
+                        @else
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <h4 class="">Nothing here</h4>
+                                <figure class="">
+                                    <img style="max-width:200px" src="{{ asset('resources/images/sad-cat-5.png') }}"
+                                        alt="">
+                                </figure>
                             </div>
-                        @endforeach
+                        @endif
                     @endisset
                 </div>
             </div>

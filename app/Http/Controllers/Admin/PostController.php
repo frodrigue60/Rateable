@@ -561,32 +561,11 @@ class PostController extends Controller
             $post->description = $item->description;
             $post->anilist_id = $item->id;
             /* $post->status = 'published'; */
-            if ($item->coverImage->extraLarge != null) {
-                $image_file_data = file_get_contents($item->coverImage->extraLarge);
-                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
-                $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
-                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-                $post->thumbnail = $file_name;
-                $post->thumbnail_src = $item->coverImage->extraLarge;
-            } else {
-                $post->thumbnail = null;
-                $post->thumbnail_src = null;
-            }
-
-            if ($item->bannerImage != null) {
-                $banner_file_data = file_get_contents($item->bannerImage);
-                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
-                $encoded = Image::make($banner_file_data)->encode('webp', 100); //->resize(150, 212)
-                Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
-                $post->banner = $file_name;
-                $post->banner_src = $item->bannerImage;
-            } else {
-                $post->banner = null;
-                $post->banner_src = null;
-            }
 
             if ($post->save()) {
                 $post->tag($tag);
+                $this->saveAnimeBanner($item, $post);
+                $this->saveAnimeThumbnail($item, $post);
             }
         }
     }
@@ -601,9 +580,16 @@ class PostController extends Controller
         foreach ($posts as $post) {
             $post->delete();
             $post->untag();
+            $file = $post->thumbnail;
+            $banner = $post->banner;
+
+            Storage::disk('public')->delete('/thumbnails/' . $file);
+            Storage::disk('public')->delete('/anime_banner/' . $banner);
         }
-        //DB::table('likeable_likes')->delete();
-        //DB::table('likeable_like_counters')->delete();
+        DB::table('likeable_likes')->delete();
+        DB::table('likeable_like_counters')->delete();
+        DB::table('ratings')->delete();
+        DB::table('tagging_tagged')->delete();
         $success = 'All posts deleted';
         return redirect(route('admin.post.index'))->with('success', $success);
     }
@@ -650,7 +636,7 @@ class PostController extends Controller
                         lastPage
                         hasNextPage
                     }
-                    media (seasonYear: $year, season: $season, type: ANIME,format_in: $format_in) {
+                    media (seasonYear: $year, season: $season, type: ANIME,format_in: $format_in, isAdult:false) {
                         id
                         title {
                             romaji
@@ -719,5 +705,35 @@ class PostController extends Controller
         }
         ';
         return $query;
+    }
+    function saveAnimeThumbnail($item, $post)
+    {
+        if ($item->coverImage->extraLarge != null) {
+            $image_file_data = file_get_contents($item->coverImage->extraLarge);
+            $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
+            $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
+            Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
+            $post->thumbnail = $file_name;
+            $post->thumbnail_src = $item->coverImage->extraLarge;
+        } else {
+            $post->thumbnail = null;
+            $post->thumbnail_src = null;
+        }
+        $post->update();
+    }
+    function saveAnimeBanner($item, $post)
+    {
+        if ($item->bannerImage != null) {
+            $banner_file_data = file_get_contents($item->bannerImage);
+            $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
+            $encoded = Image::make($banner_file_data)->encode('webp', 100); //->resize(150, 212)
+            Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
+            $post->banner = $file_name;
+            $post->banner_src = $item->bannerImage;
+        } else {
+            $post->banner = null;
+            $post->banner_src = null;
+        }
+        $post->update();
     }
 }

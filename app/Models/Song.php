@@ -37,4 +37,9 @@ class Song extends Model
     {
         return $this->hasMany(Comment::class,'rateable_id');
     }
+
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
 }

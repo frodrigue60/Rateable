@@ -53,7 +53,7 @@ class SongController extends Controller
     public function show($id)
     {
 
-        $song = Song::with(['post', 'artist'])->find($id);
+        $song = Song::with(['post', 'artist','videos'])->find($id);
         //dd($song);
         $comments = Comment::with('user', 'likeCounter')
             ->where('rateable_id', '=', $id)
@@ -104,7 +104,6 @@ class SongController extends Controller
 
         $this->count_views($song);
 
-        //dd($artist);
         return view('public.songs.show', compact('song', 'score', 'artist', 'comments', 'comments_featured'));
     }
 

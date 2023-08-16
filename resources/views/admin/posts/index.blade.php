@@ -8,6 +8,7 @@
                 {{-- CARD HEADER --}}
                 <div class="card-header">
                     <a class="btn btn-sm btn-primary" href="{{ route('admin.post.create') }}">CREATE POST</a>
+                    <a class="btn btn-sm btn-primary" href="{{ route('wipeallposts') }}">WIPE ALL POSTS</a>
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">

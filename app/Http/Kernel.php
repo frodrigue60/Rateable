@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'editor' => \App\Http\Middleware\EditorRoutes::class,
         'creator' => \App\Http\Middleware\CreatorRoutes::class,
         'staff' => \App\Http\Middleware\StaffRoutes::class,
+        'cors' => \App\Http\Middleware\Cors::class,
     ];
 }

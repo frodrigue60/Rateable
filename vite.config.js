@@ -8,6 +8,7 @@ export default defineConfig({
                 /* 'resources/sass/app.scss',
                 'resources/js/app.js', */
                 'resources/js/ajaxSearch.js',
+                'resources/js/api_get_video.js',
                 'resources/css/app.css',
                 'resources/css/modalSearch.css',
                 'resources/css/userProfile.css',

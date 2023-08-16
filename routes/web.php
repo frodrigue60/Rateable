@@ -17,6 +17,7 @@ use App\Http\Controllers\UserRequestController as UserRequestController;
 use App\Http\Controllers\Admin\UserRequestController as AdminUserRequestController;
 use App\Http\Controllers\Admin\SongController as AdminSongController;
 use App\Http\Controllers\SongController as SongController;
+use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,9 @@ Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');
+
+Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');
+
 
 Route::get('/offline', function () {
     return view('offline');
@@ -141,6 +145,15 @@ Route::group(['middleware' => 'staff'], function () {
             Route::get('/users/{id}/edit',       [AdminUserController::class, 'edit'])->name('admin.users.edit');
             Route::put('/users/{id}/update',    [AdminUserController::class, 'update'])->name('admin.users.update');
             Route::get('/users/search', [AdminUserController::class, 'searchUser'])->name('admin.users.search');
+
+            Route::get('songs/{song_id}/videos',[AdminVideoController::class,'index'])->name('admin.videos.index');
+            Route::get('songs/{song_id}/videos/create',[AdminVideoController::class,'create'])->name('admin.videos.create');
+            Route::post('songs/{song_id}/videos/store',[AdminVideoController::class,'store'])->name('admin.videos.store');
+
+            Route::get('videos/{video_id}/destroy',[AdminVideoController::class,'destroy'])->name('admin.videos.destroy');
+            Route::get('videos/{video_id}/edit',[AdminVideoController::class,'edit'])->name('admin.videos.edit');
+            Route::get('videos/{video_id}/show',[AdminVideoController::class,'show'])->name('admin.videos.show');
+            Route::put('videos/{video_id}/update',[AdminVideoController::class,'update'])->name('admin.videos.update');
         });
     });
 });
