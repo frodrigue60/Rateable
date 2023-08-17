@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const cardHeader = document.querySelector("#card-header");
+
     const elementos = cardHeader.querySelectorAll("button");
 
     for (let index = 0; index < elementos.length; index++) {
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
             check_data(data);
         } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
+            /* console.error('There was a problem with the fetch operation:', error); */
         }
     }
 
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             videoElement.controls = true;
             video_div.appendChild(videoElement);
-            let player = new Plyr('video');
+            let player = new Plyr(videoElement);
         }
     }
     if (elementos.length > 0) {

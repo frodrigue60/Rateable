@@ -76,7 +76,8 @@
                         $i = 1;
                     @endphp
                     @foreach ($song->videos as $video)
-                        <button type="button" class="btn btn-sm btn-primary" value="{{$video->id}}">Option {{ $i++ }}</button>
+                        <button type="button" class="btn btn-sm btn-primary" value="{{ $video->id }}">Option
+                            {{ $i++ }}</button>
                     @endforeach
                 </div>
                 <div class="card-body p-0 ratio ratio-16x9" id="video_container">
@@ -100,18 +101,16 @@
         </div>
         <div class="all-buttons-container">
             <div class="buttons-container">
-                <div class="button-cont">
-                    <button class="buttons-bottom">{{ $score != null ? $score : 'n/a' }} <i class="fa fa-star"
-                            aria-hidden="true" style="color: rgb(240, 188, 43)"></i>
+                <div class="d-flex gap-1">
+                    <button class="buttons-bottom px-2">{{ $score != null ? $score : 'n/a' }} <i class="fa fa-star"
+                            aria-hidden="true"></i>
                     </button>
-                </div>
-                <div class="button-cont">
-                    <button class="buttons-bottom">{{ $song->view_count }} <i class="fa fa-eye" aria-hidden="true"></i>
+
+                    <button class="buttons-bottom px-2">{{ $song->view_count }} <i class="fa fa-eye"
+                            aria-hidden="true"></i>
                     </button>
-                </div>
-                <div class="button-cont">
                     @guest
-                        <a href="{{ route('login') }}" class="buttons-bottom">{{ $song->likeCount }} <i
+                        <a href="{{ route('login') }}" class="buttons-bottom px-2">{{ $song->likeCount }} <i
                                 class="fa-regular fa-heart"></i>
                         </a>
                     @endguest
@@ -120,25 +119,24 @@
                             <form style="display: flex;width: 100%;height: 100%;"
                                 action="{{ route('song.unlike', $song->id) }}" method="post">
                                 @csrf
-                                <button class="buttons-bottom">{{ $song->likeCount }} <i class="fa-solid fa-heart"></i>
+                                <button class="buttons-bottom px-2">{{ $song->likeCount }} <i class="fa-solid fa-heart"></i>
                                 </button>
                             </form>
                         @else
                             <form style="display: flex;width: 100%;height: 100%;" action="{{ route('song.like', $song->id) }}"
                                 method="post">
                                 @csrf
-                                <button class="buttons-bottom">{{ $song->likeCount }} <i class="fa-regular fa-heart"></i>
+                                <button class="buttons-bottom px-2">{{ $song->likeCount }} <i class="fa-regular fa-heart"></i>
                                 </button>
                             </form>
                         @endif
                     @endauth
                 </div>
-                <div class="">
+                <div class="d-flex gap-1">
                     <a href="{{ route('song.create.report', $song->id) }}" class="buttons-bottom px-2" type="button"><i
                             class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                         Report</a>
-                </div>
-                <div class="">
+
                     <button class="buttons-bottom px-2" type="button" data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop"><i class="fa fa-info-circle" aria-hidden="true"></i>
                         Info</button>
@@ -443,8 +441,6 @@
                 </div>
             @endforeach
         @endisset
-
-
     </div>
 
     <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
@@ -518,35 +514,14 @@
         </div>
     </div>
 
-    <div class="modal fade" id="shareModal" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-light">
-                <div class="modal-header">
-                    <span class="modal-title fs-5" id="staticBackdropLabel">Share</span>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="d-flex gap-2 justify-content-center">
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}" target="_blank"
-                            class="btn btn-primary">FaceBook</a>
-                        <a href="https://twitter.com/intent/tweet?url={{ url()->current() }}" target="_blank"
-                            class="btn btn-primary">Twitter</a>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     @section('script')
-    @vite(['resources/js/api_get_video.js'])
+        @if (config('app.env') === 'local')
+            @vite(['resources/js/api_get_video.js'])
+        @else
+            <script src="{{ asset('build/assets/api_get_video.js') }}"></script>
+        @endif
+
         <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
         <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-        
     @endsection
 @endsection

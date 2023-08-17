@@ -40,8 +40,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         @vite([
-            'resources/sass/app.scss',
-            'resources/js/app.js',
+            /* 'resources/sass/app.scss',
+            'resources/js/app.js', */
             'resources/js/ajaxSearch.js',
             'resources/css/app.css',
             'resources/css/modalSearch.css',
@@ -52,15 +52,14 @@
         ])
     @else
         <!-- PROD ASSETS -->
-        <link rel="manifest" href="manifest.json">
         <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
         {{-- BUILD --}}
-        <link rel="stylesheet" href="{{ asset('build/assets/app.6f7605af.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/modalSearch.14aa855b.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/userProfile.29eb089a.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/post.5bee5c5a.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/ranking.c9eea4e8.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/fivestars.e5effc1e.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/assets/modalSearch.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/assets/userProfile.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/assets/post.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/assets/ranking.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/assets/fivestars.css') }}">
     @endif
 </head>
 
@@ -84,6 +83,8 @@
         <script src="{{ asset('resources/owlcarousel/owl.carousel.min.js') }}" defer></script>
         <script src="{{ asset('resources/js/owCarouselConfig.js') }}" defer></script>
 
+        
+
         @if (config('app.env') === 'local')
             {{-- DEV SCRIPTS --}}
             <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js"
@@ -93,12 +94,12 @@
             </script>
         @else
             {{-- PROD SCRIPTS --}}
-            <script src="{{ asset('resources/js/pwa-script.js') }}"></script>
+            {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
             <script src="{{ asset('resources/js/jquery-3.6.3.min.js') }}"></script>
             <script src="{{ asset('resources/js/popper.min.js') }}"></script>
             <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
             {{-- BUILD --}}
-            <script src="{{ asset('build/assets/ajaxSearch.b57e6db6.js') }}"></script>
+            <script src="{{ asset('build/assets/ajaxSearch.js') }}"></script>
         @endif
 
         @yield('script')
