@@ -15,7 +15,8 @@
         "rtconner/laravel-likeable": "^3.2",
         "rtconner/laravel-tagging": "^4.1",
         "spatie/laravel-sitemap": "^6.2",
-        "willvincent/laravel-rateable": "^3.0"
+        "willvincent/laravel-rateable": "^3.0",
+        "ext-gd": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
