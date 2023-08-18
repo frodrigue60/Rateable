@@ -1,4 +1,7 @@
 <article class="tarjeta">
+    @php
+        $thumb_url = file_exists(asset('/storage/thumbnails/' . $post->thumbnail)) ? asset('/storage/thumbnails/' . $post->thumbnail) : $post->thumbnail_src;
+    @endphp
     <div class="textos">
         <div class="tarjeta-header text-light">
             <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
@@ -7,10 +10,9 @@
             <span
                 class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
         </div> --}}
-        <a class="no-deco" target="blank_"
-            href="{{ route('post.show', [$post->id, $post->slug]) }}">
+        <a class="no-deco" target="blank_" href="{{ route('post.show', [$post->id, $post->slug]) }}">
             <img class="thumb" loading="lazy"
-                src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                src="{{ $thumb_url}}"
                 alt="{{ $post->title }}" title="{{ $post->title }}">
         </a>
         {{-- <div class="tarjeta-footer text-light">

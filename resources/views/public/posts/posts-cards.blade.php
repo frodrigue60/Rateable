@@ -9,7 +9,7 @@
                 class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
         </div> --}}
             <a class="no-deco" target="blank_" href="{{ route('post.show', [$post->id, $post->slug]) }}">
-                <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+                <img class="thumb" loading="lazy" src="{{ file_exists(asset('/storage/thumbnails/' . $post->thumbnail)) ? asset('/storage/thumbnails/' . $post->thumbnail) : $post->thumbnail_src }}"
                     alt="{{ $post->title }}" title="{{ $post->title }}">
             </a>
             <div class="tarjeta-footer justify-content-center">

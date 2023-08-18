@@ -69,11 +69,14 @@
 @endsection
 @section('content')
     <div class="container text-light">
-        <div class="banner-anime" style="background-image: url({{ asset('/storage/anime_banner/' . $post->banner) }});">
+        <div class="banner-anime" {{-- style="background-image: url({{ asset('/storage/anime_banner/' . $post->banner) }});" --}}
+            style="background-image: url({{ file_exists(asset('/storage/anime_banner/' . $post->banner)) ? asset('/storage/anime_banner/' . $post->banner) : $post->banner_src }});">
             <div class="gradient"></div>
             <div class="post-info">
-                <img class="thumbnail-post" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="">
-
+                {{-- <img class="thumbnail-post" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt=""> --}}
+                <img class="thumbnail-post"
+                    src="{{ file_exists(asset('/storage/thumbnails/' . $post->thumbnail)) ? asset('/storage/thumbnails/' . $post->thumbnail) : $post->thumbnail_src }}"
+                    alt="">
                 <div class="post-data-anime">
                     <div class="title-post">
                         <span>{{ $post->title }}</span>

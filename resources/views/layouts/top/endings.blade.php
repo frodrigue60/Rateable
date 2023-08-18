@@ -20,7 +20,7 @@
             
             $img_url = null;
             if ($song->post->banner != null) {
-                $img_url = asset('/storage/anime_banner/' . $song->post->banner);
+                $img_url = file_exists(asset('/storage/anime_banner/' . $song->post->banner)) ? asset('/storage/anime_banner/' . $song->post->banner) : $song->post->banner_src;
             } else {
                 $img_url = 'https://static.vecteezy.com/system/resources/thumbnails/005/170/408/small/banner-abstract-geometric-white-and-gray-color-background-illustration-free-vector.jpg';
             }
