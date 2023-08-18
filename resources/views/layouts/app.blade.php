@@ -54,12 +54,12 @@
         <!-- PROD ASSETS -->
         <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
         {{-- BUILD --}}
-        <link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/modalSearch.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/userProfile.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/post.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/ranking.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/assets/fivestars.css') }}">
+        <link rel="stylesheet" href="{{ URL::URL::asset('build/assets/app.css') }}">
+        <link rel="stylesheet" href="{{ URL::URL::asset('build/assets/modalSearch.css') }}">
+        <link rel="stylesheet" href="{{ URL::URL::asset('build/assets/userProfile.css') }}">
+        <link rel="stylesheet" href="{{ URL::URL::asset('build/assets/post.css') }}">
+        <link rel="stylesheet" href="{{ URL::URL::asset('build/assets/ranking.css') }}">
+        <link rel="stylesheet" href="{{URL::asset('build/assets/fivestars.css')}}">
     @endif
 </head>
 
@@ -95,11 +95,11 @@
         @else
             {{-- PROD SCRIPTS --}}
             {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
-            <script src="{{ asset('resources/js/jquery-3.6.3.min.js') }}"></script>
-            <script src="{{ asset('resources/js/popper.min.js') }}"></script>
-            <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="{{ URL::asset('resources/js/jquery-3.6.3.min.js') }}"></script>
+            <script src="{{ URL::asset('resources/js/popper.min.js') }}"></script>
+            <script src="{{ URL::asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
             {{-- BUILD --}}
-            <script src="{{ asset('build/assets/ajaxSearch.js') }}"></script>
+            <script src="{{ URL::asset('build/assets/ajaxSearch.js') }}"></script>
         @endif
 
         @yield('script')
