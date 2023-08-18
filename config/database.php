@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('JAWSDB_URL', 'mysql'),
+    'default' => env('DATABASE_URL', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------

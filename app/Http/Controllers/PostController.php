@@ -33,63 +33,57 @@ class PostController extends Controller
             $score_format = null;
         }
 
-        $songs = Song::all();
+        $recently = Song::with(['post'])
+            ->whereHas('post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->get()
+            ->sortByDesc('created_at')
+            ->take(25);
 
-        if ($songs != null) {
-            $recently = Song::with(['post'])
-                ->whereHas('post', function ($query) {
-                    $query->where('status', '=', 'published');
-                })
-                ->get()
-                ->sortByDesc('created_at')
-                ->take(25);
+        $popular = Song::with(['post'])
+            ->whereHas('post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->get()
+            ->sortByDesc('likeCount')
+            ->take(15);
+        $popular = $this->setScore($popular, $score_format);
+        //dd($popular);
 
-            $popular = Song::with(['post'])
-                ->whereHas('post', function ($query) {
-                    $query->where('status', '=', 'published');
-                })
-                ->get()
-                ->sortByDesc('likeCount')
-                ->take(15);
-            $popular = $this->setScore($popular, $score_format);
-            //dd($popular);
+        $viewed = Song::with(['post'])
+            ->whereHas('post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->get()
+            ->sortByDesc('view_count')
+            ->take(15);
+        $viewed = $this->setScore($viewed, $score_format);
+        //dd($viewed);
 
-            $viewed = Song::with(['post'])
-                ->whereHas('post', function ($query) {
-                    $query->where('status', '=', 'published');
-                })
-                ->get()
-                ->sortByDesc('view_count')
-                ->take(15);
-            $viewed = $this->setScore($viewed, $score_format);
-            //dd($viewed);
+        $openings = Song::with(['post'])
+            ->where('type', 'OP')
+            ->whereHas('post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->get()
+            ->sortByDesc('averageRating')
+            ->take(5);
+        $openings = $this->setScore($openings, $score_format);
 
-            $openings = Song::with(['post'])
-                ->where('type', 'OP')
-                ->whereHas('post', function ($query) {
-                    $query->where('status', '=', 'published');
-                })
-                ->get()
-                ->sortByDesc('averageRating')
-                ->take(5);
-            $openings = $this->setScore($openings, $score_format);
-
-            $endings = Song::with(['post'])
-                ->where('type', 'ED')
-                ->whereHas('post', function ($query) {
-                    $query->where('status', '=', 'published');
-                })
-                ->get()
-                ->sortByDesc('averageRating')
-                ->take(5);
-            $endings = $this->setScore($endings, $score_format);
-            //dd($openings,$endings);
+        $endings = Song::with(['post'])
+            ->where('type', 'ED')
+            ->whereHas('post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->get()
+            ->sortByDesc('averageRating')
+            ->take(5);
+        $endings = $this->setScore($endings, $score_format);
+        //dd($openings,$endings);
 
 
-            return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));
-        } else {
-            return view('index');
-        }
+        return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));
     }
 
     public function animes(Request $request)
@@ -130,7 +124,7 @@ class PostController extends Controller
             return $post->title;
         });
 
-        $posts = $this->paginate($posts, 24)->withQueryString();
+        $posts = $this->paginate($posts,24)->withQueryString();
 
         if ($request->ajax()) {
             //error_log('new ajax request');
@@ -138,7 +132,7 @@ class PostController extends Controller
             return response()->json(['html' => $view, "lastPage" => $posts->lastPage()]);
         }
 
-        return view('public.posts.filter', compact(/* 'posts', */'tags', 'characters', 'requested'));
+        return view('public.posts.filter', compact(/* 'posts', */ 'tags', 'characters', 'requested'));
     }
 
 
@@ -691,7 +685,7 @@ class PostController extends Controller
 
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs, 24)->withQueryString();
+        $songs = $this->paginate($songs,24)->withQueryString();
 
         //dd($songs);
         if ($request->ajax()) {
@@ -700,7 +694,7 @@ class PostController extends Controller
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
         //dd($songs);
-        return view('public.songs.filter', compact(/* 'songs', */'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+        return view('public.songs.filter', compact(/* 'songs', */ 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
     }
 
     public function likePost($id)
@@ -837,7 +831,7 @@ class PostController extends Controller
 
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs, 24)->withQueryString();
+        $songs = $this->paginate($songs,24)->withQueryString();
 
         if ($request->ajax()) {
             //error_log('new ajax request');
@@ -845,7 +839,7 @@ class PostController extends Controller
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
         //dd($songs);
-        return view('public.songs.filter', compact(/* 'songs', */'tags', 'requested', 'sortMethods', 'types', 'characters'));
+        return view('public.songs.filter', compact(/* 'songs', */ 'tags', 'requested', 'sortMethods', 'types', 'characters'));
     }
     public function setScore($songs, $score_format)
     {
