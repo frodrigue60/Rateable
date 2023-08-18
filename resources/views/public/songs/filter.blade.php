@@ -155,7 +155,7 @@
                 }
 
                 url = currentUrl + pageName + page;
-                console.log("fetch to: " + url);
+                //console.log("fetch to: " + url);
 
                 fetch(url, {
                         method: "GET",
@@ -287,7 +287,7 @@
                 }
 
                 url = currentUrl + pageName + page;
-                console.log("fetch to: " + url);
+                //console.log("fetch to: " + url);
 
                 fetch(url, {
                         method: "GET",
