@@ -54,12 +54,12 @@
         <!-- PROD ASSETS -->
         <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
         {{-- BUILD --}}
-        <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
-        <link rel="stylesheet" href="{{ asset('resources/css/modalSearch.css') }}">
-        <link rel="stylesheet" href="{{ asset('resources/css/userProfile.css') }}">
-        <link rel="stylesheet" href="{{ asset('resources/css/post.css') }}">
-        <link rel="stylesheet" href="{{ asset('resources/css/ranking.css') }}">
-        <link rel="stylesheet" href="{{ asset('resources/css/fivestars.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/build/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/build/modalSearch.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/build/userProfile.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/build/post.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/build/ranking.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/build/fivestars.css') }}">
     @endif
 </head>
 
@@ -99,7 +99,7 @@
             <script src="{{ asset('resources/js/popper.min.js') }}"></script>
             <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
             {{-- BUILD --}}
-            <script src="{{ asset('resources/js/ajaxSearch.js') }}"></script>
+            <script src="{{ asset('assets/build/ajaxSearch.js') }}"></script>
         @endif
 
         @yield('script')
