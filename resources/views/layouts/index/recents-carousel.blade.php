@@ -12,6 +12,9 @@
         <div class="owl-carousel carousel-recents-main">
             @foreach ($recently as $song)
                 @isset($song->post)
+                @php
+                    $thumb_url = file_exists(asset('/storage/thumbnails/' . $song->post->thumbnail)) ? asset('/storage/thumbnails/' . $song->post->thumbnail) : $song->post->thumbnail_src;
+                @endphp
                     <article class="tarjeta">
                         <div class="textos">
                             <div class="tarjeta-header">
@@ -23,7 +26,7 @@
                             <a class="no-deco"
                                 href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
                                 <img class="thumb" loading="lazy"
-                                    src="{{ asset('/storage/thumbnails/' . $song->post->thumbnail) }}"
+                                    src="{{ $thumb_url }}"
                                     alt="{{ $song->post->title }}" title="{{ $song->post->title }}">
                             </a>
                         </div>
