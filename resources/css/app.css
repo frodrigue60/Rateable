@@ -338,6 +338,8 @@ footer {
 	transform: rotate(45deg) translate(65px, -90px);
 	display: flex;
 	align-items: end;
+	top: 0;
+	right: 75px;
 }
 
 .tag2 {
@@ -349,6 +351,8 @@ footer {
 	transform: rotate(45deg) translate(65px, -90px);
 	display: flex;
 	align-items: end;
+	top: 0;
+	right: 75px;
 }
 
 .tag-content {
@@ -493,8 +497,8 @@ footer {
 
 .thumb {
 	position: absolute;
-	width: 150px;
-	height: 220px;
+	/* width: 150px; */
+	height: 100%;
 	/* overflow: hidden; */
 	background-position: center center;
 	transform: scale(1);
@@ -509,11 +513,11 @@ footer {
 
 .tarjeta {
 	border-radius: 5px;
-	/* font-weight: bold; */
 	position: relative;
 	overflow: hidden;
-	width: 150px;
-	height: 220px;
+	height: 100%;
+	
+	aspect-ratio: 15/22;
 	cursor: pointer;
 	background-color: #0b2538;
 }
@@ -590,13 +594,12 @@ h4 {
 
 .contenedor-tarjetas-filtro {
 	display: grid;
-	/*grid-template-columns: repeat(7, 1fr);*/
-	grid-template-columns: repeat(auto-fill, 150px);
-	grid-template-rows: repeat(auto-fill, 220px);
+	grid-template-columns: repeat(6, 1fr);
+	grid-template-rows: repeat(1, auto);
 	gap: 15px;
 }
 
-.social-share-panel{
+.social-share-panel {
 	display: flex;
 	flex-direction: column;
 	position: fixed;
@@ -606,19 +609,23 @@ h4 {
 	border-left: solid 2px #3c3c3c;
 	padding-left: 3px;
 }
-.social-share-panel div{
+
+.social-share-panel div {
 	align-items: center;
 	padding-left: 30px;
 	transition: all 250ms ease-in-out;
 }
-.social-share-panel:hover{
+
+.social-share-panel:hover {
 	right: 0;
 	border-left: solid 6px #707070;
 }
-.social-share-panel:hover div{
+
+.social-share-panel:hover div {
 	padding-left: 0px;
 }
-.social-share-panel button{
+
+.social-share-panel button {
 	font-size: 2em;
 	height: fit-content;
 	aspect-ratio: 1/1;
@@ -628,21 +635,30 @@ h4 {
 	/* padding: 0 10px; */
 }
 
-.share-fb{
+.share-fb {
 	background-color: #097CEB;
 }
-.share-ig{
-	background: linear-gradient(45deg,#FF1358,#FFC900);
+
+.share-ig {
+	background: linear-gradient(45deg, #FF1358, #FFC900);
 }
-.share-x-tw{
+
+.share-x-tw {
 	background-color: #3c3c3c;
 	color: aliceblue;
 }
 
+.owl-carousel .owl-stage {
+    display: flex;
+    width: 100%;
+	height: 220px;
+}
+
 @media screen and (max-width: 1920px) {
-	.father-container{
+	.father-container {
 		max-width: 1100px;
 	}
+
 	.container-items-seasonal {
 		background-color: #0C2638;
 		max-width: 306px;
@@ -685,10 +701,8 @@ h4 {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		/*grid-template-columns: repeat(7, 1fr);*/
-		grid-template-columns: repeat(auto-fill, 150px);
-		grid-template-rows: repeat(auto-fill, 220px);
-		gap: 15px;
+		grid-template-columns: repeat(6, 1fr);
+		grid-template-rows: repeat(1, auto);
 	}
 
 	.contenedor {
@@ -798,10 +812,8 @@ h4 {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		/*grid-template-columns: repeat(7, 1fr);*/
-		grid-template-columns: repeat(auto-fill, 150px);
-		grid-template-rows: repeat(auto-fill, 220px);
-		gap: 15px;
+		grid-template-columns: repeat(6, 1fr);
+		grid-template-rows: repeat(1, auto);
 	}
 
 	.contenedor {
@@ -907,10 +919,11 @@ h4 {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		/*grid-template-columns: repeat(7, 1fr);*/
-		grid-template-columns: repeat(auto-fill, 150px);
-		grid-template-rows: repeat(auto-fill, 220px);
-		gap: 15px;
+		grid-template-columns: repeat(5, 1fr);
+		grid-template-rows: repeat(1, auto);
+	}
+	.tarjeta{
+		min-width: 100px;
 	}
 
 	.contenedor {
@@ -1000,7 +1013,6 @@ h4 {
 	}
 
 	.contenedor-filtro {
-		width: fit-content;
 		margin: auto;
 		padding: 0px 0;
 
@@ -1011,10 +1023,8 @@ h4 {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		width: fit-content;
-		grid-template-columns: repeat(4, 150px);
-		grid-template-rows: repeat(auto-fill, 220px);
-		gap: 15px;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(1, auto);
 	}
 
 	.contenedor {
@@ -1108,7 +1118,6 @@ h4 {
 	}
 
 	.contenedor-filtro {
-		width: fit-content;
 		margin: auto;
 		padding: 0px 0;
 
@@ -1119,10 +1128,8 @@ h4 {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		width: fit-content;
-		grid-template-columns: repeat(4, 150px);
-		grid-template-rows: repeat(auto-fill, 220px);
-		gap: 15px;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(1, auto);
 	}
 
 	.contenedor {
@@ -1186,7 +1193,7 @@ h4 {
 
 	}
 
-	.social-share-panel{
+	.social-share-panel {
 		display: none;
 	}
 
@@ -1234,7 +1241,6 @@ h4 {
 	}
 
 	.contenedor-filtro {
-		width: fit-content;
 		margin: auto;
 		padding: 0px 0;
 
@@ -1245,10 +1251,8 @@ h4 {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		width: fit-content;
-		grid-template-columns: repeat(3, 150px);
-		grid-template-rows: repeat(auto-fill, 220px);
-		gap: 15px;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(1, auto);
 	}
 
 	.contenedor {
@@ -1333,6 +1337,12 @@ h4 {
 		place-content: center;
 	}
 
+	.contenedor-tarjetas-filtro{
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(1, auto);
+	}
+
 	.contenedor-main {
 		width: 480px;
 		margin: auto;
@@ -1387,7 +1397,6 @@ h4 {
 	}
 
 	.contenedor-filtro {
-		width: fit-content;
 		margin: auto;
 		padding: 0px 0;
 
@@ -1398,10 +1407,8 @@ h4 {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		width: fit-content;
-		grid-template-columns: repeat(2, 150px);
-		grid-template-rows: repeat(auto-fill, 220px);
-		gap: 15px;
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-rows: repeat(1, auto);
 	}
 
 	.contenedor {
@@ -1478,7 +1485,6 @@ h4 {
 	}
 
 	.contenedor-filtro {
-		width: fit-content;
 		margin: auto;
 		padding: 0px 0;
 
@@ -1489,10 +1495,8 @@ h4 {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		width: fit-content;
-		grid-template-columns: repeat(2, 150px);
-		grid-template-rows: repeat(auto-fill, 220px);
-		gap: 15px;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: repeat(1, auto);
 	}
 
 	.contenedor {

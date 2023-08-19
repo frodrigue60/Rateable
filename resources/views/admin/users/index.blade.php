@@ -29,22 +29,20 @@
                             </tr>
                         </thead>
                         <tbody>
-
                             @foreach ($users as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td><a href="{{route('user.list',$item->id)}}">{{ $item->name }}</a></td>
-                                    <td>{{$item->email}}</td>
-                                    <td>{{$item->type}}</td>
+                                    <td><a href="{{ route('user.list', $item->id) }}">{{ $item->name }}</a></td>
+                                    <td>{{ $item->email }}</td>
+                                    <td>{{ $item->type }}</td>
                                     <td>
-                                        @auth
-                                            <a class="btn btn-success btn-sm" href="{{route('admin.users.edit',$item->id)}}"
-                                                role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
-                                                {{ $item->id }}</a>
-                                            <a class="btn btn-danger btn-sm" href="{{route('admin.users.destroy',$item->id)}}"
-                                                role="button"><i class="fa fa-trash" aria-hidden="true"></i> Delete
-                                                {{ $item->id }}</a>
-                                        @endauth
+                                        @if (Auth::User()->isAdmin())
+                                            <a class="btn btn-success btn-sm"
+                                                href="{{ route('admin.users.edit', $item->id) }}" role="button"><i
+                                                    class="fa-solid fa-pencil"></i></a>
+                                            <a class="btn btn-danger btn-sm"
+                                                href="{{ route('admin.users.destroy', $item->id) }}" role="button"><i class="fa-solid fa-trash"></i></a>
+                                        @endif
                                     </td>
                             @endforeach
 

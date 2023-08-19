@@ -45,19 +45,14 @@
                                     <td>
                                         @if (Auth::User()->isAdmin())
                                             <a class="btn btn-success btn-sm" href="/admin/artist/{{ $artist->id }}/edit"
-                                                role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
-                                                {{ $artist->id }}</a>
+                                                role="button"><i class="fa-solid fa-pencil"></i></a>
                                             <a class="btn btn-danger btn-sm"
                                                 href="/admin/artist/{{ $artist->id }}/destroy" role="button"><i
-                                                    class="fa fa-trash" aria-hidden="true"></i> Delete
-                                                {{ $artist->id }}</a>
+                                                    class="fa fa-trash" aria-hidden="true"></i></a>
                                         @else
-                                            <button disabled="disabled" class="btn btn-success btn-sm"><i
-                                                    class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
-                                                {{ $artist->id }}</button>
+                                            <button disabled="disabled" class="btn btn-success btn-sm"><i class="fa-solid fa-pencil"></i></button>
                                             <button disabled="disabled" class="btn btn-danger btn-sm"><i class="fa fa-trash"
-                                                    aria-hidden="true"></i> Delete
-                                                {{ $artist->id }}</button>
+                                                    aria-hidden="true"></i></button>
                                         @endif
                                     </td>
                             @endforeach

@@ -7,7 +7,7 @@
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
                 <div class="card-header text-light">
-                    <span>Reports Panel</span>
+                    <h5>Reports Panel</h5>
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">
@@ -20,7 +20,7 @@
                         <thead>
                             <tr>
                                 {{-- <th scope="col">ID</th> --}}
-                                <th scope="col">Post ID</th>
+                                {{-- <th scope="col">Post ID</th> --}}
                                 <th scope="col">Reports</th>
                                 <th scope="col">Source</th>
                                 <th scope="col">Status</th>
@@ -33,9 +33,9 @@
                             @foreach ($reports as $report)
                                 <tr>
                                     {{-- <td>{{ $report->id }}</td> --}}
-                                    <td>
+                                    {{-- <td>
                                         {{ $report->post_id }}
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         {{ $report->nums }}
                                     </td>
@@ -47,23 +47,19 @@
                                         @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                             @if ($report->status == 'pending')
                                                 <a class="btn btn-secondary btn-sm"
-                                                    href="{{ route('admin.report.fixed', $report->id) }}">Fixed
-                                                    {{ $report->id }}</a>
+                                                    href="{{ route('admin.report.fixed', $report->id) }}"><i class="fa-solid fa-clock"></i></a>
                                             @else
                                                 @if ($report->status == 'fixed')
                                                     <a class="btn btn-success btn-sm"
-                                                        href="{{ route('admin.report.unfixed', $report->id) }}">Unfixed
-                                                        {{ $report->id }}</a>
+                                                        href="{{ route('admin.report.unfixed', $report->id) }}"><i class="fa-solid fa-check"></i></a>
                                                 @endif
                                             @endif
                                         @else
                                             @if ($report->status == 'pending')
-                                                <button disabled class="btn btn-warning btn-sm">Fixed
-                                                    {{ $report->id }}</button>
+                                                <button disabled class="btn btn-warning btn-sm"><i class="fa-solid fa-clock"></i></button>
                                             @else
                                                 @if ($report->status == 'fixed')
-                                                    <button disabled class="btn btn-success btn-sm">Unfixed
-                                                        {{ $report->id }}</button>
+                                                    <button disabled class="btn btn-success btn-sm"><i class="fa-solid fa-check"></i></button>
                                                 @endif
                                             @endif
                                         @endif
@@ -72,12 +68,10 @@
 
                                     @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                         <td>
-                                            <a href="{{ route('song.post.edit', $report->post_id) }}"
-                                                class="btn btn-success btn-sm"><i class="fa fa-pencil-square-o"
-                                                    aria-hidden="true"></i> {{ $report->post_id }}</a>
+                                            {{-- <a href="{{ route('song.post.edit', $report->post_id) }}"
+                                                class="btn btn-success btn-sm"><i class="fa-solid fa-pencil"></i> Edit Post</a> --}}
                                             <a class="btn btn-danger btn-sm"
-                                                href="{{ route('admin.report.destroy', $report->id) }}"><i
-                                                    class="fa fa-trash" aria-hidden="true"></i> {{ $report->id }}</a>
+                                                href="{{ route('admin.report.destroy', $report->id) }}"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     @endif
 

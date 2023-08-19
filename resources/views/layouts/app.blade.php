@@ -41,7 +41,7 @@
             integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         @vite([
             /* 'resources/sass/app.scss',
-            'resources/js/app.js', */
+             'resources/js/app.js', */
             'resources/js/ajaxSearch.js',
             'resources/css/app.css',
             'resources/css/modalSearch.css',
@@ -80,15 +80,21 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"
             integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="{{ asset('resources/owlcarousel/owl.carousel.min.js') }}" defer></script>
-        <script src="{{ asset('resources/js/owCarouselConfig.js') }}" defer></script>
 
-        
+        @if (Request::routeIs('/'))
+            <script src="{{ asset('resources/owlcarousel/owl.carousel.min.js') }}" defer></script>
+            <script src="{{ asset('resources/js/owCarouselConfig.js') }}" defer></script>
+        @endif
+
+
 
         @if (config('app.env') === 'local')
             {{-- DEV SCRIPTS --}}
-            <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js"
-                integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+            @if (Request::routeIs('/'))
+                <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js"
+                    integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+            @endif
+
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous" defer>
             </script>
