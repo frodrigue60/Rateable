@@ -9,19 +9,24 @@
     "src": "resources/js/api_get_video.js",
     "isEntry": true
   },
+  "resources/js/animes_infinite_scroll.js": {
+    "file": "assets/animes_infinite_scroll.3d5192c8.js",
+    "src": "resources/js/animes_infinite_scroll.js",
+    "isEntry": true
+  },
   "resources/css/modalSearch.css": {
     "file": "assets/modalSearch.14aa855b.css",
     "src": "resources/css/modalSearch.css",
     "isEntry": true
   },
-  "resources/css/fivestars.css": {
-    "file": "assets/fivestars.e5effc1e.css",
-    "src": "resources/css/fivestars.css",
-    "isEntry": true
-  },
   "resources/css/userProfile.css": {
     "file": "assets/userProfile.29eb089a.css",
     "src": "resources/css/userProfile.css",
+    "isEntry": true
+  },
+  "resources/css/fivestars.css": {
+    "file": "assets/fivestars.e5effc1e.css",
+    "src": "resources/css/fivestars.css",
     "isEntry": true
   },
   "resources/css/ranking.css": {
@@ -35,7 +40,7 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app.ff245c89.css",
+    "file": "assets/app.54134bb3.css",
     "src": "resources/css/app.css",
     "isEntry": true
   }
