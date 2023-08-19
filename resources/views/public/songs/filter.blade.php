@@ -37,7 +37,7 @@
         <div class="contenedor-filtro">
             {{-- SEARCH PANEL --}}
             <aside>
-                <div class="searchPanel">
+                <section class="searchPanel">
                     @if (Request::routeIs('favorites'))
                         <form id="myForm" action="{{ route('favorites') }}" method="get">
                     @endif
@@ -49,10 +49,10 @@
                     @endif
                     @if (Request::routeIs('favorites') || Request::routeIs('user.list'))
                         {{-- FILTER BY --}}
-                        <section class="searchItem">
-                            <span class="text-light">Filter By</span>
-                            <select id="chzn-filterBy" name="filterBy" class="form-select"
-                                aria-label="Default select example">
+                        <div class="searchItem">
+                            <label for="select-filterBy" class="form-label text-light">Filter By</label>
+                            <select class="form-select" aria-label="Default select example" id="select-filterBy"
+                                name="filterBy">
                                 <option value="">Select a filter method</option>
                                 @foreach ($filters as $item)
                                     <option value="{{ $item['value'] }}"
@@ -61,13 +61,13 @@
                                     </option>
                                 @endforeach
                             </select>
-                        </section>
+                        </div>
                     @endif
                     {{-- TYPE --}}
-                    <section class="searchItem">
-                        <span class="text-light">Select Type</span>
-                        <select id="chzn-type" name="type" class="form-select" aria-label="Default select example">
-                            <option value="">Select the type</option>
+                    <div class="searchItem">
+                        <label for="select-type" class="form-label text-light">Select type</label>
+                        <select class="form-select" aria-label="Default select example" id="select-type" name="type">
+                            <option value="">Select a theme type</option>
                             @foreach ($types as $item)
                                 <option value="{{ $item['value'] }}"
                                     {{ $requested->type == $item['value'] ? 'selected' : '' }}>
@@ -75,23 +75,23 @@
                                 </option>
                             @endforeach
                         </select>
-                    </section>
+                    </div>
                     {{-- TAGS --}}
-                    <section class="searchItem">
-                        <span class="text-light">Select Season</span>
-                        <select id="chzn-tag" name='tag' class="form-select" aria-label="Default select example">
-                            <option value="">Select the season</option>
+                    <div class="searchItem">
+                        <label for="select-season" class="form-label text-light">Select season</label>
+                        <select class="form-select" aria-label="Default select example" id="select-season" name="tag">
+                            <option value="">Select a season</option>
                             @foreach ($tags as $tag)
                                 <option value="{{ $tag->name }}" {{ $requested->tag == $tag->name ? 'selected' : '' }}>
                                     {{ $tag->name }}</option>
                             @endforeach
                         </select>
-                    </section>
+                    </div>
                     {{-- SORT --}}
-                    <section class="searchItem">
-                        <span class="text-light">Sort By</span>
-                        <select id="chzn-sort" name="sort" class="form-select" aria-label="Default select example">
-                            <option value="">Select order method</option>
+                    <div class="searchItem">
+                        <label for="select-sort" class="form-label text-light">Select order method</label>
+                        <select class="form-select" aria-label="Default select example" id="select-sort" name="sort">
+                            <option value="">Select a sort method</option>
                             @foreach ($sortMethods as $item)
                                 <option value="{{ $item['value'] }}"
                                     {{ $requested->sort == $item['value'] ? 'selected' : '' }}>
@@ -99,24 +99,24 @@
                                 </option>
                             @endforeach
                         </select>
-                    </section>
+                    </div>
                     {{-- LETTER --}}
-                    <section class="searchItem">
-                        <span class="text-light">Filter by Letter</span>
-                        <select id="chzn-char" name="char" class="form-select" aria-label="Default select example">
-                            <option value="">Select a letter</option>
+                    <div class="searchItem">
+                        <label for="select-char" class="form-label text-light">Select a character</label>
+                        <select class="form-select" aria-label="Default select example" id="select-char" name="char">
+                            <option value="">Select a character</option>
                             @foreach ($characters as $item)
                                 <option value="{{ $item }}" class="text-uppercase"
                                     {{ $requested->char == $item ? 'selected' : '' }}>{{ $item }}</option>
                             @endforeach
                         </select>
-                    </section>
+                    </div>
                     <br>
                     <div class="d-flex justify-content-center">
                         <button class="btn btn-primary w-100" type="submit">Do it</button>
                     </div>
                     </form>
-                </div>
+                </section>
             </aside>
             {{-- POSTS --}}
             <section class="text-light">
@@ -522,18 +522,4 @@
             }
         </script>
     @endif
-
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#chzn-filterBy").chosen();
-            $("#chzn-type").chosen();
-            $("#chzn-tag").chosen();
-            $("#chzn-sort").chosen();
-            $("#chzn-char").chosen();
-        });
-    </script>
 @endsection

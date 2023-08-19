@@ -43,27 +43,33 @@
             {{-- SEARCH PANEL --}}
             <aside>
                 <div class="searchPanel">
-                    <form action="" method="get">
+                    <form action="{{ route('animes') }}" method="get">
                         <section class="searchItem">
-                            <span class="text-light">Select Season</span>
-                            <select id="chzn-tag" name='tag' class="form-select" aria-label="Default select example">
-                                <option value="">Select the season</option>
-                                @foreach ($tags as $tag)
-                                    <option value="{{ $tag->name }}"
-                                        {{ $requested->tag == $tag->name ? 'selected' : '' }}>
-                                        {{ $tag->name }}</option>
-                                @endforeach
-                            </select>
+                            <div class="mb-3 w-100">
+                                <label for="select-season" class="form-label text-light">Select season</label>
+                                <select class="form-select" aria-label="Default select example" id="select-season"
+                                    name="tag">
+                                    <option value="">Select a tag</option>
+                                    @foreach ($tags as $tag)
+                                        <option value="{{ $tag->name }}"
+                                            {{ $requested->tag == $tag->name ? 'selected' : '' }}>
+                                            {{ $tag->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </section>
                         <section class="searchItem">
-                            <span class="text-light">Filter by Letter</span>
-                            <select id="chzn-char" name="char" class="form-select" aria-label="Default select example">
-                                <option value="">Select a letter</option>
-                                @foreach ($characters as $item)
-                                    <option value="{{ $item }}" class="text-uppercase"
-                                        {{ $requested->char == $item ? 'selected' : '' }}>{{ $item }}</option>
-                                @endforeach
-                            </select>
+                            <div class="mb-3 w-100">
+                                <label for="select-season" class="form-label text-light">Select character</label>
+                                <select class="form-select" aria-label="Default select example" id="select-season"
+                                    name="char">
+                                    <option value="">Select a character</option>
+                                    @foreach ($characters as $item)
+                                        <option value="{{ $item }}" class="text-uppercase"
+                                            {{ $requested->char == $item ? 'selected' : '' }}>{{ $item }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </section>
                         <br>
                         <div class="d-flex justify-content-center">
@@ -217,16 +223,6 @@
                     })
                     .catch(error => console.error(error));
             }
-        </script>
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        <script src="https://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#chzn-tag").chosen();
-                $("#chzn-char").chosen();
-            });
         </script>
     @endif
 @endsection
