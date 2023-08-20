@@ -78,14 +78,29 @@
                     </div>
                     {{-- TAGS --}}
                     <div class="searchItem">
-                        <label for="select-season" class="form-label text-light">Select season</label>
-                        <select class="form-select" aria-label="Default select example" id="select-season" name="tag">
-                            <option value="">Select a season</option>
-                            @foreach ($tags as $tag)
-                                <option value="{{ $tag->name }}" {{ $requested->tag == $tag->name ? 'selected' : '' }}>
-                                    {{ $tag->name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="w-100 mb-1">
+                            <label class="text-light" for="select-year">Year:</label>
+                            <select class="form-select" aria-label="Default select example" name="year" id="select-year">
+                                <option selected value="">Select a year</option>
+                                @foreach ($years as $item)
+                                    <option value="{{ $item['value'] }}"
+                                        {{ $requested->year == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="w-100 mb-1">
+                            <label class="text-light" for="select-season">Season:</label>
+                            <select class="form-select" aria-label="Default select example" name="season"
+                                id="select-season">
+                                <option selected value="">Select a season</option>
+                                @foreach ($seasons as $item)
+                                    <option value="{{ $item['value'] }}"
+                                        {{ $requested->season == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     {{-- SORT --}}
                     <div class="searchItem">

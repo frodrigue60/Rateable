@@ -75,9 +75,9 @@
                 <section class="contenedor-tarjetas">
                     @foreach ($songs as $song)
                         @isset($song->post)
-                        @php
-                            $img_src = file_exists(asset('/storage/thumbnails/' . $song->post->thumbnail)) ? asset('/storage/thumbnails/' . $song->post->thumbnail) : $song->post->thumbnail_src;
-                        @endphp
+                            @php
+                                $img_src = file_exists(asset('/storage/thumbnails/' . $song->post->thumbnail)) ? asset('/storage/thumbnails/' . $song->post->thumbnail) : $song->post->thumbnail_src;
+                            @endphp
                             <article class="tarjeta">
                                 <div class="textos">
                                     <div class="tarjeta-header text-light">
@@ -98,14 +98,14 @@
                                     @endif
                                     <a class="no-deco"
                                         href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
-                                        <img class="thumb" loading="lazy"
-                                            src="{{ $img_src}}"
+                                        <img class="thumb" loading="lazy" src="{{ $img_src }}"
                                             alt="{{ $song->post->title }}" title="{{ $song->post->title }}">
                                     </a>
                                     <div class="tarjeta-footer text-light">
                                         <span>{{ $song->likeCount }} <i class="fa fa-heart"></i></span>
                                         <span>{{ $song->view_count }} <i class="fa fa-eye"></i></span>
-                                        <span>{{$song->score != null ? $song->score : 'n/a'}} <i class="fa fa-star" aria-hidden="true"></i>
+                                        <span>{{ $song->score != null ? $song->score : 'n/a' }} <i class="fa fa-star"
+                                                aria-hidden="true"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -128,8 +128,11 @@
                         </div>
                         <div class="seasons-content">
                             @foreach ($tags as $item)
+                                @php
+                                    [$season,$year] = explode(' ', $item->name);
+                                @endphp
                                 <article class="season-item color4">
-                                    <span><a href="{{ route('themes', 'tag=' . str_replace(' ', '+', $item->name)) }}"
+                                    <span><a href="{{ route('themes', ['type=','year='.$year,'season='.$season,'sort=','char=']) }}"
                                             class="no-deco text-light">{{ $item->name }}</a></span>
                                 </article>
                             @endforeach
@@ -171,7 +174,8 @@
                                         </div>
                                     </div>
                                     <div class="item-score-seasonal">
-                                        <span>{{$song->score != null ? $song->score : 'n/a'}} <i class="fa fa-star" aria-hidden="true"></i>
+                                        <span>{{ $song->score != null ? $song->score : 'n/a' }} <i class="fa fa-star"
+                                                aria-hidden="true"></i>
                                         </span>
                                     </div>
                                 </article>

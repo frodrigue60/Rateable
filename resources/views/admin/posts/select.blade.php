@@ -4,11 +4,9 @@
     <div class="container">
         <div
             style="
-        display: flex;
-        flex-direction: initial;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
+        display: grid;
+    grid-template-columns: repeat(auto-fill,150px);
+    gap: 15px;
     ">
             @foreach ($posts as $post)
                 <article class="tarjeta">

@@ -30,16 +30,30 @@ class SongController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create($post_id)
     {
-        $tags = Tag::all();
+        /* $tags = Tag::all(); */
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
             ['name' => 'Ending', 'value' => 'ED']
         ];
         $artists = Artist::all();
-        $post = Post::find($id);
-        return view('admin.songs.create', compact('id', 'artists', 'types', 'tags', 'post'));
+        $post = Post::find($post_id);
+
+        $years = [];
+        $seasons = [];
+
+        for ($i = 1950; $i < 2050; $i++) {
+            $years[] = ['name' => $i, 'value' => $i];
+        }
+
+        $seasons = [
+            ['name' => 'SPRING', 'value' => 'SPRING'],
+            ['name' => 'SUMMER', 'value' => 'SUMMER'],
+            ['name' => 'FALL', 'value' => 'FALL'],
+            ['name' => 'WINTER', 'value' => 'WINTER']
+        ];
+        return view('admin.songs.create', compact('artists', 'types', 'post','years','seasons'));
     }
 
     /**
@@ -48,16 +62,18 @@ class SongController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $post_id)
     {
-        //dd($request->tags);
+        //dd($request->all());
         $song = new Song();
         $song->song_romaji = $request->song_romaji;
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
         $song->artist_id = $request->artist_id;
-        $song->post_id = $request->post_id;
+        $song->post_id = $post_id;
         $song->type = $request->type;
+
+        $tag = $request->season.' '.$request->year;
         /* 
         $song->ytlink = $request->ytlink;
         $song->scndlink = $request->scndlink;
@@ -89,10 +105,9 @@ class SongController extends Controller
             $song->suffix = null;
         }
 
-
         if ($song->save()) {
-            $song->tag($request->tags);
-            return redirect(route('song.post.manage', $request->post_id))->with('success', 'song added successfully');
+            $song->tag($tag);
+            return redirect(route('song.post.manage', $post_id))->with('success', 'song added successfully');
         } else {
             return redirect(route('admin.post.index'))->with('error', 'error');
         }
@@ -124,7 +139,21 @@ class SongController extends Controller
             ['name' => 'Opening', 'value' => 'OP'],
             ['name' => 'Ending', 'value' => 'ED']
         ];
-        return view('admin.songs.edit', compact('song', 'artists', 'types', 'tags'));
+        $years = [];
+        $seasons = [];
+
+        for ($i = 1950; $i < 2050; $i++) {
+            $years[] = ['name' => $i, 'value' => $i];
+        }
+
+        $seasons = [
+            ['name' => 'SPRING', 'value' => 'SPRING'],
+            ['name' => 'SUMMER', 'value' => 'SUMMER'],
+            ['name' => 'FALL', 'value' => 'FALL'],
+            ['name' => 'WINTER', 'value' => 'WINTER']
+        ];
+
+        return view('admin.songs.edit', compact('song', 'artists', 'types', 'tags','years','seasons'));
     }
 
     /**
@@ -136,6 +165,7 @@ class SongController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request->all());
         $song = Song::find($id);
         $song->song_romaji = $request->song_romaji;
         $song->song_jp = $request->song_jp;
@@ -144,29 +174,8 @@ class SongController extends Controller
         $song->post_id = $request->post_id;
         $song->type = $request->type;
         $song->theme_num = $request->theme_num;
-        $song->ytlink = $request->ytlink;
-        $song->scndlink = $request->scndlink;
-        $old_video = $song->video_src;
 
-        if ($request->hasFile('video')) {
-            $validator = Validator::make($request->all(), [
-                'video' => 'mimes:webm'
-            ]);
-
-            if ($validator->fails()) {
-                $errors = $validator->getMessageBag();
-                $request->flash();
-                return Redirect::back()
-                    ->with('error', $errors);
-            }
-            $post = Post::find($request->post_id);
-            $file_name = $post->slug . '-' . time() . '.' . 'webm';
-            $song->video_src = $file_name;
-            Storage::disk('public')->delete('/videos/' . $old_video);
-            $request->video->storeAs('videos', $file_name, 'public');
-        } else {
-            $song->video_src = null;
-        }
+        $tag = $request->season.' '.$request->year;
 
         if ($request->theme_num >= 1) {
             $song->suffix = $song->type . $request->theme_num;
@@ -176,7 +185,7 @@ class SongController extends Controller
         }
 
         if ($song->update()) {
-            $song->tag($request->tags);
+            $song->tag($tag);
             return redirect(route('song.post.manage', $song->post_id))->with('success', 'Song updated success');
         } else {
             return redirect(route('admin.post.index'))->with('error', 'error, something has been wrong');

@@ -61,7 +61,7 @@ Route::group(['middleware' => 'staff'], function () {
         //SONGS
         Route::group(['middleware' => 'editor'], function () {
             Route::get('/song-post/{id}/create',       [AdminSongController::class, 'create'])->name('song.post.create');
-            Route::post('/song-post/store',       [AdminSongController::class, 'store'])->name('song.post.store');
+            Route::post('/song-post/{id}/store',       [AdminSongController::class, 'store'])->name('song.post.store');
             
         });
         Route::group(['middleware' => 'editor'], function () {

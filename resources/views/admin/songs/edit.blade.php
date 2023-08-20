@@ -35,8 +35,9 @@
                         <div class="row">
                             <div class="col-md">
                                 <label for="ArtistId" class="form-label">Artist</label>
-                                <select class="chzn-select" name="artist_id" id="ArtistId" style="width:100%;">
-                                    <option value="">Select a artist</option>
+                                <select class="form-select" aria-label="Default select example" name="artist_id"
+                                    id="ArtistId">
+                                    <option selected value="">Select an artist</option>
                                     @foreach ($artists as $artist)
                                         <option {{ $song->artist_id == $artist->id ? 'selected' : '' }}
                                             value="{{ $artist->id }}">{{ $artist->name }}</option>
@@ -45,33 +46,39 @@
                             </div>
                             <div class="col-md">
                                 <label for="type" class="form-label">Type:</label>
-                                <select class="chzn-select" name="type" id="type" style="width:100%;">
+                                <select class="form-select" aria-label="Default select example" name="type"
+                                    id="type">
+                                    <option selected value="">Select a type</option>
                                     @foreach ($types as $item)
                                         <option {{ $song->type == $item['value'] ? 'selected' : '' }}
                                             value="{{ $item['value'] }}">{{ $item['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md">
-                                <label for="seasonsTags">Select season</label>
-                                <select class="chzn-select" multiple="true" name="tags[]" id="seasonsTags"
-                                    style="width:100%;display:flex;flex-direction:column;">
-                                    @foreach ($tags as $tag)
-                                        @foreach ($song->tags as $item)
-                                            <option {{ $item->name == $tag->name ? 'selected' : '' }}
-                                                value="{{ $tag->name }}">
-                                                {{ $tag->name }}</option>
-                                        @endforeach
-                                        <option value="{{ $tag->name }}">
-                                            {{ $tag->name }}</option>
+                                <label for="select-year">Year:</label>
+                                <select class="form-select" aria-label="Default select example" name="year"
+                                    id="select-year">
+                                    <option selected value="">Select a year</option>
+                                    @foreach ($years as $item)
+                                        <option value="{{ $item['value'] }}">{{ $item['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md">
+                                <label for="select-season">Season:</label>
+                                <select class="form-select" aria-label="Default select example" name="season"
+                                    id="select-season">
+                                    <option selected value="">Select a season</option>
+                                    @foreach ($seasons as $item)
+                                        <option value="{{ $item['value'] }}">{{ $item['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        
-
                         <br>
-
                         <button class="btn btn-primary" type="submit">Submit</button>
                 </div>
                 </form>
@@ -80,17 +87,6 @@
         </div>
 
     @section('script')
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        {{-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> --}}
-        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
-
-        <script type="text/javascript">
-            $(function() {
-                $(".chzn-select").chosen();
-            });
-        </script>
     @endsection
 </div>
 @endsection
