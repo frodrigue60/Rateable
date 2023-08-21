@@ -518,7 +518,7 @@
         @if (config('app.env') === 'local')
             @vite(['resources/js/api_get_video.js'])
         @else
-            <script src="{{ asset('build/assets/api_get_video.js') }}"></script>
+            <script src="{{ asset('resources/js/api_get_video.js') }}"></script>
         @endif
 
         <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
