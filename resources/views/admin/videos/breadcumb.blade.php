@@ -1,5 +1,6 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ route('admin.post.index') }}">index</a></li>
         @if (isset($song))
             <li class="breadcrumb-item"><a
                     href="{{ route('song.post.manage', $song->post->id) }}">{{ $song->post->title }}</a></li>

@@ -2,6 +2,7 @@
 .container-top {
     display: flex;
     flex-direction: row;
+    gap: 1em;
 }
 
 .container-items {
@@ -17,9 +18,9 @@
 
 .top-header-ranking {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     flex-direction: row;
-    width: 96%;
     align-items: center;
     /* margin-top: 5px; */
     color: #ffffff;
@@ -31,7 +32,6 @@
 
 .top-item {
     white-space: nowrap;
-    width: 96%;
     transform: scale(1);
     transition: all .15s ease-out;
     margin: 1px;
@@ -41,6 +41,7 @@
     z-index: 1;
     background: #0E3D5F;
     border-radius: 3px;
+    width: 100%;
 }
 
 .top-item:hover {
