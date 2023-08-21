@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    const siteUrl = "https://anirank-edcb15de9fd7.herokuapp.com/"
+    const siteUrl = "https://anirank-edcb15de9fd7.herokuapp.com"
 
     async function getVideo(id) {
         try {
