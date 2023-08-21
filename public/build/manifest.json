@@ -24,14 +24,14 @@
     "src": "resources/css/userProfile.css",
     "isEntry": true
   },
-  "resources/css/ranking.css": {
-    "file": "assets/ranking.f62a9a4f.css",
-    "src": "resources/css/ranking.css",
-    "isEntry": true
-  },
   "resources/css/fivestars.css": {
     "file": "assets/fivestars.e5effc1e.css",
     "src": "resources/css/fivestars.css",
+    "isEntry": true
+  },
+  "resources/css/ranking.css": {
+    "file": "assets/ranking.f62a9a4f.css",
+    "src": "resources/css/ranking.css",
     "isEntry": true
   },
   "resources/css/post.css": {
@@ -40,7 +40,7 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app.793ae92f.css",
+    "file": "assets/app.dc0cbb1c.css",
     "src": "resources/css/app.css",
     "isEntry": true
   }
