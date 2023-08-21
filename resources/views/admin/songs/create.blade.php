@@ -2,13 +2,15 @@
 
 @section('content')
     <div class="container">
+        @include('admin.songs.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
-                <div class="card-header">Create Post</div>
+                <div class="card-header">
+                    <h5 class="card-title">Add song</h5>
+                </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('song.post.store',$post->id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('song.post.store', $post->id) }}" enctype="multipart/form-data">
                         @csrf
-                        {{-- <input id="post_id" name="post_id" type="hidden" value="{{ $post->id }}"> --}}
                         <div class="row">
                             <div class="col">
                                 <label for="theme_num" class="form-label">OP/ED Number</label>

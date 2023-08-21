@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container">
-        <h3 class="text-light">{{$song->post->title}} / {{$song->suffix}}</h3>
+        @include('admin.videos.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}

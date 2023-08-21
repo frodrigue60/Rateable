@@ -2,9 +2,10 @@
 
 @section('content')
     <div class="container">
+        @include('admin.videos.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
-                <div class="card-header">Update Post</div>
+                <div class="card-header">Edit video</div>
                 <div class="card-body">
                     <form method="post" action="{{ route('admin.videos.update', $video->id) }}" enctype="multipart/form-data">
                         @csrf

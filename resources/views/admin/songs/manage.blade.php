@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="container">
+        @include('admin.songs.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}

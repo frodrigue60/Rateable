@@ -2,9 +2,10 @@
 
 @section('content')
     <div class="container">
+        @include('admin.songs.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
-                <div class="card-header">Create Post</div>
+                <div class="card-header">Edit Song</div>
                 <div class="card-body">
                     <form method="post" action="{{ route('song.post.update', $song->id) }}" enctype="multipart/form-data">
                         @method('put')
