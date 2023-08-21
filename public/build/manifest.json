@@ -1,11 +1,11 @@
 {
   "resources/js/ajaxSearch.js": {
-    "file": "assets/ajaxSearch.64b1be1f.js",
+    "file": "assets/ajaxSearch.da0eae01.js",
     "src": "resources/js/ajaxSearch.js",
     "isEntry": true
   },
   "resources/js/api_get_video.js": {
-    "file": "assets/api_get_video.8ffecaa4.js",
+    "file": "assets/api_get_video.5e9846ab.js",
     "src": "resources/js/api_get_video.js",
     "isEntry": true
   },
@@ -19,9 +19,9 @@
     "src": "resources/css/modalSearch.css",
     "isEntry": true
   },
-  "resources/css/userProfile.css": {
-    "file": "assets/userProfile.29eb089a.css",
-    "src": "resources/css/userProfile.css",
+  "resources/css/ranking.css": {
+    "file": "assets/ranking.f62a9a4f.css",
+    "src": "resources/css/ranking.css",
     "isEntry": true
   },
   "resources/css/fivestars.css": {
@@ -29,9 +29,9 @@
     "src": "resources/css/fivestars.css",
     "isEntry": true
   },
-  "resources/css/ranking.css": {
-    "file": "assets/ranking.c9eea4e8.css",
-    "src": "resources/css/ranking.css",
+  "resources/css/userProfile.css": {
+    "file": "assets/userProfile.29eb089a.css",
+    "src": "resources/css/userProfile.css",
     "isEntry": true
   },
   "resources/css/post.css": {
@@ -40,7 +40,7 @@
     "isEntry": true
   },
   "resources/css/app.css": {
-    "file": "assets/app.54134bb3.css",
+    "file": "assets/app.793ae92f.css",
     "src": "resources/css/app.css",
     "isEntry": true
   }
