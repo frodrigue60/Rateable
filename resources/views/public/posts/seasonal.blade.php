@@ -132,7 +132,7 @@
                                     [$season,$year] = explode(' ', $item->name);
                                 @endphp
                                 <article class="season-item color4">
-                                    <span><a href="{{ route('themes', ['type=','year='.$year,'season='.$season,'sort=','char=']) }}"
+                                    <span><a href="{{ route('animes', ['type=','year='.$year,'season='.$season,'sort=','char=']) }}"
                                             class="no-deco text-light">{{ $item->name }}</a></span>
                                 </article>
                             @endforeach
