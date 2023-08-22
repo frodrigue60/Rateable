@@ -17,7 +17,6 @@ const delay = 250;
 document.addEventListener("DOMContentLoaded", function () {
     loaderContainer.style.display = 'none';
     siteBody.removeAttribute('hidden');
-
     nullValueInput();
     cutTitles();
 
@@ -28,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             insertLoader();
             clearTimeout(typingTimer);
             if (input.value.length >= 1) {
-                typingTimer = setTimeout(apiSearch, delay);
+                typingTimer = setTimeout(apiSearch, 250);
             } else {
                 resetDivs();
                 nullValueInput();

@@ -121,6 +121,8 @@ class UserController extends Controller
         $requested->tag = $tag;
         $requested->sort = $sort;
         $requested->char = $char;
+        $requested->year = $request->year;
+        $requested->season = $request->season;
 
         $years = [];
         $seasons = [];

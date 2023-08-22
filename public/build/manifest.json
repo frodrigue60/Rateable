@@ -1,6 +1,6 @@
 {
   "resources/js/ajaxSearch.js": {
-    "file": "assets/ajaxSearch.da0eae01.js",
+    "file": "assets/ajaxSearch.b0842994.js",
     "src": "resources/js/ajaxSearch.js",
     "isEntry": true
   },
@@ -19,9 +19,9 @@
     "src": "resources/css/modalSearch.css",
     "isEntry": true
   },
-  "resources/css/userProfile.css": {
-    "file": "assets/userProfile.29eb089a.css",
-    "src": "resources/css/userProfile.css",
+  "resources/css/ranking.css": {
+    "file": "assets/ranking.f62a9a4f.css",
+    "src": "resources/css/ranking.css",
     "isEntry": true
   },
   "resources/css/fivestars.css": {
@@ -29,9 +29,9 @@
     "src": "resources/css/fivestars.css",
     "isEntry": true
   },
-  "resources/css/ranking.css": {
-    "file": "assets/ranking.f62a9a4f.css",
-    "src": "resources/css/ranking.css",
+  "resources/css/userProfile.css": {
+    "file": "assets/userProfile.29eb089a.css",
+    "src": "resources/css/userProfile.css",
     "isEntry": true
   },
   "resources/css/post.css": {

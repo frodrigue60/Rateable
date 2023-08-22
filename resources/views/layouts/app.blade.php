@@ -54,11 +54,11 @@
         <!-- PROD ASSETS -->
         <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
         {{-- BUILD --}}
-        <link rel="stylesheet" href="{{ asset('resources/css/modalSearch.css') }}">
         <link rel="stylesheet" href="{{ asset('resources/css/userProfile.css') }}">
         <link rel="stylesheet" href="{{ asset('resources/css/post.css') }}">
         <link rel="stylesheet" href="{{ asset('resources/css/ranking.css') }}">
         <link rel="stylesheet" href="{{ asset('resources/css/fivestars.css') }}">
+        <link rel="stylesheet" href="{{ asset('resources/css/modalSearch.css') }}">
         <link rel="stylesheet" href="{{ asset('resources/css/app.css') }}">
     @endif
 </head>
