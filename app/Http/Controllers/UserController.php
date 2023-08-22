@@ -122,6 +122,20 @@ class UserController extends Controller
         $requested->sort = $sort;
         $requested->char = $char;
 
+        $years = [];
+        $seasons = [];
+
+        for ($i = 1950; $i < 2050; $i++) {
+            $years[] = ['name' => $i, 'value' => $i];
+        }
+
+        $seasons = [
+            ['name' => 'SPRING', 'value' => 'SPRING'],
+            ['name' => 'SUMMER', 'value' => 'SUMMER'],
+            ['name' => 'FALL', 'value' => 'FALL'],
+            ['name' => 'WINTER', 'value' => 'WINTER']
+        ];
+
         $filters = [
             ['name' => 'All', 'value' => 'all'],
             ['name' => 'Only Rated', 'value' => 'rated']
@@ -459,7 +473,7 @@ class UserController extends Controller
             $view = view('public.songs.songs-cards', compact('songs'))->render();
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
-        return view('public.songs.filter', compact(/* 'songs', */ 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+        return view('public.songs.filter', compact('seasons','years', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
     }
 
     public function paginate($songs, $perPage = 18, $page = null, $options = [])

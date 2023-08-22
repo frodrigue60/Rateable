@@ -63,7 +63,7 @@
     @endif
 </head>
 
-<body id="body" class="color2 hidden">
+<body id="body" class="color2" hidden>
     <div id="app">
         <div class="loader-container">
             <div class="spinner"></div>

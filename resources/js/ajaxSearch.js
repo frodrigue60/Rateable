@@ -7,53 +7,36 @@ const input = document.querySelector('#searchInputModal');
 const token = document.querySelector('meta[name="csrf-token"]').content;
 const titles = document.querySelectorAll('.post-titles');
 const loaderContainer = document.querySelector('.loader-container');
-const siteBody = document.querySelector('#body');
+const siteBody = document.querySelector('body');
 const modalBody = document.querySelector('#modalBody');
 const resDiv = document.querySelector('.res');
 
-let typingTimer; //timer identifier
-let doneTypingInterval = 500; //time in ms (5 seconds)
-
-window.addEventListener("load", function(event) {
-    loaderContainer.style.display = 'none';
-    siteBody.classList.remove("hidden");
-});
+let typingTimer;
+const delay = 250;
 
 document.addEventListener("DOMContentLoaded", function () {
+    loaderContainer.style.display = 'none';
+    siteBody.removeAttribute('hidden');
+
     nullValueInput();
     cutTitles();
 
     myModal.addEventListener('shown.bs.modal', function () {
         input.focus();
-
         input.addEventListener('keyup', () => {
-            //modalBody.classList.remove('displayNone');
-            postsDiv.innerHTML =
-                '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-            artistsDiv.innerHTML =
-                '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-            tagsDiv.innerHTML =
-                '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-            usersDiv.innerHTML =
-                '<div class="d-flex justify-content-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
-
+            resetDivs();
+            insertLoader();
             clearTimeout(typingTimer);
             if (input.value.length >= 1) {
-                typingTimer = setTimeout(doneTyping, doneTypingInterval);
+                typingTimer = setTimeout(apiSearch, delay);
             } else {
-                postsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                    '</span></div>';
-                artistsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                    '</span></div>';
-                tagsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                    '</span></div>';
-                    usersDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-                    '</span></div>';
+                resetDivs();
+                nullValueInput();
             }
 
         })
 
-        function doneTyping() {
+        function apiSearch() {
             try {
                 fetch('https://anirank-edcb15de9fd7.herokuapp.com/api/search?q=' + input.value, {
                     headers: {
@@ -61,61 +44,88 @@ document.addEventListener("DOMContentLoaded", function () {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': token,
                     },
-                    method: "get",
+                    method: "GET",
                 }).then(response => {
                     return response.json()
                 }).then((data) => {
-
-                    postsDiv.innerHTML = "";
-                    artistsDiv.innerHTML = "";
-                    tagsDiv.innerHTML = "";
-                    usersDiv.innerHTML = "";
+                    resetDivs();
 
                     data.posts.forEach(element => {
-                        
-                            postsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank-edcb15de9fd7.herokuapp.com/anime/' +
-                            element.id + '/' + element.slug +'"><span>' +
-                            element.title+'</span></a></div>';
-                        
+                        let url = "https://anirank-edcb15de9fd7.herokuapp.com/anime/" + element.id + "/" + element.slug;
+
+                        let resultDiv = document.createElement('div');
+                        resultDiv.classList.add('result');
+
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.textContent = element.title;
+
+                        resultDiv.appendChild(a);
+                        postsDiv.appendChild(resultDiv);
                     });
 
                     data.artists.forEach(element => {
-                        artistsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank-edcb15de9fd7.herokuapp.com/artist/' +element.id +'/'+
-                            element.name_slug + '"><span>' + element.name +
-                            '</span></a></div>';
+                        let url = "https://anirank-edcb15de9fd7.herokuapp.com/artist/" + element.id + "/" + element.name_slug;
+
+                        let resultDiv = document.createElement('div');
+                        resultDiv.classList.add('result');
+
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.textContent = element.name;
+
+                        resultDiv.appendChild(a);
+                        artistsDiv.appendChild(resultDiv);
                     });
 
                     data.tags.forEach(element => {
-                        tagsDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank-edcb15de9fd7.herokuapp.com/filter?tag=' +
-                            element.name.replace(/ /g, '+') + '"><span>' + element.name +
-                            '</span></a></div>';
+                        let partes = element.name.split(' ');
+                        let season = partes[0];
+                        let year = partes[1];
+                        let url = "https://anirank-edcb15de9fd7.herokuapp.com/animes?type=&year=" + year + "&season=" + season + "&sort=&char=";
+
+                        let resultDiv = document.createElement('div');
+                        resultDiv.classList.add('result');
+
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.textContent = element.name;
+
+                        resultDiv.appendChild(a);
+                        tagsDiv.appendChild(resultDiv);
                     });
                     data.users.forEach(element => {
-                        usersDiv.innerHTML +=
-                            '<div class="result"><a href="https://anirank-edcb15de9fd7.herokuapp.com/user/' +
-                            element.id + '"><span>' + element.name +
-                            '</span></a></div>';
+
+                        let url = "https://anirank-edcb15de9fd7.herokuapp.com/user/" + element.id;
+
+                        let resultDiv = document.createElement('div');
+                        resultDiv.classList.add('result');
+
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.textContent = element.name;
+
+                        resultDiv.appendChild(a);
+                        usersDiv.appendChild(resultDiv);
                     });
                     resDiv.classList.remove('hidden');
                 });
             } catch (error) {
-                console.log(error)
+                //console.log(error)
             }
         }
     });
+    function resetDivs() {
+        postsDiv.innerHTML = "";
+        artistsDiv.innerHTML = "";
+        tagsDiv.innerHTML = "";
+        usersDiv.innerHTML = "";
+    }
     function nullValueInput() {
-        
-        postsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-            '</span></div>';
-        artistsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-            '</span></div>';
-        tagsDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-            '</span></div>';
-            usersDiv.innerHTML = '<div class="result" id="posts"><span>' + "Nothing" +
-            '</span></div>';
+        postsDiv.appendChild(createResultDiv('posts'));
+        artistsDiv.appendChild(createResultDiv('artists'));
+        tagsDiv.appendChild(createResultDiv('tags'));
+        usersDiv.appendChild(createResultDiv('users'));
     }
     function cutTitles() {
         titles.forEach(title => {
@@ -123,5 +133,40 @@ document.addEventListener("DOMContentLoaded", function () {
                 title.textContent = title.textContent.substr(0, 25) + "...";
             }
         });
+    }
+    function createResultDiv(element_id) {
+        let div = document.createElement('div');
+        div.className = 'result';
+        div.id = element_id; // Puedes asignar un id si es necesario
+
+        let span = document.createElement('span');
+        span.textContent = 'Nothing';
+
+        div.appendChild(span);
+
+        return div;
+    }
+    function createLoadingElement() {
+        const div = document.createElement('div');
+        div.className = 'd-flex justify-content-center';
+
+        const spinnerDiv = document.createElement('div');
+        spinnerDiv.className = 'spinner-border';
+        spinnerDiv.setAttribute('role', 'status');
+
+        const visuallyHiddenSpan = document.createElement('span');
+        visuallyHiddenSpan.className = 'visually-hidden';
+        visuallyHiddenSpan.textContent = 'Loading...';
+
+        spinnerDiv.appendChild(visuallyHiddenSpan);
+        div.appendChild(spinnerDiv);
+
+        return div;
+    }
+    function insertLoader() {
+        postsDiv.appendChild(createLoadingElement());
+        artistsDiv.appendChild(createLoadingElement());
+        tagsDiv.appendChild(createLoadingElement());
+        usersDiv.appendChild(createLoadingElement());
     }
 });
