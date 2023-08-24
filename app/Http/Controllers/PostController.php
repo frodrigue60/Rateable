@@ -104,7 +104,7 @@ class PostController extends Controller
         $years = [];
         $seasons = [];
 
-        for ($i = 1950; $i < 2050; $i++) {
+        for ($i = 2024; $i > 1950; $i--) {
             $years[] = ['name' => $i, 'value' => $i];
         }
 
@@ -115,8 +115,23 @@ class PostController extends Controller
             ['name' => 'WINTER', 'value' => 'WINTER']
         ];
 
-        if ($request->year != null && $request->season != null) {
-            $tag = $request->season.' '.$request->year;
+        if ($request->year != null || $request->season != null) {
+            if ($request->year != null && $request->season != null) {
+                $tag = $request->season.' '.$request->year;
+            } else {
+                $tag = DB::table('tagging_tags')
+                ->where(function ($query) use ($request) {
+                    if ($request->year != null) {
+                        $query->where('name', 'LIKE', '%' . $request->year . '%');
+                    } else {
+                        $query->where('name', 'LIKE', '%' . $request->season . '%');
+                    }
+                })
+                ->limit(4)
+                ->get()
+                ->pluck('name')
+                ->toArray();
+            }
             if ($char != null) {
                 $posts = Post::withAnyTag($tag)
                     ->where('status', 'published')
@@ -125,7 +140,7 @@ class PostController extends Controller
                 $posts = Post::withAnyTag($tag)
                     ->where('status', 'published')->get();
             }
-        }else {
+        } else {
             if ($char != null) {
                 $posts = Post::where('status', 'published')
                     ->where('title', 'LIKE', "{$char}%")->get();
@@ -137,15 +152,15 @@ class PostController extends Controller
             return $post->title;
         });
 
-        $posts = $this->paginate($posts,24)->withQueryString();
+        $posts = $this->paginate($posts, 24)->withQueryString();
 
         if ($request->ajax()) {
             //error_log('new ajax request');
-            $view = view('public.posts.posts-cards', compact('posts'))->render();
+            $view = view('layouts.posts-cards', compact('posts'))->render();
             return response()->json(['html' => $view, "lastPage" => $posts->lastPage()]);
         }
 
-        return view('public.posts.filter', compact('characters', 'requested','seasons','years'));
+        return view('public.posts.filter', compact('characters', 'requested', 'seasons', 'years'));
     }
 
 
@@ -376,7 +391,7 @@ class PostController extends Controller
         $years = [];
         $seasons = [];
 
-        for ($i = 1950; $i < 2050; $i++) {
+        for ($i = 2024; $i > 1950; $i--) {
             $years[] = ['name' => $i, 'value' => $i];
         }
 
@@ -409,8 +424,23 @@ class PostController extends Controller
 
         switch ($filterBy) {
             case 'all':
-                if ($request->year != null && $request->season != null) {
-                    $tag = $request->season.' '.$request->year;
+                if ($request->year != null || $request->season != null) {
+                    if ($request->year != null && $request->season != null) {
+                        $tag = $request->season.' '.$request->year;
+                    } else {
+                        $tag = DB::table('tagging_tags')
+                        ->where(function ($query) use ($request) {
+                            if ($request->year != null) {
+                                $query->where('name', 'LIKE', '%' . $request->year . '%');
+                            } else {
+                                $query->where('name', 'LIKE', '%' . $request->season . '%');
+                            }
+                        })
+                        ->limit(4)
+                        ->get()
+                        ->pluck('name')
+                        ->toArray();
+                    }
                     if ($type != null) {
                         if ($char != null) {
                             $songs = Song::with(['post'])
@@ -502,8 +532,23 @@ class PostController extends Controller
                 }
                 break;
             case 'rated':
-                if ($request->year != null && $request->season != null) {
-                    $tag = $request->season.' '.$request->year;
+                if ($request->year != null || $request->season != null) {
+                    if ($request->year != null && $request->season != null) {
+                        $tag = $request->season.' '.$request->year;
+                    } else {
+                        $tag = DB::table('tagging_tags')
+                        ->where(function ($query) use ($request) {
+                            if ($request->year != null) {
+                                $query->where('name', 'LIKE', '%' . $request->year . '%');
+                            } else {
+                                $query->where('name', 'LIKE', '%' . $request->season . '%');
+                            }
+                        })
+                        ->limit(4)
+                        ->get()
+                        ->pluck('name')
+                        ->toArray();
+                    }
                     if ($type != null) {
                         if ($char != null) {
                             /* ONLY RATED, HAS TYPE, HAS SEASON */
@@ -622,8 +667,23 @@ class PostController extends Controller
                 }
                 break;
             default:
-                if ($request->year != null && $request->season != null) {
-                    $tag = $request->season.' '.$request->year;
+                if ($request->year != null || $request->season != null) {
+                    if ($request->year != null && $request->season != null) {
+                        $tag = $request->season.' '.$request->year;
+                    } else {
+                        $tag = DB::table('tagging_tags')
+                        ->where(function ($query) use ($request) {
+                            if ($request->year != null) {
+                                $query->where('name', 'LIKE', '%' . $request->year . '%');
+                            } else {
+                                $query->where('name', 'LIKE', '%' . $request->season . '%');
+                            }
+                        })
+                        ->limit(4)
+                        ->get()
+                        ->pluck('name')
+                        ->toArray();
+                    }
                     if ($type != null) {
                         if ($char != null) {
                             $songs = Song::with(['post'])
@@ -718,12 +778,12 @@ class PostController extends Controller
 
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs,24)->withQueryString();
+        $songs = $this->paginate($songs, 24)->withQueryString();
 
         //dd($songs);
         if ($request->ajax()) {
             //error_log('new ajax request');
-            $view = view('public.songs.songs-cards', compact('songs'))->render();
+            $view = view('layouts.songs-cards', compact('songs'))->render();
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
         //dd($songs);
@@ -779,7 +839,7 @@ class PostController extends Controller
         $years = [];
         $seasons = [];
 
-        for ($i = 1950; $i < 2050; $i++) {
+        for ($i = 2024; $i > 1950; $i--) {
             $years[] = ['name' => $i, 'value' => $i];
         }
 
@@ -805,8 +865,24 @@ class PostController extends Controller
 
         $characters = range('A', 'Z');
 
-        if ($request->year != null && $request->season != null) {
-            $tag = $request->season.' '.$request->year;
+        if ($request->year != null || $request->season != null) {
+            if ($request->year != null && $request->season != null) {
+                $tag = $request->season.' '.$request->year;
+            } else {
+                $tag = DB::table('tagging_tags')
+                ->where(function ($query) use ($request) {
+                    if ($request->year != null) {
+                        $query->where('name', 'LIKE', '%' . $request->year . '%');
+                    } else {
+                        $query->where('name', 'LIKE', '%' . $request->season . '%');
+                    }
+                })
+                ->limit(4)
+                ->get()
+                ->pluck('name')
+                ->toArray();
+            }
+            //dd($tag);
             if ($type != null) {
                 if ($char != null) {
                     $songs = Song::with(['post'])
@@ -837,7 +913,7 @@ class PostController extends Controller
                 } else {
                     //dd($request->all());
                     $songs = Song::with(['post'])
-                        ->withAnyTag([$tag])
+                        ->withAnyTag($tag)
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
                         })
@@ -877,19 +953,19 @@ class PostController extends Controller
                 }
             }
         }
-
+        //dd($songs);
 
         $songs = $this->setScore($songs, $score_format);
         $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs,24)->withQueryString();
+        $songs = $this->paginate($songs, 24)->withQueryString();
 
         if ($request->ajax()) {
             //error_log('new ajax request');
-            $view = view('public.songs.songs-cards', compact('songs'))->render();
+            $view = view('layouts.songs-cards', compact('songs'))->render();
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
         //dd($songs);
-        return view('public.songs.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'characters'));
+        return view('public.songs.filter', compact(/* 'songs', */'seasons', 'years', 'requested', 'sortMethods', 'types', 'characters'));
     }
     public function setScore($songs, $score_format)
     {

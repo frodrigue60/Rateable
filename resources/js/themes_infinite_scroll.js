@@ -10,11 +10,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     firstFetch();
 
     formFilter.addEventListener('change', function (event) {
+        let type = document.querySelector('#select-type').value;
         let year = document.querySelector('#select-year').value;
         let season = document.querySelector('#select-season').value;
+        let sort = document.querySelector('#select-sort').value;
         let character = document.querySelector('#select-char').value;
 
-        filterFetch(year, season, character)
+        filterFetch(type,year, season,sort, character);
     });
 
     window.addEventListener("scroll", function () {
@@ -93,13 +95,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
         fetchData(baseUrl);
     }
 
-    function filterFetch(year, season, character) {
+    function filterFetch(type,year, season,sort, character) {
+        let currentUrl = new URL(window.location.href);
         page = 1;
         clearDataDiv();
-        let queryUrl ="?"+"year=" + year + "&season=" + season + "&char=" + character;
-        url = baseUrl + queryUrl;
-        history.pushState(null, null, url);
-        fetchData(url);
+        currentUrl.searchParams.set('type', type);
+        currentUrl.searchParams.set('year', year);
+        currentUrl.searchParams.set('season', season);
+        currentUrl.searchParams.set('sort', sort);
+        currentUrl.searchParams.set('character', character);
+        //let queryUrl ="?"+"type="+type+"&year="+year+"&season="+season+"&sort="+sort+"&char="+character;
+        let newUrl = currentUrl.toString();
+        //url = baseUrl + queryUrl;
+
+        history.pushState(null, null, newUrl);
+        
+        fetchData(newUrl);
     }
     function clearDataDiv() {
         dataDiv.innerHTML = "";

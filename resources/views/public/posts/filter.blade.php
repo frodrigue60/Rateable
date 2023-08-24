@@ -24,26 +24,17 @@
 @endsection
 
 @section('content')
-    @if (Request::routeIs('user.list') || Request::routeIs('favorites'))
-        @include('layouts.userBanner')
-    @endif
     <div class="container">
-
         @if (Request::routeIs('animes'))
             <div class="top-header color1 mb-1 mt-1">
                 <h2 class="text-light mb-0">Filter Animes</h2>
             </div>
         @endif
-        @if (Request::routeIs('favorites'))
-            <div class="top-header color1 mb-1 mt-1">
-                <h2 class="text-light mb-0">My Favorites</h2>
-            </div>
-        @endif
-        <div class="contenedor-filtro">
+        <div class="contenedor-filtro mt-2">
             {{-- SEARCH PANEL --}}
             <aside>
                 <div class="searchPanel">
-                    <form action="{{ route('animes') }}" method="get">
+                    <form action="{{ route('animes') }}" method="get" id="form-filter">
                         <section class="searchItem">
                             <div class="w-100 mb-1">
                                 <label class="text-light" for="select-year">Year:</label>
@@ -67,22 +58,21 @@
                             </div>
                         </section>
                         <section class="searchItem">
-                            <div class="w-100">
-                                <label for="select-char" class="form-label text-light">Select character</label>
+                            <div class="w-100 mb-1">
+                                <label for="select-char" class="text-light">Character:</label>
                                 <select class="form-select" aria-label="Default select example" id="select-char"
                                     name="char">
                                     <option value="">Select a character</option>
                                     @foreach ($characters as $item)
                                         <option value="{{ $item }}" class="text-uppercase"
-                                            {{ $requested->char == $item ? 'selected' : '' }}>{{ $item }}</option>
+                                            {{ $requested->char === $item ? 'selected' : '' }}>{{ $item }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </section>
-                        <br>
-                        <div class="d-flex">
-                            <button class="btn btn-primary w-100" type="submit">Do it</button>
-                        </div>
+                        {{-- <div class="d-flex mt-1">
+                            <button class="btn btn-primary w-100" type="submit">Filter</button>
+                        </div> --}}
                     </form>
                 </div>
             </aside>
@@ -91,10 +81,6 @@
                 <div class="contenedor-tarjetas-filtro" id="data">
                     {{-- @include('public.posts.posts-cards') --}}
                 </div>
-                {{-- <div style="display: flex;justify-content: center;
-                margin-top: 10px;">
-                    {{ $posts->links() }}
-                </div> --}}
             </section>
         </div>
     </div>

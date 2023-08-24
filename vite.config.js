@@ -10,6 +10,9 @@ export default defineConfig({
                 'resources/js/ajaxSearch.js',
                 'resources/js/api_get_video.js',
                 'resources/js/animes_infinite_scroll.js',
+                'resources/js/favorites_infinite_scroll.js',
+                'resources/js/themes_infinite_scroll.js',
+                'resources/js/artists_infinite_scroll.js',
                 'resources/css/app.css',
                 'resources/css/modalSearch.css',
                 'resources/css/userProfile.css',
@@ -20,4 +23,15 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    build: {
+        outDir: 'public/build/assets',
+        rollupOptions: {
+            output: {
+                entryFileNames: '[name].js',
+                chunkFileNames: '[name].js',
+                assetFileNames: '[name].[ext]',
+            },
+        },
+       
+    },
 });

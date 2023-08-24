@@ -28,6 +28,8 @@
                                 href="{{ route('animes') }}">Animes</a></li>
                         <li><a class="dropdown-item"
                                 href="{{ route('themes') }}">Openings & Endings</a></li>
+                        <li><a class="dropdown-item"
+                                href="{{ route('artist.index') }}">Artists</a></li>        
                     </ul>
                 </li>
                 @auth
