@@ -252,7 +252,7 @@ class PostController extends Controller
         if ($currentSeason == null) {
 
             $songs = Song::with(['post'])
-                ->where('type', 'OP')
+                ->where('type', 'ED')
                 ->get();
             $songs = $this->setScore($songs, $score_format);
 
