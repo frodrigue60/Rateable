@@ -26,12 +26,17 @@
     <div class="container text-light">
         @if (Request::routeIs('themes'))
             <div class="top-header color1 mb-1 mt-1">
-                <h2 class="text-light mb-0">Filter Themes</h2>
+                <h2 class="text-light">Filter Themes</h2>
             </div>
         @endif
         @if (Request::routeIs('favorites'))
             <div class="top-header color1 mb-1 mt-1">
-                <h2 class="text-light mb-0">My Favorites</h2>
+                <h2 class="text-light">My Favorites</h2>
+            </div>
+        @endif
+        @if (Request::routeIs('user.list') && isset($user))
+            <div class="top-header color1 mb-1 mt-1">
+                <h2 class="text-light"><strong>{{$user->name}}</strong> favorites</h2>
             </div>
         @endif
         @if (Request::routeIs('artist.show'))

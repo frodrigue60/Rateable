@@ -52,18 +52,18 @@
         <div class="contenedor">
             {{-- DIV POSTS --}}
             <section>
-                <div class="top-header color1">
+                <div class="top-header color1 mb-1 mt-1">
                     @if (Request::is('openings'))
                         <div>
-                            <h2 class="text-light mb-0">Openings @isset($currentSeason)
+                            <h2 class="text-light">Openings @isset($currentSeason)
                                     {{ $currentSeason->name }}
                                 @endisset
                             </h2>
                         </div>
                     @endif
-                    @if (Request::is('endings') && isset($currentSeason))
+                    @if (Request::is('endings'))
                         <div>
-                            <h2 class="text-light mb-0">Endings {{ $currentSeason->name }}</h2>
+                            <h2 class="text-light">Endings {{ $currentSeason->name }}</h2>
                         </div>
                     @endif
 
@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <section class="contenedor-tarjetas">
+                <section class="contenedor-tarjetas mt-2">
                     @foreach ($songs as $song)
                         @isset($song->post)
                             @php

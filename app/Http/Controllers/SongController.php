@@ -179,12 +179,12 @@ class SongController extends Controller
         if (Auth::check()) {
             //dd($request->all());
             $song = Song::find($id);
-            $score = $request->score;
+            //$score = $request->score;
             $score_format = $request->score_format;
 
             $validator = Validator::make($request->all(), [
                 'comment' => 'nullable|string|max:255',
-                'score' => 'required'
+                'score' => 'required|numeric'
             ]);
 
             if ($validator->fails()) {
@@ -192,11 +192,10 @@ class SongController extends Controller
                 return redirect()
                     ->back()
                     ->with('error', $messageBag);
+            }else{
+                $score = $request->score;
             }
 
-            if (blank($score)) {
-                return redirect()->back()->with('warning', 'Score can not be null');
-            }
             switch ($score_format) {
                 case 'POINT_100':
                     if (($score >= 1) && ($score <= 100)) {
@@ -250,7 +249,7 @@ class SongController extends Controller
 
                 default:
                     if (($score >= 1) && ($score <= 100)) {
-                        $song->rateOnce($score, $request->comment);
+                        $song->rateOnce($score*10, $request->comment);
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 100');

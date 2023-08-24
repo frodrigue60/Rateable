@@ -13,9 +13,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\Console\Output\ConsoleOutput;
-
-
+use Illuminate\Support\Facades\Validator;
 use stdClass;
 
 class PostController extends Controller
@@ -117,20 +115,20 @@ class PostController extends Controller
 
         if ($request->year != null || $request->season != null) {
             if ($request->year != null && $request->season != null) {
-                $tag = $request->season.' '.$request->year;
+                $tag = $request->season . ' ' . $request->year;
             } else {
                 $tag = DB::table('tagging_tags')
-                ->where(function ($query) use ($request) {
-                    if ($request->year != null) {
-                        $query->where('name', 'LIKE', '%' . $request->year . '%');
-                    } else {
-                        $query->where('name', 'LIKE', '%' . $request->season . '%');
-                    }
-                })
-                ->limit(4)
-                ->get()
-                ->pluck('name')
-                ->toArray();
+                    ->where(function ($query) use ($request) {
+                        if ($request->year != null) {
+                            $query->where('name', 'LIKE', '%' . $request->year . '%');
+                        } else {
+                            $query->where('name', 'LIKE', '%' . $request->season . '%');
+                        }
+                    })
+                    ->limit(4)
+                    ->get()
+                    ->pluck('name')
+                    ->toArray();
             }
             if ($char != null) {
                 $posts = Post::withAnyTag($tag)
@@ -289,10 +287,20 @@ class PostController extends Controller
     {
         if (Auth::check()) {
             $post = Post::find($id);
-            $score = $request->score;
 
-            if (blank($score)) {
-                return redirect()->back()->with('warning', 'Score can not be null');
+            //dd($request->all());
+            $validator = Validator::make($request->all(), [
+                'comment' => 'nullable|string|max:255',
+                'score' => 'required|numeric'
+            ]);
+
+            if ($validator->fails()) {
+                $messageBag = $validator->getMessageBag();
+                return redirect()
+                    ->back()
+                    ->with('error', $messageBag);
+            }else{
+                $score = $request->score;
             }
 
             switch (Auth::user()->score_format) {
@@ -307,7 +315,7 @@ class PostController extends Controller
 
                 case 'POINT_10_DECIMAL':
                     if (($score >= 1) && ($score <= 10)) {
-                        $post->rateOnce(intval($score * 10));
+                        $post->rateOnce($score * 10);
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 10 (can use decimals)');
@@ -316,7 +324,7 @@ class PostController extends Controller
 
                 case 'POINT_10':
                     if (($score >= 1) && ($score <= 10)) {
-                        $post->rateOnce(intval($score * 10));
+                        $post->rateOnce($score * 10);
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 10 (only integer numbers)');
@@ -350,8 +358,8 @@ class PostController extends Controller
 
 
                 default:
-                    if (($score >= 1) && ($score <= 100)) {
-                        $post->rateOnce($score);
+                    if (($score >= 1) && ($score <= 10)) {
+                        $post->rateOnce($score * 10);
                         return redirect()->back()->with('success', 'Post rated Successfully');
                     } else {
                         return redirect()->back()->with('warning', 'Only values between 1 and 100');
@@ -426,20 +434,20 @@ class PostController extends Controller
             case 'all':
                 if ($request->year != null || $request->season != null) {
                     if ($request->year != null && $request->season != null) {
-                        $tag = $request->season.' '.$request->year;
+                        $tag = $request->season . ' ' . $request->year;
                     } else {
                         $tag = DB::table('tagging_tags')
-                        ->where(function ($query) use ($request) {
-                            if ($request->year != null) {
-                                $query->where('name', 'LIKE', '%' . $request->year . '%');
-                            } else {
-                                $query->where('name', 'LIKE', '%' . $request->season . '%');
-                            }
-                        })
-                        ->limit(4)
-                        ->get()
-                        ->pluck('name')
-                        ->toArray();
+                            ->where(function ($query) use ($request) {
+                                if ($request->year != null) {
+                                    $query->where('name', 'LIKE', '%' . $request->year . '%');
+                                } else {
+                                    $query->where('name', 'LIKE', '%' . $request->season . '%');
+                                }
+                            })
+                            ->limit(4)
+                            ->get()
+                            ->pluck('name')
+                            ->toArray();
                     }
                     if ($type != null) {
                         if ($char != null) {
@@ -534,20 +542,20 @@ class PostController extends Controller
             case 'rated':
                 if ($request->year != null || $request->season != null) {
                     if ($request->year != null && $request->season != null) {
-                        $tag = $request->season.' '.$request->year;
+                        $tag = $request->season . ' ' . $request->year;
                     } else {
                         $tag = DB::table('tagging_tags')
-                        ->where(function ($query) use ($request) {
-                            if ($request->year != null) {
-                                $query->where('name', 'LIKE', '%' . $request->year . '%');
-                            } else {
-                                $query->where('name', 'LIKE', '%' . $request->season . '%');
-                            }
-                        })
-                        ->limit(4)
-                        ->get()
-                        ->pluck('name')
-                        ->toArray();
+                            ->where(function ($query) use ($request) {
+                                if ($request->year != null) {
+                                    $query->where('name', 'LIKE', '%' . $request->year . '%');
+                                } else {
+                                    $query->where('name', 'LIKE', '%' . $request->season . '%');
+                                }
+                            })
+                            ->limit(4)
+                            ->get()
+                            ->pluck('name')
+                            ->toArray();
                     }
                     if ($type != null) {
                         if ($char != null) {
@@ -669,20 +677,20 @@ class PostController extends Controller
             default:
                 if ($request->year != null || $request->season != null) {
                     if ($request->year != null && $request->season != null) {
-                        $tag = $request->season.' '.$request->year;
+                        $tag = $request->season . ' ' . $request->year;
                     } else {
                         $tag = DB::table('tagging_tags')
-                        ->where(function ($query) use ($request) {
-                            if ($request->year != null) {
-                                $query->where('name', 'LIKE', '%' . $request->year . '%');
-                            } else {
-                                $query->where('name', 'LIKE', '%' . $request->season . '%');
-                            }
-                        })
-                        ->limit(4)
-                        ->get()
-                        ->pluck('name')
-                        ->toArray();
+                            ->where(function ($query) use ($request) {
+                                if ($request->year != null) {
+                                    $query->where('name', 'LIKE', '%' . $request->year . '%');
+                                } else {
+                                    $query->where('name', 'LIKE', '%' . $request->season . '%');
+                                }
+                            })
+                            ->limit(4)
+                            ->get()
+                            ->pluck('name')
+                            ->toArray();
                     }
                     if ($type != null) {
                         if ($char != null) {
@@ -867,20 +875,20 @@ class PostController extends Controller
 
         if ($request->year != null || $request->season != null) {
             if ($request->year != null && $request->season != null) {
-                $tag = $request->season.' '.$request->year;
+                $tag = $request->season . ' ' . $request->year;
             } else {
                 $tag = DB::table('tagging_tags')
-                ->where(function ($query) use ($request) {
-                    if ($request->year != null) {
-                        $query->where('name', 'LIKE', '%' . $request->year . '%');
-                    } else {
-                        $query->where('name', 'LIKE', '%' . $request->season . '%');
-                    }
-                })
-                ->limit(4)
-                ->get()
-                ->pluck('name')
-                ->toArray();
+                    ->where(function ($query) use ($request) {
+                        if ($request->year != null) {
+                            $query->where('name', 'LIKE', '%' . $request->year . '%');
+                        } else {
+                            $query->where('name', 'LIKE', '%' . $request->season . '%');
+                        }
+                    })
+                    ->limit(4)
+                    ->get()
+                    ->pluck('name')
+                    ->toArray();
             }
             //dd($tag);
             if ($type != null) {
@@ -1006,7 +1014,6 @@ class PostController extends Controller
                     if ($song->rating != null) {
                         $song->user_score = round($song->rating / 10);
                     }
-
                     break;
             }
         });

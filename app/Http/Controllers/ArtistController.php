@@ -40,12 +40,11 @@ class ArtistController extends Controller
      */
     public function show(Request $request, $id, $name_slug)
     {
-
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
             $user = Auth::user();
         } else {
-            return redirect()->route('login');
+            $score_format = null;
         }
         $tag = $request->season . ' ' . $request->year;
         $type = $request->type;

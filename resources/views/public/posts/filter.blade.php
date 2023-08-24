@@ -27,7 +27,7 @@
     <div class="container">
         @if (Request::routeIs('animes'))
             <div class="top-header color1 mb-1 mt-1">
-                <h2 class="text-light mb-0">Filter Animes</h2>
+                <h2 class="text-light">Filter Animes</h2>
             </div>
         @endif
         <div class="contenedor-filtro mt-2">
