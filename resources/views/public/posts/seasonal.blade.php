@@ -55,21 +55,23 @@
                 <div class="top-header color1 mb-1 mt-1">
                     @if (Request::is('openings'))
                         <div>
-                            <h2 class="text-light">Openings @isset($currentSeason)
-                                    {{ $currentSeason->name }}
-                                @endisset
-                            </h2>
+                            @if (isset($currentSeason->name))
+                                <h2 class="text-light">Openings {{$currentSeason->name}}</h2>
+                            @else
+                                <h2 class="text-light">Openings</h2>
+                            @endif
+
                         </div>
                     @endif
                     @if (Request::is('endings'))
                         <div>
-                            <h2 class="text-light">Endings {{ $currentSeason->name }}</h2>
+                            @if (isset($currentSeason->name))
+                                <h2 class="text-light">Endings {{$currentSeason->name}}</h2>
+                            @else
+                                <h2 class="text-light">Endings</h2>
+                            @endif
                         </div>
                     @endif
-
-                    <div>
-                        {{-- <a href="{{route('globalranking')}}" class="btn btn-sm btn-primary">More</a> --}}
-                    </div>
                 </div>
 
                 <section class="contenedor-tarjetas mt-2">
@@ -129,10 +131,10 @@
                         <div class="seasons-content">
                             @foreach ($tags as $item)
                                 @php
-                                    [$season,$year] = explode(' ', $item->name);
+                                    [$season, $year] = explode(' ', $item->name);
                                 @endphp
                                 <article class="season-item color4">
-                                    <span><a href="{{ route('animes', ['type=','year='.$year,'season='.$season,'sort=','char=']) }}"
+                                    <span><a href="{{ route('animes', ['type=', 'year=' . $year, 'season=' . $season, 'sort=', 'char=']) }}"
                                             class="no-deco text-light">{{ $item->name }}</a></span>
                                 </article>
                             @endforeach
