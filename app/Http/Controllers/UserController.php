@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -124,39 +123,13 @@ class UserController extends Controller
         $requested->year = $request->year;
         $requested->season = $request->season;
 
-        $years = [];
-        $seasons = [];
+        $years = $this->SeasonsYears($tags)['years'];
+        $seasons = $this->SeasonsYears($tags)['seasons'];
 
-        for ($i = 1950; $i < 2050; $i++) {
-            $years[] = ['name' => $i, 'value' => $i];
-        }
-
-        $seasons = [
-            ['name' => 'SPRING', 'value' => 'SPRING'],
-            ['name' => 'SUMMER', 'value' => 'SUMMER'],
-            ['name' => 'FALL', 'value' => 'FALL'],
-            ['name' => 'WINTER', 'value' => 'WINTER']
-        ];
-
-        $filters = [
-            ['name' => 'All', 'value' => 'all'],
-            ['name' => 'Only Rated', 'value' => 'rated']
-        ];
-
-        $types = [
-            ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
-        ];
-
-        $sortMethods = [
-            ['name' => 'Recent', 'value' => 'recent'],
-            ['name' => 'Title', 'value' => 'title'],
-            ['name' => 'Score', 'value' => 'averageRating'],
-            ['name' => 'Views', 'value' => 'view_count'],
-            ['name' => 'Popular', 'value' => 'likeCount']
-        ];
-
-        $characters = range('A', 'Z');
+        $filters = $this->filterTypesSortChar()['filters'];
+        $types = $this->filterTypesSortChar()['types'];
+        $sortMethods = $this->filterTypesSortChar()['sortMethods'];
+        $characters = $this->filterTypesSortChar()['characters'];
 
         switch ($filterBy) {
             case 'all':
@@ -269,7 +242,7 @@ class UserController extends Controller
                                 //->with('likeCounter')
                                 //->with('post')
                                 ->get();
-                                //dd($songs);
+                            //dd($songs);
                         } else {
                             /* ONLY RATED, TYPE, SEASON */
                             $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
@@ -297,9 +270,8 @@ class UserController extends Controller
                                 ->where('ratings.user_id', '=', $user->id)
                                 //->with('likeCounter')
                                 ->get();
-                                
                         } else {
-                                $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
+                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
                                 ->withAnyTag($tag)
                                 ->whereHas('post', function ($query) {
                                     $query->where('status', 'published');
@@ -354,7 +326,7 @@ class UserController extends Controller
                                 ->where('ratings.user_id', '=', $user->id)
                                 //->with('likeCounter')
                                 ->get();
-                                //dd($songs);
+                            //dd($songs);
                         } else {
                             /* ONLY RATED */
                             $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
@@ -475,7 +447,7 @@ class UserController extends Controller
             $view = view('public.songs.songs-cards', compact('songs'))->render();
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
-        return view('public.songs.filter', compact('seasons','years', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+        return view('public.songs.filter', compact('seasons', 'years', 'tags', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
     }
 
     public function paginate($songs, $perPage = 18, $page = null, $options = [])
@@ -661,5 +633,60 @@ class UserController extends Controller
     public function welcome()
     {
         return view('welcome');
+    }
+    public function SeasonsYears($tags)
+    {
+        $tagNames = [];
+        $tagYears = [];
+
+        for ($i = 0; $i < count($tags); $i++) {
+            [$name, $year] = explode(' ', $tags[$i]->name);
+
+            if (!in_array($year, $tagNames)) {
+                $years[] = ['name' => $year, 'value' => $year];
+                $tagNames[] = $year; // Agregamos el año al array de nombres para evitar duplicados
+            }
+
+            if (!in_array($name, $tagYears)) {
+                $seasons[] = ['name' => $name, 'value' => $name];
+                $tagYears[] = $name; // Agregamos el año al array de nombres para evitar duplicados
+            }
+        }
+
+        $data = [
+            'years' => $years,
+            'seasons' => $seasons
+        ];
+        return $data;
+    }
+    public function filterTypesSortChar()
+    {
+        $filters = [
+            ['name' => 'All', 'value' => 'all'],
+            ['name' => 'Only Rated', 'value' => 'rated']
+        ];
+
+        $types = [
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED']
+        ];
+
+        $sortMethods = [
+            ['name' => 'Recent', 'value' => 'recent'],
+            ['name' => 'Title', 'value' => 'title'],
+            ['name' => 'Score', 'value' => 'averageRating'],
+            ['name' => 'Views', 'value' => 'view_count'],
+            ['name' => 'Popular', 'value' => 'likeCount']
+        ];
+
+        $characters = range('A', 'Z');
+
+        $data = [
+            'filters' => $filters,
+            'types' => $types,
+            'sortMethods' => $sortMethods,
+            'characters' => $characters
+        ];
+        return $data;
     }
 }

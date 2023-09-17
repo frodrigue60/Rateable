@@ -32,7 +32,10 @@ class TagController extends Controller
      */
     public function create()
     {
-        return view('admin.tags.create');
+        $seasons = $this->seasonsYears()['seasons'];
+        $years = $this->seasonsYears()['years'];
+        //dd($seasons,$years);
+        return view('admin.tags.create', compact('seasons', 'years'));
     }
 
     /**
@@ -44,7 +47,8 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
+            'season' => 'required|string|max:50',
+            'year' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -52,14 +56,16 @@ class TagController extends Controller
             return redirect()
                 ->back()
                 ->withInput([
-                    'name' => $request->input('name')
+                    'season' => $request->input('season'),
+                    'year' => $request->input('year')
                 ])
                 ->with('error', $messageBag);
         } else {
             $tag = new stdClass;
-            $tag->name = preg_replace('/\s+/', ' ', $request->name);
-            $tag->slug = Str::slug($request->name);
-
+            $tag->name = preg_replace('/\s+/', ' ', $request->season . ' ' . $request->year);
+            $tag->slug = Str::slug($tag->name);
+            //dd($tag);
+            
             try {
                 DB::transaction(function () use ($tag) {
                     DB::table('tagging_tags')->insert([
@@ -94,8 +100,10 @@ class TagController extends Controller
     public function edit($id)
     {
         $tag = DB::table('tagging_tags')->find($id);
+        $seasons = $this->seasonsYears()['seasons'];
+        $years = $this->seasonsYears()['years'];
 
-        return view('admin.tags.edit')->with('tag', $tag);
+        return view('admin.tags.edit', compact('seasons', 'years', 'tag'));
     }
 
     /**
@@ -107,22 +115,37 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $tag = new stdClass;
-        $tag->name = preg_replace('/\s+/', ' ', $request->name);
-        $tag->slug = Str::slug($request->name);
+        $validator = Validator::make($request->all(), [
+            'season' => 'required|string|max:50',
+            'year' => 'required|integer',
+        ]);
 
-        try {
-            DB::transaction(function () use ($tag,$id) {
-                DB::table('tagging_tags')
-                ->where('id', '=', $id)
-                ->update([
-                    'slug' => $tag->slug,
-                    'name' => $tag->name
-                ]);
-            });
-            return redirect(route('admin.tags.index'))->with('success', 'Data Has Been Updated Successfully');
-        } catch (\Throwable $e) {
-            return redirect(route('admin.tags.index'))->with('error', $e->getMessage());
+        if ($validator->fails()) {
+            $messageBag = $validator->getMessageBag();
+            return redirect()
+                ->back()
+                ->withInput([
+                    'season' => $request->input('season'),
+                    'year' => $request->input('year')
+                ])
+                ->with('error', $messageBag);
+        } else {
+            $tag = new stdClass;
+            $tag->name = preg_replace('/\s+/', ' ', $request->season . ' ' . $request->year);
+            $tag->slug = Str::slug($tag->name);
+            try {
+                DB::transaction(function () use ($tag, $id) {
+                    DB::table('tagging_tags')
+                        ->where('id', '=', $id)
+                        ->update([
+                            'slug' => $tag->slug,
+                            'name' => $tag->name
+                        ]);
+                });
+                return redirect(route('admin.tags.index'))->with('success', 'Data Has Been Updated Successfully');
+            } catch (\Throwable $e) {
+                return redirect(route('admin.tags.index'))->with('error', $e->getMessage());
+            }
         }
     }
 
@@ -171,5 +194,28 @@ class TagController extends Controller
             ->update(['flag' => '0']);
 
         return redirect()->back()->with('status', 'Data has been updated');
+    }
+    public function seasonsYears()
+    {
+        $years = [];
+        $seasons = [];
+
+        for ($i = 2025; $i > 1950; $i--) {
+            $years[] = ['name' => $i, 'value' => $i];
+        }
+
+        $seasons = [
+            ['name' => 'SPRING', 'value' => 'SPRING'],
+            ['name' => 'SUMMER', 'value' => 'SUMMER'],
+            ['name' => 'FALL', 'value' => 'FALL'],
+            ['name' => 'WINTER', 'value' => 'WINTER']
+        ];
+
+        $data = [
+            'years' => $years,
+            'seasons' => $seasons
+        ];
+
+        return $data;
     }
 }

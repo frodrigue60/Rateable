@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
-use App\Models\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use willvincent\Rateable\Rateable;
 use App\Models\Song;
-use App\Models\Tag;
 use stdClass;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Conner\Tagging\Model\Tag;
 
 
 class ArtistController extends Controller
@@ -46,7 +43,7 @@ class ArtistController extends Controller
         } else {
             $score_format = null;
         }
-        $tag = $request->season . ' ' . $request->year;
+        $tags = Tag::all();
         $type = $request->type;
         $sort = $request->sort;
         $char = $request->char;
@@ -58,24 +55,8 @@ class ArtistController extends Controller
         $requested->year = $request->year;
         $requested->season = $request->season;
 
-        $years = [];
-        $seasons = [];
-
-        for ($i = 2024; $i > 1950; $i--) {
-            $years[] = ['name' => $i, 'value' => $i];
-        }
-
-        $seasons = [
-            ['name' => 'SPRING', 'value' => 'SPRING'],
-            ['name' => 'SUMMER', 'value' => 'SUMMER'],
-            ['name' => 'FALL', 'value' => 'FALL'],
-            ['name' => 'WINTER', 'value' => 'WINTER']
-        ];
-
-        $filters = [
-            ['name' => 'All', 'value' => 'all'],
-            ['name' => 'Only Rated', 'value' => 'rated']
-        ];
+        $years = $this->SeasonsYears($tags)['years'];
+        $seasons = $this->SeasonsYears($tags)['seasons'];
 
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
@@ -92,24 +73,24 @@ class ArtistController extends Controller
 
         $characters = range('A', 'Z');
 
-        $artist = Artist::where('name_slug', $name_slug)->where('id',$id)->first();
+        $artist = Artist::where('name_slug', $name_slug)->where('id', $id)->first();
 
         if ($request->year != null || $request->season != null) {
             if ($request->year != null && $request->season != null) {
-                $tag = $request->season.' '.$request->year;
+                $tag = $request->season . ' ' . $request->year;
             } else {
                 $tag = DB::table('tagging_tags')
-                ->where(function ($query) use ($request) {
-                    if ($request->year != null) {
-                        $query->where('name', 'LIKE', '%' . $request->year . '%');
-                    } else {
-                        $query->where('name', 'LIKE', '%' . $request->season . '%');
-                    }
-                })
-                ->limit(4)
-                ->get()
-                ->pluck('name')
-                ->toArray();
+                    ->where(function ($query) use ($request) {
+                        if ($request->year != null) {
+                            $query->where('name', 'LIKE', '%' . $request->year . '%');
+                        } else {
+                            $query->where('name', 'LIKE', '%' . $request->season . '%');
+                        }
+                    })
+                    ->limit(4)
+                    ->get()
+                    ->pluck('name')
+                    ->toArray();
             }
             if ($type != null) {
                 if ($char != null) {
@@ -192,7 +173,7 @@ class ArtistController extends Controller
             return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
         }
 
-        return view('public.songs.filter', compact('artist','seasons', 'years', 'requested', 'sortMethods', 'types', 'characters'));
+        return view('public.songs.filter', compact('artist', 'seasons', 'years', 'requested', 'sortMethods', 'types', 'characters'));
     }
     public function setScore($songs, $score_format)
     {
@@ -282,5 +263,30 @@ class ArtistController extends Controller
                 return $songs;
                 break;
         }
+    }
+    public function SeasonsYears($tags)
+    {
+        $tagNames = [];
+        $tagYears = [];
+
+        for ($i = 0; $i < count($tags); $i++) {
+            [$name, $year] = explode(' ', $tags[$i]->name);
+
+            if (!in_array($year, $tagNames)) {
+                $years[] = ['name' => $year, 'value' => $year];
+                $tagNames[] = $year; // Agregamos el año al array de nombres para evitar duplicados
+            }
+
+            if (!in_array($name, $tagYears)) {
+                $seasons[] = ['name' => $name, 'value' => $name];
+                $tagYears[] = $name; // Agregamos el año al array de nombres para evitar duplicados
+            }
+        }
+
+        $data = [
+            'years' => $years,
+            'seasons' => $seasons
+        ];
+        return $data;
     }
 }

@@ -7,7 +7,7 @@
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
                 <div class="card-header text-light">
-                    <span>requests Panel</span>
+                    <h5 class="card-title">Requests Panel</h5>
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">
@@ -20,9 +20,7 @@
                         <thead>
                             <tr>
                                 <th class="col" scope="col">ID</th>
-
                                 <th scope="col">Content</th>
-
                                 @if (Auth::User()->isStaff())
                                     <th class="col" scope="col">Actions</th>
                                 @endif
@@ -46,8 +44,7 @@
                                                     </a>
                                                 @else
                                                     @if ($request->status == 'attended')
-                                                        <a class="btn btn-success btn-sm" href="">OK
-                                                        </a>
+                                                        <button class="btn btn-success btn-sm">OK</button>
                                                     @endif
                                                 @endif
                                             @endif

@@ -6,16 +6,16 @@
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
                 <div class="card-header text-light">
-                    <span>Request by {{$userRequest->user->name}}</span>
+                    <h5 class="card-title">Request by: {{$userRequest->user->name}}</h5>
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body text-light">
-                    <span>{{$userRequest->content}}</span>
+                    <p class="card-text">{{$userRequest->content}}</p>
                 </div>
                 {{-- CARD FOOTER --}}
-                <div class="card-footer">
+                {{-- <div class="card-footer">
                     
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

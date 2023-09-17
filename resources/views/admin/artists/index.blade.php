@@ -14,7 +14,7 @@
                 {{-- CARD BODY --}}
                 <div class="card-body">
                     {{-- search form --}}
-                    <form class="d-flex" action="{{route('admin.artist.search')}}" method="GET">
+                    <form class="d-flex" action="{{ route('admin.artist.search') }}" method="GET">
                         <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
@@ -24,15 +24,15 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Name JP</th>
+                                <th scope="col">Slug</th>
                                 <th scope="col">Options</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($artists as $artist)
                                 <tr>
-
                                     <td>{{ $artist->id }}</td>
-                                    <td><a href="{{ route('artist.show', [$artist->id,$artist->name_slug]) }}"
+                                    <td><a href="{{ route('artist.show', [$artist->id, $artist->name_slug]) }}"
                                             class="no-deco">{{ $artist->name }}</a>
                                     </td>
                                     <td>
@@ -43,14 +43,19 @@
                                         @endif
                                     </td>
                                     <td>
+                                        {{ $artist->name_slug }}
+                                    </td>
+                                    <td>
                                         @if (Auth::User()->isAdmin())
-                                            <a class="btn btn-success btn-sm" href="/admin/artist/{{ $artist->id }}/edit"
-                                                role="button"><i class="fa-solid fa-pencil"></i></a>
+                                            <a class="btn btn-success btn-sm"
+                                                href="{{ route('admin.artist.edit', $artist->id) }}" role="button"><i
+                                                    class="fa-solid fa-pencil"></i></a>
                                             <a class="btn btn-danger btn-sm"
-                                                href="/admin/artist/{{ $artist->id }}/destroy" role="button"><i
+                                                href="{{ route('admin.artist.destroy', $artist->id) }}" role="button"><i
                                                     class="fa fa-trash" aria-hidden="true"></i></a>
                                         @else
-                                            <button disabled="disabled" class="btn btn-success btn-sm"><i class="fa-solid fa-pencil"></i></button>
+                                            <button disabled="disabled" class="btn btn-success btn-sm"><i
+                                                    class="fa-solid fa-pencil"></i></button>
                                             <button disabled="disabled" class="btn btn-danger btn-sm"><i class="fa fa-trash"
                                                     aria-hidden="true"></i></button>
                                         @endif
@@ -65,6 +70,7 @@
                         {{ $artists->links() }}
                     </div>
                 </div>
+
             </div>
         </div>
 

@@ -32,28 +32,17 @@ class SongController extends Controller
      */
     public function create($post_id)
     {
-        /* $tags = Tag::all(); */
+        $tags = Tag::all();
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
             ['name' => 'Ending', 'value' => 'ED']
         ];
         $artists = Artist::all();
         $post = Post::find($post_id);
+        $years = $this->SeasonsYears($tags)['years'];
+        $seasons = $this->SeasonsYears($tags)['seasons'];
 
-        $years = [];
-        $seasons = [];
-
-        for ($i = 1950; $i < 2050; $i++) {
-            $years[] = ['name' => $i, 'value' => $i];
-        }
-
-        $seasons = [
-            ['name' => 'SPRING', 'value' => 'SPRING'],
-            ['name' => 'SUMMER', 'value' => 'SUMMER'],
-            ['name' => 'FALL', 'value' => 'FALL'],
-            ['name' => 'WINTER', 'value' => 'WINTER']
-        ];
-        return view('admin.songs.create', compact('artists', 'types', 'post','years','seasons'));
+        return view('admin.songs.create', compact('artists', 'types', 'post', 'years', 'seasons'));
     }
 
     /**
@@ -73,7 +62,7 @@ class SongController extends Controller
         $song->post_id = $post_id;
         $song->type = $request->type;
 
-        $tag = $request->season.' '.$request->year;
+        $tag = $request->season . ' ' . $request->year;
         /* 
         $song->ytlink = $request->ytlink;
         $song->scndlink = $request->scndlink;
@@ -139,21 +128,10 @@ class SongController extends Controller
             ['name' => 'Opening', 'value' => 'OP'],
             ['name' => 'Ending', 'value' => 'ED']
         ];
-        $years = [];
-        $seasons = [];
+        $years = $this->SeasonsYears($tags)['years'];
+        $seasons = $this->SeasonsYears($tags)['seasons'];
 
-        for ($i = 1950; $i < 2050; $i++) {
-            $years[] = ['name' => $i, 'value' => $i];
-        }
-
-        $seasons = [
-            ['name' => 'SPRING', 'value' => 'SPRING'],
-            ['name' => 'SUMMER', 'value' => 'SUMMER'],
-            ['name' => 'FALL', 'value' => 'FALL'],
-            ['name' => 'WINTER', 'value' => 'WINTER']
-        ];
-
-        return view('admin.songs.edit', compact('song', 'artists', 'types', 'tags','years','seasons'));
+        return view('admin.songs.edit', compact('song', 'artists', 'types', 'years', 'seasons'));
     }
 
     /**
@@ -171,11 +149,11 @@ class SongController extends Controller
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
         $song->artist_id = $request->artist_id;
-        $song->post_id = $request->post_id;
+        $song->post_id = $song->post->id;
         $song->type = $request->type;
         $song->theme_num = $request->theme_num;
 
-        $tag = $request->season.' '.$request->year;
+        $tag = $request->season . ' ' . $request->year;
 
         if ($request->theme_num >= 1) {
             $song->suffix = $song->type . $request->theme_num;
@@ -221,4 +199,29 @@ class SongController extends Controller
         $post = Post::with('songs')->find($id);
         return view('admin.songs.manage', compact('post'));
     }
+    public function SeasonsYears($tags){
+        $tagNames = [];
+        $tagYears = [];
+
+        for ($i = 0; $i < count($tags); $i++) {
+            [$name, $year] = explode(' ', $tags[$i]->name);
+
+            if (!in_array($year, $tagNames)) {
+                $years[] = ['name' => $year, 'value' => $year];
+                $tagNames[] = $year; // Agregamos el año al array de nombres para evitar duplicados
+            }
+
+            if (!in_array($name, $tagYears)) {
+                $seasons[] = ['name' => $name, 'value' => $name];
+                $tagYears[] = $name; // Agregamos el año al array de nombres para evitar duplicados
+            }
+        }
+
+        $data = [
+            'years' => $years,
+            'seasons' => $seasons
+        ];
+        return $data;
+    }
+    
 }

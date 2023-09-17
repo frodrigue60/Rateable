@@ -86,7 +86,6 @@
                         <tbody>
                             @foreach ($posts as $post)
                                 <tr>
-
                                     <th scope="row">{{ $post->id }}</th>
                                     <td>
                                         <a href="{{ route('post.show', [$post->id, $post->slug]) }}"
@@ -95,7 +94,7 @@
                                     <td>
                                         @foreach ($post->tags as $tag)
                                             <span
-                                                class="badge rounded-pill text-bg-dark">{{ isset($tag) ? $tag->name : 'N/A' }}</span>
+                                                class="badge rounded-pill text-bg-primary">{{ isset($tag) ? $tag->name : 'N/A' }}</span>
                                         @endforeach
 
                                     </td>

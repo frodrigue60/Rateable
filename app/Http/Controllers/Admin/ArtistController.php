@@ -57,17 +57,18 @@ class ArtistController extends Controller
                 ->withInput([
                     'name' => $request->input('name'),
                     'name_jp' => $request->input('name_jp')
-                    ])
+                ])
                 ->with('error', $messageBag);
         } else {
-            $name = preg_replace('/\s+/', ' ', $request->name);
-            $name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
-            $name_slug = Str::slug($name);
-
             $artist = new Artist();
+            $name = preg_replace('/\s+/', ' ', $request->name);
+            $name_slug = Str::slug($name);
             $artist->name = $name;
             if ($request->name_jp != null) {
+                $name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
                 $artist->name_jp = $name_jp;
+            } else {
+                $name_jp = null;
             }
             $artist->name_slug = $name_slug;
             if ($artist->save()) {
@@ -112,19 +113,36 @@ class ArtistController extends Controller
     {
         $artist = Artist::find($id);
 
-        $name = $request->name;
-        $name_jp = $request->name_jp;
-        $name_slug = Str::slug($name);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:50',
+        ]);
 
-        if ($name != null) {
+        if ($validator->fails()) {
+            $messageBag = $validator->getMessageBag();
+            return redirect()
+                ->back()
+                ->withInput([
+                    'name' => $request->input('name'),
+                    'name_jp' => $request->input('name_jp')
+                ])
+                ->with('error', $messageBag);
+        } else {
+            $name = preg_replace('/\s+/', ' ', $request->name);
             $artist->name = $name;
-            $artist->name_jp = $name_jp;
+            $name_slug = Str::slug($name);
+            if ($request->name_jp != null) {
+                $name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
+                $artist->name_jp = $name_jp;
+            } else {
+                $name_jp = null;
+            }
             $artist->name_slug = $name_slug;
 
-            $artist->update();
-            return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Updated Successfully');
-        } else {
-            return redirect(route('admin.artist.index'))->with('error', 'Artist not Updated, "name" has not be null');
+            if ($artist->update()) {
+                return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Updated Successfully');
+            } else {
+                return redirect(route('admin.artist.index'))->with('error', 'Something has wrong');
+            }
         }
     }
 

@@ -49,7 +49,7 @@ class VideoController extends Controller
             $song = Song::find($song_id);
 
             $video = new Video();
-            $video->song_id = $song_id;
+            $video->song_id = $song->id;
 
             if ($request->hasFile('video')) {
                 $validator = Validator::make($request->all(), [
@@ -67,9 +67,9 @@ class VideoController extends Controller
                     $path = "videos/endings/";
                 }
                 $file_name = $song->post->slug . '-' . strtolower($song->suffix) . '-' . time() . '.' . 'webm';
-                $video->video_src = $path . $file_name;
+                $video->video_src = '/storage/' . $path . $file_name;
                 //Storage::disk('public')->put('/videos/',$file_name.$request->video);
-                
+
                 $video->type = 'file';
             } else {
                 $validator = Validator::make($request->all(), [
@@ -91,11 +91,9 @@ class VideoController extends Controller
                     $request->video->storeAs($path, $file_name, 'public');
                 }
                 return redirect(route('admin.videos.index', $video->song->id))->with('success', 'saved successfully');
-            } else {
-                return redirect(route('admin.videos.index', $video->song->id))->with('error', 'something has wrong');
             }
         } catch (ModelNotFoundException $e) {
-            dd($e);
+            return redirect(route('admin.videos.index', $video->song->id))->with('error', $e);
         }
     }
 
@@ -140,7 +138,53 @@ class VideoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $video = Video::findOrFail($id);
+            //dd($request->all(),$video->song);
+            if ($request->hasFile('video')) {
+                $validator = Validator::make($request->all(), [
+                    'video' => 'mimes:webm,mp4'
+                ]);
+
+                if ($validator->fails()) {
+                    $errors = $validator->getMessageBag();
+                    $request->flash();
+                    return Redirect::back()->with('error', $errors);
+                }
+                if ($video->song->type == "OP") {
+                    $path = "videos/openings/";
+                } else {
+                    $path = "videos/endings/";
+                }
+                $file_name = $video->song->post->slug . '-' . strtolower($video->song->suffix) . '-' . time() . '.' . 'webm';
+                $video->video_src = $path . $file_name;
+                //Storage::disk('public')->put('/videos/',$file_name.$request->video);
+
+                $video->type = 'file';
+            } else {
+                $validator = Validator::make($request->all(), [
+                    'embed' => 'required'
+                ]);
+
+                if ($validator->fails()) {
+                    $errors = $validator->getMessageBag();
+                    $request->flash();
+                    return Redirect::back()->with('error', $errors);
+                }
+                $video->embed_code = $request->embed;
+                $video->video_src = null;
+                $video->type = 'embed';
+            }
+
+            if ($video->save()) {
+                if ($video->type === "file") {
+                    $request->video->storeAs($path, $file_name, 'public');
+                }
+                return redirect(route('admin.videos.index', $video->song->id))->with('success', 'saved successfully');
+            }
+        } catch (ModelNotFoundException $e) {
+            return redirect(route('admin.videos.index', $video->song->id))->with('error', $e);
+        }
     }
 
     /**

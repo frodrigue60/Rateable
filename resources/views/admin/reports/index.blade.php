@@ -7,7 +7,7 @@
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
                 <div class="card-header text-light">
-                    <h5>Reports Panel</h5>
+                    <h5 class="card-title">Reports Panel</h5>
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">
@@ -19,8 +19,7 @@
                     <table class="table table-dark">
                         <thead>
                             <tr>
-                                {{-- <th scope="col">ID</th> --}}
-                                {{-- <th scope="col">Post ID</th> --}}
+                                {{-- <th scope="col">Song ID</th> --}}
                                 <th scope="col">Reports</th>
                                 <th scope="col">Source</th>
                                 <th scope="col">Status</th>
@@ -32,9 +31,8 @@
                         <tbody>
                             @foreach ($reports as $report)
                                 <tr>
-                                    {{-- <td>{{ $report->id }}</td> --}}
                                     {{-- <td>
-                                        {{ $report->post_id }}
+                                        <a href="{{ $report->source }}">{{ $report->post_id }}</a>
                                     </td> --}}
                                     <td>
                                         {{ $report->nums }}
@@ -68,8 +66,6 @@
 
                                     @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                         <td>
-                                            {{-- <a href="{{ route('song.post.edit', $report->post_id) }}"
-                                                class="btn btn-success btn-sm"><i class="fa-solid fa-pencil"></i> Edit Post</a> --}}
                                             <a class="btn btn-danger btn-sm"
                                                 href="{{ route('admin.report.destroy', $report->id) }}"><i class="fa-solid fa-trash"></i></a>
                                         </td>

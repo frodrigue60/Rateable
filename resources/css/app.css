@@ -471,7 +471,6 @@ footer {
 
 .contenedor-tarjetas-main {
 	display: grid;
-	place-content: center;
 	grid-template-columns: repeat(7, auto);
 	grid-template-rows: repeat(2, 1fr);
 	gap: 1em;

@@ -99,19 +99,8 @@ class PostController extends Controller
         $tags = Tag::all();
         $characters = range('A', 'Z');
 
-        $years = [];
-        $seasons = [];
-
-        for ($i = 2024; $i > 1950; $i--) {
-            $years[] = ['name' => $i, 'value' => $i];
-        }
-
-        $seasons = [
-            ['name' => 'SPRING', 'value' => 'SPRING'],
-            ['name' => 'SUMMER', 'value' => 'SUMMER'],
-            ['name' => 'FALL', 'value' => 'FALL'],
-            ['name' => 'WINTER', 'value' => 'WINTER']
-        ];
+        $years = $this->SeasonsYears($tags)['years'];
+        $seasons = $this->SeasonsYears($tags)['seasons'];
 
         if ($request->year != null || $request->season != null) {
             if ($request->year != null && $request->season != null) {
@@ -299,7 +288,7 @@ class PostController extends Controller
                 return redirect()
                     ->back()
                     ->with('error', $messageBag);
-            }else{
+            } else {
                 $score = $request->score;
             }
 
@@ -396,39 +385,13 @@ class PostController extends Controller
         $requested->year = $request->year;
         $requested->season = $request->season;
 
-        $years = [];
-        $seasons = [];
+        $years = $this->SeasonsYears($tags)['years'];
+        $seasons = $this->SeasonsYears($tags)['seasons'];
 
-        for ($i = 2024; $i > 1950; $i--) {
-            $years[] = ['name' => $i, 'value' => $i];
-        }
-
-        $seasons = [
-            ['name' => 'SPRING', 'value' => 'SPRING'],
-            ['name' => 'SUMMER', 'value' => 'SUMMER'],
-            ['name' => 'FALL', 'value' => 'FALL'],
-            ['name' => 'WINTER', 'value' => 'WINTER']
-        ];
-
-        $filters = [
-            ['name' => 'All', 'value' => 'all'],
-            ['name' => 'Only Rated', 'value' => 'rated']
-        ];
-
-        $types = [
-            ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
-        ];
-
-        $sortMethods = [
-            ['name' => 'Recent', 'value' => 'recent'],
-            ['name' => 'Title', 'value' => 'title'],
-            ['name' => 'Score', 'value' => 'averageRating'],
-            ['name' => 'Views', 'value' => 'view_count'],
-            ['name' => 'Popular', 'value' => 'likeCount']
-        ];
-
-        $characters = range('A', 'Z');
+        $filters = $this->filterTypesSortChar()['filters'];
+        $types = $this->filterTypesSortChar()['types'];
+        $sortMethods = $this->filterTypesSortChar()['sortMethods'];
+        $characters = $this->filterTypesSortChar()['characters'];
 
         switch ($filterBy) {
             case 'all':
@@ -844,34 +807,12 @@ class PostController extends Controller
         $requested->year = $request->year;
         $requested->season = $request->season;
 
-        $years = [];
-        $seasons = [];
+        $years = $this->SeasonsYears($tags)['years'];
+        $seasons = $this->SeasonsYears($tags)['seasons'];
 
-        for ($i = 2024; $i > 1950; $i--) {
-            $years[] = ['name' => $i, 'value' => $i];
-        }
-
-        $seasons = [
-            ['name' => 'SPRING', 'value' => 'SPRING'],
-            ['name' => 'SUMMER', 'value' => 'SUMMER'],
-            ['name' => 'FALL', 'value' => 'FALL'],
-            ['name' => 'WINTER', 'value' => 'WINTER']
-        ];
-
-        $types = [
-            ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
-        ];
-
-        $sortMethods = [
-            ['name' => 'Recent', 'value' => 'recent'],
-            ['name' => 'Title', 'value' => 'title'],
-            ['name' => 'Score', 'value' => 'averageRating'],
-            ['name' => 'Views', 'value' => 'view_count'],
-            ['name' => 'Popular', 'value' => 'likeCount']
-        ];
-
-        $characters = range('A', 'Z');
+        $types = $this->filterTypesSortChar()['types'];
+        $sortMethods = $this->filterTypesSortChar()['sortMethods'];
+        $characters = $this->filterTypesSortChar()['characters'];
 
         if ($request->year != null || $request->season != null) {
             if ($request->year != null && $request->season != null) {
@@ -1172,5 +1113,61 @@ class PostController extends Controller
             return Redirect::back()->with('success', 'Comment Like undo successfully!');
         }
         return redirect()->route('/')->with('warning', 'Please login');
+    }
+
+    public function SeasonsYears($tags)
+    {
+        $tagNames = [];
+        $tagYears = [];
+
+        for ($i = 0; $i < count($tags); $i++) {
+            [$name, $year] = explode(' ', $tags[$i]->name);
+
+            if (!in_array($year, $tagNames)) {
+                $years[] = ['name' => $year, 'value' => $year];
+                $tagNames[] = $year; // Agregamos el año al array de nombres para evitar duplicados
+            }
+
+            if (!in_array($name, $tagYears)) {
+                $seasons[] = ['name' => $name, 'value' => $name];
+                $tagYears[] = $name; // Agregamos el año al array de nombres para evitar duplicados
+            }
+        }
+
+        $data = [
+            'years' => $years,
+            'seasons' => $seasons
+        ];
+        return $data;
+    }
+    public function filterTypesSortChar()
+    {
+        $filters = [
+            ['name' => 'All', 'value' => 'all'],
+            ['name' => 'Only Rated', 'value' => 'rated']
+        ];
+
+        $types = [
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED']
+        ];
+
+        $sortMethods = [
+            ['name' => 'Recent', 'value' => 'recent'],
+            ['name' => 'Title', 'value' => 'title'],
+            ['name' => 'Score', 'value' => 'averageRating'],
+            ['name' => 'Views', 'value' => 'view_count'],
+            ['name' => 'Popular', 'value' => 'likeCount']
+        ];
+
+        $characters = range('A', 'Z');
+
+        $data = [
+            'filters' => $filters,
+            'types' => $types,
+            'sortMethods' => $sortMethods,
+            'characters' => $characters
+        ];
+        return $data;
     }
 }

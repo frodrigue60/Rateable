@@ -69,13 +69,26 @@
 @endsection
 @section('content')
     <div class="container text-light">
-        <div class="banner-anime" {{-- style="background-image: url({{ asset('/storage/anime_banner/' . $post->banner) }});" --}}
-            style="background-image: url({{ file_exists(asset('/storage/anime_banner/' . $post->banner)) ? asset('/storage/anime_banner/' . $post->banner) : $post->banner_src }});">
+        <p>
+            @php
+                if (file_exists(public_path('/storage/thumbnails/'.$post->thumbnail)) === true) {
+                    $thumbnail = asset('/storage/thumbnails/'.$post->thumbnail);
+                } else {
+                    $thumbnail = $post->thumbnail_src;
+                }
+
+                if (file_exists(public_path('/storage/anime_banner/'.$post->banner)) === true) {
+                    $banner = asset('/storage/anime_banner/'.$post->banner);
+                } else {
+                    $banner = $post->banner_src;
+                }
+            @endphp
+        </p>
+        <div class="banner-anime" style="background-image: url({{ $banner }});">
             <div class="gradient"></div>
             <div class="post-info">
-                {{-- <img class="thumbnail-post" src="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt=""> --}}
                 <img class="thumbnail-post"
-                    src="{{ file_exists(asset('/storage/thumbnails/' . $post->thumbnail)) ? asset('/storage/thumbnails/' . $post->thumbnail) : $post->thumbnail_src }}"
+                    src="{{ $thumbnail }}"
                     alt="">
                 <div class="post-data-anime">
                     <div class="title-post">
@@ -178,11 +191,11 @@
                             @endforeach
                         @else
                             <div class="d-flex flex-column align-items-center text-center">
-                                <h4 class="">Nothing here</h4>
-                                <figure class="">
+                                <figure class="mb-0">
                                     <img style="max-width:200px" src="{{ asset('resources/images/sad-cat-5.png') }}"
                                         alt="">
                                 </figure>
+                                <h4 class="">Nothing here</h4>
                             </div>
                         @endif
                     @endisset
@@ -245,11 +258,11 @@
                             @endforeach
                         @else
                             <div class="d-flex flex-column align-items-center text-center">
-                                <h4 class="">Nothing here</h4>
-                                <figure class="">
+                                <figure class="mb-0">
                                     <img style="max-width:200px" src="{{ asset('resources/images/sad-cat-5.png') }}"
                                         alt="">
                                 </figure>
+                                <h4 class="">Nothing here</h4>
                             </div>
                         @endif
                     @endisset

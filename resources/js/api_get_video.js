@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    const siteUrl = "https://anirank-edcb15de9fd7.herokuapp.com"
+    //const siteUrl = "http://127.0.0.1:8000"
+    const siteUrl = "https://anirank-edcb15de9fd7.herokuapp.com/"
 
     async function getVideo(id) {
         try {
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             
             const data = await response.json();
+            //console.log(data);
             check_data(data);
         } catch (error) {
             /* console.error('There was a problem with the fetch operation:', error); */
@@ -41,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             video_div.classList.remove("ratio");
             video_div.classList.remove("ratio-16x9");
             let videoElement = document.createElement("video");
-            videoElement.src = siteUrl + "/storage/" + data.video_src;
+            videoElement.src = siteUrl + data.video_src;
 
             videoElement.controls = true;
             video_div.appendChild(videoElement);

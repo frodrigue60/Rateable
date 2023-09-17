@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     });
 
     window.addEventListener("scroll", function () {
-        if (window.scrollY + window.innerHeight + 300 >= document.documentElement.scrollHeight) {
+        if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
             if (lastPage == undefined) {
                 page++;
                 loadMoreData(page);
