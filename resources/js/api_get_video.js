@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //const siteUrl = "http://127.0.0.1:8000"
-    const siteUrl = "https://anirank-edcb15de9fd7.herokuapp.com/"
+    const siteUrl = "https://anirank-edcb15de9fd7.herokuapp.com"
 
     async function getVideo(id) {
         try {
