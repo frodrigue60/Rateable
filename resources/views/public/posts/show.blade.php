@@ -71,14 +71,14 @@
     <div class="container text-light">
         <p>
             @php
-                if (file_exists(public_path('/storage/thumbnails/'.$post->thumbnail)) === true) {
-                    $thumbnail = asset('/storage/thumbnails/'.$post->thumbnail);
+                if (file_exists(public_path('/storage/thumbnails/' . $post->thumbnail)) === true) {
+                    $thumbnail = asset('/storage/thumbnails/' . $post->thumbnail);
                 } else {
                     $thumbnail = $post->thumbnail_src;
                 }
-
-                if (file_exists(public_path('/storage/anime_banner/'.$post->banner)) === true) {
-                    $banner = asset('/storage/anime_banner/'.$post->banner);
+                
+                if (file_exists(public_path('/storage/anime_banner/' . $post->banner)) === true) {
+                    $banner = asset('/storage/anime_banner/' . $post->banner);
                 } else {
                     $banner = $post->banner_src;
                 }
@@ -87,9 +87,7 @@
         <div class="banner-anime" style="background-image: url({{ $banner }});">
             <div class="gradient"></div>
             <div class="post-info">
-                <img class="thumbnail-post"
-                    src="{{ $thumbnail }}"
-                    alt="">
+                <img class="thumbnail-post" src="{{ $thumbnail }}" alt="">
                 <div class="post-data-anime">
                     <div class="title-post">
                         <span>{{ $post->title }}</span>
@@ -108,7 +106,7 @@
                     @if ($post->status == 'stagged')
                         <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
                             @csrf
-                            <button class="btn btn-warning btn-sm"> <i class="fa fa-clock-o" aria-hidden="true">
+                            <button class="btn btn-warning btn-sm"> <i class="fa fa-clock" aria-hidden="true">
                                     {{ $post->id }}</i></button>
                         </form>
                     @endif
@@ -122,12 +120,13 @@
 
 
                     <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-success btn-sm"><i
-                            class="fa fa-pencil-square-o" aria-hidden="true"></i> {{ $post->id }}</a>
+                            class="fa-solid fa-pencil"></i></a>
                     <a href="{{ route('admin.post.destroy', $post->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"
-                            aria-hidden="true"></i>
-                        {{ $post->id }}</a>
-                    <a class="btn btn-sm btn-primary" href="{{ route('song.post.create', $post->id) }}">Add song</a>
-                    <a class="btn btn-sm btn-success" href="{{ route('song.post.manage', $post->id) }}">Manage</a>
+                            aria-hidden="true"></i></a>
+                    <a class="btn btn-sm btn-primary" href="{{ route('song.post.create', $post->id) }}"><i
+                            class="fa-solid fa-plus"></i></a>
+                    <a class="btn btn-sm btn-success" href="{{ route('song.post.manage', $post->id) }}"><i
+                            class="fa-solid fa-list-check"></i></a>
 
                 </div>
             @endif

@@ -8,7 +8,15 @@
 
 @section('content')
     @if (Request::routeIs('profile'))
-        @include('layouts.userBanner')
+        @if (config('app.env') === 'local')
+            @include('layouts.userBanner')
+        @else
+            @if (Request::routeIs('profile'))
+                <div class="container">
+                    <h1 class="text-light">User banners is disabled</h1>
+                </div>
+            @endif
+        @endif
     @endif
     <div class="container">
         <div class="row justify-content-center">

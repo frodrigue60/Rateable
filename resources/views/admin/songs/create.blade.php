@@ -55,7 +55,7 @@
                         </div>
                         <div class="row">
                             @php
-                                [$name, $year] = explode(' ', $post->tags[0]->name);
+                                //[$name, $year] = explode(' ', $post->tags[0]->name);
                                 
                                 if (isset($post->tags[0])) {
                                     [$name, $year] = explode(' ', $post->tags[0]->name);
