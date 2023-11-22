@@ -24,12 +24,9 @@
                     <a class="nav-link dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown"aria-expanded="false">Filter</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item"
-                                href="{{ route('animes') }}">Animes</a></li>
-                        <li><a class="dropdown-item"
-                                href="{{ route('themes') }}">Openings & Endings</a></li>
-                        <li><a class="dropdown-item"
-                                href="{{ route('artist.index') }}">Artists</a></li>        
+                        <li><a class="dropdown-item" href="{{ route('animes') }}">Animes</a></li>
+                        <li><a class="dropdown-item" href="{{ route('themes') }}">Openings & Endings</a></li>
+                        <li><a class="dropdown-item" href="{{ route('artist.index') }}">Artists</a></li>
                     </ul>
                 </li>
                 @auth
@@ -85,7 +82,7 @@
                                 <img src="{{ asset('/storage/profile/' . Auth::user()->image) }}" alt="profile pic"
                                     width="25" height="25" title="profile pic">
                             @else
-                            <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-user"></i>
                             @endif
                             {{ Auth::user()->name }}
                         </a>
@@ -95,8 +92,8 @@
                                 Profile
                             </a>
                             @auth
-                            <a class="dropdown-item" href="{{ route('request.create') }}">
-                                <i class="fa-solid fa-pen"></i> Request</a>
+                                <a class="dropdown-item" href="{{ route('request.create') }}">
+                                    <i class="fa-solid fa-pen"></i> Request</a>
                             @endauth
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();

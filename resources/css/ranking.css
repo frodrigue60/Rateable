@@ -58,7 +58,7 @@
 
 .item-info {
     display: grid;
-    padding-left: 5px;
+    /* padding-left: 5px; */
 
     background-position: center;
     background-size: cover;
@@ -85,6 +85,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    padding-left: .5em;
 }
 
 .item-post-info>span>a {
@@ -104,6 +105,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    padding-left: .5em;
 }
 
 .item-song-info>strong>a {

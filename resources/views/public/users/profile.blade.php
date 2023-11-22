@@ -23,34 +23,71 @@
             <div class="card text-light">
                 <div class="card-header"><strong>{{ $user->name }}</strong>'s Dashboard</div>
                 <div class="card-body">
-                    <div>
-                        <label for="profilePic" class="form-label">Upload a profile pic</label>
-                        <form action="{{ route('upload.profile.pic') }}" method="POST" enctype="multipart/form-data">
-                            @method('post')
-                            @csrf
-                            <div class="input-group">
-                                <input type="file" class="form-control" id="profilePic"
-                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image">
-                                <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Submit profile
-                                    pic</button>
-                            </div>
-                        </form>
-                    </div>
-                    <br>
-                    <div>
-                        <label for="bannerPic" class="form-label">Upload a banner pic</label>
-                        <form action="{{ route('upload.banner.pic') }}" method="POST" enctype="multipart/form-data">
-                            @method('post')
-                            @csrf
-                            <div class="input-group">
-                                <input type="file" class="form-control" id="bannerPic"
-                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="banner">
-                                <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Submit banner
-                                    pic</button>
-                            </div>
-                        </form>
-                    </div>
-                    <br>
+                    @if (config('app.env') === 'local')
+                        <div>
+                            <label for="profilePic" class="form-label">Upload a profile pic</label>
+                            <form action="{{ route('upload.profile.pic') }}" method="POST" enctype="multipart/form-data">
+                                @method('post')
+                                @csrf
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="profilePic"
+                                        aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image">
+                                    <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Submit
+                                        profile
+                                        pic</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div>
+                            <label for="bannerPic" class="form-label">Upload a banner pic</label>
+                            <form action="{{ route('upload.banner.pic') }}" method="POST" enctype="multipart/form-data">
+                                @method('post')
+                                @csrf
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="bannerPic"
+                                        aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="banner">
+                                    <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Submit
+                                        banner
+                                        pic</button>
+                                </div>
+                            </form>
+                        </div>
+                    @else
+                        <div>
+                            <label for="profilePic" class="form-label">Upload a profile pic</label>
+                            <form action="{{ route('upload.profile.pic') }}" method="POST" enctype="multipart/form-data">
+                                @method('post')
+                                @csrf
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="profilePic"
+                                        aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image"
+                                        disabled>
+                                    <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04"
+                                        disabled>Submit
+                                        profile
+                                        pic</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div>
+                            <label for="bannerPic" class="form-label">Upload a banner pic</label>
+                            <form action="{{ route('upload.banner.pic') }}" method="POST" enctype="multipart/form-data">
+                                @method('post')
+                                @csrf
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="bannerPic"
+                                        aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="banner"
+                                        disabled>
+                                    <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04"
+                                        disabled>Submit
+                                        banner
+                                        pic</button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
+
+
                     <div>
                         <label for="selectScoreFormat" class="form-label">Change score format</label>
                         <form action="{{ route('change.score.format') }}" method="POST" enctype="multipart/form-data">
