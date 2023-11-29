@@ -598,6 +598,7 @@ class PostController extends Controller
                 } else {
                     $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'jpg';
                 }
+                dd($extension);
             }
 
             $post->thumbnail = $file_name;
@@ -606,7 +607,7 @@ class PostController extends Controller
             $post->thumbnail = null;
             $post->thumbnail_src = null;
         }
-        $post->update();
+        /* $post->update(); */
     }
     function saveAnimeBanner($item, $post)
     {
@@ -636,7 +637,7 @@ class PostController extends Controller
             $post->banner = null;
             $post->banner_src = null;
         }
-        $post->update();
+        /* $post->update(); */
     }
 
     public function storePostImages($post, $request) {
