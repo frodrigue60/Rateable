@@ -592,6 +592,12 @@ class PostController extends Controller
                 $extension = pathinfo($image_file_data, PATHINFO_EXTENSION);
                 $file_name = Str::slug($post->slug) . '-' . time() . '.' . $extension;
                 /* Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data); */
+
+                if ($extension != '') {
+                    $file_name = Str::slug($post->slug) . '-' . time() . '.' . $extension;
+                } else {
+                    $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'jpg';
+                }
             }
 
             $post->thumbnail = $file_name;
@@ -614,10 +620,16 @@ class PostController extends Controller
             } else {
                 $banner_file_data = file_get_contents($item->bannerImage);
                 $extension = pathinfo($banner_file_data, PATHINFO_EXTENSION);
-                $file_name = Str::slug($post->slug) . '-' . time() . '.' . $extension;
+                
+                if ($extension != '') {
+                    $file_name = Str::slug($post->slug) . '-' . time() . '.' . $extension;
+                } else {
+                    $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'jpg';
+                }
+                
                 /* Storage::disk('public')->put('/anime_banner/' . $file_name, $banner_file_data); */
             }
-            dd($extension);
+            
             $post->banner = $file_name;
             $post->banner_src = $item->bannerImage;
         } else {
