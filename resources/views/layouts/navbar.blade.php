@@ -78,7 +78,7 @@
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            @if (Auth::user()->image)
+                            @if (file_exist(asset('/storage/profile/' . Auth::user()->image)))
                                 <img src="{{ asset('/storage/profile/' . Auth::user()->image) }}" alt="profile pic"
                                     width="25" height="25" title="profile pic">
                             @else
