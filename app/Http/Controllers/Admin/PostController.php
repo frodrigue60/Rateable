@@ -589,16 +589,9 @@ class PostController extends Controller
                 /* Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded); */
             } else {
                 $image_file_data = file_get_contents($item->coverImage->extraLarge);
-                $extension = pathinfo($image_file_data, PATHINFO_EXTENSION);
-                $file_name = Str::slug($post->slug) . '-' . time() . '.' . $extension;
+                /* $extension = pathinfo($image_file_data, PATHINFO_EXTENSION); */
+                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'png';
                 /* Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data); */
-
-                if ($extension != '') {
-                    $file_name = Str::slug($post->slug) . '-' . time() . '.' . $extension;
-                } else {
-                    $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'jpg';
-                }
-                dd($extension);
             }
 
             $post->thumbnail = $file_name;
@@ -607,7 +600,7 @@ class PostController extends Controller
             $post->thumbnail = null;
             $post->thumbnail_src = null;
         }
-        /* $post->update(); */
+        $post->update();
     }
     function saveAnimeBanner($item, $post)
     {
@@ -620,24 +613,18 @@ class PostController extends Controller
                 /* Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded); */
             } else {
                 $banner_file_data = file_get_contents($item->bannerImage);
-                $extension = pathinfo($banner_file_data, PATHINFO_EXTENSION);
-                
-                if ($extension != '') {
-                    $file_name = Str::slug($post->slug) . '-' . time() . '.' . $extension;
-                } else {
-                    $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'jpg';
-                }
-                
-                /* Storage::disk('public')->put('/anime_banner/' . $file_name, $banner_file_data); */
+                /* $extension = pathinfo($banner_file_data, PATHINFO_EXTENSION); */
+                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'png';
+               /*  Storage::disk('public')->put('/anime_banner/' . $file_name, $banner_file_data); */
             }
-            
+
             $post->banner = $file_name;
             $post->banner_src = $item->bannerImage;
         } else {
             $post->banner = null;
             $post->banner_src = null;
         }
-        /* $post->update(); */
+        $post->update();
     }
 
     public function storePostImages($post, $request) {
