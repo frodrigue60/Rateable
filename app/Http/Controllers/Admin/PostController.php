@@ -617,7 +617,7 @@ class PostController extends Controller
                 $file_name = Str::slug($post->slug) . '-' . time() . '.' . $extension;
                 /* Storage::disk('public')->put('/anime_banner/' . $file_name, $banner_file_data); */
             }
-
+            dd($extension);
             $post->banner = $file_name;
             $post->banner_src = $item->bannerImage;
         } else {
