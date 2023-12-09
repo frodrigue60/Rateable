@@ -53,8 +53,8 @@ class SongController extends Controller
     public function show($id)
     {
 
-        $song = Song::with(['post', 'artist','videos'])->find($id);
-        //dd($song);
+        $song = Song::with(['post', 'artists','videos'])->find($id);
+        
         $comments = Comment::with('user', 'likeCounter')
             ->where('rateable_id', '=', $id)
             ->where('comment', '!=', "")

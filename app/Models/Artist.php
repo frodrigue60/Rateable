@@ -14,8 +14,24 @@ class Artist extends Model
         'name_jp',
     ];
 
-    public function posts()
+    /* public function posts()
     {
         return $this->hasMany('App\Models\Post');
+    } */
+
+    public function songs()
+    {
+        return $this->belongsToMany(Song::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Escucha el evento de eliminación del artista
+        static::deleting(function ($artist) {
+            // Desvincula todas las canciones asociadas
+            $artist->songs()->detach();
+        });
     }
 }

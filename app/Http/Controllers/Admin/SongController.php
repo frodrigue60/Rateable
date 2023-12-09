@@ -52,13 +52,11 @@ class SongController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $post_id)
-    {
-        //dd($request->all());
+    {   
         $song = new Song();
         $song->song_romaji = $request->song_romaji;
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
-        $song->artist_id = $request->artist_id;
         $song->post_id = $post_id;
         $song->type = $request->type;
 
@@ -95,6 +93,7 @@ class SongController extends Controller
         }
 
         if ($song->save()) {
+            $song->artists()->sync($request->artist_id);
             $song->tag($tag);
             return redirect(route('song.post.manage', $post_id))->with('success', 'song added successfully');
         } else {
@@ -148,7 +147,6 @@ class SongController extends Controller
         $song->song_romaji = $request->song_romaji;
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
-        $song->artist_id = $request->artist_id;
         $song->post_id = $song->post->id;
         $song->type = $request->type;
         $song->theme_num = $request->theme_num;
@@ -163,6 +161,7 @@ class SongController extends Controller
         }
 
         if ($song->update()) {
+            $song->artists()->sync($request->artist_id);
             $song->tag($tag);
             return redirect(route('song.post.manage', $song->post_id))->with('success', 'Song updated success');
         } else {
@@ -180,6 +179,7 @@ class SongController extends Controller
     {
         $song = Song::find($id);
         $old_video = $song->video_src;
+        $song->artists()->detach();
         if ($song->delete()) {
             DB::table('ratings')
                 ->where('rateable_id', '=', $id)->delete();

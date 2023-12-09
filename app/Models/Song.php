@@ -28,9 +28,9 @@ class Song extends Model
         return $this->belongsTo(Post::class);
     }
 
-    public function artist()
+    public function artists()
     {
-        return $this->belongsTo(Artist::class);
+        return $this->belongsToMany(Artist::class);
     }
 
     public function comments()
