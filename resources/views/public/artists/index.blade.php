@@ -89,10 +89,13 @@
                 <div class="artist-list py-2">
 
                     @foreach ($artists as $artist)
+                    @php
+                        $countThemes = count($artist->songs)
+                    @endphp
                         @if (Str::startsWith($artist->name, $char))
                             <div class="artist-list-item">
                                 <a class="no-deco"
-                                    href="{{ route('artist.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }}</a>
+                                    href="{{ route('artist.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }} {{"(".$countThemes.")"}}</a>
                             </div>
                         @endif
                     @endforeach
