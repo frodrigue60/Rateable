@@ -76,7 +76,7 @@
                 } else {
                     $thumbnail = $post->thumbnail_src;
                 }
-                
+
                 if (file_exists(public_path('/storage/anime_banner/' . $post->banner)) === true) {
                     $banner = asset('/storage/anime_banner/' . $post->banner);
                 } else {
@@ -166,18 +166,23 @@
                                             <span
                                                 style="padding-left: 5px; padding-right: 5px;">({{ $song->suffix != null ? $song->suffix : $song->type }})</span>
                                         </div>
-                                        @isset($song->artist->name)
+                                        @isset($song->artists)
                                             <div>
                                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                                <strong>
-                                                    <a class="no-deco text-light"
-                                                        href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">
-                                                        {{ $song->artist->name }}
-                                                        @if ($song->artist->name_jp)
-                                                            ({{ $song->artist->name_jp }})
-                                                        @endif
-                                                    </a>
-                                                </strong>
+                                                @foreach ($song->artists as $index => $item)
+                                                    <strong>
+                                                        <a class="no-deco text-light"
+                                                            href="{{ route('artist.show', [$item->id, $item->name_slug]) }}">
+                                                            {{ $item->name }}
+                                                            @if ($item->name_jp)
+                                                                ({{ $item->name_jp }})
+                                                            @endif
+                                                        </a>
+                                                    </strong>
+                                                    @if ($index < count($song->artists) - 1)
+                                                        , <!-- Agrega la coma si no es el último elemento -->
+                                                    @endif
+                                                @endforeach
                                             </div>
                                         @endisset
                                     </div>
@@ -233,18 +238,23 @@
                                             <span
                                                 style="padding-left: 5px; padding-right: 5px;">({{ $song->suffix != null ? $song->suffix : $song->type }})</span>
                                         </div>
-                                        @isset($song->artist->name)
+                                        @isset($song->artists)
                                             <div>
                                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                                <strong>
-                                                    <a class="no-deco text-light"
-                                                        href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">
-                                                        {{ $song->artist->name }}
-                                                        @if ($song->artist->name_jp)
-                                                            ({{ $song->artist->name_jp }})
-                                                        @endif
-                                                    </a>
-                                                </strong>
+                                                @foreach ($song->artists as $index => $item)
+                                                    <strong>
+                                                        <a class="no-deco text-light"
+                                                            href="{{ route('artist.show', [$item->id, $item->name_slug]) }}">
+                                                            {{ $item->name }}
+                                                            @if ($item->name_jp)
+                                                                ({{ $item->name_jp }})
+                                                            @endif
+                                                        </a>
+                                                    </strong>
+                                                    @if ($index < count($song->artists) - 1)
+                                                        , <!-- Agrega la coma si no es el último elemento -->
+                                                    @endif
+                                                @endforeach
                                             </div>
                                         @endisset
                                     </div>

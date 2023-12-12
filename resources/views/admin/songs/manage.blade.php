@@ -55,6 +55,9 @@
                                             <a class="text-light"
                                                 href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">{{ $song->artist->name }}</a>
                                         @endisset
+                                        @isset($song->artists)
+                                            {{count($song->artists)}}
+                                        @endisset
                                     </td>
                                     <td>
                                         @foreach ($song->tags as $tag)
