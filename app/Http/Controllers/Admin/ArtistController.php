@@ -45,7 +45,7 @@ class ArtistController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    /* {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:50',
         ]);
@@ -60,23 +60,71 @@ class ArtistController extends Controller
                 ])
                 ->with('error', $messageBag);
         } else {
-            $artist = new Artist();
             $name = preg_replace('/\s+/', ' ', $request->name);
-            $name_slug = Str::slug($name);
-            $artist->name = $name;
-            if ($request->name_jp != null) {
-                $name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
-                $artist->name_jp = $name_jp;
+
+            if ($this->artistExists($name)) {
+                return redirect(route('admin.artist.index'))->with('warning', 'Artist already exist!');
             } else {
-                $name_jp = null;
-            }
-            $artist->name_slug = $name_slug;
-            if ($artist->save()) {
-                return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Inserted Successfully');
-            } else {
-                return redirect(route('admin.artist.index'))->with('error', 'Something has wrong');
+                $artist = new Artist();
+
+                $name_slug = Str::slug($name);
+                $artist->name = $name;
+
+                if ($request->name_jp != null) {
+                    $name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
+                    $artist->name_jp = $name_jp;
+                } else {
+                    $name_jp = null;
+                }
+
+                $artist->name_slug = $name_slug;
+
+                if ($artist->save()) {
+                    return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Inserted Successfully');
+                } else {
+                    return redirect(route('admin.artist.index'))->with('error', 'Something has wrong');
+                }
             }
         }
+    } */
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:50',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withInput($request->only(['name', 'name_jp']))
+                ->withErrors($validator);
+        }
+
+        $name = preg_replace('/\s+/', ' ', $request->name);
+
+        if ($this->artistExists($name)) {
+            return redirect(route('admin.artist.index'))->with('warning', 'Artist ' . $name . ' already exists!');
+        }
+
+        $artist = new Artist();
+        $name_slug = Str::slug($name);
+        $artist->name = $name;
+
+        if ($request->name_jp) {
+            $artist->name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
+        }
+
+        $artist->name_slug = $name_slug;
+
+        if ($artist->save()) {
+            return redirect(route('admin.artist.index'))->with('success', 'Data has been inserted successfully');
+        }
+
+        return redirect(route('admin.artist.index'))->with('error', 'Something went wrong');
+    }
+
+    function artistExists($name)
+    {
+        return Artist::where('name', $name)->exists();
     }
 
     /**
@@ -110,7 +158,7 @@ class ArtistController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+    /* {
         $artist = Artist::find($id);
 
         $validator = Validator::make($request->all(), [
@@ -144,6 +192,36 @@ class ArtistController extends Controller
                 return redirect(route('admin.artist.index'))->with('error', 'Something has wrong');
             }
         }
+    } */
+    {
+        $artist = Artist::find($id);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:50',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withInput($request->only(['name', 'name_jp']))
+                ->withErrors($validator);
+        }
+
+        $name = preg_replace('/\s+/', ' ', $request->name);
+        $artist->name = $name;
+        $artist->name_slug = Str::slug($name);
+
+        if ($request->name_jp) {
+            $artist->name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
+        } else {
+            $artist->name_jp = null;
+        }
+
+        if ($artist->save()) {
+            return redirect(route('admin.artist.index'))->with('success', 'Data has been updated successfully');
+        }
+
+        return redirect(route('admin.artist.index'))->with('error', 'Something went wrong');
     }
 
     /**
