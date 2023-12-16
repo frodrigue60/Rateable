@@ -211,7 +211,7 @@
                 </div>
                 <div>
                     @isset($endings)
-                        @if ($openings->count() != null)
+                        @if ($endings->count() != null)
                             @foreach ($endings->sortByDesc('theme_num') as $song)
                                 <div class="post-song">
                                     <div style="overflow: hidden">
