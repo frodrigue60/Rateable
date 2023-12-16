@@ -140,7 +140,7 @@
                 <div>
                     @isset($openings)
                         @if ($openings->count() != null)
-                            @foreach ($openings->sortByDesc('theme_num') as $song)
+                            @foreach ($openings->sortBy('theme_num') as $song)
                                 <div class="post-song">
                                     <div style="overflow: hidden">
                                         <div class="theme-info">
@@ -212,7 +212,7 @@
                 <div>
                     @isset($endings)
                         @if ($endings->count() != null)
-                            @foreach ($endings->sortByDesc('theme_num') as $song)
+                            @foreach ($endings->sortBy('theme_num') as $song)
                                 <div class="post-song">
                                     <div style="overflow: hidden">
                                         <div class="theme-info">
