@@ -50,7 +50,7 @@ class SongController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $slug = null, $suffix = null)
     {
 
         $song = Song::with(['post', 'artists','videos'])->find($id);

@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\UserRequestController as AdminUserRequestControll
 use App\Http\Controllers\Admin\SongController as AdminSongController;
 use App\Http\Controllers\SongController as SongController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
+use App\Http\Controllers\Admin\SongVariantController as AdminSongVariantController;
+use App\Http\Controllers\SongVariantController as SongVariantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,7 @@ Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
 Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('anime.show');
 Route::get('/post/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
+Route::get('/song/{id}/{slug}/{suffix}/v/{version}',       [SongVariantController::class, 'show'])->name('p.song.variant.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalRanking'])->name('seasonal.ranking');
@@ -62,8 +65,21 @@ Route::group(['middleware' => 'staff'], function () {
         Route::group(['middleware' => 'editor'], function () {
             Route::get('/song-post/{id}/create',       [AdminSongController::class, 'create'])->name('song.post.create');
             Route::post('/song-post/{id}/store',       [AdminSongController::class, 'store'])->name('song.post.store');
-            
         });
+
+        //VARIANTS
+        Route::get('/song/{song_id}/variant/store', [AdminSongVariantController::class,'store'])->name('song.variant.store');
+        Route::get('/variant/{variant_id}/destroy', [AdminSongVariantController::class,'destroy'])->name('song.variant.destroy');
+        Route::get('/variant/{variant_id}/edit', [AdminSongVariantController::class,'edit'])->name('song.variant.edit');
+        Route::get('/variant/{variant_id}/show', [AdminSongVariantController::class,'show'])->name('song.variant.show');
+        Route::post('/variant/{variant_id}/update', [AdminSongVariantController::class,'update'])->name('song.variant.update');
+        Route::get('/variant/{variant_id}/videos', [AdminSongVariantController::class,'index'])->name('song.variant.index');
+
+        Route::get('song/{song_id}/variant/{variant_id?}/video/create',[AdminVideoController::class,'create'])->name('variant.videos.create');
+        Route::post('song/{song_id}/variant/{variant_id?}/video/store',[AdminVideoController::class,'store'])->name('variant.videos.store');
+        //Route::post('song/{song_id}/variant/{variant_id?}/video/store',[AdminVideoController::class,'store'])->name('variant.videos.store');
+
+
         Route::group(['middleware' => 'editor'], function () {
             Route::get('/songs-post/{id}/manage',       [AdminSongController::class, 'manage'])->name('song.post.manage');
             Route::get('/songs-post/{id}/destroy',       [AdminSongController::class, 'destroy'])->name('song.post.destroy');

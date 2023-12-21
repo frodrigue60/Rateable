@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Song;
+use App\Models\SongVariant;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -31,10 +32,17 @@ class VideoController extends Controller
      * @param  int  $song_id
      * @return \Illuminate\Http\Response
      */
-    public function create($song_id)
+    public function create($song_id, $variant_id = null)
     {
         $song = Song::findOrFail($song_id);
-        return view('admin.videos.create', compact('song'));
+
+
+        if ($variant_id != null) {
+            $song_variant = SongVariant::find($variant_id);
+            return view('admin.songs.variants.videos.create', compact('song', 'song_variant'));
+        } else {
+            return view('admin.videos.create', compact('song'));
+        }
     }
 
     /**
@@ -43,13 +51,19 @@ class VideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $song_id)
+    public function store(Request $request, $song_id, $variant_id = null)
     {
+        //dd($song_id, $variant_id);
+
         try {
             $song = Song::find($song_id);
 
             $video = new Video();
             $video->song_id = $song->id;
+
+            if ($variant_id != null) {
+                $video->song_variant_id = $variant_id;
+            }
 
             if ($request->hasFile('video')) {
                 $validator = Validator::make($request->all(), [
@@ -85,7 +99,7 @@ class VideoController extends Controller
                 $video->video_src = null;
                 $video->type = 'embed';
             }
-
+            //dd($video);
             if ($video->save()) {
                 if ($video->type === "file") {
                     $request->video->storeAs($path, $file_name, 'public');

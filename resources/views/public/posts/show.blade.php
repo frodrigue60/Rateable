@@ -118,7 +118,6 @@
                         </form>
                     @endif
 
-
                     <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-success btn-sm"><i
                             class="fa-solid fa-pencil"></i></a>
                     <a href="{{ route('admin.post.destroy', $post->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"
@@ -141,56 +140,71 @@
                     @isset($openings)
                         @if ($openings->count() != null)
                             @foreach ($openings->sortBy('theme_num') as $song)
-                                <div class="post-song">
-                                    <div style="overflow: hidden">
-                                        <div class="theme-info">
-                                            <strong>
-                                                <i class="fa fa-music" aria-hidden="true"></i>
-                                                <a class="no-deco text-light"
-                                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
-                                                    @if (isset($song->song_romaji))
-                                                        {{ $song->song_romaji }}
-                                                    @else
-                                                        @if (isset($song->song_en))
-                                                            {{ $song->song_en }}
-                                                        @else
-                                                            @if (isset($song->song_jp))
-                                                                {{ $song->song_jp }}
-                                                            @else
-                                                                N/A
-                                                            @endif
-                                                        @endif
-                                                    @endif
-                                                </a>
-                                            </strong>
-                                            <span
-                                                style="padding-left: 5px; padding-right: 5px;">({{ $song->suffix != null ? $song->suffix : $song->type }})</span>
-                                        </div>
+                                @php
+                                    $songShowRoute = route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]);
+                                    $songName = 'N/A';
+                                    $themeSuffix = $song->suffix != null ? $song->suffix : $song->type;
+                                    $songScore = $song->averageRating != null ? $song->averageRating / 1 : 'N/A';
+
+                                    if (isset($song->song_romaji)) {
+                                        $songName = $song->song_romaji;
+                                    } else {
+                                        if (isset($song->song_en)) {
+                                            $songName = $song->song_en;
+                                        } else {
+                                            if (isset($song->song_jp)) {
+                                                $songName = $song->song_jp;
+                                            } else {
+                                                $songName = 'N/A';
+                                            }
+                                        }
+                                    }
+                                @endphp
+                                <div class="bg-dark p-2 d-flex flex-column gap-1 my-2 rounded-2">
+                                    <div class="d-flex justify-content-between">
+                                        <h4 class="p-0 m-0">{{ $themeSuffix }} {{ $song->themeNum }}</h4>
+                                        <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-light text-decoration-none">{{ $songName }}</span>
                                         @isset($song->artists)
                                             <div>
-                                                <i class="fa fa-user" aria-hidden="true"></i>
                                                 @foreach ($song->artists as $index => $item)
-                                                    <strong>
-                                                        <a class="no-deco text-light"
-                                                            href="{{ route('artist.show', [$item->id, $item->name_slug]) }}">
-                                                            {{ $item->name }}
-                                                            @if ($item->name_jp)
-                                                                ({{ $item->name_jp }})
-                                                            @endif
-                                                        </a>
-                                                    </strong>
+                                                    @php
+                                                        $artistShowRoute = route('artist.show', [$item->id, $item->name_slug]);
+                                                        if ($item->name_jp != null) {
+                                                            $artistName = $item->name . ' (' . $item->name_jp . ')';
+                                                        } else {
+                                                            $artistName = $item->name;
+                                                        }
+                                                    @endphp
+                                                    <a class="text-light text-decoration-none"
+                                                        href="{{ $artistShowRoute }}">{{ $artistName }}</a>
                                                     @if ($index < count($song->artists) - 1)
-                                                        , <!-- Agrega la coma si no es el último elemento -->
+                                                        , 
                                                     @endif
                                                 @endforeach
                                             </div>
                                         @endisset
                                     </div>
-                                    <div style="display: inline;
-                                align-self: center;">
-                                        <span>{{ $song->averageRating != null ? $song->averageRating / 1 : 'N/A' }}</span>
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </div>
+                                    <hr class="p-0 m-0">
+                                    @isset($song->songVariants)
+                                        @if ($song->songVariants->count() != 0)
+                                            <div class="d-flex flex-column gap-2 mx-2 py-2">
+                                                @foreach ($song->songVariants->sortBy('version') as $variant)
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <a class="text-decoration-none text-light" href=""><span>Version
+                                                                {{ $variant->version }}</span></a>
+                                                        <a class="btn btn-sm btn-primary rounded-4"
+                                                            href="">{{ 'Show' }}
+                                                            <i class="fa-solid fa-play"></i></a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <h4 class="text-center">No videos</h4>
+                                        @endif
+                                    @endisset
                                 </div>
                             @endforeach
                         @else
@@ -213,56 +227,84 @@
                     @isset($endings)
                         @if ($endings->count() != null)
                             @foreach ($endings->sortBy('theme_num') as $song)
-                                <div class="post-song">
-                                    <div style="overflow: hidden">
-                                        <div class="theme-info">
-                                            <strong>
-                                                <i class="fa fa-music" aria-hidden="true"></i>
-                                                <a class="no-deco text-light"
-                                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
-                                                    @if (isset($song->song_romaji))
-                                                        {{ $song->song_romaji }}
-                                                    @else
-                                                        @if (isset($song->song_en))
-                                                            {{ $song->song_en }}
-                                                        @else
-                                                            @if (isset($song->song_jp))
-                                                                {{ $song->song_jp }}
-                                                            @else
-                                                                N/A
-                                                            @endif
-                                                        @endif
-                                                    @endif
-                                                </a>
-                                            </strong>
-                                            <span
-                                                style="padding-left: 5px; padding-right: 5px;">({{ $song->suffix != null ? $song->suffix : $song->type }})</span>
-                                        </div>
+                                @php
+                                    $songShowRoute = route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]);
+                                    $songName = 'N/A';
+                                    $themeSuffix = $song->suffix != null ? $song->suffix : $song->type;
+                                    $songScore = $song->averageRating != null ? $song->averageRating / 1 : 'N/A';
+
+                                    if (isset($song->song_romaji)) {
+                                        $songName = $song->song_romaji;
+                                    } else {
+                                        if (isset($song->song_en)) {
+                                            $songName = $song->song_en;
+                                        } else {
+                                            if (isset($song->song_jp)) {
+                                                $songName = $song->song_jp;
+                                            } else {
+                                                $songName = 'N/A';
+                                            }
+                                        }
+                                    }
+                                @endphp
+                                <div class="bg-dark p-2 d-flex flex-column gap-1 my-2 rounded-2">
+                                    <div class="d-flex justify-content-between">
+                                        <h4 class="p-0 m-0">{{ $themeSuffix }} {{ $song->themeNum }}</h4>
+                                        <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-light text-decoration-none"><span class="pe-1"><i class="fa-solid fa-music"></i></span> {{ $songName }}</span>
                                         @isset($song->artists)
-                                            <div>
-                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                            <div class="d-flex align-items-center">
+                                                <span class="pe-2"><i class="fa-solid fa-user"></i></span>
                                                 @foreach ($song->artists as $index => $item)
-                                                    <strong>
-                                                        <a class="no-deco text-light"
-                                                            href="{{ route('artist.show', [$item->id, $item->name_slug]) }}">
-                                                            {{ $item->name }}
-                                                            @if ($item->name_jp)
-                                                                ({{ $item->name_jp }})
-                                                            @endif
-                                                        </a>
-                                                    </strong>
+                                                    @php
+                                                        $artistShowRoute = route('artist.show', [$item->id, $item->name_slug]);
+                                                        if ($item->name_jp != null) {
+                                                            $artistName = $item->name . ' (' . $item->name_jp . ')';
+                                                        } else {
+                                                            $artistName = $item->name;
+                                                        }
+                                                    @endphp
+                                                    <a class="text-light text-decoration-none"
+                                                        href="{{ $artistShowRoute }}">{{ $artistName }}</a>
                                                     @if ($index < count($song->artists) - 1)
-                                                        , <!-- Agrega la coma si no es el último elemento -->
+                                                        , 
                                                     @endif
                                                 @endforeach
                                             </div>
                                         @endisset
                                     </div>
-                                    <div style="display: inline;
-                            align-self: center;">
-                                        <span>{{ $song->averageRating != null ? $song->averageRating / 1 : 'N/A' }}</span>
-                                        <i class="fa fa-star" aria-hidden="true"></i>
-                                    </div>
+                                    <hr class="p-0 m-0">
+                                    @isset($song->songVariants)
+                                        @if ($song->songVariants->count() != 0)
+                                            <div class="d-flex flex-column gap-3 mx-2 py-2">
+                                                @foreach ($song->songVariants->sortBy('version') as $variant)
+                                                @php
+                                                    $song_id = $variant->song->id;
+                                                    $slug = $variant->song->post->slug;
+                                                    if ($variant->song->suffix != null) {
+                                                        $suffix = $variant->song->suffix;
+                                                    } else {
+                                                        $suffix = $variant->song->type;
+                                                    }
+                                                    $version = $variant->version;
+                                                    
+                                                    $varianShowRoute = route("p.song.variant.show",[$song->id,$slug,$suffix,$version]);
+                                                @endphp
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <a class="text-decoration-none text-light" href="{{$varianShowRoute}}"><span>Version
+                                                                {{ $variant->version }}</span></a>
+                                                        <a class="btn btn-sm btn-primary rounded-4"
+                                                            href="{{$varianShowRoute}}">{{ 'Show' }}
+                                                            <i class="fa-solid fa-play"></i></a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <h4 class="text-center">No videos</h4>
+                                        @endif
+                                    @endisset
                                 </div>
                             @endforeach
                         @else

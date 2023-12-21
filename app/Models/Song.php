@@ -8,6 +8,7 @@ use willvincent\Rateable\Rateable;
 use Conner\Tagging\Taggable;
 use Conner\Likeable\Likeable;
 use App\Models\Post;
+use App\Models\SongVariant;
 
 class Song extends Model
 {
@@ -35,11 +36,16 @@ class Song extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class,'rateable_id');
+        return $this->hasMany(Comment::class, 'rateable_id');
     }
 
     public function videos()
     {
-        return $this->hasMany(Video::class);
+        return $this->hasMany(Video::class)->whereNull('song_variant_id');
+    }
+
+    public function songVariants()
+    {
+        return $this->hasMany(SongVariant::class);
     }
 }
