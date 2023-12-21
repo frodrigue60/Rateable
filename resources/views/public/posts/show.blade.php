@@ -166,9 +166,11 @@
                                         <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4>
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <span class="text-light text-decoration-none">{{ $songName }}</span>
+                                        <span class="text-light text-decoration-none"><span class="pe-1"><i
+                                            class="fa-solid fa-music"></i></span> {{ $songName }}</span>
                                         @isset($song->artists)
                                             <div>
+                                                <span class="pe-2"><i class="fa-solid fa-user"></i></span>
                                                 @foreach ($song->artists as $index => $item)
                                                     @php
                                                         $artistShowRoute = route('artist.show', [$item->id, $item->name_slug]);
