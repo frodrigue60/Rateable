@@ -181,7 +181,7 @@
                                                     <a class="text-light text-decoration-none"
                                                         href="{{ $artistShowRoute }}">{{ $artistName }}</a>
                                                     @if ($index < count($song->artists) - 1)
-                                                        , 
+                                                        ,
                                                     @endif
                                                 @endforeach
                                             </div>
@@ -192,11 +192,23 @@
                                         @if ($song->songVariants->count() != 0)
                                             <div class="d-flex flex-column gap-2 mx-2 py-2">
                                                 @foreach ($song->songVariants->sortBy('version') as $variant)
+                                                    @php
+                                                        $song_id = $variant->song->id;
+                                                        $slug = $variant->song->post->slug;
+                                                        if ($variant->song->suffix != null) {
+                                                            $suffix = $variant->song->suffix;
+                                                        } else {
+                                                            $suffix = $variant->song->type;
+                                                        }
+                                                        $version = $variant->version;
+
+                                                        $varianShowRoute = route('p.song.variant.show', [$song->id, $slug, $suffix, $version]);
+                                                    @endphp
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <a class="text-decoration-none text-light" href=""><span>Version
+                                                        <a class="text-decoration-none text-light" href="{{$varianShowRoute}}"><span>Version
                                                                 {{ $variant->version }}</span></a>
                                                         <a class="btn btn-sm btn-primary rounded-4"
-                                                            href="">{{ 'Show' }}
+                                                            href="{{$varianShowRoute}}">{{ 'Show' }}
                                                             <i class="fa-solid fa-play"></i></a>
                                                     </div>
                                                 @endforeach
@@ -253,7 +265,8 @@
                                         <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4>
                                     </div>
                                     <div class="d-flex flex-column">
-                                        <span class="text-light text-decoration-none"><span class="pe-1"><i class="fa-solid fa-music"></i></span> {{ $songName }}</span>
+                                        <span class="text-light text-decoration-none"><span class="pe-1"><i
+                                                    class="fa-solid fa-music"></i></span> {{ $songName }}</span>
                                         @isset($song->artists)
                                             <div class="d-flex align-items-center">
                                                 <span class="pe-2"><i class="fa-solid fa-user"></i></span>
@@ -269,7 +282,7 @@
                                                     <a class="text-light text-decoration-none"
                                                         href="{{ $artistShowRoute }}">{{ $artistName }}</a>
                                                     @if ($index < count($song->artists) - 1)
-                                                        , 
+                                                        ,
                                                     @endif
                                                 @endforeach
                                             </div>
@@ -280,23 +293,24 @@
                                         @if ($song->songVariants->count() != 0)
                                             <div class="d-flex flex-column gap-3 mx-2 py-2">
                                                 @foreach ($song->songVariants->sortBy('version') as $variant)
-                                                @php
-                                                    $song_id = $variant->song->id;
-                                                    $slug = $variant->song->post->slug;
-                                                    if ($variant->song->suffix != null) {
-                                                        $suffix = $variant->song->suffix;
-                                                    } else {
-                                                        $suffix = $variant->song->type;
-                                                    }
-                                                    $version = $variant->version;
-                                                    
-                                                    $varianShowRoute = route("p.song.variant.show",[$song->id,$slug,$suffix,$version]);
-                                                @endphp
+                                                    @php
+                                                        $song_id = $variant->song->id;
+                                                        $slug = $variant->song->post->slug;
+                                                        if ($variant->song->suffix != null) {
+                                                            $suffix = $variant->song->suffix;
+                                                        } else {
+                                                            $suffix = $variant->song->type;
+                                                        }
+                                                        $version = $variant->version;
+
+                                                        $varianShowRoute = route('p.song.variant.show', [$song->id, $slug, $suffix, $version]);
+                                                    @endphp
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <a class="text-decoration-none text-light" href="{{$varianShowRoute}}"><span>Version
+                                                        <a class="text-decoration-none text-light"
+                                                            href="{{ $varianShowRoute }}"><span>Version
                                                                 {{ $variant->version }}</span></a>
                                                         <a class="btn btn-sm btn-primary rounded-4"
-                                                            href="{{$varianShowRoute}}">{{ 'Show' }}
+                                                            href="{{ $varianShowRoute }}">{{ 'Show' }}
                                                             <i class="fa-solid fa-play"></i></a>
                                                     </div>
                                                 @endforeach
