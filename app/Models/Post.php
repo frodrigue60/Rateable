@@ -11,9 +11,9 @@ use Conner\Likeable\Likeable;
 class Post extends Model
 {
     use HasFactory;
-    use Rateable;
+    //use Rateable;
     use Taggable;
-    use Likeable;
+    //use Likeable;
 
     protected $fillable = [
         'title',

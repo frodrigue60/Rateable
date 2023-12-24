@@ -9,8 +9,8 @@
     </div>
     {{-- POPULAR POSTS --}}
     <section class="contenedor-tarjetas-main">
-        @foreach ($popular->take(14) as $song)
-            @isset($song->post)
+        @foreach ($popular->take(14) as $variant)
+            @isset($variant->song->post)
                 {{-- <article class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </article> --}}
-                @include('layouts.song-card')
+                @include('layouts.song-variant-card')
             @endisset
         @endforeach
     </section>
@@ -47,8 +47,8 @@
     </div>
     {{-- MOST VIEWED --}}
     <section class="contenedor-tarjetas-main">
-        @foreach ($viewed->take(14) as $song)
-            @isset($song->post)
+        @foreach ($viewed->take(14) as $variant)
+            @isset($variant->song->post)
                 {{-- <article class="tarjeta">
                     <div class="textos">
                         <div class="tarjeta-header text-light">
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </article> --}}
-                @include('layouts.song-card')
+                @include('layouts.song-variant-card')
             @endisset
         @endforeach
     </section>

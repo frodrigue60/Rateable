@@ -163,11 +163,11 @@
                                 <div class="bg-dark p-2 d-flex flex-column gap-1 my-2 rounded-2">
                                     <div class="d-flex justify-content-between">
                                         <h4 class="p-0 m-0">{{ $themeSuffix }} {{ $song->themeNum }}</h4>
-                                        <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4>
+                                        {{-- <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4> --}}
                                     </div>
                                     <div class="d-flex flex-column">
                                         <span class="text-light text-decoration-none"><span class="pe-1"><i
-                                            class="fa-solid fa-music"></i></span> {{ $songName }}</span>
+                                                    class="fa-solid fa-music"></i></span> {{ $songName }}</span>
                                         @isset($song->artists)
                                             <div>
                                                 <span class="pe-2"><i class="fa-solid fa-user"></i></span>
@@ -207,14 +207,28 @@
                                                         $varianShowRoute = route('p.song.variant.show', [$song->id, $slug, $suffix, $version]);
                                                     @endphp
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <a class="text-decoration-none text-light" href="{{$varianShowRoute}}"><span>Version
+                                                        <a class="text-decoration-none text-light"
+                                                            href="{{ $varianShowRoute }}"><span>Version
                                                                 {{ $variant->version }}</span></a>
-                                                        <a class="btn btn-sm btn-primary rounded-4"
-                                                            href="{{$varianShowRoute}}">{{ 'Show' }}
-                                                            <i class="fa-solid fa-play"></i></a>
+                                                        <div class="d-flex flex-row align-items-center gap-4">
+                                                            <div>
+                                                                @if (isset($variant->score))
+                                                                    <span>{{ $variant->score }} <i
+                                                                            class="fa-solid fa-star"></i></span>
+                                                                @else
+                                                                    <span>N/A <i class="fa-solid fa-star"></i></span>
+                                                                @endif
+                                                            </div>
+                                                            <div>
+                                                                <a class="btn btn-sm btn-primary rounded-4"
+                                                                    href="{{ $varianShowRoute }}">{{ 'Show' }}
+                                                                    <i class="fa-solid fa-play"></i></a>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            {{-- <p class="text-light">{{$variant->score}}</p> --}}
                                         @else
                                             <h4 class="text-center">No videos</h4>
                                         @endif
@@ -264,7 +278,7 @@
                                 <div class="bg-dark p-2 d-flex flex-column gap-1 my-2 rounded-2">
                                     <div class="d-flex justify-content-between">
                                         <h4 class="p-0 m-0">{{ $themeSuffix }} {{ $song->themeNum }}</h4>
-                                        <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4>
+                                        {{-- <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4> --}}
                                     </div>
                                     <div class="d-flex flex-column">
                                         <span class="text-light text-decoration-none"><span class="pe-1"><i
@@ -311,9 +325,21 @@
                                                         <a class="text-decoration-none text-light"
                                                             href="{{ $varianShowRoute }}"><span>Version
                                                                 {{ $variant->version }}</span></a>
-                                                        <a class="btn btn-sm btn-primary rounded-4"
-                                                            href="{{ $varianShowRoute }}">{{ 'Show' }}
-                                                            <i class="fa-solid fa-play"></i></a>
+                                                        <div class="d-flex flex-row align-items-center gap-4">
+                                                            <div class="">
+                                                                @if (isset($variant->score))
+                                                                    <span>{{ $variant->score }} <i
+                                                                            class="fa-solid fa-star"></i></span>
+                                                                @else
+                                                                    <span>N/A <i class="fa-solid fa-star"></i></span>
+                                                                @endif
+                                                            </div>
+                                                            <div>
+                                                                <a class="btn btn-sm btn-primary rounded-4"
+                                                                    href="{{ $varianShowRoute }}">{{ 'Show' }}
+                                                                    <i class="fa-solid fa-play"></i></a>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 @endforeach
                                             </div>

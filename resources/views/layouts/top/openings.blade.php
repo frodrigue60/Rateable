@@ -1,26 +1,26 @@
 @php
     $j = 1;
 @endphp
-@foreach ($openings as $song)
-    @isset($song->post)
+@foreach ($openings as $variant)
+    @isset($variant->song->post)
         @php
-            $j + 1;
             $song_name = null;
 
-            if (isset($song->song_romaji)) {
-                $song_name = $song->song_romaji;
+            if (isset($variant->song->song_romaji)) {
+                $song_name = $variant->song->song_romaji;
             } else {
-                if (isset($song->song_en)) {
-                    $song_name = $song->song_en;
+                if (isset($variant->song->song_en)) {
+                    $song_name = $variant->song->song_en;
                 } else {
-                    if (isset($song->song_jp)) {
-                        $song_name = $song->song_jp;
+                    if (isset($variant->song->song_jp)) {
+                        $song_name = $variant->song->song_jp;
                     }
                 }
             }
+
             $img_url = null;
-            if ($song->post->banner != null) {
-                $img_url = file_exists(asset('/storage/anime_banner/' . $song->post->banner)) ? asset('/storage/anime_banner/' . $song->post->banner) : $song->post->banner_src;
+            if ($variant->song->post->banner != null) {
+                $img_url = file_exists(asset('/storage/anime_banner/' . $variant->song->post->banner)) ? asset('/storage/anime_banner/' . $variant->song->post->banner) : $variant->song->post->banner_src;
             } else {
                 $img_url = 'https://static.vecteezy.com/system/resources/thumbnails/005/170/408/small/banner-abstract-geometric-white-and-gray-color-background-illustration-free-vector.jpg';
             }
@@ -32,24 +32,32 @@
             </div>
             <div class="item-info" style="background-image: url({{ $img_url }})">
                 <div class="item-info-filter"></div>
-                @isset($song)
+                @isset($variant->song)
+                    @php
+                        $song_id = $variant->song->id;
+                        $post_slug = $variant->song->post->slug;
+                        $suffix = $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type;
+                        $version = $variant->version;
+                        $showVariantRoute = route('p.song.variant.show', [$song_id, $post_slug, $suffix, $version]);
+                        $forward_text = ($variant->song->suffix ? $variant->song->suffix : $variant->song->type) . 'v' . $variant->version;
+                    @endphp
                     <div class="item-song-info">
                         {{-- SONG TITLE --}}
                         <div class="text-ellipsis">
                             @if ($song_name != null)
                                 <a class="no-deco text-light bold"
-                                    href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song_name }}</a>
+                                    href="{{ $showVariantRoute }}">{{ $song_name . ' ' . $forward_text }} </a>
                             @else
                                 <strong>N/A</strong>
                             @endif
                         </div>
                         {{-- SONG ARTISTS --}}
                         <div class="text-ellipsis">
-                            @if (isset($song->artists) && count($song->artists) != 0)
-                                @foreach ($song->artists as $index => $artist)
+                            @if (isset($variant->song->artists) && count($variant->song->artists) != 0)
+                                @foreach ($variant->song->artists as $index => $artist)
                                     <a class="no-deco text-light"
                                         href="{{ route('artist.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }}</a>
-                                    @if ($index < count($song->artists) - 1)
+                                    @if ($index < count($variant->song->artists) - 1)
                                         ,
                                     @endif
                                 @endforeach
@@ -61,15 +69,13 @@
                 @endisset
                 {{-- ANIME TITLE --}}
                 <div class="item-post-info">
-                    <a class="no-deco text-light " target="_blank"
-                        href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song->post->title }}</a>
-                    {{ $song->suffix ? '(' . $song->suffix . ')' : '' }}
+                    <a class="no-deco text-light" target="_blank"
+                        href="{{ route('post.show', [$variant->song->post->id, $variant->song->post->slug]) }}">{{ $variant->song->post->title }}</a>
                 </div>
-
             </div>
-
             <div class="item-score">
-                <span>{{ $song->score != null ? $song->score : 'n/a' }} <i class="fa fa-star" aria-hidden="true"></i></span>
+                <span>{{ $variant->score != null ? $variant->score : 'N/A' }} <i class="fa fa-star"
+                        aria-hidden="true"></i></span>
             </div>
         </div>
     @endisset

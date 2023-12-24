@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use stdClass;
+use App\Models\SongVariant;
 
 class PostController extends Controller
 {
@@ -31,55 +32,110 @@ class PostController extends Controller
             $score_format = null;
         }
 
-        $recently = Song::with(['post'])
+        /*  $recently = Song::with(['post'])
             ->whereHas('post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->get()
+            ->sortByDesc('created_at')
+            ->take(25); */
+
+        $recently = SongVariant::with(['song.post'])
+            ->whereHas('song.post', function ($query) {
                 $query->where('status', '=', 'published');
             })
             ->get()
             ->sortByDesc('created_at')
             ->take(25);
 
-        $popular = Song::with(['post'])
+        //dd($recently);
+
+        /* $popular = Song::with(['post'])
             ->whereHas('post', function ($query) {
                 $query->where('status', '=', 'published');
             })
             ->get()
             ->sortByDesc('likeCount')
+            ->take(15); */
+
+        $popular = SongVariant::with(['song.post'])
+            ->whereHas('song.post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->get()
+            ->sortByDesc('likeCount')
             ->take(15);
-        $popular = $this->setScore($popular, $score_format);
+
+        $popular = $this->setScoreOnlyVariants($popular, $score_format);
+
         //dd($popular);
 
-        $viewed = Song::with(['post'])
+        /* $viewed = Song::with(['post'])
             ->whereHas('post', function ($query) {
                 $query->where('status', '=', 'published');
             })
             ->get()
             ->sortByDesc('view_count')
+            ->take(15); */
+
+        $viewed = SongVariant::with(['song.post'])
+            ->whereHas('song.post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->get()
+            ->sortByDesc('views')
             ->take(15);
-        $viewed = $this->setScore($viewed, $score_format);
+
+        $viewed = $this->setScoreOnlyVariants($viewed, $score_format);
+
         //dd($viewed);
 
-        $openings = Song::with(['post'])
+        /* $openings = Song::with(['post'])
             ->where('type', 'OP')
             ->whereHas('post', function ($query) {
                 $query->where('status', '=', 'published');
             })
             ->get()
             ->sortByDesc('averageRating')
-            ->take(5);
-        $openings = $this->setScore($openings, $score_format);
+            ->take(5); */
 
-        $endings = Song::with(['post'])
+        $openings = SongVariant::with(['song.post'])
+            ->whereHas('song.post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->whereHas('song', function ($query) {
+                $query->where('type', 'OP');
+            })
+            ->get()
+            ->sortByDesc('averageRating')
+            ->take(5);
+
+        $openings = $this->setScoreOnlyVariants($openings, $score_format);
+
+        //dd($openings);
+
+        /* $endings = Song::with(['post'])
             ->where('type', 'ED')
             ->whereHas('post', function ($query) {
                 $query->where('status', '=', 'published');
             })
             ->get()
             ->sortByDesc('averageRating')
+            ->take(5); */
+        $endings = SongVariant::with(['song.post'])
+            ->whereHas('song.post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->whereHas('song', function ($query) {
+                $query->where('type', 'ED');
+            })
+            ->get()
+            ->sortByDesc('averageRating')
             ->take(5);
-        $endings = $this->setScore($endings, $score_format);
-        //dd($openings,$endings);
 
+        $endings = $this->setScore($endings, $score_format);
+
+        //dd($endings);
 
         return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));
     }
@@ -159,6 +215,12 @@ class PostController extends Controller
      */
     public function show($id, $slug)
     {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+
         $post = Post::with('songs')->find($id);
 
         $openings = $post->songs->filter(function ($song) {
@@ -170,12 +232,16 @@ class PostController extends Controller
         });
 
         $tags = $post->tagged;
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-            return view('public.posts.show', compact('post', 'tags', 'openings', 'endings', 'score_format'));
-        } else {
-            return view('public.posts.show', compact('post', 'tags', 'openings', 'endings'));
-        }
+
+        //dd($openings, $endings, $tags);
+
+        $endings = $this->setScoreToSongVariants($endings, $score_format);
+
+        $openings = $this->setScoreToSongVariants($openings, $score_format);
+
+        //dd($openings,$endings);
+
+        return view('public.posts.show', compact('post', 'tags', 'openings', 'endings', 'score_format'));
     }
 
     /**
@@ -253,7 +319,7 @@ class PostController extends Controller
             return view('public.posts.seasonal', compact('songs', 'tags', 'score_format'));
         } else {
 
-            $songs = Song::with(['post'])
+            $songs = Song::with(['post', 'songVariants'])
                 ->withAnyTag($currentSeason->name)
                 ->whereHas('post', function ($query) {
                     $query->where('status', 'published')
@@ -267,6 +333,8 @@ class PostController extends Controller
                 ->orderBy('name', 'desc')
                 ->take(5)
                 ->get();
+
+            //dd($songs);
 
             return view('public.posts.seasonal', compact('songs', 'tags', 'score_format', 'currentSeason'));
         }
@@ -796,7 +864,7 @@ class PostController extends Controller
         $tag = $request->tag;
         $type = $request->type;
         $sort = $request->sort;
-        $char = $request->char;
+        $char = $request->character;
 
         $requested = new stdClass;
         $requested->type = $type;
@@ -813,6 +881,10 @@ class PostController extends Controller
         $types = $this->filterTypesSortChar()['types'];
         $sortMethods = $this->filterTypesSortChar()['sortMethods'];
         $characters = $this->filterTypesSortChar()['characters'];
+
+        $song_variants = null;
+
+        //dd($char);
 
         if ($request->year != null || $request->season != null) {
             if ($request->year != null && $request->season != null) {
@@ -834,37 +906,70 @@ class PostController extends Controller
             //dd($tag);
             if ($type != null) {
                 if ($char != null) {
-                    $songs = Song::with(['post'])
+                    /* $songs = Song::with(['post'])
                         ->withAnyTag($tag)
                         ->whereHas('post', function ($query) use ($char) {
                             $query->where('status', 'published')
                                 ->where('title', 'LIKE', "{$char}%");
                         })
                         ->where('type', $type)
+                        ->get(); */
+
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($char, $tag) {
+                            $query->where('status', 'published')
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->withAnyTag($tag);
+                        })
+                        ->whereHas('song', function ($query) use ($type) {
+                            $query->where('type', $type);
+                        })
                         ->get();
                 } else {
-                    $songs = Song::with(['post'])
+                    /*  $songs = Song::with(['post'])
                         ->withAnyTag($tag)
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
                         })
                         ->where('type', $type)
+                        ->get(); */
+
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($char, $tag) {
+                            $query->where('status', 'published')
+                                ->withAnyTag($tag);
+                        })
+                        ->whereHas('song', function ($query) use ($type) {
+                            $query->where('type', $type);
+                        })
                         ->get();
                 }
             } else {
                 if ($char != null) {
-                    $songs = Song::with(['post'])
+                    /* $songs = Song::with(['post'])
                         ->withAnyTag($tag)
                         ->whereHas('post', function ($query) use ($char) {
                             $query->where('status', 'published')
                                 ->where('title', 'LIKE', "{$char}%");
-                        })->get();
+                        })->get(); */
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($tag, $char) {
+                            $query->where('status', 'published')
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->withAnyTag($tag);
+                        })
+                        ->get();
                 } else {
-                    //dd($request->all());
-                    $songs = Song::with(['post'])
+                    /* $songs = Song::with(['post'])
                         ->withAnyTag($tag)
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
+                        })
+                        ->get(); */
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($tag) {
+                            $query->where('status', 'published')
+                                ->withAnyTag($tag);
                         })
                         ->get();
                 }
@@ -872,49 +977,82 @@ class PostController extends Controller
         } else {
             if ($type != null) {
                 if ($char != null) {
-                    $songs = Song::with(['post'])
+                    /* $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) use ($char) {
                             $query->where('status', 'published')
                                 ->where('title', 'LIKE', "{$char}%");
                         })
                         ->where('type', $type)
+                        ->get(); */
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($char) {
+                            $query->where('status', 'published')
+                                ->where('title', 'LIKE', "{$char}%");
+                        })
+                        ->whereHas('song', function ($query) use ($type) {
+                            $query->where('type', $type);
+                        })
                         ->get();
                 } else {
-                    $songs = Song::with(['post'])
+                    /* $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
-                        })->where('type', $type)->get();
+                        })->where('type', $type)->get(); */
+
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) {
+                            $query->where('status', 'published');
+                        })
+                        ->whereHas('song', function ($query) use ($type) {
+                            $query->where('type', $type);
+                        })
+                        ->get();
                 }
+                //dd($song_variants);
             } else {
                 if ($char != null) {
-                    $songs = Song::with(['post'])
+                    /* $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) use ($char) {
                             $query
                                 ->where('status', 'published')
                                 ->where('title', 'LIKE', "{$char}%");
+                        })->get(); */
+
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($char) {
+                            $query->where('status', 'published')
+                                ->where('title', 'LIKE', "{$char}%");
                         })->get();
                 } else {
-
-                    $songs = Song::with(['post'])
+                    /* $songs = Song::with(['post'])
                         ->whereHas('post', function ($query) {
                             $query->where('status', 'published');
-                        })->get();
+                        })->get(); */
+                    $song_variants = SongVariant::with(['song'])
+                        ->get();
                 }
             }
         }
-        //dd($songs);
 
-        $songs = $this->setScore($songs, $score_format);
-        $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs, 24)->withQueryString();
+        //dd($song_variants);
+
+        //$songs = $this->setScore($songs, $score_format);
+        //$songs = $this->paginate($songs, 24)->withQueryString();
+        //$songs = $this->sort($sort, $songs);
+
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
+        $song_variants = $this->sort_variants($sort, $song_variants);
+        $song_variants = $this->paginate($song_variants);
+       
+
+        //dd($song_variants);
 
         if ($request->ajax()) {
-            //error_log('new ajax request');
-            $view = view('layouts.songs-cards', compact('songs'))->render();
-            return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
+            $view = view('layouts.song-variant-cards', compact('song_variants'))->render();
+            return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
-        //dd($songs);
-        return view('public.songs.filter', compact(/* 'songs', */'seasons', 'years', 'requested', 'sortMethods', 'types', 'characters'));
+
+        return view('public.songs.filter', compact(/* 'song_variants', */'seasons', 'years', 'requested', 'sortMethods', 'types', 'characters'));
     }
     public function setScore($songs, $score_format)
     {
@@ -961,6 +1099,96 @@ class PostController extends Controller
         return $songs;
     }
 
+    public function setScoreOnlyVariants($variantsArray, $score_format)
+    {
+        $variantsArray->each(function ($variant) use ($score_format) {
+            $variant->score = null;
+            $variant->user_score = null;
+            switch ($score_format) {
+                case 'POINT_100':
+                    $variant->score = round($variant->averageRating);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating);
+                    }
+
+                    break;
+                case 'POINT_10_DECIMAL':
+                    $variant->score = round($variant->averageRating / 10, 1);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating / 10, 1);
+                    }
+
+                    break;
+                case 'POINT_10':
+                    $variant->score = round($variant->averageRating / 10);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating / 10);
+                    }
+
+                    break;
+                case 'POINT_5':
+                    $variant->score = round($variant->averageRating / 20);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating / 20);
+                    }
+
+                    break;
+                default:
+                    $variant->score = round($variant->averageRating / 10);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating / 10);
+                    }
+                    break;
+            }
+        });
+        return $variantsArray;
+    }
+
+    public function setScoreToSongVariants($songsArray, $score_format)
+    {
+        $songsArray->each(function ($song) use ($score_format) {
+            $song->songVariants->each(function ($variant) use ($score_format) {
+                $variant->score = null;
+                $variant->user_score = null;
+                switch ($score_format) {
+                    case 'POINT_100':
+                        $variant->score = round($variant->averageRating);
+                        if ($variant->rating != null) {
+                            $variant->user_score = round($variant->rating);
+                        }
+                        break;
+                    case 'POINT_10_DECIMAL':
+                        $variant->score = round($variant->averageRating / 10, 1);
+                        if ($variant->rating != null) {
+                            $variant->user_score = round($variant->rating / 10, 1);
+                        }
+                        break;
+                    case 'POINT_10':
+                        $variant->score = round($variant->averageRating / 10);
+                        if ($variant->rating != null) {
+                            $variant->user_score = round($variant->rating / 10);
+                        }
+                        break;
+                    case 'POINT_5':
+                        $variant->score = round($variant->averageRating / 20);
+                        if ($variant->rating != null) {
+                            $variant->user_score = round($variant->rating / 20);
+                        }
+                        break;
+                    default:
+                        $variant->score = round($variant->averageRating / 10);
+                        if ($variant->rating != null) {
+                            $variant->user_score = round($variant->rating / 10);
+                        }
+                        break;
+                }
+            });
+        });
+
+        return $songsArray;
+    }
+
+
     public function paginate($songs, $perPage = 18, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();
@@ -1004,10 +1232,49 @@ class PostController extends Controller
                 break;
         }
     }
+    public function sort_variants($sort, $song_variants)
+    {
+        //dd($song_variants);
+
+        switch ($sort) {
+            case 'title':
+                $song_variants = $song_variants->sortBy(function ($song_variant) {
+                    return $song_variant->song->post->title;
+                });
+                return $song_variants;
+                break;
+
+            case 'averageRating':
+                $song_variants = $song_variants->sortByDesc('averageRating');
+                return $song_variants;
+                break;
+
+            case 'view_count':
+                $song_variants = $song_variants->sortByDesc('views');
+                return $song_variants;
+                break;
+
+            case 'likeCount':
+                $song_variants = $song_variants->sortByDesc('likeCount');
+                return $song_variants;
+                break;
+
+            case 'recent':
+                $song_variants = $song_variants->sortByDesc('created_at');
+                return $song_variants;
+                break;
+
+            default:
+                $song_variants = $song_variants->sortByDesc('created_at');
+                return $song_variants;
+                break;
+        }
+    }
 
     public function seasonalRanking()
     {
         $currentSeason = DB::table('tagging_tags')->where('flag', '1')->first();
+
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {
@@ -1027,32 +1294,39 @@ class PostController extends Controller
 
             return view('public.posts.ranking', compact('openings', 'endings', 'score_format'));
         } else {
-            $openings = Song::with(['post'])
-                ->withAnyTag($currentSeason->name)
-                ->whereHas('post', function ($query) {
+            $openings = SongVariant::with(['song'])
+                ->whereHas('song.post', function ($query) use ($currentSeason) {
                     $query->where('status', 'published')
-                        ->orderBy('title', 'asc');
+                        ->withAnyTag($currentSeason->name);
                 })
-                ->where('type', 'OP')
+                ->whereHas('song', function ($query) {
+                    $query->where('type', 'OP');
+                })
                 ->get()
                 ->sortByDesc('averageRating')
                 ->take(100);
+
+            //dd($op_variants);
+
             $this->setScore($openings, $score_format);
 
-            $endings = Song::with(['post'])
-                ->withAnyTag($currentSeason->name)
-                ->whereHas('post', function ($query) {
+            $endings = SongVariant::with(['song'])
+                ->whereHas('song.post', function ($query) use ($currentSeason) {
                     $query->where('status', 'published')
-                        ->orderBy('title', 'asc');
+                        ->withAnyTag($currentSeason->name);
                 })
-                ->where('type', 'ED')
-
+                ->whereHas('song', function ($query) {
+                    $query->where('type', 'ED');
+                })
                 ->get()
                 ->sortByDesc('averageRating')
                 ->take(100);
-            $this->setScore($endings, $score_format);
 
+            //dd($endings);
 
+            $this->setScoreOnlyVariants($endings, $score_format);
+
+            //dd($openings, $endings);
 
             return view('public.posts.ranking', compact('openings', 'endings', 'currentSeason', 'score_format'));
         }
@@ -1064,22 +1338,36 @@ class PostController extends Controller
         } else {
             $score_format = null;
         }
-        $getOpenings = Song::with(['post'])
-            ->where('type', 'OP')
-            ->get();
+
+        $getOpenings = SongVariant::with(['song.post'])
+            ->whereHas('song.post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->whereHas('song', function ($query) {
+                $query->where('type', 'OP');
+            })
+            ->get()
+            ->sortByDesc('averageRating')
+            ->take(100);
 
         $openings = $getOpenings->sortByDesc('averageRating')->take(100);
-        $openings = $this->setScore($openings, $score_format);
-        //$openings = $this->paginate($openings, 10)->withQueryString();
 
-        $getEndings = Song::with(['post'])
-            ->where('type', 'ED')
-            ->get();
+        $openings = $this->setScoreOnlyVariants($openings, $score_format);
+
+        $getEndings = SongVariant::with(['song.post'])
+            ->whereHas('song.post', function ($query) {
+                $query->where('status', '=', 'published');
+            })
+            ->whereHas('song', function ($query) {
+                $query->where('type', 'ED');
+            })
+            ->get()
+            ->sortByDesc('averageRating')
+            ->take(100);
 
         $endings = $getEndings->sortByDesc('averageRating')->take(100);
-        $endings = $this->setScore($endings, $score_format);
-        //$endings = $this->paginate($endings, 10)->withQueryString();
-        //dd($openings,$endings);
+
+        $endings = $this->setScoreOnlyVariants($endings, $score_format);
 
         return view('public.posts.ranking', compact('openings', 'endings',  'score_format'));
     }

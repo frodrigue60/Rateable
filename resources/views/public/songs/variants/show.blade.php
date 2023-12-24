@@ -1,58 +1,46 @@
 @extends('layouts.app')
 @section('meta')
-    <title>{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}</title>
-    <meta name="title" content="{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}">
+    @php
+        $title = $song_variant->song->post->title;
+        $suffix = $song_variant->song->suffix != null ? $song_variant->song->suffix : $song_variant->song->type . ' v' . $song_variant->version;
+        $artist_names = [];
+        foreach ($song_variant->song->artists as $artist) {
+            $artist_names[] = $artist->name;
+            $artists_string = implode(', ', $artist_names);
+        }
+        if (isset($song_variant->song->song_romaji)) {
+            $song_name = $song_variant->song->song_romaji;
+        } else {
+            if ($song_variant->song->song_en) {
+                $song_name = $song_variant->song->song_en;
+            } else {
+                if ($song_variant->song->song_jp) {
+                    $song_name = $song_variant->song->song_jp;
+                } else {
+                    $song_name = 'N/A';
+                }
+            }
+        }
+        $currentUrl = url()->current();
+        $thumbnailUrl = asset('/storage/thumbnails/' . $song_variant->song->post->thumbnail);
+    @endphp
 
-    @if (isset($song->song_romaji))
-        @if (isset($song->artist->name))
-            <meta name="description" content="Song: {{ $song->song_romaji }} - Artist: {{ $song->artist->name }}">
-        @else
-            <meta name="description" content="Song: {{ $song->song_romaji }} - Artist: N/A">
-        @endif
-    @else
-        @if (isset($song->song_en))
-            @if (isset($song->artist->name))
-                <meta name="description" content="Song: {{ $song->song_en }} - Artist: {{ $song->artist->name }}">
-            @else
-                <meta name="description" content="Song: {{ $song->song_en }} - Artist: N/A">
-            @endif
-        @endif
-    @endif
-
-
+    <title>{{ $title }} {{ $suffix }}</title>
+    <meta name="title" content="{{ $title }} {{ $suffix }}">
+    <meta name="description" content="Song: {{ $song_name }}  - Artists: {{ $artists_string }}">
     <meta name="robots" content="index, follow, max-image-preview:standard">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <link rel="canonical" href="{{ $currentUrl }}">
+    <meta property="article:section" content="{{ $song_variant->song->type == 'OP' ? 'Opening' : 'Ending' }}">
 
     <meta property="og:type" content="article">
-    <meta property="og:title"
-        content="{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}">
-
-    @if (isset($song->song_romaji))
-        @if (isset($song->artist->name))
-            <meta name="og:description" content="Song: {{ $song->song_romaji }} - Artist: {{ $song->artist->name }}">
-        @else
-            <meta name="og:description" content="Song: {{ $song->song_romaji }} - Artist: N/A">
-        @endif
-    @else
-        @if (isset($song->song_en))
-            @if (isset($song->artist->name))
-                <meta name="og:description" content="Song: {{ $song->song_en }} - Artist: {{ $song->artist->name }}">
-            @else
-                <meta name="og:description" content="Song: {{ $song->song_en }} - Artist: N/A">
-            @endif
-        @endif
-    @endif
-    <meta property="og:url" content="{{ url()->current() }}">
-    <meta property="article:section" content="{{ $song->type == 'OP' ? 'Opening' : 'Ending' }}">
-
-    <meta property="og:image" content="{{ asset('/storage/thumbnails/' . $song->post->thumbnail) }}"
-        alt="{{ $song->post->title }}">
-    <meta property="og:image:secure_url" content="{{ asset('/storage/thumbnails/' . $song->post->thumbnail) }}"
-        alt="{{ $song->post->title }}">
+    <meta property="og:title" content="{{ $title }} {{ $suffix }}">
+    <meta name="og:description" content="Song: {{ $song_name }} - Artist: {{ $artists_string }}">
+    <meta property="og:url" content="{{ $currentUrl }}">
+    <meta property="og:image" content="{{ $thumbnailUrl }}" alt="{{ $title . ' thumbnail' }}">
+    <meta property="og:image:secure_url" content="{{ $thumbnailUrl }}" alt="{{ $title . ' thumbnail' }}">
     <meta property="og:image:width" content="460">
     <meta property="og:image:height" content="650">
-    <meta property="og:image:alt"
-        content="{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}">
+    <meta property="og:image:alt" content="{{ $title . ' thumbnail' }}">
     <meta property="og:image:type" content="image/webp">
 @endsection
 @section('content')
@@ -99,8 +87,9 @@
                     ">
             <h3 class="mb-0 py-1 px-2 text-center text-light">
                 <a class="text-light text-decoration-none"
-                    href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song->post->title }}</a>
-                <span>{{ $song->suffix ? $song->suffix : '' }} {{ 'v' . $song_variant->version }}</span>
+                    href="{{ route('post.show', [$song_variant->song->post->id, $song_variant->song->post->slug]) }}">{{ $song_variant->song->post->title }}</a>
+                <span>{{ $song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type }}
+                    {{ 'v' . $song_variant->version }}</span>
             </h3>
         </div>
         <div class="all-buttons-container">
@@ -110,44 +99,53 @@
                             aria-hidden="true"></i>
                     </button>
 
-                    <button class="buttons-bottom px-2">{{ $song->view_count }} <i class="fa fa-eye"
+                    <button class="buttons-bottom px-2">{{ $song_variant->song->view_count }} <i class="fa fa-eye"
                             aria-hidden="true"></i>
                     </button>
                     @guest
-                        <a href="{{ route('login') }}" class="buttons-bottom px-2">{{ $song->likeCount }} <i
+                        <a href="{{ route('login') }}" class="buttons-bottom px-2">{{ $song_variant->likeCount }} <i
                                 class="fa-regular fa-heart"></i>
                         </a>
                     @endguest
                     @auth
-                        @if ($song->liked())
+                        @if ($song_variant->liked())
                             <form style="display: flex;width: 100%;height: 100%;"
-                                action="{{ route('song.unlike', $song->id) }}" method="post">
+                                action="{{ route('song.variant.unlike', [$song_variant->song->id, $song_variant->id]) }}"
+                                method="post">
                                 @csrf
-                                <button class="buttons-bottom px-2">{{ $song->likeCount }} <i class="fa-solid fa-heart"></i>
+                                <button class="buttons-bottom px-2">{{ $song_variant->likeCount }} <i
+                                        class="fa-solid fa-heart"></i>
                                 </button>
                             </form>
                         @else
-                            <form style="display: flex;width: 100%;height: 100%;" action="{{ route('song.like', $song->id) }}"
+                            <form style="display: flex;width: 100%;height: 100%;"
+                                action="{{ route('song.variant.like', [$song_variant->song, $song_variant->song->id]) }}"
                                 method="post">
                                 @csrf
-                                <button class="buttons-bottom px-2">{{ $song->likeCount }} <i class="fa-regular fa-heart"></i>
+                                <button class="buttons-bottom px-2">{{ $song_variant->likeCount }} <i
+                                        class="fa-regular fa-heart"></i>
                                 </button>
                             </form>
                         @endif
                     @endauth
                 </div>
                 <div class="d-flex gap-1">
-                    <a href="{{ route('song.create.report', $song->id) }}" class="buttons-bottom px-2" type="button"><i
-                            class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    <a href="{{ route('song.create.report', $song_variant->song->id) }}" class="buttons-bottom px-2"
+                        type="button"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                         Report</a>
 
-                    <button class="buttons-bottom px-2" type="button" data-bs-toggle="modal"
+                    {{-- <button class="buttons-bottom px-2" type="button" data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop"><i class="fa fa-info-circle" aria-hidden="true"></i>
-                        Info</button>
+                        Info</button> --}}
                 </div>
             </div>
         </div>
+        {{-- <div>
+            <h4 class="text-light">Anime: {{$song_variant->song->post->title}}</h4>
+        </div> --}}
 
+
+        <hr class="text-light">
         <div>
             <h3 class="text-light">Comments</h3>
         </div>
@@ -160,7 +158,8 @@
         @auth
             <div class="py-2">
                 <div class="comment-form">
-                    <form action="{{ route('song.addrate', $song->id) }}" method="post" class="d-flex flex-column gap-2">
+                    <form action="{{ route('song.variant.rate', [$song_variant->song->id, $song_variant->id]) }}"
+                        method="post" class="d-flex flex-column gap-2">
                         @csrf
                         <div class="score-form text-light">
                             <span>Rate this theme:</span>
@@ -176,7 +175,7 @@
                                     @case('POINT_10_DECIMAL')
                                         <div class="">
                                             <input type="number" max="10" min="0" step=".1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1 to 10" required>
+                                                id="exampleFormControlInput1" name="score" placeholder="1.0 to 10.0" required>
                                         </div>
                                     @break
 
@@ -447,12 +446,12 @@
         @endisset
     </div>
 
-    <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
+    {{-- <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-dark text-light">
                 <div class="modal-header">
-                    <span class="modal-title fs-5" id="staticBackdropLabel">{{ $song->post->title }}</span>
+                    <span class="modal-title fs-5" id="staticBackdropLabel">{{ $song_variant->song->post->title }}</span>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -516,7 +515,7 @@
 
             </div>
         </div>
-    </div>
+    </div> --}}
 
     @section('script')
         @if (config('app.env') === 'local')

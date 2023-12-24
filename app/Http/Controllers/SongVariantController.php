@@ -6,6 +6,7 @@ use App\Models\SongVariant;
 use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class SongVariantController extends Controller
 {
@@ -51,10 +52,10 @@ class SongVariantController extends Controller
         //dd($song_id, $suffix, $version);
 
         //$song = Song::with(['post', 'artists','videos'])->find($id);
-        $song_variant = SongVariant::where('song_id','=', $song_id)->where('version','=',$version)->first();
+        $song_variant = SongVariant::where('song_id', '=', $song_id)->where('version', '=', $version)->first();
 
-        $song = $song_variant->song;
-        
+        //$song = $song_variant->song;
+
         $comments = Comment::with('user', 'likeCounter')
             ->where('rateable_id', '=', $song_id)
             ->where('comment', '!=', "")
@@ -70,36 +71,38 @@ class SongVariantController extends Controller
             ->take(3);
 
 
-        if (Auth::check() == true && $song_variant->song->averageRating == true) {
+        if (Auth::check() == true && $song_variant->averageRating == true) {
 
             switch (Auth::user()->score_format) {
                 case 'POINT_100':
-                    $score = round($song_variant->song->averageRating);
+                    $score = round($song_variant->averageRating);
                     break;
 
                 case 'POINT_10_DECIMAL':
-                    $score = round($song_variant->song->averageRating / 10, 1);
+                    $score = round($song_variant->averageRating / 10, 1);
                     break;
 
                 case 'POINT_10':
-                    $score = round($song_variant->song->averageRating / 10);
+                    $score = round($song_variant->averageRating / 10);
                     break;
 
                 case 'POINT_5':
-                    $score = round($song_variant->song->averageRating / 20);
+                    $score = round($song_variant->averageRating / 20);
                     break;
 
                 default:
-                    $score = round($song_variant->song->averageRating / 10);
+                    $score = round($song_variant->averageRating / 10);
                     break;
             }
         } else {
             $score = null;
         }
+        
+        $song_variant->incrementViews();
 
         //dd($song_variant,$score,$comments,$comments_featured);
 
-        return view('public.songs.variants.show', compact('song','song_variant', 'score', 'comments', 'comments_featured'));
+        return view('public.songs.variants.show', compact('song_variant', 'score', 'comments', 'comments_featured'));
     }
 
     /**
@@ -135,4 +138,109 @@ class SongVariantController extends Controller
     {
         //
     }
+
+    public function rate(Request $request, $song_id, $variant_id)
+    {
+        if (Auth::check()) {
+            
+            $songVariant = SongVariant::find($variant_id);
+            
+            $score_format = Auth::user()->score_format;
+
+            $validator = Validator::make($request->all(), [
+                'comment' => 'nullable|string|max:255',
+                'score' => 'required|numeric'
+            ]);
+
+            if ($validator->fails()) {
+                $messageBag = $validator->getMessageBag();
+                return redirect()
+                    ->back()
+                    ->with('error', $messageBag);
+            } else {
+                $score = $request->score;
+            }
+
+            switch ($score_format) {
+                case 'POINT_100':
+                    if (($score >= 1) && ($score <= 100)) {
+                        $songVariant->rateOnce($score);
+                        return redirect()->back()->with('success', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
+                    }
+                    break;
+
+                case 'POINT_10_DECIMAL':
+                    if (($score >= 1) && ($score <= 10)) {
+                        $songVariant->rateOnce(intval($score * 10));
+                        return redirect()->back()->with('success', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('warning', 'Only values between 1 and 10 (can use decimals)');
+                    }
+                    break;
+                case 'POINT_10':
+                    if (($score >= 1) && ($score <= 10)) {
+                        $songVariant->rateOnce(intval($score * 10));
+                        return redirect()->back()->with('success', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('warning', 'Only values between 1 and 10 (only integer numbers)');
+                    }
+                    break;
+                case 'POINT_5':
+                    if (($score >= 1) && ($score <= 100)) {
+                        if ($score <= 20) {
+                            $score = 20;
+                        }
+                        if (($score > 20) && ($score <= 40)) {
+                            $score = 40;
+                        }
+                        if (($score > 40) && ($score <= 60)) {
+                            $score = 60;
+                        }
+                        if (($score > 60) && ($score <= 80)) {
+                            $score = 80;
+                        }
+                        if ($score > 80) {
+                            $score = 100;
+                        }
+                        $songVariant->rateOnce($score, $request->comment);
+                        return redirect()->back()->with('success', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
+                    }
+                    break;
+
+
+                default:
+                    if (($score >= 1) && ($score <= 100)) {
+                        $songVariant->rateOnce($score * 10, $request->comment);
+                        return redirect()->back()->with('success', 'Post rated Successfully');
+                    } else {
+                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
+                    }
+                    break;
+            }
+        }
+        return redirect()->route('login');
+    }
+
+    public function likeVariant($id)
+    {
+        if (Auth::check()) {
+            SongVariant::find($id)->like(Auth::user()->id);
+            return redirect()->back()->with('success', 'Song Variant Like successfully!');
+        }
+        return redirect()->route('/')->with('warning', 'Please login');
+    }
+
+    public function unlikeVariant($id)
+    {
+        if (Auth::check()) {
+            SongVariant::find($id)->unlike(Auth::user()->id);
+            return redirect()->back()->with('success', 'Song Variant Like undo successfully!');
+        }
+        return redirect()->route('/')->with('warning', 'Please login');
+    }
+
 }

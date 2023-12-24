@@ -56,7 +56,7 @@
                     @if (Request::is('openings'))
                         <div>
                             @if (isset($currentSeason->name))
-                                <h2 class="text-light">Openings {{$currentSeason->name}}</h2>
+                                <h2 class="text-light">Openings {{ $currentSeason->name }}</h2>
                             @else
                                 <h2 class="text-light">Openings</h2>
                             @endif
@@ -66,7 +66,7 @@
                     @if (Request::is('endings'))
                         <div>
                             @if (isset($currentSeason->name))
-                                <h2 class="text-light">Endings {{$currentSeason->name}}</h2>
+                                <h2 class="text-light">Endings {{ $currentSeason->name }}</h2>
                             @else
                                 <h2 class="text-light">Endings</h2>
                             @endif
@@ -75,45 +75,15 @@
                 </div>
 
                 <section class="contenedor-tarjetas mt-2">
-                    @foreach ($songs as $song)
-                        @isset($song->post)
-                            @php
-                                $img_src = file_exists(asset('/storage/thumbnails/' . $song->post->thumbnail)) ? asset('/storage/thumbnails/' . $song->post->thumbnail) : $song->post->thumbnail_src;
-                            @endphp
-                            <article class="tarjeta">
-                                <div class="textos">
-                                    <div class="tarjeta-header text-light">
-                                        <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
-                                    </div>
-                                    @if ($song->type === 'OP' && $song->suffix != null)
-                                        <div class="tag">
-                                            <span
-                                                class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
-                                        </div>
-                                    @else
-                                        @if ($song->type === 'ED' && $song->suffix != null)
-                                            <div class="tag2">
-                                                <span
-                                                    class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
-                                            </div>
-                                        @endif
-                                    @endif
-                                    <a class="no-deco"
-                                        href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
-                                        <img class="thumb" loading="lazy" src="{{ $img_src }}"
-                                            alt="{{ $song->post->title }}" title="{{ $song->post->title }}">
-                                    </a>
-                                    <div class="tarjeta-footer text-light">
-                                        <span>{{ $song->likeCount }} <i class="fa fa-heart"></i></span>
-                                        <span>{{ $song->view_count }} <i class="fa fa-eye"></i></span>
-                                        <span>{{ $song->score != null ? $song->score : 'n/a' }} <i class="fa fa-star"
-                                                aria-hidden="true"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </article>
-                        @endisset
-                    @endforeach
+                    @isset($songs)
+                        @foreach ($songs as $song)
+                            @isset($song->songVariants)
+                                @foreach ($song->songVariants as $variant)
+                                    @include('layouts.song-variant-card')
+                                @endforeach
+                            @endisset
+                        @endforeach
+                    @endisset
                 </section>
             </section>
             <aside>

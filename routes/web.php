@@ -202,3 +202,8 @@ Route::post('/post/{id}/unlike', [PostController::class, 'unlikePost'])->name('p
 Route::post('/post/{id}/ratepost', [PostController::class, 'ratePost'])->name('post.addrate');
 
 Route::get('/song/{id}/report', [ReportController::class, 'createReport'])->name('song.create.report');
+
+//SONG VARIANT ROUTES
+Route::post('/song/{song_id}/variant/{variant_id}/unlike', [SongVariantController::class, 'unlikeVariant'])->name('song.variant.unlike');
+Route::post('/song/{song_id}/variant/{variant_id}/like', [SongVariantController::class, 'likeVariant'])->name('song.variant.like');
+Route::post('/song/{song_id}/variant/{variant_id}/ratepost', [SongVariantController::class, 'rate'])->name('song.variant.rate');

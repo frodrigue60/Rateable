@@ -96,13 +96,13 @@ class SongController extends Controller
         } else {
             $score = null;
         }
-        if (isset($song->artist->id)) {
+        /* if (isset($song->artist->id)) {
             $artist = Artist::find($song->artist->id);
         } else {
             $artist = null;
-        }
+        } */
 
-        $this->count_views($song);
+        /* $this->count_views($song); */
 
         return view('public.songs.show', compact('song', 'score', 'artist', 'comments', 'comments_featured'));
     }
@@ -132,7 +132,6 @@ class SongController extends Controller
     public function count_views($song)
     {
         $key = 'post_' . $song->post->id . '_' . 'song_' . $song->id;
-        //dd($key);
         if (!Session::has($key)) {
             DB::table('songs')
                 ->where('id', $song->id)
