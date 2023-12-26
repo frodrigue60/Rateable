@@ -11,7 +11,7 @@
         </div>
         <div class="owl-carousel carousel-recents-main">
             @foreach ($recently as $variant)
-                @isset($variant->song->post)
+                {{-- @isset($variant->song->post)
                     @php
                         $song_id = $variant->song->id;
                         $post_slug = $variant->song->post->slug;
@@ -41,7 +41,8 @@
                             </a>
                         </div>
                     </article>
-                @endisset
+                @endisset --}}
+                @include('layouts.song-variant-card')
             @endforeach
         </div>
     </section>
