@@ -309,7 +309,7 @@ class PostController extends Controller
         // Here we define our query as a multi-line string
         $query = '
         query ($id: Int) { # Define which variables will be used in the query (id)
-            Media (id: $id, type: ANIME, format: TV) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+            Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
                 id
                 title {
                 romaji
