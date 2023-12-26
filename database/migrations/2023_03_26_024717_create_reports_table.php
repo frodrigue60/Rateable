@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('post_id')->unique();
+            $table->unsignedBigInteger('song_variant_id')->unique();
             $table->unsignedBigInteger('nums')->default(1);
             $table->text('source');
             $table->enum('status', ['fixed', 'pending'])->default('pending');

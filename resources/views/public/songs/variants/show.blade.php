@@ -119,7 +119,7 @@
                             </form>
                         @else
                             <form style="display: flex;width: 100%;height: 100%;"
-                                action="{{ route('song.variant.like', [$song_variant->song, $song_variant->song->id]) }}"
+                                action="{{ route('song.variant.like', [$song_variant->song->id, $song_variant->id]) }}"
                                 method="post">
                                 @csrf
                                 <button class="buttons-bottom px-2">{{ $song_variant->likeCount }} <i
@@ -130,7 +130,7 @@
                     @endauth
                 </div>
                 <div class="d-flex gap-1">
-                    <a href="{{ route('song.create.report', $song_variant->song->id) }}" class="buttons-bottom px-2"
+                    <a href="{{ route('song.create.report', [$song_variant->song->id,$song_variant->id]) }}" class="buttons-bottom px-2"
                         type="button"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                         Report</a>
 

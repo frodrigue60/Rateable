@@ -52,7 +52,10 @@ class SongVariantController extends Controller
         //dd($song_id, $suffix, $version);
 
         //$song = Song::with(['post', 'artists','videos'])->find($id);
-        $song_variant = SongVariant::where('song_id', '=', $song_id)->where('version', '=', $version)->first();
+        $song_variant = SongVariant::where('song_id', '=', $song_id)
+        ->where('version', '=', $version)
+        ->with('likeCounter')
+        ->first();
 
         //$song = $song_variant->song;
 
@@ -225,19 +228,19 @@ class SongVariantController extends Controller
         return redirect()->route('login');
     }
 
-    public function likeVariant($id)
+    public function likeVariant($song_id,$variant_id)
     {
         if (Auth::check()) {
-            SongVariant::find($id)->like(Auth::user()->id);
+            SongVariant::find($variant_id)->like(Auth::user()->id);
             return redirect()->back()->with('success', 'Song Variant Like successfully!');
         }
         return redirect()->route('/')->with('warning', 'Please login');
     }
 
-    public function unlikeVariant($id)
+    public function unlikeVariant($song_id,$variant_id)
     {
         if (Auth::check()) {
-            SongVariant::find($id)->unlike(Auth::user()->id);
+            SongVariant::find($variant_id)->unlike(Auth::user()->id);
             return redirect()->back()->with('success', 'Song Variant Like undo successfully!');
         }
         return redirect()->route('/')->with('warning', 'Please login');

@@ -17,26 +17,24 @@ class ReportController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function createReport(Request $request, $id)
+    public function createReport(Request $request, $song_variant_id)
     {
         if (Auth::check()) {
-
             $exist = DB::table('reports')
-                ->where('post_id', $id)
+                ->where('song_variant_id', $song_variant_id)
                 ->exists();
 
             if ($exist) {
-
-                if (!Session::has('post_reported_' . $id)) {
+                if (!Session::has('variant_' . $song_variant_id)) {
                     DB::table('reports')
-                        ->where('post_id', $id)
+                        ->where('song_variant_id', $song_variant_id)
                         ->increment('nums');
-                    Session::put('post_reported_' . $id, true);
+                    Session::put('variant_' . $song_variant_id, true);
                 }
                 return redirect()->back()->with('success', 'Report already exist, thanks for report this problem');
             } else {
                 $report = new Report();
-                $report->post_id = $id;
+                $report->song_variant_id = $song_variant_id;
                 $report->source = $request->header('Referer');
                 $report->save();
                 return redirect()->back()->with('success', 'Thanks for report this problem');
