@@ -75,8 +75,8 @@ Route::group(['middleware' => 'staff'], function () {
         Route::post('/variant/{variant_id}/update', [AdminSongVariantController::class,'update'])->name('song.variant.update');
         Route::get('/variant/{variant_id}/videos', [AdminSongVariantController::class,'index'])->name('song.variant.index');
 
-        Route::get('song/{song_id}/variant/{variant_id?}/video/create',[AdminVideoController::class,'create'])->name('variant.videos.create');
-        Route::post('song/{song_id}/variant/{variant_id?}/video/store',[AdminVideoController::class,'store'])->name('variant.videos.store');
+        Route::get('song/{song_id}/variant/{variant_id}/video/create',[AdminVideoController::class,'create'])->name('variant.videos.create');
+        Route::post('song/{song_id}/variant/{variant_id}/video/store',[AdminVideoController::class,'store'])->name('variant.videos.store');
         //Route::post('song/{song_id}/variant/{variant_id?}/video/store',[AdminVideoController::class,'store'])->name('variant.videos.store');
 
 

@@ -32,13 +32,11 @@ class VideoController extends Controller
      * @param  int  $song_id
      * @return \Illuminate\Http\Response
      */
-    public function create($song_id, $variant_id = null)
+    public function create($song_id, $variant_id)
     {
-        $song = Song::findOrFail($song_id);
-
-
         if ($variant_id != null) {
             $song_variant = SongVariant::find($variant_id);
+            $song = $song_variant->song;
             return view('admin.songs.variants.videos.create', compact('song', 'song_variant'));
         } else {
             return view('admin.videos.create', compact('song'));
@@ -51,7 +49,7 @@ class VideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $song_id, $variant_id = null)
+    public function store(Request $request, $song_id, $variant_id)
     {
         //dd($song_id, $variant_id);
 
@@ -61,9 +59,7 @@ class VideoController extends Controller
             $video = new Video();
             $video->song_id = $song->id;
 
-            if ($variant_id != null) {
-                $video->song_variant_id = $variant_id;
-            }
+            $video->song_variant_id = $variant_id;
 
             if ($request->hasFile('video')) {
                 $validator = Validator::make($request->all(), [

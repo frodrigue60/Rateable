@@ -37,7 +37,7 @@ class SongVariantController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($song_id, Request $request)
+    public function store($song_id)
     {
         //dd($song_id, $request->all());
         $song = Song::find($song_id);
