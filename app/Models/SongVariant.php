@@ -37,10 +37,11 @@ class SongVariant extends Model
     public function incrementViews()
     {
 
-        DB::table('song_variants')
-                ->where('id', $this->id)
-                ->increment('views');
-        /* $key = 'variant_' . $this->id;
+        /* DB::table('song_variants')
+            ->where('id', $this->id)
+            ->increment('views'); */
+
+        $key = 'variant_' . $this->id;
 
         if (!Session::has($key)) {
             DB::table('song_variants')
@@ -48,6 +49,6 @@ class SongVariant extends Model
                 ->increment('views');
 
             Session::put($key, true);
-        } */
+        }
     }
 }

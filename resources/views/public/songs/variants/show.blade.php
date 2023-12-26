@@ -28,6 +28,14 @@
         }
         $currentUrl = url()->current();
         $thumbnailUrl = asset('/storage/thumbnails/' . $song_variant->song->post->thumbnail);
+
+        if ($song_variant->views >= 1000000) {
+            $views = number_format(intval($song_variant->views / 1000000), 0) . 'M';
+        } elseif ($song_variant->views >= 1000) {
+            $views = number_format(intval($song_variant->views / 1000), 0) . 'K';
+        } else {
+            $views = $song_variant->views;
+        }
     @endphp
 
     <title>{{ $title }} {{ $suffix }}</title>
@@ -104,7 +112,7 @@
                             aria-hidden="true"></i>
                     </button>
 
-                    <button class="buttons-bottom px-2">{{ $song_variant->song->view_count }} <i class="fa fa-eye"
+                    <button class="buttons-bottom px-2">{{ $views }} <i class="fa fa-eye"
                             aria-hidden="true"></i>
                     </button>
                     @guest
