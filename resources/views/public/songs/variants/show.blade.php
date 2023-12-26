@@ -4,10 +4,15 @@
         $title = $song_variant->song->post->title;
         $suffix = $song_variant->song->suffix != null ? $song_variant->song->suffix : $song_variant->song->type . ' v' . $song_variant->version;
         $artist_names = [];
-        foreach ($song_variant->song->artists as $artist) {
-            $artist_names[] = $artist->name;
-            $artists_string = implode(', ', $artist_names);
+        if (isset($song_variant->song->artists) && $song_variant->song->artists->count() != 0) {
+            foreach ($song_variant->song->artists as $artist) {
+                $artist_names[] = $artist->name;
+                $artists_string = implode(', ', $artist_names);
+            }
+        } else {
+            $artists_string = 'N/A';
         }
+
         if (isset($song_variant->song->song_romaji)) {
             $song_name = $song_variant->song->song_romaji;
         } else {
@@ -130,8 +135,9 @@
                     @endauth
                 </div>
                 <div class="d-flex gap-1">
-                    <a href="{{ route('song.create.report', [$song_variant->song->id,$song_variant->id]) }}" class="buttons-bottom px-2"
-                        type="button"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    <a href="{{ route('song.create.report', [$song_variant->song->id, $song_variant->id]) }}"
+                        class="buttons-bottom px-2" type="button"><i class="fa fa-exclamation-triangle"
+                            aria-hidden="true"></i>
                         Report</a>
 
                     {{-- <button class="buttons-bottom px-2" type="button" data-bs-toggle="modal"
