@@ -98,7 +98,7 @@ class SongVariantController extends Controller
                     break;
             }
         } else {
-            $score = null;
+            $score = round($song_variant->averageRating);
         }
         
         $song_variant->incrementViews();

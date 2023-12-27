@@ -189,31 +189,41 @@ class ArtistController extends Controller
         } */
 
 
-        $query = Song::whereHas('artists', function ($query) use ($artist) {
+        $song_variants = Song::whereHas('artists', function ($query) use ($artist) {
             $query->where('artists.id', $artist->id);
         })
-        ->when($request->year || $request->season, function ($query) use ($request) {
-            $query->withAnyTag($this->getTag($request));
-        })
-        ->whereHas('post', function ($query) use ($request, $char) {
-            $query->where('status', 'published');
-            if ($char) {
-                $query->where('title', 'LIKE', "{$char}%");
-            }
-        })
-        ->when($type, function ($query) use ($type) {
-            $query->where('type', $type);
-        })
-        ->get();
+            ->when($request->year || $request->season, function ($query) use ($request) {
+                $query->withAnyTag($this->getTag($request));
+            })
+            ->whereHas('post', function ($query) use ($request, $char) {
+                $query->where('status', 'published');
+                if ($char) {
+                    $query->where('title', 'LIKE', "{$char}%");
+                }
+            })
+            ->when($type, function ($query) use ($type) {
+                $query->where('type', $type);
+            })
 
-        $songs = $this->setScore($query, $score_format);
-        $songs = $this->sort($sort, $songs);
-        $songs = $this->paginate($songs, 24)->withQueryString();
+            ->get()
+            ->flatMap(function ($song) {
+                return $song->songVariants;
+            });
 
+        //dd($query);
+
+        //$songs = $this->setScore($query, $score_format);
+        //$songs = $this->sort($sort, $songs);
+
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
+        $song_variants = $this->sort_variants($sort, $song_variants);
+        $song_variants = $this->paginate($song_variants, 24)->withQueryString();
+
+        //dd($song_variants);
         if ($request->ajax()) {
 
-            $view = view('layouts.songs-cards', compact('songs'))->render();
-            return response()->json(['html' => $view, "lastPage" => $songs->lastPage()]);
+            $view = view('layouts.song-variant-cards', compact('song_variants'))->render();
+            return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
 
         return view('public.songs.filter', compact('artist', 'seasons', 'years', 'requested', 'sortMethods', 'types', 'characters'));
@@ -355,5 +365,113 @@ class ArtistController extends Controller
             'seasons' => $seasons
         ];
         return $data;
+    }
+    public function setScoreOnlyVariants($variantsArray, $score_format)
+    {
+        /* $variantsArray->each(function ($variant) use ($score_format) {
+            $variant->score = null;
+            $variant->user_score = null;
+            switch ($score_format) {
+                case 'POINT_100':
+                    $variant->score = round($variant->averageRating);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating);
+                    }
+
+                    break;
+                case 'POINT_10_DECIMAL':
+                    $variant->score = round($variant->averageRating / 10, 1);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating / 10, 1);
+                    }
+
+                    break;
+                case 'POINT_10':
+                    $variant->score = round($variant->averageRating / 10);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating / 10);
+                    }
+
+                    break;
+                case 'POINT_5':
+                    $variant->score = round($variant->averageRating / 20);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating / 20);
+                    }
+
+                    break;
+                default:
+                    $variant->score = round($variant->averageRating / 10);
+                    if ($variant->rating != null) {
+                        $variant->user_score = round($variant->rating / 10);
+                    }
+                    break;
+            }
+        });
+        return $variantsArray; */
+
+        $variantsArray->each(function ($variant) use ($score_format) {
+            $factor = 1;
+
+            switch ($score_format) {
+                case 'POINT_100':
+                    $factor = 1;
+                    break;
+                case 'POINT_10_DECIMAL':
+                    $factor = 0.1;
+                    break;
+                case 'POINT_10':
+                    $factor = 1 / 10;
+                    break;
+                case 'POINT_5':
+                    $factor = 1 / 20;
+                    break;
+                default:
+                    $factor = 1 / 10;
+                    break;
+            }
+
+            $variant->score = round($variant->averageRating * $factor);
+            $variant->user_score = $variant->rating ? round($variant->rating * $factor) : null;
+        });
+
+        return $variantsArray;
+    }
+    public function sort_variants($sort, $song_variants)
+    {
+        //dd($song_variants);
+        switch ($sort) {
+            case 'title':
+                $song_variants = $song_variants->sortBy(function ($song_variant) {
+                    return $song_variant->song->post->title;
+                });
+                return $song_variants;
+                break;
+
+            case 'averageRating':
+                $song_variants = $song_variants->sortByDesc('averageRating');
+                return $song_variants;
+                break;
+
+            case 'view_count':
+                $song_variants = $song_variants->sortByDesc('views');
+                return $song_variants;
+                break;
+
+            case 'likeCount':
+                $song_variants = $song_variants->sortByDesc('likeCount');
+                return $song_variants;
+                break;
+
+            case 'recent':
+                $song_variants = $song_variants->sortByDesc('created_at');
+                return $song_variants;
+                break;
+
+            default:
+                $song_variants = $song_variants->sortByDesc('created_at');
+                return $song_variants;
+                break;
+        }
     }
 }

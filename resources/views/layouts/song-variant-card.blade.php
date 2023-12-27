@@ -17,22 +17,30 @@
     } else {
         $views = $variant->views;
     }
+    $likeCount = null;
+    if ($variant->likeCount >= 1000000) {
+        $likeCount = number_format(intval($variant->likeCount / 1000000), 0) . 'M';
+    } elseif ($variant->likeCount >= 1000) {
+        $likeCount = number_format(intval($variant->likeCount / 1000), 0) . 'K';
+    } else {
+        $likeCount = $variant->likeCount;
+    }
 @endphp
 
 <article class="tarjeta">
     <div class="textos">
         <div class="tarjeta-header text-light">
-            <h3 class="text-shadow text-uppercase post-titles">{{$title}}</h3>
+            <h3 class="text-shadow text-uppercase post-titles">{{ $title }}</h3>
         </div>
         <div class="{{ $variant->song->type == 'OP' ? 'tag' : 'tag2' }}">
             <span class="tag-content ">{{ $forward_text }}</span>
         </div>
         <a class="no-deco" href="{{ $showVariantRoute }}">
-            <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{$title}}"
-                title="{{$title}}">
+            <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $title }}"
+                title="{{ $title }}">
         </a>
         <div class="tarjeta-footer text-light">
-            {{-- <span>{{ $variant->likeCount }} <i class="fa fa-heart"></i></span> --}}
+            <span>{{ $likeCount }} <i class="fa fa-heart"></i></span>
             <span>{{ $views }} <i class="fa fa-eye"></i></span>
             @if (isset($variant->rating))
                 <span style="color: rgb(162, 240, 181)">{{ $variant->rating != null ? $variant->rating : '0' }}

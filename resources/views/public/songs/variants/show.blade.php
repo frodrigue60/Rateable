@@ -4,6 +4,9 @@
         $title = $song_variant->song->post->title;
         $suffix = $song_variant->song->suffix != null ? $song_variant->song->suffix : $song_variant->song->type . ' v' . $song_variant->version;
         $artist_names = [];
+        $artist_names = [];
+        $artists_string = null;
+        $song_name = null;
         if (isset($song_variant->song->artists) && $song_variant->song->artists->count() != 0) {
             foreach ($song_variant->song->artists as $artist) {
                 $artist_names[] = $artist->name;
@@ -36,6 +39,8 @@
         } else {
             $views = $song_variant->views;
         }
+        $showPostRoute = route('post.show', [$song_variant->song->post->id, $song_variant->song->post->slug]);
+        $forward_text = ($song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type) . ' v' . $song_variant->version;
     @endphp
 
     <title>{{ $title }} {{ $suffix }}</title>
@@ -59,7 +64,7 @@
 @section('content')
 
     <div class="container">
-        <div class="social-share-panel text-light">
+        {{-- <div class="social-share-panel text-light">
             <div class="share-fb">
                 <button><i class="fa-brands fa-facebook"></i></button>
             </div>
@@ -69,7 +74,7 @@
             <div class="share-x-tw">
                 <button><i class="fa-brands fa-x-twitter"></i></button>
             </div>
-        </div>
+        </div> --}}
         <div class="row justify-content-center">
             <div class="card-video card">
                 <div class="card-header" id="card-header">
@@ -94,27 +99,48 @@
     </div>
 
     <div class="father-container ">
-        <div
+        {{-- <div
             style="background-color: #0e3d5f;
                     border-bottom: #151C2E;margin: 10px 0px; border-radius: 5px;
                     ">
             <h3 class="mb-0 py-1 px-2 text-center text-light">
                 <a class="text-light text-decoration-none"
-                    href="{{ route('post.show', [$song_variant->song->post->id, $song_variant->song->post->slug]) }}">{{ $song_variant->song->post->title }}</a>
+                    href="{{ $showPostRoute }}">{{ $song_variant->song->post->title }}</a>
                 <span>{{ $song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type }}
                     {{ 'v' . $song_variant->version }}</span>
             </h3>
+        </div> --}}
+        <div class="text-light my-2">
+            <h1 style="font-size:2rem;"><a href="{{ $showPostRoute }}"
+                    class="text-decoration-none text-light">{{ $song_variant->song->post->title }}
+                    {{ $forward_text }}</a></h1>
         </div>
         <div class="all-buttons-container">
             <div class="buttons-container">
                 <div class="d-flex gap-1">
-                    <button class="buttons-bottom px-2">{{ $score != null ? $score : 'n/a' }} <i class="fa fa-star"
-                            aria-hidden="true"></i>
-                    </button>
+                    @guest
+                        <span class="px-2">{{ $score != null ? $score."%" : 'N/A' }} <i class="fa-solid fa-star"></i>
+                        </span>
+                    @endguest
+                    @auth
+                        @if (Auth::User()->score_format == 'POINT_5')
+                            <span class="px-2">{{ $score != null ? $score."/5" : 'N/A' }} <i class="fa fa-star"
+                                    aria-hidden="true"></i>
+                            @else
+                                <span class="px-2">{{ $score != null ? $score."%" : 'N/A' }} <i
+                                        class="fa-solid fa-star"></i>
+                                </span>
+                            </span>
+                        @endif
+                    @endauth
 
-                    <button class="buttons-bottom px-2">{{ $views }} <i class="fa fa-eye"
-                            aria-hidden="true"></i>
-                    </button>
+                    <span class="px-2">{{ $views }} <i class="fa fa-eye" aria-hidden="true"></i>
+                    </span>
+                    <span class="px-2">{{ $song_variant->likeCount }} <i class="fa-solid fa-heart"></i>
+                    </span>
+
+                </div>
+                <div class="d-flex gap-1">
                     @guest
                         <a href="{{ route('login') }}" class="buttons-bottom px-2">{{ $song_variant->likeCount }} <i
                                 class="fa-regular fa-heart"></i>
@@ -126,8 +152,7 @@
                                 action="{{ route('song.variant.unlike', [$song_variant->song->id, $song_variant->id]) }}"
                                 method="post">
                                 @csrf
-                                <button class="buttons-bottom px-2">{{ $song_variant->likeCount }} <i
-                                        class="fa-solid fa-heart"></i>
+                                <button class="buttons-bottom px-2"><i class="fa-solid fa-bookmark"></i></i>
                                 </button>
                             </form>
                         @else
@@ -135,17 +160,13 @@
                                 action="{{ route('song.variant.like', [$song_variant->song->id, $song_variant->id]) }}"
                                 method="post">
                                 @csrf
-                                <button class="buttons-bottom px-2">{{ $song_variant->likeCount }} <i
-                                        class="fa-regular fa-heart"></i>
+                                <button class="buttons-bottom px-2"><i class="fa-regular fa-bookmark"></i>
                                 </button>
                             </form>
                         @endif
                     @endauth
-                </div>
-                <div class="d-flex gap-1">
                     <a href="{{ route('song.create.report', [$song_variant->song->id, $song_variant->id]) }}"
-                        class="buttons-bottom px-2" type="button"><i class="fa fa-exclamation-triangle"
-                            aria-hidden="true"></i>
+                        class="buttons-bottom px-2" type="button"><i class="fa-solid fa-flag" aria-hidden="true"></i>
                         Report</a>
 
                     {{-- <button class="buttons-bottom px-2" type="button" data-bs-toggle="modal"
@@ -157,8 +178,26 @@
         {{-- <div>
             <h4 class="text-light">Anime: {{$song_variant->song->post->title}}</h4>
         </div> --}}
-
-
+        <div class="text-light">
+            <p class="my-2"><span>Song: </span><strong>{{ $song_name }}</strong></p>
+            <p class="my-2"><span>Artists: </span>
+                @foreach ($song_variant->song->artists as $index => $item)
+                    @php
+                        $artistShowRoute = route('artist.show', [$item->id, $item->name_slug]);
+                        if ($item->name_jp != null) {
+                            $artistName = $item->name . ' (' . $item->name_jp . ')';
+                        } else {
+                            $artistName = $item->name;
+                        }
+                    @endphp
+                    <a class="text-light text-decoration-none"
+                        href="{{ $artistShowRoute }}"><strong>{{ $artistName }}</strong></a>
+                    @if ($index < count($song_variant->song->artists) - 1)
+                        ,
+                    @endif
+                @endforeach
+            </p>
+        </div>
         <hr class="text-light">
         <div>
             <h3 class="text-light">Comments</h3>

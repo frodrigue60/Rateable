@@ -34,7 +34,7 @@
                     title="{{ $title }}">
             </a>
             <div class="tarjeta-footer text-light">
-                {{-- <span>{{ $variant->likeCount }} <i class="fa fa-heart"></i></span> --}}
+                <span>{{ $variant->likeCount }} <i class="fa fa-heart"></i></span>
                 <span>{{ $views }} <i class="fa fa-eye"></i></span>
                 @if (isset($variant->rating))
                     <span style="color: rgb(162, 240, 181)">{{ $variant->rating != null ? $variant->rating : '0' }}
