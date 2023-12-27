@@ -25,7 +25,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="theme_num" class="form-label">OP/ED Number</label>
-                            <input type="text" class="form-control" placeholder="Opening Number" id="theme_num"
+                            <input type="number" class="form-control" placeholder="Opening Number" id="theme_num"
                                 name="theme_num" value="{{ $song->theme_num }}">
                         </div>
                         <div class="mb-3">
