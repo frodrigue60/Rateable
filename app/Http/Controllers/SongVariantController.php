@@ -86,6 +86,8 @@ class SongVariantController extends Controller
                     $score = round($song_variant->averageRating / 10);
                     break;
             }
+        } else {
+            $score = round($song_variant->averageRating / 10);
         }
 
 
@@ -152,7 +154,7 @@ class SongVariantController extends Controller
                 $score = $request->score;
             }
 
-            switch ($score_format) {
+            /* switch ($score_format) {
                 case 'POINT_100':
                     if (($score >= 1) && ($score <= 100)) {
                         $songVariant->rateOnce($score);
@@ -211,6 +213,23 @@ class SongVariantController extends Controller
                         return redirect()->back()->with('warning', 'Only values between 1 and 100');
                     }
                     break;
+            } */
+
+            if ($score_format === 'POINT_5') {
+                // Ajustar el score según las reglas específicas para POINT_5
+                $score = max(20, min(100, ceil($score / 20) * 20));
+            } else {
+                // Ajustar el score según las reglas comunes para POINT_100, POINT_10_DECIMAL y POINT_10
+                $score = max(1, min(100, ($score_format === 'POINT_10_DECIMAL') ? round($score * 10) : round($score)));
+            }
+
+            // Validar el rango del score
+            if ($score >= 1 && $score <= 100) {
+                // Utilizar el score ajustado
+                $songVariant->rateOnce($score, $request->comment);
+                return redirect()->back()->with('success', 'Post rated Successfully');
+            } else {
+                return redirect()->back()->with('warning', 'Only values between 1 and 100');
             }
         }
         return redirect()->route('login');

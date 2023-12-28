@@ -41,6 +41,28 @@
         }
         $showPostRoute = route('post.show', [$song_variant->song->post->id, $song_variant->song->post->slug]);
         $forward_text = ($song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type) . ' v' . $song_variant->version;
+        $score_string = '';
+        if (Auth::User()) {
+            switch (Auth::User()->score_format) {
+                case 'POINT_5':
+                    $score_string = $score != null ? $score . '/5' : 'N/A';
+                    break;
+                case 'POINT_10':
+                    $score_string = $score != null ? $score . '/10' : 'N/A';
+                    break;
+                case 'POINT_10_DECIMAL':
+                    $score_string = $score != null ? $score . '/10' : 'N/A';
+                    break;
+                case 'POINT_100':
+                    $score_string = $score != null ? $score . '%' : 'N/A';
+                    break;
+                default:
+                    $score_string = $score != null ? $score . '/10' : 'N/A';
+                    break;
+            }
+        } else {
+            $score_string = $score != null ? $score . '/10' : 'N/A';
+        }
     @endphp
 
     <title>{{ $title }} {{ $suffix }}</title>
@@ -118,26 +140,11 @@
         <div class="all-buttons-container">
             <div class="buttons-container">
                 <div class="d-flex gap-1">
-                    @guest
-                        <span class="px-2">{{ $score != null ? $score . '%' : 'N/A' }} <i class="fa-solid fa-star"></i>
+                    <span class="px-2">{{ $score_string }} <i class="fa fa-star" aria-hidden="true"></i>
+                        <span class="px-2">{{ $views }} <i class="fa fa-eye" aria-hidden="true"></i>
                         </span>
-                    @endguest
-                    @auth
-                        @if (Auth::User()->score_format == 'POINT_5')
-                            <span class="px-2">{{ $score != null ? $score . '/5' : 'N/A' }} <i class="fa fa-star"
-                                    aria-hidden="true"></i>
-                            @else
-                                <span class="px-2">{{ $score != null ? $score . '%' : 'N/A' }} <i
-                                        class="fa-solid fa-star"></i>
-                                </span>
-                            </span>
-                        @endif
-                    @endauth
-
-                    <span class="px-2">{{ $views }} <i class="fa fa-eye" aria-hidden="true"></i>
-                    </span>
-                    <span class="px-2">{{ $song_variant->likeCount }} <i class="fa-solid fa-heart"></i>
-                    </span>
+                        <span class="px-2">{{ $song_variant->likeCount }} <i class="fa-solid fa-heart"></i>
+                        </span>
 
                 </div>
                 <div class="d-flex gap-1">
@@ -423,8 +430,7 @@
                 <div class="py-2">
                     <div class="comment-container">
                         <div class="profile-pic-container">
-                                <img class="user-profile-pic" src="{{ $user_pp_url }}"
-                                    alt="User profile pic">
+                            <img class="user-profile-pic" src="{{ $user_pp_url }}" alt="User profile pic">
                         </div>
                         <div class="comment-details">
                             <div>
