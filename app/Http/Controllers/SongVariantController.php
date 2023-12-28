@@ -49,33 +49,22 @@ class SongVariantController extends Controller
      */
     public function show($song_id, $slug = null, $suffix = null, $version = null)
     {
-        //dd($song_id, $suffix, $version);
-
-        //$song = Song::with(['post', 'artists','videos'])->find($id);
         $song_variant = SongVariant::where('song_id', '=', $song_id)
-        ->where('version', '=', $version)
-        ->with('likeCounter')
-        ->first();
+            ->where('version', '=', $version)
+            ->with('likeCounter')
+            ->first();
 
-        //$song = $song_variant->song;
-
-        $comments = Comment::with('user', 'likeCounter')
-            ->where('rateable_id', '=', $song_id)
-            ->where('comment', '!=', "")
-            ->latest()
-            ->limit(10)
+        $comments = $song_variant->commentsWithUser()
             ->get();
 
-        $comments_featured = Comment::with('user', 'likeCounter')
-            ->where('rateable_id', '=', $song_id)
-            ->where('comment', '!=', "")
+        $comments_featured = $song_variant->commentsWithUser()
             ->get()
             ->sortByDesc('likeCount')
             ->take(3);
 
+        $score = null;
 
-        if (Auth::check() == true && $song_variant->averageRating == true) {
-
+        if (Auth::check() && $song_variant->averageRating) {
             switch (Auth::user()->score_format) {
                 case 'POINT_100':
                     $score = round($song_variant->averageRating);
@@ -97,10 +86,9 @@ class SongVariantController extends Controller
                     $score = round($song_variant->averageRating / 10);
                     break;
             }
-        } else {
-            $score = round($song_variant->averageRating);
         }
-        
+
+
         $song_variant->incrementViews();
 
         //dd($song_variant,$score,$comments,$comments_featured);
@@ -145,9 +133,9 @@ class SongVariantController extends Controller
     public function rate(Request $request, $song_id, $variant_id)
     {
         if (Auth::check()) {
-            
+
             $songVariant = SongVariant::find($variant_id);
-            
+
             $score_format = Auth::user()->score_format;
 
             $validator = Validator::make($request->all(), [
@@ -228,7 +216,7 @@ class SongVariantController extends Controller
         return redirect()->route('login');
     }
 
-    public function likeVariant($song_id,$variant_id)
+    public function likeVariant($song_id, $variant_id)
     {
         if (Auth::check()) {
             SongVariant::find($variant_id)->like(Auth::user()->id);
@@ -237,7 +225,7 @@ class SongVariantController extends Controller
         return redirect()->route('/')->with('warning', 'Please login');
     }
 
-    public function unlikeVariant($song_id,$variant_id)
+    public function unlikeVariant($song_id, $variant_id)
     {
         if (Auth::check()) {
             SongVariant::find($variant_id)->unlike(Auth::user()->id);
@@ -245,5 +233,4 @@ class SongVariantController extends Controller
         }
         return redirect()->route('/')->with('warning', 'Please login');
     }
-
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Conner\Likeable\Likeable;
-
+use App\Models\SongVariant;
 
 class Comment extends Model
 {
@@ -23,6 +23,11 @@ class Comment extends Model
     public function song()
     {
         return $this->belongsTo(Song::class);
+    }
+
+    public function song_variant()
+    {
+        return $this->belongsTo(SongVariant::class);
     }
 
     public function user()

@@ -568,6 +568,16 @@ class UserController extends Controller
                 ->update(['image' => $file_name]);
 
             return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
+        } else {
+            //dd($request->all());
+
+            $user = Auth::user();
+
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['image' => $request->profile_pic_url]);
+
+            return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
         }
         return redirect(route('profile'))->with('warning', 'File not found');
     }
@@ -598,6 +608,16 @@ class UserController extends Controller
             DB::table('users')
                 ->where('id', $user_id)
                 ->update(['banner' => $file_name]);
+
+            return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
+        } else {
+            //dd($request->all());
+
+            $user = Auth::user();
+
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['banner' => $request->banner_pic_url]);
 
             return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
         }

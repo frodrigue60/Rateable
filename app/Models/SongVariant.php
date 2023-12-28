@@ -10,6 +10,7 @@ use willvincent\Rateable\Rateable;
 use Conner\Likeable\Likeable;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use App\Models\Comment;
 
 class SongVariant extends Model
 {
@@ -23,6 +24,26 @@ class SongVariant extends Model
         'song_id',
         'views'
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'rateable_id')
+            ->whereNotNull('comment')
+            ->latest()
+            ->take(10);
+    }
+
+    public function commentsWithUser()
+    {
+        return $this->comments()->with(['user:id,name,image']);
+    }
+
+    /* public function featuredComments()
+    {
+        return $this->hasMany(Comment::class, 'rateable_id')
+            ->whereNotNull('comment');
+    } */
+
 
     public function song()
     {

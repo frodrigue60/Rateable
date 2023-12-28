@@ -23,8 +23,7 @@
             <div class="card text-light">
                 <div class="card-header"><strong>{{ $user->name }}</strong>'s Dashboard</div>
                 <div class="card-body">
-                    @if (config('app.env') === 'local')
-                        <div>
+                    {{-- <div>
                             <label for="profilePic" class="form-label">Upload a profile pic</label>
                             <form action="{{ route('upload.profile.pic') }}" method="POST" enctype="multipart/form-data">
                                 @method('post')
@@ -37,8 +36,22 @@
                                         pic</button>
                                 </div>
                             </form>
-                        </div>
-                        <div>
+                        </div> --}}
+                    <div class="mb-3">
+                        <label for="profilePic" class="form-label">Upload a profile pic</label>
+                        <form action="{{ route('upload.profile.pic') }}" method="POST" enctype="multipart/form-data">
+                            @method('post')
+                            @csrf
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="profilePic"
+                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="profile_pic_url"
+                                    placeholder="Profile pic url">
+                                <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Save</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    {{-- <div class="mb-2">
                             <label for="bannerPic" class="form-label">Upload a banner pic</label>
                             <form action="{{ route('upload.banner.pic') }}" method="POST" enctype="multipart/form-data">
                                 @method('post')
@@ -51,43 +64,22 @@
                                         pic</button>
                                 </div>
                             </form>
-                        </div>
-                    @else
-                        <div>
-                            <label for="profilePic" class="form-label">Upload a profile pic</label>
-                            <form action="{{ route('upload.profile.pic') }}" method="POST" enctype="multipart/form-data">
-                                @method('post')
-                                @csrf
-                                <div class="input-group">
-                                    <input type="file" class="form-control" id="profilePic"
-                                        aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image"
-                                        disabled>
-                                    <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04"
-                                        disabled>Submit
-                                        profile
-                                        pic</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div>
-                            <label for="bannerPic" class="form-label">Upload a banner pic</label>
-                            <form action="{{ route('upload.banner.pic') }}" method="POST" enctype="multipart/form-data">
-                                @method('post')
-                                @csrf
-                                <div class="input-group">
-                                    <input type="file" class="form-control" id="bannerPic"
-                                        aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="banner"
-                                        disabled>
-                                    <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04"
-                                        disabled>Submit
-                                        banner
-                                        pic</button>
-                                </div>
-                            </form>
-                        </div>
-                    @endif
+                        </div> --}}
+                    <div class="mb-3">
+                        <label for="bannerPic" class="form-label">Upload a banner pic</label>
+                        <form action="{{ route('upload.banner.pic') }}" method="POST" enctype="multipart/form-data">
+                            @method('post')
+                            @csrf
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="bannerPic"
+                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="banner_pic_url"
+                                    placeholder="Banner image url">
+                                <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Save</button>
+                            </div>
+                        </form>
+                    </div>
 
-
+                    {{-- SCORE FORMAT --}}
                     <div>
                         <label for="selectScoreFormat" class="form-label">Change score format</label>
                         <form action="{{ route('change.score.format') }}" method="POST" enctype="multipart/form-data">
@@ -103,8 +95,7 @@
                                             {{ $item['name'] }}</option>
                                     @endforeach
                                 </select>
-                                <button type="submit" class="btn btn-primary" type="button">Save
-                                    setting</button>
+                                <button type="submit" class="btn btn-primary" type="button">Save</button>
                             </div>
                         </form>
                     </div>

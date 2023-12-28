@@ -119,15 +119,15 @@
             <div class="buttons-container">
                 <div class="d-flex gap-1">
                     @guest
-                        <span class="px-2">{{ $score != null ? $score."%" : 'N/A' }} <i class="fa-solid fa-star"></i>
+                        <span class="px-2">{{ $score != null ? $score . '%' : 'N/A' }} <i class="fa-solid fa-star"></i>
                         </span>
                     @endguest
                     @auth
                         @if (Auth::User()->score_format == 'POINT_5')
-                            <span class="px-2">{{ $score != null ? $score."/5" : 'N/A' }} <i class="fa fa-star"
+                            <span class="px-2">{{ $score != null ? $score . '/5' : 'N/A' }} <i class="fa fa-star"
                                     aria-hidden="true"></i>
                             @else
-                                <span class="px-2">{{ $score != null ? $score."%" : 'N/A' }} <i
+                                <span class="px-2">{{ $score != null ? $score . '%' : 'N/A' }} <i
                                         class="fa-solid fa-star"></i>
                                 </span>
                             </span>
@@ -298,16 +298,27 @@
         <h4 class="text-light my-2">Featured comments</h4>
         @isset($comments_featured)
             @foreach ($comments_featured as $comment)
+                @php
+                    $user_pp_url = '';
+
+                    if (isset($comment->user->image)) {
+                        $user_pp_url = $comment->user->image;
+                    } else {
+                        $user_pp_url = asset('/storage/profile/' . 'default.jpg');
+                    }
+
+                @endphp
                 <div class="py-2">
                     <div class="comment-container">
                         <div class="profile-pic-container">
-                            @if (isset($comment->user->image))
+                            {{-- @if (isset($comment->user->image))
                                 <img class="user-profile-pic" src="{{ asset('/storage/profile/' . $comment->user->image) }}"
                                     alt="">
                             @else
                                 <img class="user-profile-pic" src="{{ asset('/storage/profile/' . 'default.jpg') }}"
                                     alt="">
-                            @endif
+                            @endif --}}
+                            <img class="user-profile-pic" src="{{ $user_pp_url }}" alt="User profile pic">
                         </div>
                         <div class="comment-details">
                             <div>
@@ -370,14 +381,14 @@
                                                 @csrf
                                                 <button class="no-deco text-light"
                                                     style="background-color: transparent;border:none;">{{ $comment->likeCount }}
-                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+                                                    <i class="fa-solid fa-thumbs-up"></i></button>
                                             </form>
                                         @else
                                             <form action="{{ route('comment.like', $comment->id) }}" method="post">
                                                 @csrf
                                                 <button class="no-deco text-light"
                                                     style="background-color: transparent;border:none;">{{ $comment->likeCount }}
-                                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
+                                                    <i class="fa-regular fa-thumbs-up"></i></button>
                                             </form>
                                         @endif
                                     </div>
@@ -399,16 +410,21 @@
         <h4 class="text-light my-2">Recents comments</h4>
         @isset($comments)
             @foreach ($comments as $comment)
+                @php
+                    $user_pp_url = '';
+
+                    if (isset($comment->user->image)) {
+                        $user_pp_url = $comment->user->image;
+                    } else {
+                        $user_pp_url = asset('/storage/profile/' . 'default.jpg');
+                    }
+
+                @endphp
                 <div class="py-2">
                     <div class="comment-container">
                         <div class="profile-pic-container">
-                            @if (isset($comment->user->image))
-                                <img class="user-profile-pic" src="{{ asset('/storage/profile/' . $comment->user->image) }}"
-                                    alt="">
-                            @else
-                                <img class="user-profile-pic" src="{{ asset('/storage/profile/' . 'default.jpg') }}"
-                                    alt="">
-                            @endif
+                                <img class="user-profile-pic" src="{{ $user_pp_url }}"
+                                    alt="User profile pic">
                         </div>
                         <div class="comment-details">
                             <div>
@@ -471,14 +487,14 @@
                                                 @csrf
                                                 <button class="no-deco text-light"
                                                     style="background-color: transparent;border:none;">{{ $comment->likeCount }}
-                                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i></button>
+                                                    <i class="fa-solid fa-thumbs-up"></i></button>
                                             </form>
                                         @else
                                             <form action="{{ route('comment.like', $comment->id) }}" method="post">
                                                 @csrf
                                                 <button class="no-deco text-light"
                                                     style="background-color: transparent;border:none;">{{ $comment->likeCount }}
-                                                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button>
+                                                    <i class="fa-regular fa-thumbs-up"></i></button>
                                             </form>
                                         @endif
                                     </div>
@@ -498,77 +514,6 @@
             @endforeach
         @endisset
     </div>
-
-    {{-- <div class="modal fade" id="staticBackdrop" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content bg-dark text-light">
-                <div class="modal-header">
-                    <span class="modal-title fs-5" id="staticBackdropLabel">{{ $song_variant->song->post->title }}</span>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row text-center">
-                        <h3>Average Score: <strong>
-                                @if (Auth::user())
-                                    @switch(Auth::user()->score_format)
-                                        @case('POINT_100')
-                                            {{ round($song->averageRating) }}
-                                        @break
-
-                                        @case('POINT_10_DECIMAL')
-                                            {{ round($song->averageRating / 10, 1) }}
-                                        @break
-
-                                        @case('POINT_10')
-                                            {{ round($song->averageRating / 10) }}
-                                        @break
-
-                                        @case('POINT_5')
-                                            {{ round($song->averageRating / 20) }}
-                                        @break
-
-                                        @default
-                                            {{ round($song->averageRating) }}
-                                    @endswitch
-                                @else
-                                    {{ round($song->averageRating / 10, 1) }}
-                                @endif
-                                <i class="fa-solid fa-star"></i>
-                            </strong>
-                        </h3>
-
-                        @isset($song->song_romaji)
-                            <h4>Song title (romaji): <strong>{{ $song->song_romaji }}</strong></h4>
-                        @endisset
-                        @isset($song->song_jp)
-                            <h4>Song title (JP): <strong>{{ $song->song_jp }}</strong></h4>
-                        @endisset
-                        @isset($song->song_en)
-                            <h4>Song title (EN): <strong>{{ $song->song_en }}</strong></h4>
-                        @endisset
-                        @isset($song->artist->name)
-                            <h4>Artist: <strong><a
-                                        href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
-                                        class="no-deco">{{ $song->artist->name }}</a></strong></h4>
-                        @endisset
-                        @isset($song->artist->name_jp)
-                            <h4>Artist (JP): <strong><a
-                                        href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
-                                        class="no-deco">{{ $song->artist->name_jp }}</a></strong></h4>
-                        @endisset
-                    </div>
-                </div>
-                @guest
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                @endguest
-
-            </div>
-        </div>
-    </div> --}}
 
     @section('script')
         @if (config('app.env') === 'local')
