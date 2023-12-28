@@ -47,9 +47,6 @@ Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');
 
-Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');
-
-
 Route::get('/offline', function () {
     return view('offline');
 });

@@ -18,10 +18,10 @@
 
 @section('content')
     @if (Request::routeIs('user.list') || Request::routeIs('favorites'))
-        {{-- @include('layouts.userBanner') --}}
-        <div class="container">
+        @include('layouts.userBanner')
+        {{-- <div class="container">
             <h1 class="text-light">User banners is disabled</h1>
-        </div>
+        </div> --}}
     @endif
     <div class="container text-light">
         @if (Request::routeIs('themes'))
