@@ -106,7 +106,7 @@ class UserController extends Controller
     public function userList(Request $request, $userId)
     {
         //dd($userId);
-        $user = User::find($userId)->select('id', 'score_format', 'image', 'banner')->first();
+        $user = User::find($userId)->select('id', 'score_format', 'image', 'banner','name')->first();
 
         $score_format = $user->score_format;
 
