@@ -229,9 +229,9 @@
                                         <div class="w-100">
                                             {{-- <input type="number" max="100" min="0" step="1" class="form-control"
                                                 id="exampleFormControlInput1" name="score" placeholder="1 to 100" required> --}}
-                                            <label for="customRange3" class="form-label">Rate</label>
+                                            <label for="score-input" class="form-label">Rate: <span id="rangeValue">0</span>/100</label>
                                             <input type="range" class="form-range" min="0" max="100" step="1"
-                                                id="customRange3" name="score" value="0" required>
+                                                id="score-input" name="score" value="0" required>
                                         </div>
                                     @break
 
@@ -239,9 +239,9 @@
                                         <div class="w-100">
                                             {{-- <input type="number" max="10" min="0" step=".1" class="form-control"
                                                 id="exampleFormControlInput1" name="score" placeholder="1.0 to 10.0" required> --}}
-                                            <label for="customRange3" class="form-label">Rate</label>
+                                                <label for="score-input" class="form-label">Rate: <span id="rangeValue">0</span>/10</label>
                                             <input type="range" class="form-range" min="0" max="10" step="0.1"
-                                                id="customRange3" name="score" value="0" required>
+                                                id="score-input" name="score" value="0" required>
                                         </div>
                                     @break
 
@@ -249,9 +249,9 @@
                                         <div class="w-100">
                                             {{-- <input type="number" max="10" min="0" step="1" class="form-control"
                                                 id="exampleFormControlInput1" name="score" placeholder="1 to 10" required> --}}
-                                            <label for="customRange3" class="form-label">Rate</label>
+                                                <label for="score-input" class="form-label">Rate: <span id="rangeValue">0</span>/10</label>
                                             <input type="range" class="form-range" min="0" max="10" step="1"
-                                                id="customRange3" name="score" value="0" required>
+                                                id="score-input" name="score" value="0" required>
                                         </div>
                                     @break
 

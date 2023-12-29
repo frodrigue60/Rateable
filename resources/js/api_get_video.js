@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const cardHeader = document.querySelector("#card-header");
-
     const elementos = cardHeader.querySelectorAll("button");
+    const rangeInput = document.getElementById('score-input');
+        const rangeValue = document.getElementById('rangeValue');
 
     for (let index = 0; index < elementos.length; index++) {
         const element = elementos[index];
@@ -53,4 +54,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (elementos.length > 0) {
         getVideo(elementos[0].value)
     }
+    function printRangeValue() {
+        const value = rangeInput.value;
+        rangeValue.textContent = value;
+    }
+
+    rangeInput.addEventListener('input', printRangeValue);
 });
