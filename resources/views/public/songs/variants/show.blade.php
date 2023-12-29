@@ -224,14 +224,23 @@
                         <div class="score-form text-light d-flex flex-column">
                             {{-- <span>Rate this theme:</span> --}}
                             @if (Auth::check())
+                                @php
+                                    if ($song_variant->userSumRating != null) {
+                                        $user_score = $song_variant->userSumRating;
+                                    } else {
+                                        $user_score = 0;
+                                    }
+
+                                @endphp
                                 @switch(Auth::user()->score_format)
                                     @case('POINT_100')
                                         <div class="w-100">
                                             {{-- <input type="number" max="100" min="0" step="1" class="form-control"
                                                 id="exampleFormControlInput1" name="score" placeholder="1 to 100" required> --}}
-                                            <label for="score-input" class="form-label">Rate: <span id="rangeValue">0</span>/100</label>
+                                            <label for="score-input" class="form-label">Rate: <span
+                                                    id="rangeValue">{{ $user_score }}</span>/100</label>
                                             <input type="range" class="form-range" min="0" max="100" step="1"
-                                                id="score-input" name="score" value="0" required>
+                                                id="score-input" name="score" value="{{ $user_score }}" required>
                                         </div>
                                     @break
 
@@ -239,9 +248,10 @@
                                         <div class="w-100">
                                             {{-- <input type="number" max="10" min="0" step=".1" class="form-control"
                                                 id="exampleFormControlInput1" name="score" placeholder="1.0 to 10.0" required> --}}
-                                                <label for="score-input" class="form-label">Rate: <span id="rangeValue">0</span>/10</label>
+                                            <label for="score-input" class="form-label">Rate: <span
+                                                    id="rangeValue">{{ $user_score }}</span>/10</label>
                                             <input type="range" class="form-range" min="0" max="10" step="0.1"
-                                                id="score-input" name="score" value="0" required>
+                                                id="score-input" name="score" value="{{ $user_score }}" required>
                                         </div>
                                     @break
 
@@ -249,9 +259,10 @@
                                         <div class="w-100">
                                             {{-- <input type="number" max="10" min="0" step="1" class="form-control"
                                                 id="exampleFormControlInput1" name="score" placeholder="1 to 10" required> --}}
-                                                <label for="score-input" class="form-label">Rate: <span id="rangeValue">0</span>/10</label>
+                                            <label for="score-input" class="form-label">Rate: <span
+                                                    id="rangeValue">{{ $user_score }}</span>/10</label>
                                             <input type="range" class="form-range" min="0" max="10" step="1"
-                                                id="score-input" name="score" value="0" required>
+                                                id="score-input" name="score" value="{{ $user_score }}" required>
                                         </div>
                                     @break
 
