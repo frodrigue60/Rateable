@@ -149,7 +149,7 @@
                                         </div>
                                     </div>
                                     <div class="item-score-seasonal">
-                                        <span>{{ $song_variant->score != null ? $song_variant->score : 'n/a' }} <i
+                                        <span class="ms-2">{{ $song_variant->score != null ? $song_variant->score : 'n/a' }} <i
                                                 class="fa fa-star" aria-hidden="true"></i>
                                         </span>
                                     </div>

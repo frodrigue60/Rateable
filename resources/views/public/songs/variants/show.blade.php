@@ -221,33 +221,43 @@
                     <form action="{{ route('song.variant.rate', [$song_variant->song->id, $song_variant->id]) }}"
                         method="post" class="d-flex flex-column gap-2">
                         @csrf
-                        <div class="score-form text-light">
-                            <span>Rate this theme:</span>
+                        <div class="score-form text-light d-flex flex-column">
+                            {{-- <span>Rate this theme:</span> --}}
                             @if (Auth::check())
                                 @switch(Auth::user()->score_format)
                                     @case('POINT_100')
-                                        <div class="">
-                                            <input type="number" max="100" min="0" step="1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1 to 100" required>
+                                        <div class="w-100">
+                                            {{-- <input type="number" max="100" min="0" step="1" class="form-control"
+                                                id="exampleFormControlInput1" name="score" placeholder="1 to 100" required> --}}
+                                            <label for="customRange3" class="form-label">Rate</label>
+                                            <input type="range" class="form-range" min="0" max="100" step="1"
+                                                id="customRange3" name="score" value="0" required>
                                         </div>
                                     @break
 
                                     @case('POINT_10_DECIMAL')
-                                        <div class="">
-                                            <input type="number" max="10" min="0" step=".1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1.0 to 10.0" required>
+                                        <div class="w-100">
+                                            {{-- <input type="number" max="10" min="0" step=".1" class="form-control"
+                                                id="exampleFormControlInput1" name="score" placeholder="1.0 to 10.0" required> --}}
+                                            <label for="customRange3" class="form-label">Rate</label>
+                                            <input type="range" class="form-range" min="0" max="10" step="0.1"
+                                                id="customRange3" name="score" value="0" required>
                                         </div>
                                     @break
 
                                     @case('POINT_10')
-                                        <div class="">
-                                            <input type="number" max="10" min="0" step="1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1 to 10" required>
+                                        <div class="w-100">
+                                            {{-- <input type="number" max="10" min="0" step="1" class="form-control"
+                                                id="exampleFormControlInput1" name="score" placeholder="1 to 10" required> --}}
+                                            <label for="customRange3" class="form-label">Rate</label>
+                                            <input type="range" class="form-range" min="0" max="10" step="1"
+                                                id="customRange3" name="score" value="0" required>
                                         </div>
                                     @break
 
                                     @case('POINT_5')
-                                        <div class="stars">
+                                        <span class="align-self-start">Rate</span>
+                                        <div class="stars align-self-start">
                                             <input class="star star-5" id="star-5" type="radio" name="score"
                                                 value="100" />
                                             <label class="star star-5" for="star-5"></label>
