@@ -261,39 +261,27 @@ class PostController extends Controller
         } else {
             $score_format = null;
         }
+
         $currentSeason = DB::table('tagging_tags')->where('flag', '1')->first();
 
-        if ($currentSeason == null) {
+        $tags = DB::table('tagging_tags')
+            ->orderBy('name', 'desc')
+            ->take(5)
+            ->get();
 
-            $songs = Song::with(['post'])
-                ->where('type', 'OP')
-                ->get();
-            $songs = $this->setScore($songs, $score_format);
-            $tags = DB::table('tagging_tags')
-                ->orderBy('name', 'desc')
-                ->take(5)
-                ->get();
+        $song_variants = Song::with('songVariants')
+            ->where('type', 'OP')
+            ->when($currentSeason, function ($query) use ($currentSeason) {
+                return $query->withAnyTag($currentSeason->name);
+            })
+            ->get()
+            ->flatMap(function ($song) {
+                return $song->songVariants;
+            });
 
-            return view('public.posts.seasonal', compact('songs', 'tags', 'score_format'));
-        } else {
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
 
-            $songs = Song::with(['post'])
-                ->withAnyTag($currentSeason->name)
-                ->whereHas('post', function ($query) {
-                    $query->where('status', 'published')
-                        ->orderBy('title', 'asc');
-                })
-                ->where('type', 'OP')
-                ->get();
-            $songs = $this->setScore($songs, $score_format);
-
-            $tags = DB::table('tagging_tags')
-                ->orderBy('name', 'desc')
-                ->take(5)
-                ->get();
-
-            return view('public.posts.seasonal', compact('songs', 'tags', 'score_format', 'currentSeason'));
-        }
+        return view('public.posts.seasonal', compact('song_variants', 'tags', 'score_format', 'currentSeason'));
     }
     public function endings()
     {
@@ -302,42 +290,27 @@ class PostController extends Controller
         } else {
             $score_format = null;
         }
+
         $currentSeason = DB::table('tagging_tags')->where('flag', '1')->first();
 
-        if ($currentSeason == null) {
+        $tags = DB::table('tagging_tags')
+            ->orderBy('name', 'desc')
+            ->take(5)
+            ->get();
 
-            $songs = Song::with(['post'])
-                ->where('type', 'ED')
-                ->get();
-            $songs = $this->setScore($songs, $score_format);
+        $song_variants = Song::with('songVariants')
+            ->where('type', 'ED')
+            ->when($currentSeason, function ($query) use ($currentSeason) {
+                return $query->withAnyTag($currentSeason->name);
+            })
+            ->get()
+            ->flatMap(function ($song) {
+                return $song->songVariants;
+            });
 
-            $tags = DB::table('tagging_tags')
-                ->orderBy('name', 'desc')
-                ->take(5)
-                ->get();
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
 
-            return view('public.posts.seasonal', compact('songs', 'tags', 'score_format'));
-        } else {
-
-            $songs = Song::with(['post', 'songVariants'])
-                ->withAnyTag($currentSeason->name)
-                ->whereHas('post', function ($query) {
-                    $query->where('status', 'published')
-                        ->orderBy('title', 'asc');
-                })
-                ->where('type', 'ED')
-                ->get();
-            $songs = $this->setScore($songs, $score_format);
-
-            $tags = DB::table('tagging_tags')
-                ->orderBy('name', 'desc')
-                ->take(5)
-                ->get();
-
-            //dd($songs);
-
-            return view('public.posts.seasonal', compact('songs', 'tags', 'score_format', 'currentSeason'));
-        }
+        return view('public.posts.seasonal', compact('song_variants', 'tags', 'score_format', 'currentSeason'));
     }
 
     public function ratePost(Request $request, $id)
@@ -1568,15 +1541,30 @@ class PostController extends Controller
         }
         if ($currentSeason == null) {
 
-            $openings = Song::with(['post'])
-                ->where('type', 'OP')
-                ->get()->sortByDesc('averageRating')->take(100);
-            $this->setScore($openings, $score_format);
+            $openings = SongVariant::with(['song'])
+                ->whereHas('song.post', function ($query) {
+                    $query->where('status', 'published');
+                })
+                ->whereHas('song', function ($query) {
+                    $query->where('type', 'OP');
+                })
+                ->get()
+                ->sortByDesc('averageRating')
+                ->take(100);
 
-            $endings = Song::with(['post'])
-                ->where('type', 'ED')
-                ->get()->sortByDesc('averageRating')->take(100);
-            $this->setScore($endings, $score_format);
+            $endings = SongVariant::with(['song'])
+                ->whereHas('song.post', function ($query) {
+                    $query->where('status', 'published');
+                })
+                ->whereHas('song', function ($query) {
+                    $query->where('type', 'ED');
+                })
+                ->get()
+                ->sortByDesc('averageRating')
+                ->take(100);
+
+            $this->setScoreOnlyVariants($openings, $score_format);
+            $this->setScoreOnlyVariants($endings, $score_format);
 
             return view('public.posts.ranking', compact('openings', 'endings', 'score_format'));
         } else {
@@ -1592,10 +1580,6 @@ class PostController extends Controller
                 ->sortByDesc('averageRating')
                 ->take(100);
 
-            //dd($op_variants);
-
-            $this->setScore($openings, $score_format);
-
             $endings = SongVariant::with(['song'])
                 ->whereHas('song.post', function ($query) use ($currentSeason) {
                     $query->where('status', 'published')
@@ -1608,11 +1592,8 @@ class PostController extends Controller
                 ->sortByDesc('averageRating')
                 ->take(100);
 
-            //dd($endings);
-
+            $this->setScoreOnlyVariants($openings, $score_format);
             $this->setScoreOnlyVariants($endings, $score_format);
-
-            //dd($openings, $endings);
 
             return view('public.posts.ranking', compact('openings', 'endings', 'currentSeason', 'score_format'));
         }

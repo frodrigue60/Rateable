@@ -248,19 +248,16 @@ footer {
 }
 
 .item-info-seasonal {
-	display: flex;
-	white-space: nowrap;
+	/* display: flex;
+	white-space: nowrap; */
 	overflow: hidden;
-	text-overflow: ellipsis;
+	/* text-overflow: ellipsis; */
 }
 
 .item-post-info-seasonal {
-	display: flex;
-	/* max-width: 140px;
 	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis; */
-	padding-left: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .item-score-seasonal {

@@ -75,14 +75,8 @@
                 </div>
 
                 <section class="contenedor-tarjetas mt-2">
-                    @isset($songs)
-                        @foreach ($songs as $song)
-                            @isset($song->songVariants)
-                                @foreach ($song->songVariants as $variant)
-                                    @include('layouts.song-variant-card')
-                                @endforeach
-                            @endisset
-                        @endforeach
+                    @isset($song_variants)
+                        @include('layouts.song-variant-cards')
                     @endisset
                 </section>
             </section>
@@ -133,21 +127,30 @@
                         @php
                             $j = 1;
                         @endphp
-                        @isset($songs)
-                            @foreach ($songs->sortByDesc('averageRating')->take(15) as $song)
+                        @isset($song_variants)
+                            @foreach ($song_variants->sortByDesc('averageRating')->take(10) as $song_variant)
+                                @php
+                                    $song_id = $song_variant->song->id;
+                                    $post_slug = $song_variant->song->post->slug;
+                                    $suffix = $song_variant->song->suffix != null ? $song_variant->song->suffix : $song_variant->song->type;
+                                    $version = $song_variant->version;
+                                    $showVariantRoute = route('p.song.variant.show', [$song_id, $post_slug, $suffix, $version]);
+                                    $forward_text = ($song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type) . 'v' . $song_variant->version;
+                                    $title = $song_variant->song->post->title;
+                                @endphp
                                 <article class="top-item-seasonal">
                                     <div class="item-place-seasonal">
                                         <span><strong>{{ $j++ }}</strong></span>
                                     </div>
                                     <div class="item-info-seasonal">
                                         <div class="item-post-info-seasonal">
-                                            <a href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}"
-                                                class="text-light no-deco">{{ $song->post->title }}</a>
+                                            <a href="{{ $showVariantRoute }}"
+                                                class="text-light no-deco">{{ $title . ' ' . $forward_text }}</a>
                                         </div>
                                     </div>
                                     <div class="item-score-seasonal">
-                                        <span>{{ $song->score != null ? $song->score : 'n/a' }} <i class="fa fa-star"
-                                                aria-hidden="true"></i>
+                                        <span>{{ $song_variant->score != null ? $song_variant->score : 'n/a' }} <i
+                                                class="fa fa-star" aria-hidden="true"></i>
                                         </span>
                                     </div>
                                 </article>
