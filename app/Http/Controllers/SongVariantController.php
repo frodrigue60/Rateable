@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class SongVariantController extends Controller
 {
@@ -65,37 +66,45 @@ class SongVariantController extends Controller
         $score = null;
 
         if (Auth::check() && $song_variant->averageRating) {
+
+            $user_rate = $this->user_rate($song_variant->id, Auth::user()->id);
+
             switch (Auth::user()->score_format) {
                 case 'POINT_100':
                     $score = round($song_variant->averageRating);
+                    $user_rate->format_rating = round($user_rate->rating);
                     break;
 
                 case 'POINT_10_DECIMAL':
                     $score = round($song_variant->averageRating / 10, 1);
+                    $user_rate->format_rating = round($user_rate->rating / 10, 1);
                     break;
 
                 case 'POINT_10':
                     $score = round($song_variant->averageRating / 10);
+                    $user_rate->format_rating = round($user_rate->rating / 10);
                     break;
 
                 case 'POINT_5':
                     $score = round($song_variant->averageRating / 20);
+                    $user_rate->format_rating = max(20, min(100, ceil($user_rate->rating / 20) * 20));
                     break;
 
                 default:
                     $score = round($song_variant->averageRating / 10);
+                    $user_rate->format_rating = max(20, min(100, ceil($user_rate->rating / 20) * 20));
                     break;
             }
         } else {
             $score = round($song_variant->averageRating / 10);
+            $user_rate = null;
         }
-
 
         $song_variant->incrementViews();
 
         //dd($song_variant,$score,$comments,$comments_featured);
 
-        return view('public.songs.variants.show', compact('song_variant', 'score', 'comments', 'comments_featured'));
+        return view('public.songs.variants.show', compact('song_variant', 'score', 'comments', 'comments_featured', 'user_rate'));
     }
 
     /**
@@ -251,5 +260,14 @@ class SongVariantController extends Controller
             return redirect()->back()->with('success', 'Song Variant Like undo successfully!');
         }
         return redirect()->route('/')->with('warning', 'Please login');
+    }
+
+    public function user_rate($song_variant_id, $user_id)
+    {
+        return DB::table('ratings')
+            ->where('rateable_type', 'App\Models\SongVariant')
+            ->where('rateable_id', $song_variant_id)
+            ->where('user_id', $user_id)
+            ->first(['comment', 'rating']);
     }
 }

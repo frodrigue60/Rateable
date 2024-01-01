@@ -225,8 +225,8 @@
                             {{-- <span>Rate this theme:</span> --}}
                             @if (Auth::check())
                                 @php
-                                    if ($song_variant->userSumRating != null) {
-                                        $user_score = $song_variant->userSumRating;
+                                    if ($user_rate != null) {
+                                        $user_score = $user_rate->format_rating;
                                     } else {
                                         $user_score = 0;
                                     }
@@ -270,23 +270,23 @@
                                         <span class="align-self-start">Rate</span>
                                         <div class="stars align-self-start">
                                             <input class="star star-5" id="star-5" type="radio" name="score"
-                                                value="100" />
+                                                value="100" {{ $user_score == 100 ? 'checked' : '' }}/>
                                             <label class="star star-5" for="star-5"></label>
 
                                             <input class="star star-4" id="star-4" type="radio" name="score"
-                                                value="80" />
+                                                value="80" {{ $user_score == 80 ? 'checked' : '' }}/>
                                             <label class="star star-4" for="star-4"></label>
 
                                             <input class="star star-3" id="star-3" type="radio" name="score"
-                                                value="60" />
+                                                value="60" {{ $user_score == 60 ? 'checked' : '' }}/>
                                             <label class="star star-3" for="star-3"></label>
 
                                             <input class="star star-2" id="star-2" type="radio" name="score"
-                                                value="40" />
+                                                value="40" {{ $user_score == 40 ? 'checked' : '' }}/>
                                             <label class="star star-2" for="star-2"></label>
 
                                             <input class="star star-1" id="star-1" type="radio" name="score"
-                                                value="20" />
+                                                value="20" {{ $user_score == 20 ? 'checked' : '' }}/>
                                             <label class="star star-1" for="star-1"></label>
                                         </div>
                                     @break
@@ -317,7 +317,7 @@
                             @endif
                         </div>
                         <textarea name="comment" class="form-control" id="exampleFormControlTextarea1" rows="2"
-                            placeholder="Comment ... (optional)" maxlength="255"></textarea>
+                            placeholder="Comment ... (optional)" maxlength="255">{{ $user_rate->comment }}</textarea>
                         <button class="btn btn-primary" type="submit">Submit</button>
                     </form>
                 </div>
