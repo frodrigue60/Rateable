@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::controller(apiPostController::class)->group(function () {
-    Route::get('/search', 'search');
+    Route::post('/search', 'search');
 });
 Route::controller(apiVideoController::class)->group(function () {
     Route::get('/video/{id}', 'show')->name('api.video.show');

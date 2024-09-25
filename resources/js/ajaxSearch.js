@@ -37,13 +37,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function apiSearch() {
             try {
-                fetch('http://127.0.0.1:8000/api/search?q=' + input.value, {
+                fetch('http://127.0.0.1:8000/api/search', {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': token,
                     },
-                    method: "GET",
+                    method: "POST",
+                    body: JSON.stringify({ q: input.value }),
                 }).then(response => {
                     return response.json()
                 }).then((data) => {

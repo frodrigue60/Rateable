@@ -22,10 +22,7 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        
-    }
+    public function index() {}
 
     /**
      * Store a newly created resource in storage.
@@ -33,10 +30,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -57,10 +51,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        
-    }
+    public function update(Request $request, $id) {}
 
     /**
      * Remove the specified resource from storage.
@@ -68,24 +59,26 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        
-    }
+    public function destroy($id) {}
 
     public function search(Request $request)
     {
-        $q = $request->get('q');
-        
+        $q = $request->input('q');
+
         $posts = Post::where('title', 'LIKE', "%$q%")->limit(5)->get(['id', 'title', 'slug']);
 
-        $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['id','name', 'name_slug']);
+        $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['id', 'name', 'name_slug']);
 
         $tags = Tag::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
 
-        $users = User::where('name', 'LIKE', "%$q%")->limit(5)->get(['id','name']);
+        $users = User::where('name', 'LIKE', "%$q%")->limit(5)->get(['id', 'name']);
 
-        $data = ["posts" => $posts, "artists" => $artists, "tags" => $tags,"users" => $users];
+        $data = [
+            "posts" => $posts,
+            "artists" => $artists,
+            "tags" => $tags,
+            "users" => $users
+        ];
 
         return response()->json($data);
     }
