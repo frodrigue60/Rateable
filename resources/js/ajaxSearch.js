@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function apiSearch() {
             try {
-                fetch('https://anirank-edcb15de9fd7.herokuapp.com/api/search?q=' + input.value, {
+                fetch('http://127.0.0.1:8000/api/search?q=' + input.value, {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     resetDivs();
 
                     data.posts.forEach(element => {
-                        let url = "https://anirank-edcb15de9fd7.herokuapp.com/anime/" + element.id + "/" + element.slug;
+                        let url = "http://127.0.0.1:8000/anime/" + element.id + "/" + element.slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     data.artists.forEach(element => {
-                        let url = "https://anirank-edcb15de9fd7.herokuapp.com/artist/" + element.id + "/" + element.name_slug;
+                        let url = "http://127.0.0.1:8000/artist/" + element.id + "/" + element.name_slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         let partes = element.name.split(' ');
                         let season = partes[0];
                         let year = partes[1];
-                        let url = "https://anirank-edcb15de9fd7.herokuapp.com/animes?type=&year=" + year + "&season=" + season + "&sort=&char=";
+                        let url = "http://127.0.0.1:8000/animes?type=&year=" + year + "&season=" + season + "&sort=&char=";
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                     data.users.forEach(element => {
 
-                        let url = "https://anirank-edcb15de9fd7.herokuapp.com/user/" + element.id;
+                        let url = "http://127.0.0.1:8000/user/" + element.id;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');

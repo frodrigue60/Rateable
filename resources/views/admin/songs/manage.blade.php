@@ -48,7 +48,7 @@
                                     <td>{{ $song->id }}</td>
                                     <td>
                                         <a class="text-light"
-                                            href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">{{ $song_name }}</a>
+                                            href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song_name }}</a>
                                     </td>
                                     <td>
                                         @isset($song->artist)
@@ -78,8 +78,8 @@
                                                 href="{{ route('song.post.edit', $song->id) }}"><i class="fa-solid fa-pencil"></i></a>
                                             <a class="btn btn-sm btn-danger"
                                                 href="{{ route('song.post.destroy', $song->id) }}"><i class="fa-solid fa-trash"></i></a>
-                                            <a class="btn btn-sm btn-primary"
-                                                href="{{ route('admin.videos.index', $song->id) }}"><i class="fa-solid fa-list"></i></a>
+                                            {{-- <a class="btn btn-sm btn-primary"
+                                                href="{{ route('admin.videos.index', $song->id) }}"><i class="fa-solid fa-list"></i></a> --}}
                                             <a class="btn btn-sm btn-primary" href="{{ route('song.variant.store',$song->id) }}">+</a>
                                         @endif
                                     </td>

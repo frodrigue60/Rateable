@@ -104,7 +104,7 @@ class SongController extends Controller
 
         /* $this->count_views($song); */
 
-        return view('public.songs.show', compact('song', 'score', 'artist', 'comments', 'comments_featured'));
+        return view('public.songs.show', compact('song', 'score', 'comments', 'comments_featured'));
     }
 
     public function likeSong($id)
