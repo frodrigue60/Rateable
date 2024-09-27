@@ -10,6 +10,7 @@ const loaderContainer = document.querySelector('.loader-container');
 const siteBody = document.querySelector('body');
 const modalBody = document.querySelector('#modalBody');
 const resDiv = document.querySelector('.res');
+const siteUrl = 'http://anirank.work';
 
 let typingTimer;
 const delay = 250;
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function apiSearch() {
             try {
-                fetch('http://127.0.0.1:8000/api/search', {
+                fetch(siteUrl + '/api/search', {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',

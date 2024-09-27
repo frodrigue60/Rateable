@@ -317,7 +317,7 @@
                             @endif
                         </div>
                         <textarea name="comment" class="form-control" id="exampleFormControlTextarea1" rows="2"
-                            placeholder="Comment ... (optional)" maxlength="255">{{ $user_rate->comment }}</textarea>
+                            placeholder="Comment ... (optional)" maxlength="255">{{ $user_rate->comment != 'null' ? $user_rate->comment : '' }}</textarea>
                         <button class="btn btn-primary" type="submit">Submit</button>
                     </form>
                 </div>
