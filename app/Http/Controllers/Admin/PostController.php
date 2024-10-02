@@ -421,7 +421,7 @@ class PostController extends Controller
                 'slug' => Str::slug($tag)
             ]);
         }
-        //dd($tag,$tag_exist);
+        //dd($data);
         foreach ($data as $item) {
             $post_exist = Post::where('title', $item->title->romaji)->first();
 
@@ -586,12 +586,12 @@ class PostController extends Controller
                 $image_file_data = file_get_contents($item->coverImage->extraLarge);
                 $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
                 $file_name = Str::slug($post->slug) . '-' . time() . '.webp';
-                /* Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded); */
+                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
             } else {
                 $image_file_data = file_get_contents($item->coverImage->extraLarge);
                 /* $extension = pathinfo($image_file_data, PATHINFO_EXTENSION); */
                 $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'png';
-                /* Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data); */
+                Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
             }
 
             $post->thumbnail = $file_name;
@@ -610,12 +610,12 @@ class PostController extends Controller
                 $banner_file_data = file_get_contents($item->bannerImage);
                 $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
                 $encoded = Image::make($banner_file_data)->encode('webp', 100); //->resize(150, 212)
-                /* Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded); */
+                Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
             } else {
                 $banner_file_data = file_get_contents($item->bannerImage);
                 /* $extension = pathinfo($banner_file_data, PATHINFO_EXTENSION); */
                 $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'png';
-               /*  Storage::disk('public')->put('/anime_banner/' . $file_name, $banner_file_data); */
+                Storage::disk('public')->put('/anime_banner/' . $file_name, $banner_file_data);
             }
 
             $post->banner = $file_name;

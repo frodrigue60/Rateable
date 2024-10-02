@@ -1,6 +1,12 @@
 <article class="tarjeta">
     @php
-        $thumb_url = file_exists(asset('/storage/thumbnails/' . $post->thumbnail)) ? asset('/storage/thumbnails/' . $post->thumbnail) : $post->thumbnail_src;
+        $thumb_path = public_path('storage/thumbnails/' . $post->thumbnail);
+
+        if (file_exists($thumb_path)) {
+            $thumb_url = asset('storage/thumbnails/' . $post->thumbnail);
+        } else {
+            $thumb_url = $post->thumbnail_src;
+        }
     @endphp
     <div class="textos">
         <div class="tarjeta-header text-light">
@@ -11,9 +17,8 @@
                 class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
         </div> --}}
         <a class="no-deco" target="blank_" href="{{ route('post.show', [$post->id, $post->slug]) }}">
-            <img class="thumb" loading="lazy"
-                src="{{ $thumb_url}}"
-                alt="{{ $post->title }}" title="{{ $post->title }}">
+            <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $post->title }}"
+                title="{{ $post->title }}">
         </a>
         {{-- <div class="tarjeta-footer text-light">
             <span>{{ $post->likeCount }} <i class="fa fa-heart"></i></span>

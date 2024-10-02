@@ -30,14 +30,22 @@
                             </form>
                         </div> --}}
                     <div class="mb-3">
-                        <label for="profilePic" class="form-label">Upload a profile pic</label>
                         <form action="{{ route('upload.profile.pic') }}" method="POST" enctype="multipart/form-data">
                             @method('post')
                             @csrf
-                            <div class="input-group">
+                            {{-- URL --}}
+                            <div class="mb-3">
+                                <label for="profilePic" class="form-label">Upload a profile pic</label>
                                 <input type="text" class="form-control" id="profilePic"
                                     aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="profile_pic_url"
                                     placeholder="Profile pic url">
+                            </div>
+                            {{-- FILE --}}
+                            <div class="mb-3 px-0">
+                                <label for="profile-file" class="form-label">Default file input example</label>
+                                <input class="form-control" type="file" id="profile-file" name="image">
+                            </div>
+                            <div class="row d-flex">
                                 <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Save</button>
                             </div>
                         </form>
@@ -62,10 +70,18 @@
                         <form action="{{ route('upload.banner.pic') }}" method="POST" enctype="multipart/form-data">
                             @method('post')
                             @csrf
+                            {{-- URL --}}
                             <div class="input-group">
                                 <input type="text" class="form-control" id="bannerPic"
                                     aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="banner_pic_url"
                                     placeholder="Banner image url">
+                            </div>
+                            {{-- FILE --}}
+                            <div class="mb-3 px-0">
+                                <label for="banner-file" class="form-label">Default file input example</label>
+                                <input class="form-control" type="file" id="banner-file" name="banner">
+                            </div>
+                            <div class="row d-flex">
                                 <button class="btn btn-primary" type="submit" id="inputGroupFileAddon04">Save</button>
                             </div>
                         </form>

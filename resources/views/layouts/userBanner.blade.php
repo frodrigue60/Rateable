@@ -2,16 +2,33 @@
     $user_profile_pic = '';
     $user_banner_pic = '';
 
-    if (isset($user->image)) {
+    /* if (isset($user->image)) {
         $user_profile_pic = $user->image;
     } else {
         $user_profile_pic = asset('/storage/profile/' . 'default.jpg');
+    } */
+
+    $user_profile_path = public_path('storage/profile/' . $user->image);
+
+    if (file_exists($user_profile_path)) {
+        $user_profile_pic = asset('storage/profile/' . $user->image);
+    } else {
+        $user_profile_pic = $user->image;
     }
-    if (isset($user->banner)) {
+
+    $user_banner_path = public_path('storage/profile/' . $user->banner);
+
+    if (file_exists($user_profile_path)) {
+        $user_banner_pic = asset('storage/banner/' . $user->banner);
+    } else {
+        $user_banner_pic = $user->banner;
+    }
+
+    /* if (isset($user->banner)) {
         $user_banner_pic = $user->banner;
     } else {
         $user_banner_pic = asset('/storage/profile/' . 'default.jpg');
-    }
+    } */
 
 @endphp
 <div class="header">

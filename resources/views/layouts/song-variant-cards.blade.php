@@ -5,10 +5,26 @@
         $suffix = $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type;
         $version = $variant->version;
         $showVariantRoute = route('p.song.variant.show', [$song_id, $post_slug, $suffix, $version]);
-        $forward_text = ($variant->song->suffix ? $variant->song->suffix : $variant->song->type) . 'v' . $variant->version;
+        $forward_text =
+            ($variant->song->suffix ? $variant->song->suffix : $variant->song->type) . 'v' . $variant->version;
 
-        $url = route('song.show', [$variant->song->id, $variant->song->post->slug, $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type]);
-        $thumb_url = file_exists(asset('/storage/thumbnails/' . $variant->song->post->thumbnail)) ? asset('/storage/thumbnails/' . $variant->song->post->thumbnail) : $variant->song->post->thumbnail_src;
+        $url = route('song.show', [
+            $variant->song->id,
+            $variant->song->post->slug,
+            $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type,
+        ]);
+        /* $thumb_url = file_exists(asset('/storage/thumbnails/' . $variant->song->post->thumbnail))
+            ? asset('/storage/thumbnails/' . $variant->song->post->thumbnail)
+            : $variant->song->post->thumbnail_src; */
+
+        $thumb_path = public_path('storage/thumbnails/' . $variant->song->post->thumbnail);
+
+        if (file_exists($thumb_path)) {
+            $thumb_url = asset('storage/thumbnails/' . $variant->song->post->thumbnail);
+        } else {
+            $thumb_url = $variant->song->post->thumbnail_src;
+        }
+
         $title = $variant->song->post->title;
 
         if ($variant->views >= 1000000) {
@@ -18,7 +34,6 @@
         } else {
             $views = $variant->views;
         }
-
     @endphp
 
     <article class="tarjeta">

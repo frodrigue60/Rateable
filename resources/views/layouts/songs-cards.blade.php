@@ -1,7 +1,14 @@
 @foreach ($songs as $song)
     @php
         $url = route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]);
-        $thumb_url = file_exists(asset('/storage/thumbnails/' . $song->post->thumbnail)) ? asset('/storage/thumbnails/' . $song->post->thumbnail) : $song->post->thumbnail_src;
+        /* $thumb_url = file_exists(asset('/storage/thumbnails/' . $song->post->thumbnail)) ? asset('/storage/thumbnails/' . $song->post->thumbnail) : $song->post->thumbnail_src; */
+        $thumb_path = public_path('storage/thumbnails/' . $song->post->thumbnail);
+
+        if (file_exists($thumb_path)) {
+            $thumb_url = asset('storage/thumbnails/' . $song->post->thumbnail);
+        } else {
+            $thumb_url = $song->post->thumbnail_src;
+        }
     @endphp
     <article class="tarjeta">
         <div class="textos">
