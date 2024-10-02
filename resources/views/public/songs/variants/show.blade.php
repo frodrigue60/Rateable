@@ -317,7 +317,7 @@
                             @endif
                         </div>
                         <textarea name="comment" class="form-control" id="exampleFormControlTextarea1" rows="2"
-                            placeholder="Comment ... (optional)" maxlength="255">{{ $user_rate->comment != 'null' ? $user_rate->comment : '' }}</textarea>
+                            placeholder="Comment ... (optional)" maxlength="255">{{ $user_rate != '' ? $user_rate->comment : '' }}</textarea>
                         <button class="btn btn-primary" type="submit">Submit</button>
                     </form>
                 </div>
@@ -546,7 +546,7 @@
         @if (config('app.env') === 'local')
             @vite(['resources/js/api_get_video.js'])
         @else
-            <script src="{{ asset('resources/js/api_get_video.js') }}"></script>
+            <script src="{{ asset('build/api_get_video.js') }}"></script>
         @endif
 
         <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />

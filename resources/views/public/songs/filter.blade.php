@@ -173,14 +173,14 @@
         @if (config('app.env') === 'local')
             @vite(['resources/js/favorites_infinite_scroll.js'])
         @else
-            <script src="{{ asset('resources/js/favorites_infinite_scroll.js') }}"></script>
+            <script src="{{ asset('build/favorites_infinite_scroll.js') }}"></script>
         @endif
     @endif
     @if (Request::routeIs('user.list'))
         @if (config('app.env') === 'local')
             @vite(['resources/js/favorites_infinite_scroll.js'])
         @else
-            <script src="{{ asset('resources/js/favorites_infinite_scroll.js') }}"></script>
+            <script src="{{ asset('build/favorites_infinite_scroll.js') }}"></script>
         @endif
     @endif
 
@@ -188,7 +188,7 @@
         @if (config('app.env') === 'local')
             @vite(['resources/js/themes_infinite_scroll.js'])
         @else
-            <script src="{{ asset('resources/js/themes_infinite_scroll.js') }}"></script>
+            <script src="{{ asset('build/themes_infinite_scroll.js') }}"></script>
         @endif
     @endif
 
@@ -196,7 +196,7 @@
         @if (config('app.env') === 'local')
             @vite(['resources/js/artists_infinite_scroll.js'])
         @else
-            <script src="{{ asset('resources/js/artists_infinite_scroll.js') }}"></script>
+            <script src="{{ asset('build/artists_infinite_scroll.js') }}"></script>
         @endif
     @endif
 @endsection

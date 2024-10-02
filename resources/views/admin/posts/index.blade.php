@@ -120,23 +120,22 @@
                                     @endif
                                     @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                         <td>
-                                            @if ($post->status == null)
-                                                <button disabled="disabled" class="btn btn-sm btn-secondary">N/A</button>
-                                            @endif
-                                            @if ($post->status == 'stagged')
-                                                <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
-                                                    @csrf
-                                                    <button class="btn btn-warning btn-sm"><i
-                                                            class="fa-solid fa-clock"></i></button>
-                                                </form>
-                                            @endif
                                             @if ($post->status == 'published')
                                                 <form action="{{ route('admin.post.unapprove', $post->id) }}"
                                                     method="post">
                                                     @csrf
-                                                    <button class="btn btn-primary btn-sm"> <i class="fa fa-check"
-                                                            aria-hidden="true"></i></button>
+                                                    <button class="btn btn-primary btn-sm"> <i
+                                                            class="fa-solid fa-toggle-on"></i></button>
                                                 </form>
+                                            @else
+                                                @if ($post->status == 'stagged')
+                                                    <form action="{{ route('admin.post.approve', $post->id) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        <button class="btn btn-warning btn-sm"><i
+                                                                class="fa-solid fa-toggle-off"></i></button>
+                                                    </form>
+                                                @endif
                                             @endif
                                         </td>
                                         <td>

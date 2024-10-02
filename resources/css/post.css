@@ -164,11 +164,13 @@ div.artist-list-item>a {
     padding-bottom: 10px;
     padding-top: 5px;
     border-radius: 5px;
+    display: flex;
 }
 
 .themes {
     margin-left: 0px;
     margin-right: 0px;
+    width: 100%;
 }
 
 /* BOTTOM BUTTONS */
@@ -395,6 +397,10 @@ img.user-profile-pic {
     .father-container {
         margin: auto;
         width: 700px;
+    }
+
+    .container-songs{
+        flex-direction: column;
     }
 }
 

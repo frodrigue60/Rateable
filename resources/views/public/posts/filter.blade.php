@@ -92,7 +92,7 @@
         @if (config('app.env') === 'local')
             @vite(['resources/js/animes_infinite_scroll.js'])
         @else
-            <script src="{{ asset('resources/js/animes_infinite_scroll.js') }}"></script>
+            <script src="{{ asset('build/animes_infinite_scroll.js') }}"></script>
         @endif
     @endif
 @endsection

@@ -12,8 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    //const siteUrl = "http://127.0.0.1:8000"
-    const siteUrl = "http://anirank.work"
+    const siteUrl = "https://anirank.work"
 
     async function getVideo(id) {
         try {
@@ -54,10 +53,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (elementos.length > 0) {
         getVideo(elementos[0].value)
     }
-    function printRangeValue() {
+    /* function printRangeValue() {
         const value = rangeInput.value;
         rangeValue.textContent = value;
     }
 
-    rangeInput.addEventListener('input', printRangeValue);
+    rangeInput.addEventListener('input', printRangeValue); */
 });

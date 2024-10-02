@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use App\Jobs\ProcessVideo;
 
 class VideoController extends Controller
 {
@@ -51,7 +52,8 @@ class VideoController extends Controller
      */
     public function store(Request $request, $song_id, $variant_id)
     {
-        //dd($song_id, $variant_id);
+        $path = null;
+        $file_name = null;
 
         try {
             $song = Song::find($song_id);
@@ -71,12 +73,29 @@ class VideoController extends Controller
                     $request->flash();
                     return Redirect::back()->with('error', $errors);
                 }
-                if ($song->type == "OP") {
+
+                switch ($video->song->type) {
+                    case 'OP':
+                        $path = "videos/openings/";
+                        break;
+
+                    case 'OP':
+                        $path = "videos/endings/";
+                        break;
+
+                    default:
+                        $path = "videos/";
+                        break;
+                }
+                /* if ($song->type == "OP") {
                     $path = "videos/openings/";
                 } else {
                     $path = "videos/endings/";
-                }
-                $file_name = $song->post->slug . '-' . strtolower($song->suffix) . '-' . time() . '.' . 'webm';
+                } */
+                $mimeType = $request->video->getMimeType();
+                $extension = $this->getExtensionFromMimeType($mimeType);
+
+                $file_name = $song->post->slug . '-' . strtolower($song->suffix) . '-' . time() . '.' . $extension;
                 $video->video_src = '/storage/' . $path . $file_name;
                 //Storage::disk('public')->put('/videos/',$file_name.$request->video);
 
@@ -161,11 +180,25 @@ class VideoController extends Controller
                     $request->flash();
                     return Redirect::back()->with('error', $errors);
                 }
-                if ($video->song->type == "OP") {
+
+                switch ($video->song->type) {
+                    case 'OP':
+                        $path = "videos/openings/";
+                        break;
+
+                    case 'OP':
+                        $path = "videos/endings/";
+                        break;
+
+                    default:
+                        $path = "videos/";
+                        break;
+                }
+                /* if ($video->song->type == "OP") {
                     $path = "videos/openings/";
                 } else {
                     $path = "videos/endings/";
-                }
+                } */
                 $file_name = $video->song->post->slug . '-' . strtolower($video->song->suffix) . '-' . time() . '.' . 'webm';
                 $video->video_src = $path . $file_name;
                 //Storage::disk('public')->put('/videos/',$file_name.$request->video);
@@ -188,7 +221,11 @@ class VideoController extends Controller
 
             if ($video->save()) {
                 if ($video->type === "file") {
-                    $request->video->storeAs($path, $file_name, 'public');
+                    //$request->video->storeAs($path, $file_name, 'public');
+
+                    $videoPath = $request->file('video')->store('videos', 'public');
+                    // Despachar el job para procesar el video
+                    ProcessVideo::dispatch($videoPath);
                 }
                 return redirect(route('admin.videos.index', $video->song->id))->with('success', 'saved successfully');
             }
@@ -219,5 +256,21 @@ class VideoController extends Controller
             return redirect(route('admin.videos.index', $video->song->id))
                 ->with('error', $e);
         }
+    }
+
+    protected function getExtensionFromMimeType($mimeType)
+    {
+        $mimeMap = [
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/gif' => 'gif',
+            'application/pdf' => 'pdf',
+            'video/mp4' => 'mp4',
+            'video/quicktime' => 'mov',
+            'audio/mpeg' => 'mp3',
+            'audio/wav' => 'wav',
+        ];
+
+        return $mimeMap[$mimeType] ?? 'bin';
     }
 }

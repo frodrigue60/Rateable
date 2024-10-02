@@ -196,7 +196,11 @@ class SongController extends Controller
     }
     public function manage($id)
     {
+        //dd(true);
         $post = Post::with('songs')->find($id);
+        if ($post == null) {
+            return redirect(route('admin.post.index'))->with('error', 'Item has been deleted!');
+        }
         return view('admin.songs.manage', compact('post'));
     }
     public function SeasonsYears($tags){

@@ -223,6 +223,10 @@ class PostController extends Controller
 
         $post = Post::with('songs')->find($id);
 
+        if ($post == null) {
+            return redirect(route('/'))->with('warning','Item has been deleted!');
+        }
+
         $openings = $post->songs->filter(function ($song) {
             return $song->type === 'OP';
         });

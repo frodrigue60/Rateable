@@ -55,6 +55,27 @@ class SongVariantController extends Controller
             ->with('likeCounter')
             ->first();
 
+        if ($song_variant == null) {
+            return redirect(route('/'))->with('warning', 'Item no exist!');
+        }
+
+        if ($song_variant->song->post->status == 'stagged') {
+            return redirect(route('/'))->with('warning', 'Paused post!');
+        }
+
+        switch ($song_variant->song->post->status) {
+            case 'stagged':
+                return redirect(route('/'))->with('warning', 'Paused post!');
+                break;
+
+            case 'published':
+                break;
+
+            default:
+                return redirect(route('/'))->with('warning', 'Ooops');
+                break;
+        }
+
         $comments = $song_variant->commentsWithUser()
             ->get();
 

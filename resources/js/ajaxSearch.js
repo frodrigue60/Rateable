@@ -10,7 +10,7 @@ const loaderContainer = document.querySelector('.loader-container');
 const siteBody = document.querySelector('body');
 const modalBody = document.querySelector('#modalBody');
 const resDiv = document.querySelector('.res');
-const siteUrl = 'http://anirank.work';
+const siteUrl = 'https://anirank.work';
 
 let typingTimer;
 const delay = 250;
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     resetDivs();
 
                     data.posts.forEach(element => {
-                        let url = "http://127.0.0.1:8000/anime/" + element.id + "/" + element.slug;
+                        let url = siteUrl + "/anime/" + element.id + "/" + element.slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     data.artists.forEach(element => {
-                        let url = "http://127.0.0.1:8000/artist/" + element.id + "/" + element.name_slug;
+                        let url = siteUrl + "/artist/" + element.id + "/" + element.name_slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         let partes = element.name.split(' ');
                         let season = partes[0];
                         let year = partes[1];
-                        let url = "http://127.0.0.1:8000/animes?type=&year=" + year + "&season=" + season + "&sort=&char=";
+                        let url = siteUrl + "/animes?type=&year=" + year + "&season=" + season + "&sort=&char=";
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                     data.users.forEach(element => {
 
-                        let url = "http://127.0.0.1:8000/user/" + element.id;
+                        let url = siteUrl + "/user/" + element.id;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
