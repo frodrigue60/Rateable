@@ -4,25 +4,20 @@
 @foreach ($endings as $variant)
     @isset($variant->song->post)
         @php
-            $song_name = null;
-
-            if (isset($variant->song->song_romaji)) {
-                $song_name = $variant->song->song_romaji;
-            } else {
-                if (isset($variant->song->song_en)) {
-                    $song_name = $variant->song->song_en;
-                } else {
-                    if (isset($variant->song->song_jp)) {
-                        $song_name = $variant->song->song_jp;
-                    }
-                }
-            }
-
             $img_url = null;
             if ($variant->song->post->banner != null) {
-                $img_url = file_exists(asset('/storage/anime_banner/' . $variant->song->post->banner)) ? asset('/storage/anime_banner/' . $variant->song->post->banner) : $variant->song->post->banner_src;
+                /* $img_url = file_exists(asset('/storage/anime_banner/' . $variant->song->post->banner))
+                    ? asset('/storage/anime_banner/' . $variant->song->post->banner)
+                    : $variant->song->post->banner_src; */
+
+                $img_path = public_path('storage/anime_banner/' . $variant->song->post->banner);
+
+                if (file_exists($img_path)) {
+                    $img_url = asset('storage/anime_banner/' . $variant->song->post->banner);
+                }
             } else {
-                $img_url = 'https://static.vecteezy.com/system/resources/thumbnails/005/170/408/small/banner-abstract-geometric-white-and-gray-color-background-illustration-free-vector.jpg';
+                $img_url =
+                    'https://static.vecteezy.com/system/resources/thumbnails/005/170/408/small/banner-abstract-geometric-white-and-gray-color-background-illustration-free-vector.jpg';
             }
 
         @endphp
@@ -39,14 +34,21 @@
                         $suffix = $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type;
                         $version = $variant->version;
                         $showVariantRoute = route('p.song.variant.show', [$song_id, $post_slug, $suffix, $version]);
-                        $forward_text = ($variant->song->suffix ? $variant->song->suffix : $variant->song->type) . 'v' . $variant->version;
+                        $forward_text =
+                            ($variant->song->suffix ? $variant->song->suffix : $variant->song->type) .
+                            'v' .
+                            $variant->version;
+
+                        $song_name = null;
+                        $song_name =
+                            $variant->song->song_romaji ?? ($variant->song->song_en ?? $variant->song->song_jp);
                     @endphp
                     <div class="item-song-info">
                         {{-- SONG TITLE --}}
                         <div class="text-ellipsis">
                             @if ($song_name != null)
                                 <a class="no-deco text-light bold"
-                                    href="{{ $showVariantRoute }}">{{ $song_name . ' ' . $forward_text }} </a>
+                                    href="{{ $showVariantRoute }}">{{ $song_name }} </a>
                             @else
                                 <strong>N/A</strong>
                             @endif

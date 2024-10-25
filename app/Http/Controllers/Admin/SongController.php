@@ -52,7 +52,7 @@ class SongController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $post_id)
-    {   
+    {
         $song = new Song();
         $song->song_romaji = $request->song_romaji;
         $song->song_jp = $request->song_jp;
@@ -144,12 +144,14 @@ class SongController extends Controller
     {
         //dd($request->all());
         $song = Song::find($id);
-        $song->song_romaji = $request->song_romaji;
+        $song->song_romaji = $this->decodeUnicodeIfNeeded($request->song_romaji);
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
         $song->post_id = $song->post->id;
         $song->type = $request->type;
         $song->theme_num = $request->theme_num;
+
+        //dd($song->song->song_romaji);
 
         $tag = $request->season . ' ' . $request->year;
 
@@ -203,7 +205,8 @@ class SongController extends Controller
         }
         return view('admin.songs.manage', compact('post'));
     }
-    public function SeasonsYears($tags){
+    public function SeasonsYears($tags)
+    {
         $tagNames = [];
         $tagYears = [];
 
@@ -227,5 +230,14 @@ class SongController extends Controller
         ];
         return $data;
     }
-    
+
+    public function decodeUnicodeIfNeeded($string)
+    {
+        // Validar si la cadena contiene secuencias Unicode (\uXXXX)
+        if (preg_match('/\\\u[0-9a-fA-F]{4}/', $string)) {
+            // Decodificar secuencias Unicode.
+            return json_decode('"' . $string . '"');
+        }
+        return $string;
+    }
 }

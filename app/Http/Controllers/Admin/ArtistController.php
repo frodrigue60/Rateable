@@ -234,9 +234,9 @@ class ArtistController extends Controller
     {
         $artist = Artist::find($id);
 
-        DB::table('songs')
+        DB::table('artist_song')
             ->where('artist_id', $artist->id)
-            ->update(['artist_id' => null]);
+            ->delete();
 
         $artist->delete();
 

@@ -2,7 +2,10 @@
 @section('meta')
     @php
         $title = $song_variant->song->post->title;
-        $suffix = $song_variant->song->suffix != null ? $song_variant->song->suffix : $song_variant->song->type . ' v' . $song_variant->version;
+        $suffix =
+            $song_variant->song->suffix != null
+                ? $song_variant->song->suffix
+                : $song_variant->song->type . ' v' . $song_variant->version;
         $artist_names = [];
         $artist_names = [];
         $artists_string = null;
@@ -40,7 +43,10 @@
             $views = $song_variant->views;
         }
         $showPostRoute = route('post.show', [$song_variant->song->post->id, $song_variant->song->post->slug]);
-        $forward_text = ($song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type) . ' v' . $song_variant->version;
+        $forward_text =
+            ($song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type) .
+            ' v' .
+            $song_variant->version;
         $score_string = '';
         if (Auth::User()) {
             switch (Auth::User()->score_format) {
@@ -269,24 +275,24 @@
                                     @case('POINT_5')
                                         <span class="align-self-start">Rate</span>
                                         <div class="stars align-self-start">
-                                            <input class="star star-5" id="star-5" type="radio" name="score"
-                                                value="100" {{ $user_score == 100 ? 'checked' : '' }}/>
+                                            <input class="star star-5" id="star-5" type="radio" name="score" value="100"
+                                                {{ $user_score == 100 ? 'checked' : '' }} />
                                             <label class="star star-5" for="star-5"></label>
 
-                                            <input class="star star-4" id="star-4" type="radio" name="score"
-                                                value="80" {{ $user_score == 80 ? 'checked' : '' }}/>
+                                            <input class="star star-4" id="star-4" type="radio" name="score" value="80"
+                                                {{ $user_score == 80 ? 'checked' : '' }} />
                                             <label class="star star-4" for="star-4"></label>
 
-                                            <input class="star star-3" id="star-3" type="radio" name="score"
-                                                value="60" {{ $user_score == 60 ? 'checked' : '' }}/>
+                                            <input class="star star-3" id="star-3" type="radio" name="score" value="60"
+                                                {{ $user_score == 60 ? 'checked' : '' }} />
                                             <label class="star star-3" for="star-3"></label>
 
-                                            <input class="star star-2" id="star-2" type="radio" name="score"
-                                                value="40" {{ $user_score == 40 ? 'checked' : '' }}/>
+                                            <input class="star star-2" id="star-2" type="radio" name="score" value="40"
+                                                {{ $user_score == 40 ? 'checked' : '' }} />
                                             <label class="star star-2" for="star-2"></label>
 
-                                            <input class="star star-1" id="star-1" type="radio" name="score"
-                                                value="20" {{ $user_score == 20 ? 'checked' : '' }}/>
+                                            <input class="star star-1" id="star-1" type="radio" name="score" value="20"
+                                                {{ $user_score == 20 ? 'checked' : '' }} />
                                             <label class="star star-1" for="star-1"></label>
                                         </div>
                                     @break
@@ -323,223 +329,231 @@
                 </div>
             </div>
         @endauth
-        <h4 class="text-light my-2">Featured comments</h4>
-        @isset($comments_featured)
-            @foreach ($comments_featured as $comment)
-                @php
-                    $user_pp_url = '';
 
-                    if (isset($comment->user->image)) {
-                        $user_pp_url = $comment->user->image;
-                    } else {
-                        $user_pp_url = asset('/storage/profile/' . 'default.jpg');
-                    }
+        @if (($comments_featured != null) && (count($comments_featured) > 0))
+            <div class="my-2">
+                <h4 class="text-light my-2">Featured comments</h4>
+                @foreach ($comments_featured as $comment)
+                    @php
+                        $user_pp_url = '';
 
-                @endphp
-                <div class="py-2">
-                    <div class="comment-container">
-                        <div class="profile-pic-container">
-                            {{-- @if (isset($comment->user->image))
+                        if (isset($comment->user->image)) {
+                            $user_pp_url = $comment->user->image;
+                        } else {
+                            $user_pp_url = asset('/storage/profile/' . 'default.jpg');
+                        }
+
+                    @endphp
+                    <div class="py-2">
+                        <div class="comment-container">
+                            <div class="profile-pic-container">
+                                {{-- @if (isset($comment->user->image))
                                 <img class="user-profile-pic" src="{{ asset('/storage/profile/' . $comment->user->image) }}"
                                     alt="">
                             @else
                                 <img class="user-profile-pic" src="{{ asset('/storage/profile/' . 'default.jpg') }}"
                                     alt="">
                             @endif --}}
-                            <img class="user-profile-pic" src="{{ $user_pp_url }}" alt="User profile pic">
-                        </div>
-                        <div class="comment-details">
-                            <div>
-                                <div class="user-details">
-                                    <div style="display: flex; gap: 10px;">
-                                        <div class="user-name">
-                                            <a class="no-deco text-light"
-                                                href="{{ route('user.list', $comment->user->id) }}">{{ $comment->user->name }}</a>
+                                <img class="user-profile-pic" src="{{ $user_pp_url }}" alt="User profile pic">
+                            </div>
+                            <div class="comment-details">
+                                <div>
+                                    <div class="user-details">
+                                        <div style="display: flex; gap: 10px;">
+                                            <div class="user-name">
+                                                <a class="no-deco text-light"
+                                                    href="{{ route('user.list', $comment->user->id) }}">{{ $comment->user->name }}</a>
+                                            </div>
+                                            <div class="user-score">
+                                                @switch($comment->rating)
+                                                    @case($comment->rating <= 20)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 20 && $comment->rating <= 40)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 40 && $comment->rating <= 60)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 60 && $comment->rating <= 80)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    @break
+
+                                                    @case($comment->rating >= 80)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                    @break
+
+                                                    @default
+                                                @endswitch
+
+                                            </div>
                                         </div>
-                                        <div class="user-score">
-                                            @switch($comment->rating)
-                                                @case($comment->rating <= 20)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                @break
-
-                                                @case($comment->rating > 20 && $comment->rating <= 40)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                @break
-
-                                                @case($comment->rating > 40 && $comment->rating <= 60)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                @break
-
-                                                @case($comment->rating > 60 && $comment->rating <= 80)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                @break
-
-                                                @case($comment->rating >= 80)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                @break
-
-                                                @default
-                                            @endswitch
-
+                                        <div class="like-buttons">
+                                            @if ($comment->liked())
+                                                <form action="{{ route('comment.unlike', $comment->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    <button class="no-deco text-light"
+                                                        style="background-color: transparent;border:none;">{{ $comment->likeCount }}
+                                                        <i class="fa-solid fa-thumbs-up"></i></button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('comment.like', $comment->id) }}" method="post">
+                                                    @csrf
+                                                    <button class="no-deco text-light"
+                                                        style="background-color: transparent;border:none;">{{ $comment->likeCount }}
+                                                        <i class="fa-regular fa-thumbs-up"></i></button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="like-buttons">
-                                        @if ($comment->liked())
-                                            <form action="{{ route('comment.unlike', $comment->id) }}" method="post">
-                                                @csrf
-                                                <button class="no-deco text-light"
-                                                    style="background-color: transparent;border:none;">{{ $comment->likeCount }}
-                                                    <i class="fa-solid fa-thumbs-up"></i></button>
-                                            </form>
-                                        @else
-                                            <form action="{{ route('comment.like', $comment->id) }}" method="post">
-                                                @csrf
-                                                <button class="no-deco text-light"
-                                                    style="background-color: transparent;border:none;">{{ $comment->likeCount }}
-                                                    <i class="fa-regular fa-thumbs-up"></i></button>
-                                            </form>
-                                        @endif
+                                    <div class="date">
+                                        <span>{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
+                                        </span>
                                     </div>
-                                </div>
-                                <div class="date">
-                                    <span>{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
-                                    </span>
-                                </div>
-                                <div class="comment-content">
-                                    <span>{{ $comment->comment }}</span>
+                                    <div class="comment-content">
+                                        <span>{{ $comment->comment }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                </div>
-            @endforeach
-        @endisset
-        <h4 class="text-light my-2">Recents comments</h4>
-        @isset($comments)
-            @foreach ($comments as $comment)
-                @php
-                    $user_pp_url = '';
+                @endforeach
+            </div>
+        @endif
 
-                    if (isset($comment->user->image)) {
-                        $user_pp_url = $comment->user->image;
-                    } else {
-                        $user_pp_url = asset('/storage/profile/' . 'default.jpg');
-                    }
+        @if (($comments != null) && (count($comments) > 0))
+            <div class="my-2">
+                <h4 class="text-light my-2">Recents comments</h4>
+                @foreach ($comments as $comment)
+                    @php
+                        $user_pp_url = '';
 
-                @endphp
-                <div class="py-2">
-                    <div class="comment-container">
-                        <div class="profile-pic-container">
-                            <img class="user-profile-pic" src="{{ $user_pp_url }}" alt="User profile pic">
-                        </div>
-                        <div class="comment-details">
-                            <div>
-                                <div class="user-details">
-                                    <div style="display: flex; gap: 10px;">
-                                        <div class="user-name">
-                                            <a class="no-deco text-light"
-                                                href="{{ route('user.list', $comment->user->id) }}">{{ $comment->user->name }}</a>
+                        if (isset($comment->user->image)) {
+                            $user_pp_url = $comment->user->image;
+                        } else {
+                            $user_pp_url = asset('/storage/profile/' . 'default.jpg');
+                        }
+
+                    @endphp
+                    <div class="py-2">
+                        <div class="comment-container">
+                            <div class="profile-pic-container">
+                                <img class="user-profile-pic" src="{{ $user_pp_url }}" alt="User profile pic">
+                            </div>
+                            <div class="comment-details">
+                                <div>
+                                    <div class="user-details">
+                                        <div style="display: flex; gap: 10px;">
+                                            <div class="user-name">
+                                                <a class="no-deco text-light"
+                                                    href="{{ route('user.list', $comment->user->id) }}">{{ $comment->user->name }}</a>
+                                            </div>
+                                            <div class="user-score">
+                                                @switch($comment->rating)
+                                                    @case($comment->rating <= 20)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 20 && $comment->rating <= 40)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 40 && $comment->rating <= 60)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    @break
+
+                                                    @case($comment->rating > 60 && $comment->rating <= 80)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-regular fa-star"></i>
+                                                    @break
+
+                                                    @case($comment->rating >= 80)
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                    @break
+
+                                                    @default
+                                                @endswitch
+
+                                            </div>
                                         </div>
-                                        <div class="user-score">
-                                            @switch($comment->rating)
-                                                @case($comment->rating <= 20)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                @break
-
-                                                @case($comment->rating > 20 && $comment->rating <= 40)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                @break
-
-                                                @case($comment->rating > 40 && $comment->rating <= 60)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                @break
-
-                                                @case($comment->rating > 60 && $comment->rating <= 80)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-regular fa-star"></i>
-                                                @break
-
-                                                @case($comment->rating >= 80)
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                    <i class="fa-solid fa-star"></i>
-                                                @break
-
-                                                @default
-                                            @endswitch
-
+                                        <div class="like-buttons">
+                                            @if ($comment->liked())
+                                                <form action="{{ route('comment.unlike', $comment->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    <button class="no-deco text-light"
+                                                        style="background-color: transparent;border:none;">{{ $comment->likeCount }}
+                                                        <i class="fa-solid fa-thumbs-up"></i></button>
+                                                </form>
+                                            @else
+                                                <form action="{{ route('comment.like', $comment->id) }}" method="post">
+                                                    @csrf
+                                                    <button class="no-deco text-light"
+                                                        style="background-color: transparent;border:none;">{{ $comment->likeCount }}
+                                                        <i class="fa-regular fa-thumbs-up"></i></button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </div>
-                                    <div class="like-buttons">
-                                        @if ($comment->liked())
-                                            <form action="{{ route('comment.unlike', $comment->id) }}" method="post">
-                                                @csrf
-                                                <button class="no-deco text-light"
-                                                    style="background-color: transparent;border:none;">{{ $comment->likeCount }}
-                                                    <i class="fa-solid fa-thumbs-up"></i></button>
-                                            </form>
-                                        @else
-                                            <form action="{{ route('comment.like', $comment->id) }}" method="post">
-                                                @csrf
-                                                <button class="no-deco text-light"
-                                                    style="background-color: transparent;border:none;">{{ $comment->likeCount }}
-                                                    <i class="fa-regular fa-thumbs-up"></i></button>
-                                            </form>
-                                        @endif
+                                    <div class="date">
+                                        <span>{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
+                                        </span>
                                     </div>
-                                </div>
-                                <div class="date">
-                                    <span>{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
-                                    </span>
-                                </div>
-                                <div class="comment-content">
-                                    <span>{{ $comment->comment }}</span>
+                                    <div class="comment-content">
+                                        <span>{{ $comment->comment }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
-                </div>
-            @endforeach
-        @endisset
+                @endforeach
+            </div>
+        @endif
     </div>
 
     @section('script')

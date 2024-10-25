@@ -119,7 +119,7 @@ class VideoController extends Controller
                 if ($video->type === "file") {
                     $request->video->storeAs($path, $file_name, 'public');
                 }
-                return redirect(route('admin.videos.index', $video->song->id))->with('success', 'saved successfully');
+                return redirect(route('song.post.manage', $video->song->post->id))->with('success', 'saved successfully');
             }
         } catch (ModelNotFoundException $e) {
             return redirect(route('admin.videos.index', $video->song->id))->with('error', $e);

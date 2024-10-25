@@ -4,11 +4,11 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
 
-        <style>
-            .mult-select-tag ul li {
-                color: black;
-            }
-        </style>
+    <style>
+        .mult-select-tag ul li {
+            color: black;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -49,7 +49,12 @@
                                 <select class="form-select" multiple name="artist_id[]" id="ArtistId">
                                     <option value="">Select a artist</option>
                                     @foreach ($artists as $artist)
-                                        <option {{ old('artist_id') == $artist->id ? 'selected' : '' }}
+                                        @php
+                                            $selectedArtistIds = $song->artists->pluck('id')->toArray();
+
+                                        @endphp
+                                        <option
+                                            {{ old('artist_id') == $artist->id || in_array($artist->id, $selectedArtistIds) ? 'selected' : '' }}
                                             value="{{ $artist->id }}">{{ $artist->name }}</option>
                                     @endforeach
                                 </select>
