@@ -19,7 +19,8 @@ use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-
+use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Client;
 
 class PostController extends Controller
 {
@@ -196,7 +197,7 @@ class PostController extends Controller
                     break;
             }
 
-            $this->storePostImages($post,$request);
+            $this->storePostImages($post, $request);
 
             if ($post->update()) {
                 $tags = $request->tags;
@@ -224,17 +225,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
 
-        if ($post->songs != null) {
-            $songs = $post->songs;
-            foreach ($songs as $song) {
-                Song::find($song->id)->delete();
-            }
-        }
-
         if ($post->delete()) {
-            Storage::disk('public')->delete('/thumbnails/' . $post->thumbnail);
-            Storage::disk('public')->delete('/anime_banner/' . $post->banner);
-
             return Redirect::route('admin.post.index')->with('success', 'Post Deleted successfully!');
         } else {
             return Redirect::route('admin.post.index')->with('error', 'Post has been not deleted!');
@@ -346,7 +337,7 @@ class PostController extends Controller
 
         $data[] = $json->data->Media;
         $this->generateMassive($data);
-        $success = 'Posts created successfully';
+        $success = 'Single post created successfully';
         return redirect(route('admin.post.index'))->with('success', $success);
     }
     public function getSeasonalAnimes(Request $request)
@@ -435,10 +426,11 @@ class PostController extends Controller
             $post->anilist_id = $item->id;
             $post->status = 'published';
 
+            $this->saveAnimeBanner($item, $post);
+            $this->saveAnimeThumbnail($item, $post);
+
             if ($post->save()) {
                 $post->tag($tag);
-                $this->saveAnimeBanner($item, $post);
-                $this->saveAnimeThumbnail($item, $post);
             }
         }
     }
@@ -451,14 +443,24 @@ class PostController extends Controller
     {
         $posts = Post::all();
         foreach ($posts as $post) {
-            $post->delete();
             $post->untag();
-            $thumbnail = $post->thumbnail;
-            $banner = $post->banner;
-
-            Storage::disk('public')->delete('/thumbnails/' . $thumbnail);
-            Storage::disk('public')->delete('/anime_banner/' . $banner);
+            $post->delete();
+            //Storage::disk('public')->delete('/thumbnails/' . $thumbnail);
+            //Storage::disk('public')->delete('/anime_banner/' . $banner);
         }
+
+        $thumbnail_files = Storage::disk('public')->files('thumbnails');
+        Storage::disk('public')->delete($thumbnail_files);
+
+        $banner_files = Storage::disk('public')->files('anime_banner');
+        Storage::disk('public')->delete($banner_files);
+
+        /*  $opening_files = Storage::disk('public')->files('videos/openings');
+        Storage::disk('public')->delete($opening_files); */
+
+        /* $ending_files = Storage::disk('public')->files('videos/endings');
+        Storage::disk('public')->delete($ending_files); */
+
         DB::table('likeable_likes')->delete();
         DB::table('likeable_like_counters')->delete();
         DB::table('ratings')->delete();
@@ -579,57 +581,62 @@ class PostController extends Controller
         ';
         return $query;
     }
+    /* Used by generateMassive Method 
+     *
+     */
     function saveAnimeThumbnail($item, $post)
     {
         if ($item->coverImage->extraLarge != null) {
-            if (extension_loaded('gd')) {
-                $image_file_data = file_get_contents($item->coverImage->extraLarge);
-                $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
-                $file_name = Str::slug($post->slug) . '-' . time() . '.webp';
-                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-            } else {
-                $image_file_data = file_get_contents($item->coverImage->extraLarge);
-                /* $extension = pathinfo($image_file_data, PATHINFO_EXTENSION); */
-                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'png';
-                Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
-            }
+            $client = new Client();
+            $response = $client->get($item->coverImage->extraLarge);
+            $imageContent = $response->getBody()->getContents();
 
-            $post->thumbnail = $file_name;
+            if (extension_loaded('gd')) {
+                $imageContent = Image::make($imageContent)->encode('webp', 100); //->resize(150, 212)
+                $file_name = Str::slug($post->slug) . '-' . time() . '.webp';
+            } else {
+                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'png';
+            }
+            $path = 'thumbnails/' . $file_name;
+            $this->storeSingleImage($path, $imageContent);
+            $post->thumbnail = $path;
             $post->thumbnail_src = $item->coverImage->extraLarge;
-        } else {
-            $post->thumbnail = null;
-            $post->thumbnail_src = null;
         }
-        $post->update();
+        return $post;
     }
+    /* Used by generateMassive Method 
+     *
+     */
     function saveAnimeBanner($item, $post)
     {
         if ($item->bannerImage != null) {
 
-            if (extension_loaded('gd')) {
-                $banner_file_data = file_get_contents($item->bannerImage);
-                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
-                $encoded = Image::make($banner_file_data)->encode('webp', 100); //->resize(150, 212)
-                Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
-            } else {
-                $banner_file_data = file_get_contents($item->bannerImage);
-                /* $extension = pathinfo($banner_file_data, PATHINFO_EXTENSION); */
-                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'png';
-                Storage::disk('public')->put('/anime_banner/' . $file_name, $banner_file_data);
-            }
+            $client = new Client();
+            $response = $client->get($item->bannerImage);
+            $imageContent = $response->getBody()->getContents();
 
-            $post->banner = $file_name;
+            if (extension_loaded('gd')) {
+                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'webp';
+                $imageContent = Image::make($imageContent)->encode('webp', 100); //->resize(150, 212)
+            } else {
+                $file_name = Str::slug($post->slug) . '-' . time() . '.' . 'png';
+            }
+            $path = 'anime_banner/' . $file_name;
+            $this->storeSingleImage($path, $imageContent);
+            $post->banner = $path;
             $post->banner_src = $item->bannerImage;
-        } else {
-            $post->banner = null;
-            $post->banner_src = null;
         }
-        $post->update();
+        return $post;
     }
 
-    public function storePostImages($post, $request) {
-
+    /* Used by Store and Update Method 
+     *
+     */
+    public function storePostImages($post, $request)
+    {
+        /* Thumnail with file store */
         if ($request->hasFile('file')) {
+
             $validator = Validator::make($request->all(), [
                 'file' => 'mimes:png,jpg,jpeg,webp|max:2048'
             ]);
@@ -640,44 +647,57 @@ class PostController extends Controller
                 return Redirect::back()
                     ->with('error', $errors);
             }
+
+            $imageContent = $request->file;
+
             if (extension_loaded('gd')) {
                 $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
-                $encoded = Image::make($request->file)->encode('webp', 100); //->resize(150, 212)
-                Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-                //$request->file->storeAs('thumbnails', $file_name, 'public');
-                $post->thumbnail = $file_name;
-                $post->thumbnail_src = null;
+                $imageContent = Image::make($request->file)->encode('webp', 100);
             } else {
                 $file_extension = $request->file->extension();
                 $file_name = Str::slug($request->title) . '-' . time() . '.' . $file_extension;
-                Storage::disk('public')->put('/thumbnails/' . $file_name, $request->file);
-                $post->thumbnail = $file_name;
-                $post->thumbnail_src = null;
             }
+            $path = 'thumbnails/' . $file_name;
+            $this->storeSingleImage($path, $imageContent);
+            $post->thumbnail = $path;
         } else {
+            /* Thumbnail witn url store */
             if ($request->thumbnail_src != null) {
+
+                $post->thumbnail_src = $request->thumbnail_src;
+
+                $client = new Client();
+                $response = $client->get($request->thumbnail_src);
+                $imageContent = $response->getBody()->getContents();
+
                 if (extension_loaded('gd')) {
-                    $image_file_data = file_get_contents($request->thumbnail_src);
                     $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
-                    $encoded = Image::make($image_file_data)->encode('webp', 100); //->resize(150, 212)
-                    Storage::disk('public')->put('/thumbnails/' . $file_name, $encoded);
-
-                    $post->thumbnail = $file_name;
-                    $post->thumbnail_src = $request->thumbnail_src;
+                    $imageContent = Image::make($imageContent)->encode('webp', 100);
                 } else {
-                    $image_file_data = file_get_contents($request->thumbnail_src);
-                    $extension = pathinfo($image_file_data, PATHINFO_EXTENSION);
-                    $file_name = Str::slug($request->title) . '-' . time() . '.' . $extension;
-                    Storage::disk('public')->put('/thumbnails/' . $file_name, $image_file_data);
+                    $headers = $response->getHeaders();
+                    $contentType = $headers['Content-Type'][0] ?? null;
 
-                    $post->thumbnail = $file_name;
-                    $post->thumbnail_src = $request->thumbnail_src;
+                    $extension = match ($contentType) {
+                        'image/jpeg' => 'jpg',
+                        'image/png'  => 'png',
+                        'image/gif'  => 'gif',
+                        'image/webp' => 'webp',
+                        default      => 'bin',
+                    };
+
+                    $file_name = Str::slug($request->title) . '-' . time() . '.' . $extension;
                 }
+
+                $path = 'thumbnails/' . $file_name;
+                $this->storeSingleImage($path, $imageContent);
+                $post->thumbnail = $path;
             } else {
                 $request->flash();
-                return Redirect::back()->with('error', "Post not created, images not founds");
+                return Redirect::back()->with('error', "Post not created, thumbnail image not found");
             }
         }
+
+        /* Banner with file store */
         if ($request->hasFile('banner')) {
             $validator = Validator::make($request->all(), [
                 'banner' => 'mimes:png,jpg,jpeg,webp|max:2048'
@@ -690,38 +710,54 @@ class PostController extends Controller
                     ->with('error', $errors);
             }
 
+            $imageContent = $request->banner;
+
             if (extension_loaded('gd')) {
                 $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
-                $post->banner = $file_name;
-                $encoded = Image::make($request->banner)->encode('webp', 100); //->resize(150, 212)
-                Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
+                $imageContent = Image::make($request->banner)->encode('webp', 100);
             } else {
-                $extension = pathinfo($request->banner, PATHINFO_EXTENSION);
+                $extension = $request->file->extension();
                 $file_name = Str::slug($request->title) . '-' . time() . '.' . $extension;
-                $post->banner = $file_name;
-                Storage::disk('public')->put('/anime_banner/' . $file_name, $request->banner);
             }
+            $path = 'anime_banner/' . $file_name;
+            $this->storeSingleImage($path, $imageContent);
+            $post->banner = $path;
         } else {
+            /* Bannter with url store */
             if ($request->banner_src != null) {
-                $banner_file_data = file_get_contents($request->banner_src);
+
+                $post->banner_src = $request->banner_src;
+
+                $client = new Client();
+                $response = $client->get($request->thumbnail_src);
+                $imageContent = $response->getBody()->getContents();
+
                 if (extension_loaded('gd')) {
                     $file_name = Str::slug($request->title) . '-' . time() . '.' . 'webp';
-                    $encoded = Image::make($banner_file_data)->encode('webp', 100); //->resize(150, 212)
-                    Storage::disk('public')->put('/anime_banner/' . $file_name, $encoded);
-                    $post->banner = $file_name;
-                    $post->banner_src = $request->banner_src;
+                    $imageContent = Image::make($imageContent)->encode('webp', 100);
                 } else {
-                    $extension = pathinfo($banner_file_data, PATHINFO_EXTENSION);
+                    $headers = $response->getHeaders();
+                    $contentType = $headers['Content-Type'][0] ?? null;
+                    $extension = match ($contentType) {
+                        'image/jpeg' => 'jpg',
+                        'image/png'  => 'png',
+                        'image/gif'  => 'gif',
+                        'image/webp' => 'webp',
+                        default      => 'bin', // Extensión por defecto si no se reconoce
+                    };
+
                     $file_name = Str::slug($request->title) . '-' . time() . '.' . $extension;
-                    Storage::disk('public')->put('/anime_banner/' . $file_name, $banner_file_data);
-                    $post->banner = $file_name;
-                    $post->banner_src = $request->banner_src;
                 }
-            } else {
-                $post->banner = null;
-                $post->banner_src = null;
+                $path = 'anime_banner/' . $file_name;
+                $this->storeSingleImage($path, $imageContent);
+                $post->banner = $path;
             }
         }
         return $post;
+    }
+
+    public function storeSingleImage($path, $imageContent)
+    {
+        Storage::disk('public')->put($path, $imageContent);
     }
 }

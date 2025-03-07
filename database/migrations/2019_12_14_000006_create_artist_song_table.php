@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('song_variants', function (Blueprint $table) {
+        Schema::create('artist_song', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('version')->default('1');
-            $table->unsignedBigInteger('song_id');
+            //$table->foreignId('artist_id')->constrained()->onDelete('cascade');
+            $table->foreignId('artist_id')->references('id')->on('artists')->onDelete('cascade');
+            //$table->foreignId('song_id')->constrained()->onDelete('cascade');
+            $table->foreignId('song_id')->references('id')->on('songs')->onDelete('cascade');
             $table->timestamps();
-        });
-
-        Schema::table('song_variants', function (Blueprint $table) {
-            $table->foreign('song_id')->references('id')->on('songs')->onDelete('cascade');
         });
     }
 
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('song_variants');
+        Schema::dropIfExists('artist_song');
     }
 };

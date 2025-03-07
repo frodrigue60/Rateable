@@ -105,39 +105,33 @@
         </div> --}}
         <div class="row justify-content-center">
             <div class="card-video card">
-                <div class="card-header" id="card-header">
-                    @php
-                        $i = 1;
-                    @endphp
-                    @foreach ($song_variant->videos as $video)
-                        <button type="button" class="btn btn-sm btn-primary" value="{{ $video->id }}">Option
-                            {{ $i++ }}</button>
-                    @endforeach
-                </div>
-                <div class="card-body p-0 ratio ratio-16x9" id="video_container">
-                    @if ($song_variant->videos->count() != 0)
-                        <h3 class="text-light d-flex align-items-center justify-content-center">Select an video option</h3>
+                @if ($song_variant->video)
+                    @if ($song_variant->video->type == 'file')
+                        @php
+                            $video_url = '';
+                            if ($song_variant->video->type == 'file') {
+                                $video_url = env('APP_URL') . Storage::url($song_variant->video->video_src);
+                            }
+                        @endphp
+                        <div class="card-body p-0" id="video_container">
+                            <video id="player" controls class="ratio-16x9" autoplay>
+                                <source src="{{ $video_url }}" type="video/webm" />
+                            </video>
+                        </div>
                     @else
-                        <h3 class="text-light d-flex align-items-center justify-content-center">Videos not found</h3>
+                        <div class="d-flex ratio-16x9 justify-content-center">
+                            {!! $song_variant->video->embed_code !!}
+                        </div>
                     @endif
-                </div>
+                @else
+                    <h3 class="text-light d-flex align-items-center justify-content-center">Videos not found</h3>
+                @endif
             </div>
 
         </div>
     </div>
 
     <div class="father-container ">
-        {{-- <div
-            style="background-color: #0e3d5f;
-                    border-bottom: #151C2E;margin: 10px 0px; border-radius: 5px;
-                    ">
-            <h3 class="mb-0 py-1 px-2 text-center text-light">
-                <a class="text-light text-decoration-none"
-                    href="{{ $showPostRoute }}">{{ $song_variant->song->post->title }}</a>
-                <span>{{ $song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type }}
-                    {{ 'v' . $song_variant->version }}</span>
-            </h3>
-        </div> --}}
         <div class="text-light my-2">
             <h1 style="font-size:2rem;"><a href="{{ $showPostRoute }}"
                     class="text-decoration-none text-light">{{ $song_variant->song->post->title }}
@@ -330,7 +324,7 @@
             </div>
         @endauth
 
-        @if (($comments_featured != null) && (count($comments_featured) > 0))
+        @if ($comments_featured != null && count($comments_featured) > 0)
             <div class="my-2">
                 <h4 class="text-light my-2">Featured comments</h4>
                 @foreach ($comments_featured as $comment)
@@ -446,7 +440,7 @@
             </div>
         @endif
 
-        @if (($comments != null) && (count($comments) > 0))
+        @if ($comments != null && count($comments) > 0)
             <div class="my-2">
                 <h4 class="text-light my-2">Recents comments</h4>
                 @foreach ($comments as $comment)
@@ -557,13 +551,16 @@
     </div>
 
     @section('script')
-        @if (config('app.env') === 'local')
+        {{-- @if (config('app.env') === 'local')
             @vite(['resources/js/api_get_video.js'])
         @else
             <script src="{{ asset('build/api_get_video.js') }}"></script>
-        @endif
+        @endif --}}
 
         <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
         <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+        <script>
+            const player = new Plyr('#player');
+        </script>
     @endsection
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
 {
@@ -49,6 +50,7 @@ class VideoController extends Controller
     {
         try {
             $video = Video::findOrFail($id);
+            $video->video_src = Storage::url($video->video_src);
             return response($video);
 
         } catch (\Throwable $th) {

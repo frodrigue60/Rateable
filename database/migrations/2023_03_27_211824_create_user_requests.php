@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('user_requests', function (Blueprint $table) {
             $table->id();
             $table->text('content');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('attended_by')->nullable();
+            //$table->unsignedBigInteger('user_id');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            //$table->unsignedBigInteger('attended_by')->nullable();
+            $table->foreignId('attended_by')->references('id')->on('users')->onDelete('cascade');
             $table->enum('status', ['pending', 'attended'])->default('pending');
             $table->timestamps();
         });

@@ -52,77 +52,79 @@ class VideoController extends Controller
      */
     public function store(Request $request, $song_id, $variant_id)
     {
-        $path = null;
-        $file_name = null;
+        $song = Song::find($song_id);
+        $songVariant = SongVariant::find($variant_id);
+        $video = Video::where('song_variant_id', $songVariant->id)->first();
+        //dd($song, $songVariant, $video);
 
-        try {
-            $song = Song::find($song_id);
+        if ($video) {
+            return redirect(route('song.post.manage', $song->post->id))->with('warning', 'Video already exist');
+        } else {
+            try {
+                $video = new Video();
+                //$video->song_id = $song->id;
 
-            $video = new Video();
-            $video->song_id = $song->id;
+                $video->song_variant_id = $variant_id;
 
-            $video->song_variant_id = $variant_id;
+                if ($request->hasFile('video')) {
+                    $validator = Validator::make($request->all(), [
+                        'video' => 'mimes:webm,mp4'
+                    ]);
 
-            if ($request->hasFile('video')) {
-                $validator = Validator::make($request->all(), [
-                    'video' => 'mimes:webm,mp4'
-                ]);
+                    if ($validator->fails()) {
+                        $errors = $validator->getMessageBag();
+                        $request->flash();
+                        return Redirect::back()->with('error', $errors);
+                    }
 
-                if ($validator->fails()) {
-                    $errors = $validator->getMessageBag();
-                    $request->flash();
-                    return Redirect::back()->with('error', $errors);
-                }
+                    $path = null;
+                    $file_name = null;
 
-                switch ($video->song->type) {
-                    case 'OP':
-                        $path = "videos/openings/";
-                        break;
+                    switch ($song->type) {
+                        case 'OP':
+                            $path = "videos/openings/";
+                            break;
 
-                    case 'OP':
-                        $path = "videos/endings/";
-                        break;
+                        case 'ED':
+                            $path = "videos/endings/";
+                            break;
 
-                    default:
-                        $path = "videos/";
-                        break;
-                }
-                /* if ($song->type == "OP") {
-                    $path = "videos/openings/";
+                        default:
+                            $path = "videos/";
+                            break;
+                    }
+
+                    $mimeType = $request->video->getMimeType();
+                    $extension = $this->getExtensionFromMimeType($mimeType);
+
+                    $file_name = $song->post->slug . '-' . strtolower($song->suffix) . '-' . time() . '.' . $extension;
+                    $video->video_src = $path . $file_name;
+
+                    $video->type = 'file';
                 } else {
-                    $path = "videos/endings/";
-                } */
-                $mimeType = $request->video->getMimeType();
-                $extension = $this->getExtensionFromMimeType($mimeType);
+                    $validator = Validator::make($request->all(), [
+                        'embed' => 'required'
+                    ]);
 
-                $file_name = $song->post->slug . '-' . strtolower($song->suffix) . '-' . time() . '.' . $extension;
-                $video->video_src = '/storage/' . $path . $file_name;
-                //Storage::disk('public')->put('/videos/',$file_name.$request->video);
-
-                $video->type = 'file';
-            } else {
-                $validator = Validator::make($request->all(), [
-                    'embed' => 'required'
-                ]);
-
-                if ($validator->fails()) {
-                    $errors = $validator->getMessageBag();
-                    $request->flash();
-                    return Redirect::back()->with('error', $errors);
+                    if ($validator->fails()) {
+                        $errors = $validator->getMessageBag();
+                        $request->flash();
+                        return Redirect::back()->with('error', $errors);
+                    }
+                    $video->embed_code = $request->embed;
+                    $video->type = 'embed';
                 }
-                $video->embed_code = $request->embed;
-                $video->video_src = null;
-                $video->type = 'embed';
-            }
-            //dd($video);
-            if ($video->save()) {
-                if ($video->type === "file") {
-                    $request->video->storeAs($path, $file_name, 'public');
+
+                if ($video->save()) {
+                    if ($video->type === "file") {
+                        //Storage::disk('public')->put($path,$file_name.$request->video);
+                        $request->video->storeAs($path, $file_name, 'public');
+                    }
+                    return redirect(route('song.post.manage', $song->post->id))->with('success', 'saved successfully');
                 }
-                return redirect(route('song.post.manage', $video->song->post->id))->with('success', 'saved successfully');
+            } catch (ModelNotFoundException $e) {
+                return redirect(route('song.post.manage', $song->post->id))->with('error', $e);
             }
-        } catch (ModelNotFoundException $e) {
-            return redirect(route('admin.videos.index', $video->song->id))->with('error', $e);
         }
     }
 
@@ -186,7 +188,7 @@ class VideoController extends Controller
                         $path = "videos/openings/";
                         break;
 
-                    case 'OP':
+                    case 'ED':
                         $path = "videos/endings/";
                         break;
 
@@ -194,14 +196,15 @@ class VideoController extends Controller
                         $path = "videos/";
                         break;
                 }
-                /* if ($video->song->type == "OP") {
-                    $path = "videos/openings/";
-                } else {
-                    $path = "videos/endings/";
-                } */
-                $file_name = $video->song->post->slug . '-' . strtolower($video->song->suffix) . '-' . time() . '.' . 'webm';
+
+                $old_file = $video->video_src;
+
+                $mimeType = $request->video->getMimeType();
+                $extension = $this->getExtensionFromMimeType($mimeType);
+
+                $file_name = $video->song->post->slug . '-' . strtolower($video->song->suffix) . '-' . time() . '.' . $extension;
                 $video->video_src = $path . $file_name;
-                //Storage::disk('public')->put('/videos/',$file_name.$request->video);
+
 
                 $video->type = 'file';
             } else {
@@ -218,19 +221,34 @@ class VideoController extends Controller
                 $video->video_src = null;
                 $video->type = 'embed';
             }
+            //dd($old_file);
+            $video->update();
 
-            if ($video->save()) {
-                if ($video->type === "file") {
-                    //$request->video->storeAs($path, $file_name, 'public');
+            switch ($video->type) {
+                case 'file':
+                    //Delete old video file
+                    //$filePath = str_replace('/storage', 'public', $old_file);
+                    if (isset($old_file) && Storage::disk('public')->exists($old_file)) {
+                        Storage::disk('public')->delete($old_file);
+                    }
 
-                    $videoPath = $request->file('video')->store('videos', 'public');
-                    // Despachar el job para procesar el video
-                    ProcessVideo::dispatch($videoPath);
-                }
-                return redirect(route('admin.videos.index', $video->song->id))->with('success', 'saved successfully');
+                    //Store new video file
+                    //Storage::disk('public')->put('$path',$file_name.$request->video);
+                    $request->video->storeAs($path, $file_name, 'public');
+
+                    return redirect(route('song.post.manage', $video->song->post->id))->with('success', 'saved successfully');
+                    break;
+
+                case 'embed':
+                    return redirect(route('song.post.manage', $video->song->post->id))->with('success', 'saved successfully');
+                    break;
+
+                default:
+                    return redirect(route('song.post.manage', $video->song->post->id))->with('warning', 'error saving video');
+                    break;
             }
         } catch (ModelNotFoundException $e) {
-            return redirect(route('admin.videos.index', $video->song->id))->with('error', $e);
+            return redirect(route('song.post.manage', $video->song->post->id))->with('error', $e);
         }
     }
 
@@ -242,15 +260,10 @@ class VideoController extends Controller
      */
     public function destroy($id)
     {
+        $video = Video::findOrFail($id);
         try {
-            $video = Video::findOrFail($id);
-
             if ($video->delete()) {
-                if ($video->type == "file") {
-                    Storage::disk('public')->delete($video->video_src);
-                }
-                return redirect(route('admin.videos.index', $video->song->id))
-                    ->with('success', 'Video ' . $video->id . ' deleted successfully');
+                return redirect(route('song.post.manage', $video->song->post->id))->with('success', 'item deleted successfully');
             }
         } catch (ModelNotFoundException $e) {
             return redirect(route('admin.videos.index', $video->song->id))
@@ -262,11 +275,13 @@ class VideoController extends Controller
     {
         $mimeMap = [
             'image/jpeg' => 'jpg',
+            'image/webp' => 'webp',
             'image/png' => 'png',
             'image/gif' => 'gif',
             'application/pdf' => 'pdf',
             'video/mp4' => 'mp4',
             'video/quicktime' => 'mov',
+            'video/webm' => 'webm',
             'audio/mpeg' => 'mp3',
             'audio/wav' => 'wav',
         ];

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use App\Models\SongVariant;
+use App\Models\Video;
 
 class SongVariantController extends Controller
 {
@@ -117,8 +118,10 @@ class SongVariantController extends Controller
     public function destroy($id)
     {
         $songVariant = SongVariant::find($id);
-
+        
         if ($songVariant->delete()) {
+            //$video = Video::where('song_variant_id', $songVariant->id)->first();
+            //$video->delete();
             return redirect(route('song.post.manage', $songVariant->song->post->id))->with('success', 'song variant added successfully');
         } else {
             return redirect(route('song.post.manage', $songVariant->song->post->id))->with('error', 'error');

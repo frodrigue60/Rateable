@@ -1,14 +1,13 @@
 @foreach ($posts as $post)
     @php
-    
-        $thumb_path = public_path('storage/thumbnails/'.$post->thumbnail);
 
-        if (file_exists($thumb_path)) {
-            $thumb_url =asset('storage/thumbnails/' . $post->thumbnail);
+        //$thumb_path = public_path('storage/thumbnails/'.$post->thumbnail);
+
+        if (Storage::disk('public')->exists($post->thumbnail)) {
+            $thumbnail_url = Storage::url($post->thumbnail);
         } else {
-            $thumb_url = $post->thumbnail_src;
+            $thumbnail_url = $post->thumbnail_src;
         }
-        
 
     @endphp
     <article class="tarjeta">
@@ -21,7 +20,7 @@
                 class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
         </div> --}}
             <a class="no-deco" target="blank_" href="{{ route('post.show', [$post->id, $post->slug]) }}">
-                <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $post->title }}"
+                <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $post->title }}"
                     title="{{ $post->title }}">
             </a>
             <div class="tarjeta-footer justify-content-center">

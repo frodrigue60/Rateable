@@ -180,7 +180,6 @@ class SongController extends Controller
     public function destroy($id)
     {
         $song = Song::find($id);
-        $old_video = $song->video_src;
         $song->artists()->detach();
         if ($song->delete()) {
             DB::table('ratings')
@@ -190,7 +189,7 @@ class SongController extends Controller
             DB::table('likeable_like_counters')
                 ->where('likeable_id', '=', $id)->delete();
 
-            Storage::disk('public')->delete('/videos/' . $old_video);
+            /* Storage::disk('public')->delete('/videos/' . $old_video); */
             return redirect()->back()->with('success', 'Song ' . $song->id . ' has been deleted');
         } else {
             return redirect()->back()->with('error', 'A error has been ocurred');

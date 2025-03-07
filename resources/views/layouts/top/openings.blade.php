@@ -6,14 +6,8 @@
         @php
             $img_url = null;
             if ($variant->song->post->banner != null) {
-                /* $img_url = file_exists(asset('/storage/anime_banner/' . $variant->song->post->banner))
-                    ? asset('/storage/anime_banner/' . $variant->song->post->banner)
-                    : $variant->song->post->banner_src; */
-
-                $img_path = public_path('storage/anime_banner/' . $variant->song->post->banner);
-
-                if (file_exists($img_path)) {
-                    $img_url = asset('storage/anime_banner/' . $variant->song->post->banner);
+                if (Storage::disk('public')->exists($variant->song->post->banner)) {
+                    $img_url = Storage::url($variant->song->post->banner);
                 }
             } else {
                 $img_url =
@@ -48,8 +42,7 @@
                         {{-- SONG TITLE --}}
                         <div class="text-ellipsis">
                             @if ($song_name != null)
-                                <a class="no-deco text-light bold"
-                                    href="{{ $showVariantRoute }}">{{ $song_name }} </a>
+                                <a class="no-deco text-light bold" href="{{ $showVariantRoute }}">{{ $song_name }} </a>
                             @else
                                 <strong>N/A</strong>
                             @endif

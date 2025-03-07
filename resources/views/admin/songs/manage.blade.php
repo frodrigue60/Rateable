@@ -26,7 +26,7 @@
                                 <th scope="col">Song Name</th>
                                 <th scope="col">Songs Artist</th>
                                 <th scope="col">Tags</th>
-                                <th scope="col">Videos</th>
+                                <th scope="col">Video ID</th>
                                 <th scope="col">Theme</th>
                                 <th scope="col">Options</th>
                             </tr>
@@ -65,8 +65,8 @@
                                         @endforeach
                                     </td>
                                     <td>
-                                        @if (isset($song->videos))
-                                            {{ count($song->videos) }}
+                                        @if (isset($song->video))
+                                            {{ count($song->video) }}
                                         @else
                                             "N/A"
                                         @endif
@@ -107,7 +107,7 @@
                                             </td>
                                             <td></td>
                                             <td></td>
-                                            <td>{{ $variant->videos->count() }}</td>
+                                            <td>{{ isset($variant->video->id) ? $variant->id : 'N/A' }}</td>
                                             <td>{{ $variant->song->suffix != '' ? $variant->song->suffix : $variant->song->type }}
                                                 {{ 'v' . $variant->version }}</td>
                                             <td>

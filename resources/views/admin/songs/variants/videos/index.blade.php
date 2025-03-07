@@ -15,11 +15,13 @@
                             } else {
                                 $song_type = $songVariant->song->suffix;
                             }
-                            
+
                         @endphp
-                        <h3>{{$songVariant->song->post->title}} {{$song_type}} {{'v'.$songVariant->version}}</h3>
+                        <h3>{{ $songVariant->song->post->title }} {{ $song_type }} {{ 'v' . $songVariant->version }}</h3>
                     </div>
-                    <a class="btn btn-primary btn-sm" href="{{route('variant.videos.create',[$songVariant->song->id,$songVariant->id])}}" role="button">ADD VIDEO</a>
+                    <a class="btn btn-primary btn-sm"
+                        href="{{ route('variant.videos.create', [$songVariant->song->id, $songVariant->id]) }}"
+                        role="button">ADD VIDEO</a>
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">
@@ -33,27 +35,31 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($songVariant->videos as $video)
-                            @php
-                                if ($video->type == "embed") {
-                                    $value = $video->embed_code;
-                                } else {
-                                    $value = $video->video_src;
-                                }
-                                
-                            @endphp
+                            @isset($songVariant->video)
+                                @php
+                                $video = $songVariant->video;
+                                    if ($video->type == 'embed') {
+                                        $value = $video->embed_code;
+                                    } else {
+                                        $value = $video->video_src;
+                                    }
+
+                                @endphp
                                 <tr>
-                                    <td>{{$video->id}}</td>
-                                    <td>{{$video->type}}</td>
-                                    <td>{{$value}}</td>
+                                    <td>{{ $video->id }}</td>
+                                    <td>{{ $video->type }}</td>
+                                    <td>{{ $value }}</td>
                                     <td>
-                                        <a class="btn btn-sm btn-success" href="{{route('admin.videos.edit',$video->id)}}"><i
+                                        <a class="btn btn-sm btn-success" href="{{ route('admin.videos.edit', $video->id) }}"><i
                                                 class="fa-solid fa-pencil"></i></a>
-                                        <a class="btn btn-sm btn-danger" href="{{route('admin.videos.destroy',$video->id)}}"><i
+                                        <a class="btn btn-sm btn-danger"
+                                            href="{{ route('admin.videos.destroy', $video->id) }}"><i
                                                 class="fa-solid fa-trash"></i></a>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @endisset
+
+
                         </tbody>
                     </table>
                 </div>

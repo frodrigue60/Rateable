@@ -11,6 +11,7 @@ use Conner\Likeable\Likeable;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Storage;
 
 class SongVariant extends Model
 {
@@ -24,6 +25,17 @@ class SongVariant extends Model
         'song_id',
         'views'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($songVariant) {
+            if ($songVariant->video->video_src != null && file_exists(public_path($songVariant->video->video_src))) {
+                Storage::disk('public')->delete($songVariant->video->video_src);
+            }
+        });
+    }
 
     public function comments()
     {
@@ -50,9 +62,9 @@ class SongVariant extends Model
         return $this->belongsTo(Song::class);
     }
 
-    public function videos()
+    public function video()
     {
-        return $this->hasMany(Video::class)->whereNotNull('song_variant_id');
+        return $this->hasOne(Video::class);
     }
 
     public function incrementViews()

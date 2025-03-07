@@ -1,5 +1,19 @@
 @extends('layouts.app')
 @section('meta')
+
+    @php
+        if ($post->thumbnail != null && Storage::disk('public')->exists($post->thumbnail)) {
+            $thumbnail_url = Storage::url($post->thumbnail);
+        } else {
+            $thumbnail_url = $post->thumbnail_src;
+        }
+
+        if ($post->banner != null && Storage::disk('public')->exists($post->banner)) {
+            $banner_url = Storage::url($post->banner);
+        } else {
+            $banner_url = $post->banner_src;
+        }
+    @endphp
     <title>
         {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
     <meta name="title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
@@ -48,8 +62,8 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="article:section" content="{{ $post->type == 'OP' ? 'Opening' : 'Ending' }}">
     {{-- <meta property="og:updated_time" content="2022-09-04T20:03:37-05:00"> --}}
-    <meta property="og:image" content="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="{{ $post->title }}">
-    <meta property="og:image:secure_url" content="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
+    <meta property="og:image" content="{{ $thumbnail_url }}" alt="{{ $post->title }}">
+    <meta property="og:image:secure_url" content="{{ $thumbnail_url }}"
         alt="{{ $post->title }}">
     <meta property="og:image:width" content="460">
     <meta property="og:image:height" content="650">
@@ -69,25 +83,10 @@
 @endsection
 @section('content')
     <div class="container text-light">
-        <p>
-            @php
-                if (file_exists(public_path('/storage/thumbnails/' . $post->thumbnail)) === true) {
-                    $thumbnail = asset('/storage/thumbnails/' . $post->thumbnail);
-                } else {
-                    $thumbnail = $post->thumbnail_src;
-                }
-
-                if (file_exists(public_path('/storage/anime_banner/' . $post->banner)) === true) {
-                    $banner = asset('/storage/anime_banner/' . $post->banner);
-                } else {
-                    $banner = $post->banner_src;
-                }
-            @endphp
-        </p>
-        <div class="banner-anime" style="background-image: url({{ $banner }});">
+        <div class="banner-anime" style="background-image: url({{ $banner_url }});">
             <div class="gradient"></div>
             <div class="post-info">
-                <img class="thumbnail-post" src="{{ $thumbnail }}" alt="">
+                <img class="thumbnail-post" src="{{ $thumbnail_url }}" alt="">
                 <div class="post-data-anime">
                     <div class="title-post">
                         <span>{{ $post->title }}</span>
@@ -141,7 +140,11 @@
                         @if ($openings->count() != null)
                             @foreach ($openings->sortBy('theme_num') as $song)
                                 @php
-                                    $songShowRoute = route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]);
+                                    $songShowRoute = route('song.show', [
+                                        $song->id,
+                                        $song->post->slug,
+                                        $song->suffix != null ? $song->suffix : $song->type,
+                                    ]);
                                     $songName = 'N/A';
                                     $themeSuffix = $song->suffix != null ? $song->suffix : $song->type;
                                     $songScore = $song->averageRating != null ? $song->averageRating / 1 : 'N/A';
@@ -173,7 +176,10 @@
                                                 <span class="pe-2"><i class="fa-solid fa-user"></i></span>
                                                 @foreach ($song->artists as $index => $item)
                                                     @php
-                                                        $artistShowRoute = route('artist.show', [$item->id, $item->name_slug]);
+                                                        $artistShowRoute = route('artist.show', [
+                                                            $item->id,
+                                                            $item->name_slug,
+                                                        ]);
                                                         if ($item->name_jp != null) {
                                                             $artistName = $item->name . ' (' . $item->name_jp . ')';
                                                         } else {
@@ -204,7 +210,12 @@
                                                         }
                                                         $version = $variant->version;
 
-                                                        $varianShowRoute = route('p.song.variant.show', [$song->id, $slug, $suffix, $version]);
+                                                        $varianShowRoute = route('p.song.variant.show', [
+                                                            $song->id,
+                                                            $slug,
+                                                            $suffix,
+                                                            $version,
+                                                        ]);
                                                     @endphp
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <a class="text-decoration-none text-light"
@@ -256,7 +267,11 @@
                         @if ($endings->count() != null)
                             @foreach ($endings->sortBy('theme_num') as $song)
                                 @php
-                                    $songShowRoute = route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]);
+                                    $songShowRoute = route('song.show', [
+                                        $song->id,
+                                        $song->post->slug,
+                                        $song->suffix != null ? $song->suffix : $song->type,
+                                    ]);
                                     $songName = 'N/A';
                                     $themeSuffix = $song->suffix != null ? $song->suffix : $song->type;
                                     $songScore = $song->averageRating != null ? $song->averageRating / 1 : 'N/A';
@@ -288,7 +303,10 @@
                                                 <span class="pe-2"><i class="fa-solid fa-user"></i></span>
                                                 @foreach ($song->artists as $index => $item)
                                                     @php
-                                                        $artistShowRoute = route('artist.show', [$item->id, $item->name_slug]);
+                                                        $artistShowRoute = route('artist.show', [
+                                                            $item->id,
+                                                            $item->name_slug,
+                                                        ]);
                                                         if ($item->name_jp != null) {
                                                             $artistName = $item->name . ' (' . $item->name_jp . ')';
                                                         } else {
@@ -319,7 +337,12 @@
                                                         }
                                                         $version = $variant->version;
 
-                                                        $varianShowRoute = route('p.song.variant.show', [$song->id, $slug, $suffix, $version]);
+                                                        $varianShowRoute = route('p.song.variant.show', [
+                                                            $song->id,
+                                                            $slug,
+                                                            $suffix,
+                                                            $version,
+                                                        ]);
                                                     @endphp
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <a class="text-decoration-none text-light"

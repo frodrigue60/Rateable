@@ -13,16 +13,14 @@
             $variant->song->post->slug,
             $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type,
         ]);
-        /* $thumb_url = file_exists(asset('/storage/thumbnails/' . $variant->song->post->thumbnail))
-            ? asset('/storage/thumbnails/' . $variant->song->post->thumbnail)
-            : $variant->song->post->thumbnail_src; */
 
-        $thumb_path = public_path('storage/thumbnails/' . $variant->song->post->thumbnail);
+        $post = $variant->song->post;
+        $thumbnail_url = '';
 
-        if (file_exists($thumb_path)) {
-            $thumb_url = asset('storage/thumbnails/' . $variant->song->post->thumbnail);
+        if (Storage::disk('public')->exists($post->thumbnail)) {
+            $thumbnail_url = Storage::url($post->thumbnail);
         } else {
-            $thumb_url = $variant->song->post->thumbnail_src;
+            $thumbnail_url = $post->thumbnail_src;
         }
 
         $title = $variant->song->post->title;
@@ -45,7 +43,7 @@
                 <span class="tag-content ">{{ $forward_text }}</span>
             </div>
             <a class="no-deco" href="{{ $showVariantRoute }}">
-                <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $title }}"
+                <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $title }}"
                     title="{{ $title }}">
             </a>
             <div class="tarjeta-footer text-light">

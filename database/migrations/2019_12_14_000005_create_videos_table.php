@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('artist_song', function (Blueprint $table) {
+        Schema::create('videos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('song_id');
-            $table->unsignedBigInteger('artist_id');
+            $table->text('embed_code')->nullable();
+            $table->text('video_src')->nullable();
+            $table->enum('type', ['embed', 'file'])->default('embed');
+            $table->foreignId('song_variant_id')->references('id')->on('song_variants')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('artist_song');
+        Schema::dropIfExists('videos');
     }
 };

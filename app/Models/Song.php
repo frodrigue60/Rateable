@@ -9,6 +9,7 @@ use Conner\Tagging\Taggable;
 use Conner\Likeable\Likeable;
 use App\Models\Post;
 use App\Models\SongVariant;
+use Illuminate\Support\Facades\Storage;
 
 class Song extends Model
 {
@@ -23,6 +24,35 @@ class Song extends Model
         'song_jp',
         'song_song_en',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($song) {
+            foreach ($song->songVariants as $variant) {
+                if ($variant->video->video_src != null && file_exists(public_path($variant->video->video_src))) {
+                    Storage::disk('public')->delete($variant->video->video_src);
+                }
+            }
+
+            $song->load('songVariants.video');
+
+            foreach ($song->songVariants as $variant) {
+                if ($variant->video) {
+                    $video = $variant->video;
+                    //Log::info("Intentando eliminar archivo: " . $video->video_src);
+
+                    if ($video->video_src != null && Storage::disk('public')->exists($video->video_src)) {
+                        Storage::disk('public')->delete($video->video_src);
+                        //Log::info("Archivo eliminado con éxito");
+                    } else {
+                        //Log::info("Archivo no eliminado - No existe en: " . $video->video_src);
+                    }
+                }
+            }
+        });
+    }
 
     public function post()
     {
