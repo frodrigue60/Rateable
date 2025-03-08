@@ -199,7 +199,7 @@ class PostController extends Controller
 
         if ($request->ajax()) {
             //error_log('new ajax request');
-            $view = view('layouts.posts-cards', compact('posts'))->render();
+            $view = view('layouts.post.cards', compact('posts'))->render();
             return response()->json(['html' => $view, "lastPage" => $posts->lastPage()]);
         }
 
@@ -1059,7 +1059,7 @@ class PostController extends Controller
 
         //dd($songs);
         if ($request->ajax()) {
-            $view = view('layouts.song-variant-cards', compact('song_variants'))->render();
+            $view = view('layouts.variant.cards', compact('song_variants'))->render();
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
         //dd($songs);
@@ -1285,7 +1285,7 @@ class PostController extends Controller
         //dd($song_variants);
 
         if ($request->ajax()) {
-            $view = view('layouts.song-variant-cards', compact('song_variants'))->render();
+            $view = view('layouts.variant.cards', compact('song_variants'))->render();
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
 

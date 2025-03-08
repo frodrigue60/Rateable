@@ -8,7 +8,7 @@
 
 @section('content')
     @if (Request::routeIs('profile'))
-        @include('layouts.userBanner')
+        @include('layouts.user.banner')
     @endif
     <div class="container">
         <div class="row justify-content-center">

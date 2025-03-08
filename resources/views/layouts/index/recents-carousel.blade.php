@@ -42,7 +42,7 @@
                         </div>
                     </article>
                 @endisset --}}
-                @include('layouts.song-variant-card')
+                @include('layouts.variant.card')
             @endforeach
         </div>
     </section>

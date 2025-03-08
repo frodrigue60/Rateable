@@ -61,29 +61,7 @@ class SongController extends Controller
         $song->type = $request->type;
 
         $tag = $request->season . ' ' . $request->year;
-        /* 
-        $song->ytlink = $request->ytlink;
-        $song->scndlink = $request->scndlink;
 
-        if ($request->hasFile('video')) {
-            $validator = Validator::make($request->all(), [
-                'video' => 'mimes:webm'
-            ]);
-
-            if ($validator->fails()) {
-                $errors = $validator->getMessageBag();
-                $request->flash();
-                return Redirect::back()
-                    ->with('error', $errors);
-            }
-            $post = Post::find($request->post_id);
-            $file_name = $post->slug . '-' . time() . '.' . 'webm';
-            $song->video_src = $file_name;
-            //Storage::disk('public')->put('/videos/',$file_name.$request->video);
-            $request->video->storeAs('videos', $file_name, 'public');
-        } else {
-            $song->video_src = null;
-        } */
 
         if ($request->theme_num >= 1) {
             $song->suffix = $song->type . $request->theme_num;

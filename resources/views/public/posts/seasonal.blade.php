@@ -76,7 +76,7 @@
 
                 <section class="contenedor-tarjetas mt-2">
                     @isset($song_variants)
-                        @include('layouts.song-variant-cards')
+                        @include('layouts.variant.cards')
                     @endisset
                 </section>
             </section>
