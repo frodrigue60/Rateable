@@ -349,7 +349,7 @@
                                                             href="{{ $varianShowRoute }}"><span>Version
                                                                 {{ $variant->version }}</span></a>
                                                         <div class="d-flex flex-row align-items-center gap-4">
-                                                            <div class="">
+                                                            <div>
                                                                 @if (isset($variant->score))
                                                                     <span>{{ $variant->score }} <i
                                                                             class="fa-solid fa-star"></i></span>
