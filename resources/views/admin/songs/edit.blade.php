@@ -45,8 +45,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md mb-3">
-                                <label for="ArtistId" class="form-label">Artist</label>
-                                <select class="form-select" multiple name="artist_id[]" id="ArtistId">
+                                <label for="artists-select" class="form-label">Artist</label>
+                                <select class="form-select" multiple name="artists[]" id="artists-select">
                                     <option value="">Select a artist</option>
                                     @foreach ($artists as $artist)
                                         @php
@@ -116,7 +116,7 @@
         <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
 
         <script>
-            new MultiSelectTag('ArtistId');
+            new MultiSelectTag('artists-select');
         </script>
     @endsection
 </div>

@@ -53,17 +53,17 @@ class SongController extends Controller
      */
     public function store(Request $request, $post_id)
     {
+        //dd($request->all());
         $song = new Song();
         $song->song_romaji = $request->song_romaji;
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
         $song->post_id = $post_id;
         $song->type = $request->type;
-
         $tag = $request->season . ' ' . $request->year;
 
 
-        if ($request->theme_num >= 1) {
+        if ($request->theme_num != null) {
             $song->suffix = $song->type . $request->theme_num;
             $song->theme_num = $request->theme_num;
         } else {
@@ -71,7 +71,7 @@ class SongController extends Controller
         }
 
         if ($song->save()) {
-            $song->artists()->sync($request->artist_id);
+            $song->artists()->sync($request->artists);
             $song->tag($tag);
             return redirect(route('song.post.manage', $post_id))->with('success', 'song added successfully');
         } else {
@@ -141,7 +141,7 @@ class SongController extends Controller
         }
 
         if ($song->update()) {
-            $song->artists()->sync($request->artist_id);
+            $song->artists()->sync($request->artists);
             $song->tag($tag);
             return redirect(route('song.post.manage', $song->post_id))->with('success', 'Song updated success');
         } else {

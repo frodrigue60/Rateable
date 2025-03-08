@@ -18,11 +18,9 @@ return new class extends Migration
             $table->string('song_romaji')->nullable();
             $table->string('song_jp')->nullable();
             $table->string('song_en')->nullable();
-            //$table->unsignedBigInteger('post_id');
             $table->string('theme_num')->nullable();
             $table->enum('type', ['OP', 'ED'])->default('OP');
             $table->string('suffix')->nullable();
-            //$table->bigInteger('view_count')->default(0);
             $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
             $table->timestamps();
         });
