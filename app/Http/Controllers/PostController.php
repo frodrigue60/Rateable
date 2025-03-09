@@ -213,7 +213,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $slug)
+    public function show($anilist_id, $slug)
     {
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
@@ -221,10 +221,10 @@ class PostController extends Controller
             $score_format = null;
         }
 
-        $post = Post::with('songs')->find($id);
+        $post = Post::with('songs')->where('anilist_id', $anilist_id)->where('slug', $slug)->first();
 
         if ($post == null) {
-            return redirect(route('/'))->with('warning','Item has been deleted!');
+            return redirect(route('/'))->with('warning','Item do not exist!');
         }
 
         $openings = $post->songs->filter(function ($song) {

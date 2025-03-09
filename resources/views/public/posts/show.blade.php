@@ -130,7 +130,7 @@
             @endif
         @endauth
 
-        <div class="container text-light mt-2 container-songs">
+        <div class="container text-light mt-2 container-songs gap-4">
             <div class="themes">
                 <div>
                     <h3>Openings</h3>
@@ -140,11 +140,6 @@
                         @if ($openings->count() != null)
                             @foreach ($openings->sortBy('theme_num') as $song)
                                 @php
-                                    $songShowRoute = route('song.show', [
-                                        $song->id,
-                                        $song->post->slug,
-                                        $song->slug != null ? $song->slug : $song->type,
-                                    ]);
                                     $songName = 'N/A';
                                     $themeSuffix = $song->slug != null ? $song->slug : $song->type;
                                     $songScore = $song->averageRating != null ? $song->averageRating / 1 : 'N/A';
@@ -226,7 +221,7 @@
                                                             </div>
                                                             <div>
                                                                 <a class="btn btn-sm btn-primary rounded-4"
-                                                                    href="{{ $varianShowRoute }}">{{ 'Show' }}
+                                                                    href="{{ $variant->url }}">{{ 'Show' }}
                                                                     <i class="fa-solid fa-play"></i></a>
                                                             </div>
                                                         </div>
@@ -261,11 +256,6 @@
                         @if ($endings->count() != null)
                             @foreach ($endings->sortBy('theme_num') as $song)
                                 @php
-                                    $songShowRoute = route('song.show', [
-                                        $song->id,
-                                        $song->post->slug,
-                                        $song->slug != null ? $song->slug : $song->type,
-                                    ]);
                                     $songName = 'N/A';
                                     $themeSuffix = $song->slug != null ? $song->slug : $song->type;
                                     $songScore = $song->averageRating != null ? $song->averageRating / 1 : 'N/A';
@@ -347,7 +337,7 @@
                                                             </div>
                                                             <div>
                                                                 <a class="btn btn-sm btn-primary rounded-4"
-                                                                    href="{{ $varianShowRoute }}">{{ 'Show' }}
+                                                                    href="{{ $variant->url }}">{{ 'Show' }}
                                                                     <i class="fa-solid fa-play"></i></a>
                                                             </div>
                                                         </div>

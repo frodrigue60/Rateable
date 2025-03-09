@@ -34,7 +34,7 @@ use App\Http\Controllers\SongVariantController as SongVariantController;
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'index'])->name('/');
 Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
-Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('anime.show');
+//Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('anime.show');
 Route::get('/anime/{anilist_id}/{slug}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
