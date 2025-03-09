@@ -33,7 +33,7 @@ class VideoController extends Controller
      * @param  int  $song_id
      * @return \Illuminate\Http\Response
      */
-    public function create($song_id, $variant_id)
+    public function create($variant_id)
     {
         if ($variant_id != null) {
             $song_variant = SongVariant::find($variant_id);
@@ -50,81 +50,75 @@ class VideoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $song_id, $variant_id)
+    public function store(Request $request, $variant_id)
     {
-        $song = Song::find($song_id);
-        $songVariant = SongVariant::find($variant_id);
-        $video = Video::where('song_variant_id', $songVariant->id)->first();
-        //dd($song, $songVariant, $video);
+        $song_variant = SongVariant::find($variant_id);
+        $song = Song::find($song_variant->id);
 
-        if ($video) {
-            return redirect(route('song.post.manage', $song->post->id))->with('warning', 'Video already exist');
-        } else {
-            try {
-                $video = new Video();
-                //$video->song_id = $song->id;
+        try {
+            $video = new Video();
+            //$video->song_id = $song->id;
 
-                $video->song_variant_id = $variant_id;
+            $video->song_variant_id = $variant_id;
 
-                if ($request->hasFile('video')) {
-                    $validator = Validator::make($request->all(), [
-                        'video' => 'mimes:webm,mp4'
-                    ]);
+            if ($request->hasFile('video')) {
+                $validator = Validator::make($request->all(), [
+                    'video' => 'mimes:webm,mp4'
+                ]);
 
-                    if ($validator->fails()) {
-                        $errors = $validator->getMessageBag();
-                        $request->flash();
-                        return Redirect::back()->with('error', $errors);
-                    }
-
-                    $path = null;
-                    $file_name = null;
-
-                    switch ($song->type) {
-                        case 'OP':
-                            $path = "videos/openings/";
-                            break;
-
-                        case 'ED':
-                            $path = "videos/endings/";
-                            break;
-
-                        default:
-                            $path = "videos/";
-                            break;
-                    }
-
-                    $mimeType = $request->video->getMimeType();
-                    $extension = $this->getExtensionFromMimeType($mimeType);
-
-                    $file_name = $song->post->slug . '-' . strtolower($song->slug) . '-' . time() . '.' . $extension;
-                    $video->video_src = $path . $file_name;
-
-                    $video->type = 'file';
-                } else {
-                    $validator = Validator::make($request->all(), [
-                        'embed' => 'required'
-                    ]);
-
-                    if ($validator->fails()) {
-                        $errors = $validator->getMessageBag();
-                        $request->flash();
-                        return Redirect::back()->with('error', $errors);
-                    }
-                    $video->embed_code = $request->embed;
-                    $video->type = 'embed';
+                if ($validator->fails()) {
+                    $errors = $validator->getMessageBag();
+                    $request->flash();
+                    return Redirect::back()->with('error', $errors);
                 }
 
-                if ($video->save()) {
-                    if ($video->type === "file") {
-                        //Storage::disk('public')->put($path,$file_name.$request->video);
-                        $request->video->storeAs($path, $file_name, 'public');
-                    }
-                    return redirect(route('song.post.manage', $song->post->id))->with('success', 'saved successfully');
+                $path = null;
+                $file_name = null;
+
+                switch ($song->type) {
+                    case 'OP':
+                        $path = "videos/openings/";
+                        break;
+
+                    case 'ED':
+                        $path = "videos/endings/";
+                        break;
+
+                    default:
+                        $path = "videos/";
+                        break;
                 }
-            } catch (ModelNotFoundException $e) {
-                return redirect(route('song.post.manage', $song->post->id))->with('error', $e);
+
+                $mimeType = $request->video->getMimeType();
+                $extension = $this->getExtensionFromMimeType($mimeType);
+
+                $file_name = $song->post->slug . '-' . strtolower($song->slug) . '-' . time() . '.' . $extension;
+                $video->video_src = $path . $file_name;
+
+                $video->type = 'file';
+            } else {
+                $validator = Validator::make($request->all(), [
+                    'embed' => 'required'
+                ]);
+
+                if ($validator->fails()) {
+                    $errors = $validator->getMessageBag();
+                    $request->flash();
+                    return Redirect::back()->with('error', $errors);
+                }
+                $video->embed_code = $request->embed;
+                $video->type = 'embed';
             }
+
+            if ($video->save()) {
+                if ($video->type === "file") {
+                    //Storage::disk('public')->put($path,$file_name.$request->video);
+                    $request->video->storeAs($path, $file_name, 'public');
+                }
+                return redirect(route('song.post.manage', $song->post->id))->with('success', 'saved successfully');
+            }
+        } catch (ModelNotFoundException $e) {
+            return redirect(route('song.post.manage', $song->post->id))->with('error', $e);
         }
     }
 

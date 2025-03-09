@@ -5,12 +5,6 @@
     $version = $variant->version_number;
     $forward_text = ($variant->song->slug ? $variant->song->slug : $variant->song->type) . 'v' . $variant->version_number;
 
-    $url = route('song.show', [
-        $variant->song->id,
-        $variant->song->post->slug,
-        $variant->song->slug != null ? $variant->song->slug : $variant->song->type,
-    ]);
-
     $post = $variant->song->post;
 
     if (Storage::disk('public')->exists($post->thumbnail)) {

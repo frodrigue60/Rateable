@@ -6,10 +6,11 @@
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
                 <div class="card-header">
-                    <h5 class="card-title">Add Video to variant</h5>
+                    <h5 class="card-title">Add Video to</h5>
+                    <p>{{$song_variant->song->post->title}} {{$song_variant->song->slug}} {{$song_variant->slug}}</p>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{route('variant.videos.store',[$song_variant->song->id,$song_variant->id])}}" enctype="multipart/form-data">
+                    <form method="post" action="{{route('variants.videos.store',[$song_variant->id])}}" enctype="multipart/form-data">
                         @csrf
                         @method('post')
                         <div class="mb-3">

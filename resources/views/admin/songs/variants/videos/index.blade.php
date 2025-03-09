@@ -20,7 +20,7 @@
                         <h3>{{ $songVariant->song->post->title }} {{ $song_type }} {{ 'v' . $songVariant->version_number }}</h3>
                     </div>
                     <a class="btn btn-primary btn-sm"
-                        href="{{ route('variant.videos.create', [$songVariant->song->id, $songVariant->id]) }}"
+                        href="{{ route('variants.videos.create', [$songVariant->id]) }}"
                         role="button">ADD VIDEO</a>
                 </div>
                 {{-- CARD BODY --}}

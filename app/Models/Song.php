@@ -56,10 +56,10 @@ class Song extends Model
         return $this->belongsToMany(Artist::class);
     }
 
-    public function comments()
+    /* public function comments()
     {
         return $this->hasMany(Comment::class, 'rateable_id');
-    }
+    } */
 
     public function videos()
     {

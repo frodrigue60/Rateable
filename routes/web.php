@@ -36,7 +36,7 @@ Route::get('/',       [PostController::class, 'index'])->name('/');
 Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
 //Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('anime.show');
 Route::get('/anime/{anilist_id}/{slug}',   [PostController::class, 'show'])->name('post.show');
-Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
+//Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalRanking'])->name('seasonal.ranking');
@@ -61,29 +61,40 @@ Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {
         //SONGS
         Route::group(['middleware' => 'editor'], function () {
-            Route::get('/song-post/{id}/create',       [AdminSongController::class, 'create'])->name('song.post.create');
+            Route::get('/posts/{id}/songs/create',       [AdminSongController::class, 'create'])->name('posts.songs.create');
             Route::post('/song-post/{id}/store',       [AdminSongController::class, 'store'])->name('song.post.store');
         });
-
-        //VARIANTS
-        Route::get('/song/{song_id}/variant/store', [AdminSongVariantController::class,'store'])->name('song.variant.store');
-        Route::get('/variant/{variant_id}/destroy', [AdminSongVariantController::class,'destroy'])->name('song.variant.destroy');
-        Route::get('/variant/{variant_id}/edit', [AdminSongVariantController::class,'edit'])->name('song.variant.edit');
-        Route::get('/variant/{variant_id}/show', [AdminSongVariantController::class,'show'])->name('song.variant.show');
-        Route::post('/variant/{variant_id}/update', [AdminSongVariantController::class,'update'])->name('song.variant.update');
-        Route::get('/variant/{variant_id}/videos', [AdminSongVariantController::class,'index'])->name('song.variant.index');
-
-        Route::get('song/{song_id}/variant/{variant_id}/video/create',[AdminVideoController::class,'create'])->name('variant.videos.create');
-        Route::post('song/{song_id}/variant/{variant_id}/video/store',[AdminVideoController::class,'store'])->name('variant.videos.store');
-        //Route::post('song/{song_id}/variant/{variant_id?}/video/store',[AdminVideoController::class,'store'])->name('variant.videos.store');
-
-
         Route::group(['middleware' => 'editor'], function () {
             Route::get('/songs-post/{id}/manage',       [AdminSongController::class, 'manage'])->name('song.post.manage');
             Route::get('/songs-post/{id}/destroy',       [AdminSongController::class, 'destroy'])->name('song.post.destroy');
             Route::get('/songs-post/{id}/edit',       [AdminSongController::class, 'edit'])->name('song.post.edit');
             Route::put('/songs-post/{id}/update',       [AdminSongController::class, 'update'])->name('song.post.update');
         });
+
+        //VARIANTS
+        Route::get('/songs/{song_id}/variant/store', [AdminSongVariantController::class, 'store'])->name('song.variant.store');
+        Route::get('/variants/{variant_id}/destroy', [AdminSongVariantController::class, 'destroy'])->name('song.variant.destroy');
+        Route::get('/variants/{variant_id}/edit', [AdminSongVariantController::class, 'edit'])->name('song.variant.edit');
+        Route::get('/variants/{variant_id}/show', [AdminSongVariantController::class, 'show'])->name('song.variant.show');
+        Route::post('/variants/{variant_id}/update', [AdminSongVariantController::class, 'update'])->name('song.variant.update');
+        Route::get('/variants/{variant_id}/videos', [AdminSongVariantController::class, 'index'])->name('song.variant.index');
+
+        //VIDEOS
+        Route::group(['middleware' => 'admin'], function () {
+            Route::get('/songs/{song_id}/videos', [AdminVideoController::class, 'index'])->name('admin.videos.index');
+            Route::get('/songs/{song_id}/videos/create', [AdminVideoController::class, 'create'])->name('admin.videos.create');
+            Route::post('/songs/{song_id}/videos/store', [AdminVideoController::class, 'store'])->name('admin.videos.store');
+
+            Route::get('/videos/{video_id}/destroy', [AdminVideoController::class, 'destroy'])->name('admin.videos.destroy');
+            Route::get('/videos/{video_id}/edit', [AdminVideoController::class, 'edit'])->name('admin.videos.edit');
+            Route::get('/videos/{video_id}/show', [AdminVideoController::class, 'show'])->name('admin.videos.show');
+            Route::put('/videos/{video_id}/update', [AdminVideoController::class, 'update'])->name('admin.videos.update');
+        });
+        Route::group(['middleware' => 'admin'], function () {
+            Route::get('/variants/{variant_id}/videos/create', [AdminVideoController::class, 'create'])->name('variants.videos.create');
+            Route::post('/variants/{variant_id}/videos/store', [AdminVideoController::class, 'store'])->name('variants.videos.store');
+        });
+
         //REQUESTS
         Route::group(['middleware' => 'creator'], function () {
             Route::get('/requests/index',       [AdminUserRequestController::class, 'index'])->name('admin.request.index');
@@ -159,15 +170,6 @@ Route::group(['middleware' => 'staff'], function () {
             Route::get('/users/{id}/edit',       [AdminUserController::class, 'edit'])->name('admin.users.edit');
             Route::put('/users/{id}/update',    [AdminUserController::class, 'update'])->name('admin.users.update');
             Route::get('/users/search', [AdminUserController::class, 'searchUser'])->name('admin.users.search');
-
-            Route::get('songs/{song_id}/videos',[AdminVideoController::class,'index'])->name('admin.videos.index');
-            Route::get('songs/{song_id}/videos/create',[AdminVideoController::class,'create'])->name('admin.videos.create');
-            Route::post('songs/{song_id}/videos/store',[AdminVideoController::class,'store'])->name('admin.videos.store');
-
-            Route::get('videos/{video_id}/destroy',[AdminVideoController::class,'destroy'])->name('admin.videos.destroy');
-            Route::get('videos/{video_id}/edit',[AdminVideoController::class,'edit'])->name('admin.videos.edit');
-            Route::get('videos/{video_id}/show',[AdminVideoController::class,'show'])->name('admin.videos.show');
-            Route::put('videos/{video_id}/update',[AdminVideoController::class,'update'])->name('admin.videos.update');
         });
     });
 });
@@ -177,16 +179,13 @@ Auth::routes();
 
 //COMMENT LIKE
 Route::post('/comment/{id}/like', [PostController::class, 'likeComment'])->name('comment.like');
-Route::post('/comment/{ipostd}/unlike', [PostController::class, 'unlikeComment'])->name('comment.unlike');
+Route::post('/comment/{id}/unlike', [PostController::class, 'unlikeComment'])->name('comment.unlike');
 
 //REQUEST ROUTES
 Route::get('/request/create', [App\Http\Controllers\UserRequestController::class, 'create'])->name('request.create');
 Route::post('/request/store', [App\Http\Controllers\UserRequestController::class, 'store'])->name('request.store');
 
 //SONGS ROUTES
-Route::post('/song/{id}/like', [SongController::class, 'likeSong'])->name('song.like');
-Route::post('/song/{id}/unlike', [SongController::class, 'unlikeSong'])->name('song.unlike');
-Route::post('/song/{id}/ratesong', [SongController::class, 'rateSong'])->name('song.addrate');
 
 //USER ROUTES
 Route::post('/change-score-format', [App\Http\Controllers\UserController::class, 'changeScoreFormat'])->name('change.score.format');
@@ -202,6 +201,6 @@ Route::post('/post/{id}/ratepost', [PostController::class, 'ratePost'])->name('p
 Route::get('/song/{song_id}/variant/{variant_id}/report', [ReportController::class, 'createReport'])->name('song.create.report');
 
 //SONG VARIANT ROUTES
-Route::post('/song/{song_id}/variant/{variant_id}/unlike', [SongVariantController::class, 'unlikeVariant'])->name('song.variant.unlike');
-Route::post('/song/{song_id}/variant/{variant_id}/like', [SongVariantController::class, 'likeVariant'])->name('song.variant.like');
-Route::post('/song/{song_id}/variant/{variant_id}/ratepost', [SongVariantController::class, 'rate'])->name('song.variant.rate');
+Route::post('/variant/{variant_id}/unlike', [SongVariantController::class, 'unlikeVariant'])->name('variant.unlike');
+Route::post('/variant/{variant_id}/like', [SongVariantController::class, 'likeVariant'])->name('variant.like');
+Route::post('/variant/{variant_id}/ratepost', [SongVariantController::class, 'rate'])->name('variant.rate');

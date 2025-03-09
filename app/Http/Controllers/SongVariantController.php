@@ -255,7 +255,7 @@ class SongVariantController extends Controller
         //
     }
 
-    public function rate(Request $request, $song_id, $variant_id)
+    public function rate(Request $request, $variant_id)
     {
         if (Auth::check()) {
 
@@ -358,7 +358,7 @@ class SongVariantController extends Controller
         return redirect()->route('login');
     }
 
-    public function likeVariant($song_id, $variant_id)
+    public function likeVariant($variant_id)
     {
         if (Auth::check()) {
             SongVariant::find($variant_id)->like(Auth::user()->id);
@@ -367,7 +367,7 @@ class SongVariantController extends Controller
         return redirect()->route('/')->with('warning', 'Please login');
     }
 
-    public function unlikeVariant($song_id, $variant_id)
+    public function unlikeVariant($variant_id)
     {
         if (Auth::check()) {
             SongVariant::find($variant_id)->unlike(Auth::user()->id);

@@ -20,10 +20,10 @@ class Comment extends Model
      */
     protected $table = 'ratings';
 
-    public function song()
+    /* public function song()
     {
         return $this->belongsTo(Song::class);
-    }
+    } */
 
     public function song_variant()
     {

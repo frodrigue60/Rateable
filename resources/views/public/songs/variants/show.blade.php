@@ -109,7 +109,7 @@
                         @php
                             $video_url = '';
                             if ($song_variant->video->type == 'file') {
-                                $video_url = env('APP_URL') . Storage::url($song_variant->video->video_src);
+                                $video_url = Storage::url($song_variant->video->video_src);
                             }
                         @endphp
                         <div class="card-body p-0" id="video_container">
@@ -155,7 +155,7 @@
                     @auth
                         @if ($song_variant->liked())
                             <form style="display: flex;width: 100%;height: 100%;"
-                                action="{{ route('song.variant.unlike', [$song_variant->song->id, $song_variant->id]) }}"
+                                action="{{ route('variant.unlike', [$song_variant->id]) }}"
                                 method="post">
                                 @csrf
                                 <button class="buttons-bottom px-2"><i class="fa-solid fa-bookmark"></i></i>
@@ -163,7 +163,7 @@
                             </form>
                         @else
                             <form style="display: flex;width: 100%;height: 100%;"
-                                action="{{ route('song.variant.like', [$song_variant->song->id, $song_variant->id]) }}"
+                                action="{{ route('variant.like', [$song_variant->id]) }}"
                                 method="post">
                                 @csrf
                                 <button class="buttons-bottom px-2"><i class="fa-regular fa-bookmark"></i>
@@ -217,7 +217,7 @@
         @auth
             <div class="py-2">
                 <div class="comment-form">
-                    <form action="{{ route('song.variant.rate', [$song_variant->song->id, $song_variant->id]) }}"
+                    <form action="{{ route('variant.rate', [$song_variant->id]) }}"
                         method="post" class="d-flex flex-column gap-2">
                         @csrf
                         <div class="score-form text-light d-flex flex-column">

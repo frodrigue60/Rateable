@@ -9,7 +9,7 @@
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
                 <div class="card-header">
-                    <a class="btn btn-primary btn-sm" href="{{ route('song.post.create', $post->id) }}" role="button">ADD
+                    <a class="btn btn-primary btn-sm" href="{{ route('posts.songs.create', $post->id) }}" role="button">ADD
                         SONG</a>
                 </div>
                 {{-- CARD BODY --}}
@@ -47,8 +47,7 @@
                                 <tr>
                                     <td>{{ $song->id }}</td>
                                     <td>
-                                        <a class="text-light"
-                                            href="{{ $song->post->url }}">{{ $song_name }}</a>
+                                        <a class="text-light" href="{{ $song->post->url }}">{{ $song_name }}</a>
                                     </td>
                                     <td>
                                         @isset($song->artist)
@@ -61,17 +60,11 @@
                                     </td>
                                     <td>
                                         @foreach ($song->tags as $tag)
-                                            [{{ $tag->name }}]
+                                            {{ $tag->name }}
                                         @endforeach
                                     </td>
-                                    <td>
-                                        @if (isset($song->video))
-                                            {{ count($song->video) }}
-                                        @else
-                                            "N/A"
-                                        @endif
-                                    </td>
-                                    <td>{{ $song->suffix != null ? $song->suffix : $song->type }}</td>
+                                    <td></td>
+                                    <td>{{ $song->slug != null ? $song->slug : $song->type }}</td>
                                     <td>
                                         @if (Auth::user()->isEditor() | Auth::user()->isAdmin())
                                             <a class="btn btn-sm btn-success"
@@ -83,7 +76,9 @@
                                             {{-- <a class="btn btn-sm btn-primary"
                                                 href="{{ route('admin.videos.index', $song->id) }}"><i class="fa-solid fa-list"></i></a> --}}
                                             <a class="btn btn-sm btn-primary"
-                                                href="{{ route('song.variant.store', $song->id) }}">+</a>
+                                                href="{{ route('song.variant.store', $song->id) }}"><i
+                                                    class="fa-solid fa-plus"></i>
+                                            </a>
                                         @endif
                                     </td>
 
@@ -92,14 +87,14 @@
                                     @foreach ($song->songVariants as $variant)
                                         <tr>
                                             <td></td>
-                                            <td><a href="{{ $variant->url }}">{{ $song_name }}
-                                                    {{ 'v' . $variant->version }}</a>
+                                            <td><a href="{{ $variant->url }}" class="text-light">{{ $song_name }}
+                                                    {{ $variant->slug }}</a>
                                             </td>
                                             <td></td>
                                             <td></td>
                                             <td>{{ isset($variant->video->id) ? $variant->id : 'N/A' }}</td>
-                                            <td>{{ $variant->song->suffix != '' ? $variant->song->suffix : $variant->song->type }}
-                                                {{ 'v' . $variant->version }}</td>
+                                            <td>{{ $variant->song->slug != null ? $variant->song->slug : $variant->song->type }}
+                                                {{ $variant->slug }}</td>
                                             <td>
                                                 <a class="btn-sm btn btn-success"
                                                     href="{{ route('song.variant.edit', $variant->id) }}"><i

@@ -145,7 +145,7 @@
                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"
                                                     aria-hidden="true"></i></a>
                                             <a class="btn btn-sm btn-primary"
-                                                href="{{ route('song.post.create', $post->id) }}"><i
+                                                href="{{ route('posts.songs.create', $post->id) }}"><i
                                                     class="fa-solid fa-plus"></i></a>
                                             <a class="btn btn-sm btn-success"
                                                 href="{{ route('song.post.manage', $post->id) }}"><i

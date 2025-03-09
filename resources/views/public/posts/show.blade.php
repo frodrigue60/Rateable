@@ -98,7 +98,7 @@
             </div>
         </div>
 
-        @auth
+        {{-- @auth
             @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                 <div class="container d-flex pt-2 justify-content-center gap-2">
 
@@ -128,7 +128,7 @@
 
                 </div>
             @endif
-        @endauth
+        @endauth --}}
 
         <div class="container text-light mt-2 container-songs gap-4">
             <div class="themes">
