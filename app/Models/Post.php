@@ -72,4 +72,12 @@ class Post extends Model
     {
         return $this->hasMany(Report::class);
     }
+
+    public function getUrlAttribute()
+    {
+        return route('post.show', [
+            'anilist_id' => $this->anilist_id,
+            'slug' => $this->slug,
+        ]);
+    }
 }

@@ -36,9 +36,9 @@
                                 <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
                             </div>
                             <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
-                                <span class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
+                                <span class="tag-content ">{{ $song->slug != null ? $song->slug : $song->type }}</span>
                             </div>
-                            <a class="no-deco" href="{{ route('song.show', [$song->id,$song->post->slug,$song->suffix != null ? $song->suffix : $song->type ]) }}">
+                            <a class="no-deco" href="{{ route('song.show', [$song->id,$song->post->slug,$song->slug != null ? $song->slug : $song->type ]) }}">
                                 <img class="thumb" loading="lazy" src="{{ asset('/storage/thumbnails/' . $song->post->thumbnail) }}"
                                     alt="{{ $song->post->title }}" title="{{ $song->post->title }}">
                             </a>
@@ -94,10 +94,10 @@
                                      <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
                                  </div>
                                  <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
-                                     <span class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
+                                     <span class="tag-content ">{{ $song->slug != null ? $song->slug : $song->type }}</span>
                                  </div>
                                  <a class="no-deco"
-                                     href="{{ route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]) }}">
+                                     href="{{ route('song.show', [$song->id, $song->post->slug, $song->slug != null ? $song->slug : $song->type]) }}">
                                      <img class="thumb" loading="lazy"
                                          src="{{ asset('/storage/thumbnails/' . $song->post->thumbnail) }}"
                                          alt="{{ $song->post->title }}" title="{{ $song->post->title }}">

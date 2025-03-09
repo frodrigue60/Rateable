@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('meta')
-    <title>{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}</title>
-    <meta name="title" content="{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}">
+    <title>{{ $song->post->title }} {{ $song->slug != null ? $song->slug : $song->type }}</title>
+    <meta name="title" content="{{ $song->post->title }} {{ $song->slug != null ? $song->slug : $song->type }}">
 
     @if (isset($song->song_romaji))
         @if (isset($song->artist->name))
@@ -25,7 +25,7 @@
 
     <meta property="og:type" content="article">
     <meta property="og:title"
-        content="{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}">
+        content="{{ $song->post->title }} {{ $song->slug != null ? $song->slug : $song->type }}">
 
     @if (isset($song->song_romaji))
         @if (isset($song->artist->name))
@@ -52,7 +52,7 @@
     <meta property="og:image:width" content="460">
     <meta property="og:image:height" content="650">
     <meta property="og:image:alt"
-        content="{{ $song->post->title }} {{ $song->suffix != null ? $song->suffix : $song->type }}">
+        content="{{ $song->post->title }} {{ $song->slug != null ? $song->slug : $song->type }}">
     <meta property="og:image:type" content="image/webp">
 @endsection
 @section('content')
@@ -95,8 +95,8 @@
                     ">
             <h3 class="mb-0 py-1 px-2 text-center text-light">
                 <a class="text-light text-decoration-none"
-                    href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song->post->title }}</a>
-                <span>{{ $song->suffix ? $song->suffix : '' }}</span>
+                    href="{{ $song->post->url }}">{{ $song->post->title }}</a>
+                <span>{{ $song->slug ? $song->slug : '' }}</span>
             </h3>
         </div>
         <div class="all-buttons-container">

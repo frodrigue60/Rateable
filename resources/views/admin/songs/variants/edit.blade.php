@@ -19,7 +19,7 @@
                         <div class="mb-3">
                             <label for="version" class="form-label">Theme Version Number</label>
                             <input type="number" class="form-control" placeholder="Theme Version 1,2,3..." id="version"
-                                name="version" value="{{ $songVariant->version }}">
+                                name="version" value="{{ $songVariant->version_number }}">
                         </div>
                         <div class="d-flex">
                             <button class="btn btn-primary w-100" type="submit">Submit</button>

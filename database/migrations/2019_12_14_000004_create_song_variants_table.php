@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('song_variants', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('version')->default(1);
+            $table->unsignedBigInteger('version_number')->default(1);
             $table->foreignId('song_id')->references('id')->on('songs')->onDelete('cascade');
             $table->unsignedBigInteger('views')->default(0);
+            $table->string('slug')->unique();
             $table->timestamps();
         });
     }

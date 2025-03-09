@@ -69,11 +69,6 @@ class SongVariant extends Model
 
     public function incrementViews()
     {
-
-        /* DB::table('song_variants')
-            ->where('id', $this->id)
-            ->increment('views'); */
-
         $key = 'variant_' . $this->id;
 
         if (!Session::has($key)) {
@@ -83,5 +78,14 @@ class SongVariant extends Model
 
             Session::put($key, true);
         }
+    }
+
+    public function getUrlAttribute()
+    {
+        return route('variants.show', [
+            'anime_slug' => $this->song->post->slug,
+            'song_slug' => $this->song->slug,
+            'variant_version_number' => $this->version_number,
+        ]);
     }
 }

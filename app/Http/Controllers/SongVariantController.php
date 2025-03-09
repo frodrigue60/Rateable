@@ -8,6 +8,8 @@ use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Models\Post;
+use App\Models\Song;
 
 class SongVariantController extends Controller
 {
@@ -48,12 +50,18 @@ class SongVariantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($song_id, $slug = null, $suffix = null, $version = null)
+    public function show($anime_slug, $song_suffix, $variant_version_number)
     {
-        $song_variant = SongVariant::where('song_id', '=', $song_id)
-            ->where('version', '=', $version)
+        $post = Post::where('slug', $anime_slug)->firstOrFail();
+
+        $song = Song::where('slug', $song_suffix)
+            ->where('post_id', $post->id)
+            ->firstOrFail();
+
+        $song_variant = SongVariant::where('version_number', $variant_version_number)
+            ->where('song_id', $song->id)
             ->with('likeCounter')
-            ->first();
+            ->firstOrFail();
 
         if ($song_variant == null) {
             return redirect(route('/'))->with('warning', 'Item no exist!');
@@ -127,6 +135,91 @@ class SongVariantController extends Controller
 
         return view('public.songs.variants.show', compact('song_variant', 'score', 'comments', 'comments_featured', 'user_rate'));
     }
+
+    /* public function showTest($anime_slug, $song_suffix, $variant_version_number)
+    {
+        $post = Post::where('slug', $anime_slug)->firstOrFail();
+
+        $song = Song::where('slug', $song_suffix)
+            ->where('post_id', $post->id)
+            ->firstOrFail();
+
+        $song_variant = SongVariant::where('version_number', $variant_version_number)
+            ->where('song_id', $song->id)
+            ->with('likeCounter')
+            ->firstOrFail();
+
+        if ($song_variant == null) {
+            return redirect(route('/'))->with('warning', 'Item no exist!');
+        }
+
+        if ($song_variant->song->post->status == 'stagged') {
+            return redirect(route('/'))->with('warning', 'Paused post!');
+        }
+
+        switch ($song_variant->song->post->status) {
+            case 'stagged':
+                return redirect(route('/'))->with('warning', 'Paused post!');
+                break;
+
+            case 'published':
+                break;
+
+            default:
+                return redirect(route('/'))->with('warning', 'Ooops');
+                break;
+        }
+
+        $comments = $song_variant->commentsWithUser()
+            ->get();
+
+        $comments_featured = $song_variant->commentsWithUser()
+            ->get()
+            ->sortByDesc('likeCount')
+            ->take(3);
+
+        $score = null;
+
+        if (Auth::check() && $song_variant->averageRating) {
+
+            $user_rate = $this->user_rate($song_variant->id, Auth::user()->id);
+
+            switch (Auth::user()->score_format) {
+                case 'POINT_100':
+                    $score = round($song_variant->averageRating);
+                    $user_rate->format_rating = round($user_rate->rating);
+                    break;
+
+                case 'POINT_10_DECIMAL':
+                    $score = round($song_variant->averageRating / 10, 1);
+                    $user_rate->format_rating = round($user_rate->rating / 10, 1);
+                    break;
+
+                case 'POINT_10':
+                    $score = round($song_variant->averageRating / 10);
+                    $user_rate->format_rating = round($user_rate->rating / 10);
+                    break;
+
+                case 'POINT_5':
+                    $score = round($song_variant->averageRating / 20);
+                    $user_rate->format_rating = max(20, min(100, ceil($user_rate->rating / 20) * 20));
+                    break;
+
+                default:
+                    $score = round($song_variant->averageRating / 10);
+                    $user_rate->format_rating = max(20, min(100, ceil($user_rate->rating / 20) * 20));
+                    break;
+            }
+        } else {
+            $score = round($song_variant->averageRating / 10);
+            $user_rate = null;
+        }
+
+        $song_variant->incrementViews();
+
+        // Pasar los datos a la vista
+        return view('public.songs.variants.show', compact('song_variant', 'score', 'comments', 'comments_featured', 'user_rate'));
+    } */
 
     /**
      * Show the form for editing the specified resource.

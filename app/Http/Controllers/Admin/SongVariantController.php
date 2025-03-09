@@ -44,14 +44,16 @@ class SongVariantController extends Controller
         $song = Song::find($song_id);
 
         $latestVersion = SongVariant::where('song_id', $song_id)
-            ->max('version');
+            ->max('version_number');
 
         $newVersion = $latestVersion !== null ? $latestVersion + 1 : 1;
 
-        $songVariant = new SongVariant([
-            'song_id' => $song_id,
-            'version' => $newVersion,
-        ]);
+        $slug ='v' . $newVersion;
+
+        $songVariant = new SongVariant();
+        $songVariant->song_id = $song_id;
+        $songVariant->version_number = $newVersion;
+        $songVariant->slug = $slug;
 
         //dd($songVariant);
 
@@ -100,8 +102,8 @@ class SongVariantController extends Controller
     public function update(Request $request, $id)
     {
         $songVariant = SongVariant::find($id);
-        $songVariant->version = $request->version;
-        
+        $songVariant->version_number = $request->version_number;
+
         if ($songVariant->update()) {
             return redirect(route('song.post.manage', $songVariant->song->post_id))->with('success', 'Song updated success');
         } else {
@@ -118,7 +120,7 @@ class SongVariantController extends Controller
     public function destroy($id)
     {
         $songVariant = SongVariant::find($id);
-        
+
         if ($songVariant->delete()) {
             //$video = Video::where('song_variant_id', $songVariant->id)->first();
             //$video->delete();

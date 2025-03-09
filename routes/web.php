@@ -35,9 +35,8 @@ use App\Http\Controllers\SongVariantController as SongVariantController;
 Route::get('/',       [PostController::class, 'index'])->name('/');
 Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
 Route::get('/anime/{id}/{slug}',   [PostController::class, 'show'])->name('anime.show');
-Route::get('/post/{id}/{slug}',   [PostController::class, 'show'])->name('post.show');
+Route::get('/anime/{anilist_id}/{slug}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/song/{id}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
-Route::get('/song/{id}/{slug}/{suffix}/v/{version}',       [SongVariantController::class, 'show'])->name('p.song.variant.show');
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/seasonal-ranking',       [PostController::class, 'seasonalRanking'])->name('seasonal.ranking');
@@ -46,6 +45,8 @@ Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');
+
+Route::get('/anime/{anime_slug}/{song_slug}/v{variant_version_number}', [SongVariantController::class, 'show'])->name('variants.show');
 
 Route::get('/offline', function () {
     return view('offline');

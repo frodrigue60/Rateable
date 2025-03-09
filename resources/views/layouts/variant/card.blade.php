@@ -1,15 +1,14 @@
 @php
     $song_id = $variant->song->id;
     $post_slug = $variant->song->post->slug;
-    $suffix = $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type;
-    $version = $variant->version;
-    $showVariantRoute = route('p.song.variant.show', [$song_id, $post_slug, $suffix, $version]);
-    $forward_text = ($variant->song->suffix ? $variant->song->suffix : $variant->song->type) . 'v' . $variant->version;
+    $suffix = $variant->song->slug != null ? $variant->song->slug : $variant->song->type;
+    $version = $variant->version_number;
+    $forward_text = ($variant->song->slug ? $variant->song->slug : $variant->song->type) . 'v' . $variant->version_number;
 
     $url = route('song.show', [
         $variant->song->id,
         $variant->song->post->slug,
-        $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type,
+        $variant->song->slug != null ? $variant->song->slug : $variant->song->type,
     ]);
 
     $post = $variant->song->post;
@@ -47,7 +46,7 @@
         <div class="{{ $variant->song->type == 'OP' ? 'tag' : 'tag2' }}">
             <span class="tag-content ">{{ $forward_text }}</span>
         </div>
-        <a class="no-deco" href="{{ $showVariantRoute }}">
+        <a class="no-deco" href="{{ $variant->url }}">
             <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $title }}"
                 title="{{ $title }}">
         </a>

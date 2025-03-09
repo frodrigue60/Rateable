@@ -132,10 +132,9 @@
                                 @php
                                     $song_id = $song_variant->song->id;
                                     $post_slug = $song_variant->song->post->slug;
-                                    $suffix = $song_variant->song->suffix != null ? $song_variant->song->suffix : $song_variant->song->type;
-                                    $version = $song_variant->version;
-                                    $showVariantRoute = route('p.song.variant.show', [$song_id, $post_slug, $suffix, $version]);
-                                    $forward_text = ($song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type) . 'v' . $song_variant->version;
+                                    $suffix = $song_variant->song->slug != null ? $song_variant->song->slug : $song_variant->song->type;
+                                    $version = $song_variant->version_number;
+                                    $forward_text = ($song_variant->song->slug ? $song_variant->song->slug : $song_variant->song->type) . 'v' . $song_variant->version_number;
                                     $title = $song_variant->song->post->title;
                                 @endphp
                                 <article class="top-item-seasonal">
@@ -144,7 +143,7 @@
                                     </div>
                                     <div class="item-info-seasonal">
                                         <div class="item-post-info-seasonal">
-                                            <a href="{{ $showVariantRoute }}"
+                                            <a href="{{ $song_variant->url }}"
                                                 class="text-light no-deco">{{ $title . ' ' . $forward_text }}</a>
                                         </div>
                                     </div>

@@ -97,7 +97,7 @@ class VideoController extends Controller
                     $mimeType = $request->video->getMimeType();
                     $extension = $this->getExtensionFromMimeType($mimeType);
 
-                    $file_name = $song->post->slug . '-' . strtolower($song->suffix) . '-' . time() . '.' . $extension;
+                    $file_name = $song->post->slug . '-' . strtolower($song->slug) . '-' . time() . '.' . $extension;
                     $video->video_src = $path . $file_name;
 
                     $video->type = 'file';
@@ -202,7 +202,7 @@ class VideoController extends Controller
                 $mimeType = $request->video->getMimeType();
                 $extension = $this->getExtensionFromMimeType($mimeType);
 
-                $file_name = $video->song->post->slug . '-' . strtolower($video->song->suffix) . '-' . time() . '.' . $extension;
+                $file_name = $video->song->post->slug . '-' . strtolower($video->song->slug) . '-' . time() . '.' . $extension;
                 $video->video_src = $path . $file_name;
 
 

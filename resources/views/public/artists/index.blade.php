@@ -1,9 +1,9 @@
 @extends('layouts.app')
 {{-- @section('meta')
     <title>
-        {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
+        {{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}</title>
     <meta name="title"
-        content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+        content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
 
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
 
@@ -27,7 +27,7 @@
     <link rel="canonical" href="{{ url()->current() }}">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:title" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
 
     @if (isset($post->song->song_romaji))
         @if (isset($post->artist->name))
@@ -52,7 +52,7 @@
         alt="{{ $post->title }}">
     <meta property="og:image:width" content="460">
     <meta property="og:image:height" content="650">
-    <meta property="og:image:alt" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:image:alt" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
     <meta property="og:image:type" content="image/webp">
     
 @endsection --}}

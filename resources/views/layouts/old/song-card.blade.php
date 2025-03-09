@@ -1,5 +1,5 @@
 @php
-    $url = route('song.show', [$song->id, $song->post->slug, $song->suffix != null ? $song->suffix : $song->type]);
+    $url = route('song.show', [$song->id, $song->post->slug, $song->slug != null ? $song->slug : $song->type]);
 
     $thumb_path = public_path('storage/thumbnails/' . $post->thumbnail);
 
@@ -16,7 +16,7 @@
             <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
         </div>
         <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
-            <span class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
+            <span class="tag-content ">{{ $song->slug != null ? $song->slug : $song->type }}</span>
         </div>
         <a class="no-deco" href="{{ $url }}">
             <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $song->post->title }}"

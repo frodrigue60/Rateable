@@ -48,7 +48,7 @@
                                     <td>{{ $song->id }}</td>
                                     <td>
                                         <a class="text-light"
-                                            href="{{ route('post.show', [$song->post->id, $song->post->slug]) }}">{{ $song_name }}</a>
+                                            href="{{ $song->post->url }}">{{ $song_name }}</a>
                                     </td>
                                     <td>
                                         @isset($song->artist)
@@ -90,19 +90,9 @@
                                 </tr>
                                 @isset($song->songVariants)
                                     @foreach ($song->songVariants as $variant)
-                                        @php
-                                            $variant_url = route('p.song.variant.show', [
-                                                $variant->song->id,
-                                                $variant->song->post->slug,
-                                                $variant->song->suffix == 'null'
-                                                    ? $variant->song->suffix
-                                                    : $variant->song->type,
-                                                $variant->version,
-                                            ]);
-                                        @endphp
                                         <tr>
                                             <td></td>
-                                            <td><a href="{{ $variant_url }}">{{ $song_name }}
+                                            <td><a href="{{ $variant->url }}">{{ $song_name }}
                                                     {{ 'v' . $variant->version }}</a>
                                             </td>
                                             <td></td>

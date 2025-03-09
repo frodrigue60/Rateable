@@ -29,7 +29,6 @@
 @endsection
 @section('content')
     <section class="container">
-
         {{-- TOP SECTION --}}
         <section class="contenedor-main">
             <div class="container-top">

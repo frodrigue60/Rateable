@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('meta')
     <title>
-        {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
+        {{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}</title>
     <meta name="title"
-        content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+        content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
 
     <link rel="stylesheet" href="{{ asset('/resources/css/fivestars.css') }}">
 
@@ -27,7 +27,7 @@
     <link rel="canonical" href="{{ url()->current() }}">
     {{-- <meta property="og:locale" content="es_MX"> --}}
     <meta property="og:type" content="article">
-    <meta property="og:title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:title" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
 
     @if (isset($post->song->song_romaji))
         @if (isset($post->artist->name))
@@ -52,7 +52,7 @@
         alt="{{ $post->title }}">
     <meta property="og:image:width" content="460">
     <meta property="og:image:height" content="650">
-    <meta property="og:image:alt" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:image:alt" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
     <meta property="og:image:type" content="image/webp">
     {{-- <meta property="article:published_time" content="2022-09-04T20:03:32-05:00">
     <meta property="article:modified_time" content="2022-09-04T20:03:37-05:00"> --}}
@@ -80,7 +80,7 @@
                 </div>
                 <div class="card-footer">
                     <h1 class="text-light show-view-title mb-0">{{ $post->title }}
-                        {{ $post->suffix != null ? $post->suffix : $post->type }}</h1>
+                        {{ $post->slug != null ? $post->slug : $post->type }}</h1>
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-start">
                     <div class="text-light">

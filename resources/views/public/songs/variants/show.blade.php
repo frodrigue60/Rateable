@@ -3,9 +3,9 @@
     @php
         $title = $song_variant->song->post->title;
         $suffix =
-            $song_variant->song->suffix != null
-                ? $song_variant->song->suffix
-                : $song_variant->song->type . ' v' . $song_variant->version;
+            $song_variant->song->slug != null
+                ? $song_variant->song->slug
+                : $song_variant->song->type . ' v' . $song_variant->version_number;
         $artist_names = [];
         $artist_names = [];
         $artists_string = null;
@@ -42,11 +42,10 @@
         } else {
             $views = $song_variant->views;
         }
-        $showPostRoute = route('post.show', [$song_variant->song->post->id, $song_variant->song->post->slug]);
         $forward_text =
-            ($song_variant->song->suffix ? $song_variant->song->suffix : $song_variant->song->type) .
+            ($song_variant->song->slug ? $song_variant->song->slug : $song_variant->song->type) .
             ' v' .
-            $song_variant->version;
+            $song_variant->version_number;
         $score_string = '';
         if (Auth::User()) {
             switch (Auth::User()->score_format) {
@@ -133,7 +132,7 @@
 
     <div class="father-container ">
         <div class="text-light my-2">
-            <h1 style="font-size:2rem;"><a href="{{ $showPostRoute }}"
+            <h1 style="font-size:2rem;"><a href="{{ $song_variant->song->post->url }}"
                     class="text-decoration-none text-light">{{ $song_variant->song->post->title }}
                     {{ $forward_text }}</a></h1>
         </div>

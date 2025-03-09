@@ -10,14 +10,14 @@
                 <div class="card-header">
                     <div class="text-light">
                         @php
-                            if (!isset($songVariant->song->suffix)) {
+                            if (!isset($songVariant->song->slug)) {
                                 $song_type = $songVariant->song->type;
                             } else {
-                                $song_type = $songVariant->song->suffix;
+                                $song_type = $songVariant->song->slug;
                             }
 
                         @endphp
-                        <h3>{{ $songVariant->song->post->title }} {{ $song_type }} {{ 'v' . $songVariant->version }}</h3>
+                        <h3>{{ $songVariant->song->post->title }} {{ $song_type }} {{ 'v' . $songVariant->version_number }}</h3>
                     </div>
                     <a class="btn btn-primary btn-sm"
                         href="{{ route('variant.videos.create', [$songVariant->song->id, $songVariant->id]) }}"

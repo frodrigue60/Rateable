@@ -14,9 +14,9 @@
         </div>
         {{-- <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
             <span
-                class="tag-content ">{{ $song->suffix != null ? $song->suffix : $song->type }}</span>
+                class="tag-content ">{{ $song->slug != null ? $song->slug : $song->type }}</span>
         </div> --}}
-        <a class="no-deco" target="blank_" href="{{ route('post.show', [$post->id, $post->slug]) }}">
+        <a class="no-deco" target="blank_" href="{{ $post->url }}">
             <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $post->title }}"
                 title="{{ $post->title }}">
         </a>

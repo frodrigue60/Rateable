@@ -88,7 +88,7 @@
                                 <tr>
                                     <th scope="row">{{ $post->id }}</th>
                                     <td>
-                                        <a href="{{ route('post.show', [$post->id, $post->slug]) }}"
+                                        <a href="{{ $post->url }}"
                                             class="no-deco">{{ $post->title }}</a>
                                     </td>
                                     <td>

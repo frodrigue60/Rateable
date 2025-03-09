@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SongController extends Controller
 {
@@ -54,6 +55,7 @@ class SongController extends Controller
     public function store(Request $request, $post_id)
     {
         //dd($request->all());
+        //$post = Post::find($post_id);
         $song = new Song();
         $song->song_romaji = $request->song_romaji;
         $song->song_jp = $request->song_jp;
@@ -62,14 +64,15 @@ class SongController extends Controller
         $song->type = $request->type;
         $tag = $request->season . ' ' . $request->year;
 
-
         if ($request->theme_num != null) {
-            $song->suffix = $song->type . $request->theme_num;
             $song->theme_num = $request->theme_num;
         } else {
-            $song->suffix = null;
+            $song->theme_num = 1;
         }
 
+        $song->slug = $song->type . $song->theme_num;
+
+        //dd($song);
         if ($song->save()) {
             $song->artists()->sync($request->artists);
             $song->tag($tag);
@@ -122,6 +125,7 @@ class SongController extends Controller
     {
         //dd($request->all());
         $song = Song::find($id);
+        $post = $song->post;
         $song->song_romaji = $this->decodeUnicodeIfNeeded($request->song_romaji);
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
@@ -129,16 +133,17 @@ class SongController extends Controller
         $song->type = $request->type;
         $song->theme_num = $request->theme_num;
 
-        //dd($song->song->song_romaji);
-
         $tag = $request->season . ' ' . $request->year;
 
-        if ($request->theme_num >= 1) {
-            $song->suffix = $song->type . $request->theme_num;
+        if ($request->theme_num != null) {
+
             $song->theme_num = $request->theme_num;
         } else {
-            $song->suffix = null;
+            $song->theme_num = 1;
         }
+        $song->slug = $song->type . $request->theme_num;
+
+        $song->slug = $post->slug . '/' . $song->type . $song->theme_num;
 
         if ($song->update()) {
             $song->artists()->sync($request->artists);

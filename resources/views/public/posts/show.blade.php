@@ -15,8 +15,8 @@
         }
     @endphp
     <title>
-        {{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}</title>
-    <meta name="title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+        {{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}</title>
+    <meta name="title" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
 
 
 
@@ -40,7 +40,7 @@
     <link rel="canonical" href="{{ url()->current() }}">
     {{-- <meta property="og:locale" content="es_MX"> --}}
     <meta property="og:type" content="article">
-    <meta property="og:title" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:title" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
 
     @if (isset($post->song->song_romaji))
         @if (isset($post->artist->name))
@@ -67,7 +67,7 @@
         alt="{{ $post->title }}">
     <meta property="og:image:width" content="460">
     <meta property="og:image:height" content="650">
-    <meta property="og:image:alt" content="{{ $post->title }} {{ $post->suffix != null ? $post->suffix : $post->type }}">
+    <meta property="og:image:alt" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
     <meta property="og:image:type" content="image/webp">
     {{-- <meta property="article:published_time" content="2022-09-04T20:03:32-05:00">
     <meta property="article:modified_time" content="2022-09-04T20:03:37-05:00"> --}}
@@ -143,10 +143,10 @@
                                     $songShowRoute = route('song.show', [
                                         $song->id,
                                         $song->post->slug,
-                                        $song->suffix != null ? $song->suffix : $song->type,
+                                        $song->slug != null ? $song->slug : $song->type,
                                     ]);
                                     $songName = 'N/A';
-                                    $themeSuffix = $song->suffix != null ? $song->suffix : $song->type;
+                                    $themeSuffix = $song->slug != null ? $song->slug : $song->type;
                                     $songScore = $song->averageRating != null ? $song->averageRating / 1 : 'N/A';
 
                                     if (isset($song->song_romaji)) {
@@ -203,24 +203,18 @@
                                                     @php
                                                         $song_id = $variant->song->id;
                                                         $slug = $variant->song->post->slug;
-                                                        if ($variant->song->suffix != null) {
-                                                            $suffix = $variant->song->suffix;
+                                                        if ($variant->song->slug != null) {
+                                                            $suffix = $variant->song->slug;
                                                         } else {
                                                             $suffix = $variant->song->type;
                                                         }
-                                                        $version = $variant->version;
+                                                        $version = $variant->version_number;
 
-                                                        $varianShowRoute = route('p.song.variant.show', [
-                                                            $song->id,
-                                                            $slug,
-                                                            $suffix,
-                                                            $version,
-                                                        ]);
                                                     @endphp
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <a class="text-decoration-none text-light"
-                                                            href="{{ $varianShowRoute }}"><span>Version
-                                                                {{ $variant->version }}</span></a>
+                                                            href="{{ $variant->url }}"><span>Version
+                                                                {{ $variant->version_number }}</span></a>
                                                         <div class="d-flex flex-row align-items-center gap-4">
                                                             <div>
                                                                 @if (isset($variant->score))
@@ -270,10 +264,10 @@
                                     $songShowRoute = route('song.show', [
                                         $song->id,
                                         $song->post->slug,
-                                        $song->suffix != null ? $song->suffix : $song->type,
+                                        $song->slug != null ? $song->slug : $song->type,
                                     ]);
                                     $songName = 'N/A';
-                                    $themeSuffix = $song->suffix != null ? $song->suffix : $song->type;
+                                    $themeSuffix = $song->slug != null ? $song->slug : $song->type;
                                     $songScore = $song->averageRating != null ? $song->averageRating / 1 : 'N/A';
 
                                     if (isset($song->song_romaji)) {
@@ -330,24 +324,18 @@
                                                     @php
                                                         $song_id = $variant->song->id;
                                                         $slug = $variant->song->post->slug;
-                                                        if ($variant->song->suffix != null) {
-                                                            $suffix = $variant->song->suffix;
+                                                        if ($variant->song->slug != null) {
+                                                            $suffix = $variant->song->slug;
                                                         } else {
                                                             $suffix = $variant->song->type;
                                                         }
-                                                        $version = $variant->version;
+                                                        $version = $variant->version_number;
 
-                                                        $varianShowRoute = route('p.song.variant.show', [
-                                                            $song->id,
-                                                            $slug,
-                                                            $suffix,
-                                                            $version,
-                                                        ]);
                                                     @endphp
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <a class="text-decoration-none text-light"
-                                                            href="{{ $varianShowRoute }}"><span>Version
-                                                                {{ $variant->version }}</span></a>
+                                                            href="{{ $variant->url }}"><span>Version
+                                                                {{ $variant->version_number }}</span></a>
                                                         <div class="d-flex flex-row align-items-center gap-4">
                                                             <div>
                                                                 @if (isset($variant->score))

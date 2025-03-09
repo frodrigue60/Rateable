@@ -25,13 +25,12 @@
                     @php
                         $song_id = $variant->song->id;
                         $post_slug = $variant->song->post->slug;
-                        $suffix = $variant->song->suffix != null ? $variant->song->suffix : $variant->song->type;
-                        $version = $variant->version;
-                        $showVariantRoute = route('p.song.variant.show', [$song_id, $post_slug, $suffix, $version]);
+                        $suffix = $variant->song->slug != null ? $variant->song->slug : $variant->song->type;
+                        $version = $variant->version_number;
                         $forward_text =
-                            ($variant->song->suffix ? $variant->song->suffix : $variant->song->type) .
+                            ($variant->song->slug ? $variant->song->slug : $variant->song->type) .
                             ' v' .
-                            $variant->version;
+                            $variant->version_number;
 
                         $song_name = null;
 
@@ -42,7 +41,7 @@
                         {{-- SONG TITLE --}}
                         <div class="text-ellipsis">
                             @if ($song_name != null)
-                                <a class="no-deco text-light bold" href="{{ $showVariantRoute }}">{{ $song_name }} </a>
+                                <a class="no-deco text-light bold" href="{{ $variant->url }}">{{ $song_name }} </a>
                             @else
                                 <strong>N/A</strong>
                             @endif
@@ -66,7 +65,7 @@
                 {{-- ANIME TITLE --}}
                 <div class="item-post-info">
                     <a class="no-deco text-light" target="_blank"
-                        href="{{ route('post.show', [$variant->song->post->id, $variant->song->post->slug]) }}">{{ $variant->song->post->title }}</a>
+                        href="{{ $variant->song->post->url }}">{{ $variant->song->post->title }}</a>
                 </div>
             </div>
             <div class="item-score">
