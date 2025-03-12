@@ -4,7 +4,6 @@
 
 @section('content')
     <div class="container">
-        @include('admin.songs.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
@@ -15,7 +14,7 @@
                 {{-- CARD BODY --}}
                 <div class="card-body">
                     {{-- search form --}}
-                    <form class="d-flex" action="{{ route('search.tag') }}" method="GET">
+                    <form class="d-flex" action="{{ route('admin.tags.search') }}" method="GET">
                         <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
@@ -26,7 +25,7 @@
                                 <th scope="col">Song Name</th>
                                 <th scope="col">Songs Artist</th>
                                 <th scope="col">Tags</th>
-                                <th scope="col">Video ID</th>
+                                <th scope="col">Variants</th>
                                 <th scope="col">Theme</th>
                                 <th scope="col">Options</th>
                             </tr>
@@ -52,7 +51,7 @@
                                     <td>
                                         @isset($song->artist)
                                             <a class="text-light"
-                                                href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}">{{ $song->artist->name }}</a>
+                                                href="{{ route('artists.show', [$song->artist->id, $song->artist->name_slug]) }}">{{ $song->artist->name }}</a>
                                         @endisset
                                         @isset($song->artists)
                                             {{ count($song->artists) }}
@@ -63,57 +62,30 @@
                                             {{ $tag->name }}
                                         @endforeach
                                     </td>
-                                    <td></td>
+                                    <td>{{ count($song->songVariants) }}</td>
                                     <td>{{ $song->slug != null ? $song->slug : $song->type }}</td>
                                     <td>
                                         @if (Auth::user()->isEditor() | Auth::user()->isAdmin())
                                             <a class="btn btn-sm btn-success"
-                                                href="{{ route('song.post.edit', $song->id) }}"><i
+                                                href="{{ route('posts.songs.edit', $song->id) }}"><i
                                                     class="fa-solid fa-pencil"></i></a>
                                             <a class="btn btn-sm btn-danger"
-                                                href="{{ route('song.post.destroy', $song->id) }}"><i
+                                                href="{{ route('posts.songs.destroy', $song->id) }}"><i
                                                     class="fa-solid fa-trash"></i></a>
                                             {{-- <a class="btn btn-sm btn-primary"
-                                                href="{{ route('admin.videos.index', $song->id) }}"><i class="fa-solid fa-list"></i></a> --}}
+                                                href="{{ route('songs.variants.show', $song->id) }}"><i
+                                                    class="fa-solid fa-eye"></i></a> --}}
                                             <a class="btn btn-sm btn-primary"
-                                                href="{{ route('song.variant.store', $song->id) }}"><i
-                                                    class="fa-solid fa-plus"></i>
+                                                href="{{ route('songs.variants.manage', $song->id) }}"><i
+                                                    class="fa-solid fa-list"></i></a>
+                                            {{-- <a class="btn btn-sm btn-primary"
+                                                href="{{ route('songs.variants.add', $song->id) }}"><i
+                                                    class="fa-solid fa-plus"></i> --}}
                                             </a>
                                         @endif
                                     </td>
-
                                 </tr>
-                                @isset($song->songVariants)
-                                    @foreach ($song->songVariants as $variant)
-                                        <tr>
-                                            <td></td>
-                                            <td><a href="{{ $variant->url }}" class="text-light">{{ $song_name }}
-                                                    {{ $variant->slug }}</a>
-                                            </td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{ isset($variant->video->id) ? $variant->id : 'N/A' }}</td>
-                                            <td>{{ $variant->song->slug != null ? $variant->song->slug : $variant->song->type }}
-                                                {{ $variant->slug }}</td>
-                                            <td>
-                                                <a class="btn-sm btn btn-success"
-                                                    href="{{ route('song.variant.edit', $variant->id) }}"><i
-                                                        class="fa-solid fa-pencil"></i></a>
-                                                <a class="btn-sm btn btn-danger"
-                                                    href="{{ route('song.variant.destroy', $variant->id) }}"><i
-                                                        class="fa-solid fa-trash"></i></a>
-                                                <a class="btn-sm btn btn-primary"
-                                                    href="{{ route('song.variant.index', $variant->id) }}"><i
-                                                        class="fa-solid fa-list"></i></a>
-                                                <a class="btn-sm btn btn-primary"
-                                                    href="{{ route('song.variant.show', $variant->id) }}"><i
-                                                        class="fa-solid fa-eye"></i></a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endisset
                             @endforeach
-
                         </tbody>
                     </table>
                 </div>

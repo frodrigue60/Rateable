@@ -21,6 +21,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use App\Services\Breadcrumb;
 
 class PostController extends Controller
 {
@@ -32,8 +33,15 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::orderByDesc('id')->paginate(20);
+
+        $breadcrumb = Breadcrumb::generate([
+            [
+                'name' => 'Index',
+                'url' => route('admin.posts.index'),
+            ],
+        ]);
         //dd($posts);
-        return view('admin.posts.index', compact('posts'));
+        return view('admin.posts.index', compact('posts', 'breadcrumb'));
     }
 
     /**
@@ -43,6 +51,9 @@ class PostController extends Controller
      */
     public function create()
     {
+        $tags = Tag::all();
+        $artists = Artist::all();
+
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
             ['name' => 'Ending', 'value' => 'ED']
@@ -53,9 +64,19 @@ class PostController extends Controller
             ['name' => 'Published', 'value' => 'published']
         ];
 
-        $tags = Tag::all();
-        $artists = Artist::all();
-        return view('admin.posts.create', compact('tags', 'types', 'artists', 'postStatus'));
+        $breadcrumb = Breadcrumb::generate([
+            [
+                'name' => 'Index',
+                'url' => route('admin.posts.index'),
+            ],
+            [
+                'name' => 'Create post',
+                'url' => '',
+            ],
+        ]);
+
+        //dd($tagsYears, $tagsNames);
+        return view('admin.posts.create', compact('tags', 'types', 'artists', 'postStatus', 'breadcrumb'));
     }
 
     /**
@@ -66,6 +87,10 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
+        /* return redirect()->back()
+                         ->with('error', 'Hubo un error al procesar el formulario.')
+                         ->withInput(); */
         $user = Auth::User()->type;
         if ($user == 'admin' || $user == 'editor' || $user == 'creator') {
 
@@ -93,18 +118,17 @@ class PostController extends Controller
             $this->storePostImages($post, $request);
 
             if ($post->save()) {
-                $tags = $request->tags;
-                $post->tag($tags);
+                $post->retag($request->tags);
 
                 $success = 'Post created successfully';
-                return redirect(route('admin.post.index'))->with('success', $success);
+                return redirect(route('admin.posts.index'))->with('success', $success);
             } else {
                 $error = 'Somethis was wrong!';
-                return redirect(route('admin.post.index'))->with('error', $error);
+                return redirect(route('admin.posts.index'))->with('error', $error);
             }
         } else {
             $error = 'User is not authorized!';
-            return redirect(route('admin.post.index'))->with('error', $error);
+            return redirect(route('admin.posts.index'))->with('error', $error);
         }
     }
 
@@ -118,9 +142,19 @@ class PostController extends Controller
     {
         if (Auth::check() && Auth::user()->type == 'admin' || Auth::user()->type == 'editor') {
 
+            $post = Post::findOrFail($id);
             $score_format = Auth::user()->score_format;
 
-            $post = Post::findOrFail($id);
+            $breadcrumb = Breadcrumb::generate([
+                [
+                    'name' => 'Index',
+                    'url' => route('admin.posts.index', $post->id),
+                ],
+                [
+                    'name' => $post->title,
+                    'url' => route('admin.posts.show', $post->id),
+                ],
+            ]);
 
             $ops = $post->songs->filter(function ($song) {
                 return $song->type === 'OP';
@@ -132,7 +166,7 @@ class PostController extends Controller
             $artist = $post->artist;
             $tags = $post->tagged;
             //dd($post);
-            return view('admin.posts.show', compact('post', 'tags', 'score_format', 'artist', 'ops', 'eds'));
+            return view('admin.posts.show', compact('post', 'tags', 'score_format', 'artist', 'ops', 'eds', 'breadcrumb'));
         }
     }
 
@@ -144,6 +178,10 @@ class PostController extends Controller
      */
     public function edit($id)
     {
+        $post = Post::find($id);
+        $tags = Tag::all();
+        $artists = Artist::all();
+
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
             ['name' => 'Ending', 'value' => 'ED']
@@ -154,12 +192,18 @@ class PostController extends Controller
             ['name' => 'Published', 'value' => 'published']
         ];
 
-        $post = Post::find($id);
-        $song = Song::find($post->song_id);
-        $tags = Tag::all();
-        $artists = Artist::all();
+        $breadcrumb = Breadcrumb::generate([
+            [
+                'name' => 'Index',
+                'url' => route('admin.posts.index'),
+            ],
+            [
+                'name' => $post->title,
+                'url' => '',
+            ],
+        ]);
 
-        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists', 'song', 'postStatus'));
+        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists', 'postStatus', 'breadcrumb'));
     }
 
     /**
@@ -171,6 +215,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //dd($request->all());
         $user = Auth::User()->type;
         if ($user == 'admin' || $user == 'editor' || $user == 'creator') {
             $post = Post::find($id);
@@ -200,18 +245,17 @@ class PostController extends Controller
             $this->storePostImages($post, $request);
 
             if ($post->update()) {
-                $tags = $request->tags;
-                $post->retag($tags);
+                $post->retag($request->tags);
 
                 Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
                 Storage::disk('public')->delete('/anime_banner/' . $old_banner);
-                return redirect(route('admin.post.index'))->with('success', 'Post Updated Successfully');
+                return redirect(route('admin.posts.index'))->with('success', 'Post Updated Successfully');
             } else {
-                return redirect(route('admin.post.index'))->with('error', 'Something has wrong');
+                return redirect(route('admin.posts.index'))->with('error', 'Something has wrong');
             }
         } else {
             $error = 'User is not authorized!';
-            return redirect(route('admin.post.index'))->with('error', $error);
+            return redirect(route('admin.posts.index'))->with('error', $error);
         }
     }
 
@@ -226,9 +270,9 @@ class PostController extends Controller
         $post = Post::find($id);
 
         if ($post->delete()) {
-            return Redirect::route('admin.post.index')->with('success', 'Post Deleted successfully!');
+            return Redirect::route('admin.posts.index')->with('success', 'Post Deleted successfully!');
         } else {
-            return Redirect::route('admin.post.index')->with('error', 'Post has been not deleted!');
+            return Redirect::route('admin.posts.index')->with('error', 'Post has been not deleted!');
         }
     }
 
@@ -338,7 +382,7 @@ class PostController extends Controller
         $data[] = $json->data->Media;
         $this->generateMassive($data);
         $success = 'Single post created successfully';
-        return redirect(route('admin.post.index'))->with('success', $success);
+        return redirect(route('admin.posts.index'))->with('success', $success);
     }
     public function getSeasonalAnimes(Request $request)
     {
@@ -354,7 +398,7 @@ class PostController extends Controller
 
         if ($validator->fails()) {
             $messageBag = $validator->getMessageBag();
-            return redirect(route('admin.animes.index'))->with('error', $messageBag);
+            return redirect(route('admin.posts.index'))->with('error', $messageBag);
         }
 
         $client = new \GuzzleHttp\Client();
@@ -399,7 +443,7 @@ class PostController extends Controller
         //dd($data);
         $this->generateMassive($data);
         $success = count($data) . ' Posts created successfully ';
-        return redirect(route('admin.post.index'))->with('success', $success);
+        return redirect(route('admin.posts.index'))->with('success', $success);
     }
 
     public function generateMassive($data)
@@ -437,9 +481,9 @@ class PostController extends Controller
 
     public function forceUpdate()
     {
-        return redirect(route('admin.post.index'))->with('warning', 'force update');
+        return redirect(route('admin.posts.index'))->with('warning', 'force update');
     }
-    public function wipeAllPosts()
+    public function wipePosts()
     {
         $posts = Post::all();
         foreach ($posts as $post) {
@@ -466,7 +510,7 @@ class PostController extends Controller
         DB::table('ratings')->delete();
         DB::table('tagging_tagged')->delete();
         $success = 'All posts deleted';
-        return redirect(route('admin.post.index'))->with('success', $success);
+        return redirect(route('admin.posts.index'))->with('success', $success);
     }
     function buildGraphQLQuerySearch()
     {

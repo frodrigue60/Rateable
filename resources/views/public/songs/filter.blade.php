@@ -36,10 +36,10 @@
                 <h2 class="text-light"><strong>{{$user->name}}</strong> favorites</h2>
             </div>
         @endif
-        @if (Request::routeIs('artist.show'))
+        @if (Request::routeIs('artists.show'))
             <div class="top-header color1  mb-1 mt-1">
                 <h2><a class="no-deco text-light"
-                        href="{{ route('artist.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }}
+                        href="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }}
                         {{ $artist->name_jp != null ? '(' . $artist->name_jp . ')' : '' }}</a></h2>
             </div>
         @endif
@@ -56,8 +56,8 @@
                     @if (Request::routeIs('user.list'))
                         <form id="form-filter" action="{{ route('user.list', $user->id) }}" method="get">
                     @endif
-                    @if (Request::routeIs('artist.show'))
-                        <form id="form-filter" action="{{ route('artist.show', [$artist->id, $artist->name_slug]) }}"
+                    @if (Request::routeIs('artists.show'))
+                        <form id="form-filter" action="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}"
                             method="get">
                     @endif
                     @if (Request::routeIs('favorites') || Request::routeIs('user.list'))
@@ -189,7 +189,7 @@
         @endif
     @endif
 
-    @if (Request::routeIs('artist.show'))
+    @if (Request::routeIs('artists.show'))
         @if (config('app.env') === 'local')
             @vite(['resources/js/artists_infinite_scroll.js'])
         @else

@@ -13,14 +13,13 @@
 
 @section('content')
     <div class="container">
-        @include('admin.songs.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
                 <div class="card-header">
                     <h5 class="cart-title">Edit Song</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('song.post.update', $song->id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('posts.songs.update', $song->id) }}" enctype="multipart/form-data">
                         @method('put')
                         @csrf
                         <div class="mb-3">
@@ -71,38 +70,25 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
-                            @php
-                                if (isset($song->tags[0])) {
-                                    [$name, $year] = explode(' ', $song->tags[0]->name);
-                                } else {
-                                    $name = null;
-                                    $year = null;
-                                }
-                            @endphp
-                            <div class="col-md mb-3">
-                                <label for="select-year">Year</label>
-                                <select class="form-select" aria-label="Default select example" name="year"
-                                    id="select-year">
-                                    <option selected value="">Select a year</option>
-                                    @foreach ($years as $item)
-                                        <option value="{{ $item['value'] }}"
-                                            {{ $item['value'] == $year ? 'selected' : '' }}>{{ $item['name'] }}</option>
+
+                        <div class="col-md mb-3">
+                            <label for="tags-select">Year</label>
+                            <select class="form-select" aria-label="Default select example" name="tags[]" id="tags-select" multiple>
+                                <option selected value="">Select tags</option>
+                                @isset($tags)
+                                    @php
+                                        $plucked = $song->tags->pluck('name')->toArray();
+                                    @endphp
+                                    @foreach ($tags as $tag)
+                                        <option value="{{ $tag->name }}"
+                                            {{ in_array($tag->name, $plucked) ? 'selected' : '' }}>{{ $tag->name }}
+                                        </option>
                                     @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md mb-3">
-                                <label for="select-season">Season</label>
-                                <select class="form-select" aria-label="Default select example" name="season"
-                                    id="select-season">
-                                    <option selected value="">Select a season</option>
-                                    @foreach ($seasons as $item)
-                                        <option value="{{ $item['value'] }}"
-                                            {{ $item['value'] == $name ? 'selected' : '' }}>{{ $item['name'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                @endisset
+
+                            </select>
                         </div>
+
                         <div class="d-flex">
                             <button class="btn btn-primary w-100" type="submit">Submit</button>
                         </div>
@@ -117,6 +103,7 @@
 
         <script>
             new MultiSelectTag('artists-select');
+            new MultiSelectTag('tags-select');
         </script>
     @endsection
 </div>

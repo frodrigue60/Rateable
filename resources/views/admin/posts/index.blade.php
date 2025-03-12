@@ -7,8 +7,8 @@
             <div class="card bg-dark">
                 {{-- CARD HEADER --}}
                 <div class="card-header">
-                    <a class="btn btn-sm btn-primary" href="{{ route('admin.post.create') }}">CREATE POST</a>
-                    <a class="btn btn-sm btn-primary" href="{{ route('wipeallposts') }}">WIPE ALL POSTS</a>
+                    <a class="btn btn-sm btn-primary" href="{{ route('admin.posts.create') }}">CREATE POST</a>
+                    <a class="btn btn-sm btn-primary" href="{{ route('posts.wipe') }}">WIPE ALL POSTS</a>
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">
@@ -25,7 +25,8 @@
                                 <div id="collapseOne" class="accordion-collapse collapse"
                                     data-bs-parent="#accordionExample">
                                     <div class="accordion-body bg-dark">
-                                        <form class="d-flex gap-1" action="{{ route('search.animes') }}" method="GET">
+                                        <form class="d-flex gap-1" action="{{ route('admin.search.animes') }}"
+                                            method="GET">
                                             <input class="form-control" type="text" name="q" placeholder="Search"
                                                 required />
                                             <select class="form-select" aria-label="Default select example" name="types">
@@ -66,7 +67,7 @@
                         </div>
                         <br>
                     @endif
-                    <form class="d-flex" action="{{ route('admin.post.search') }}" method="GET">
+                    <form class="d-flex" action="{{ route('admin.posts.search') }}" method="GET">
                         <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
@@ -88,8 +89,7 @@
                                 <tr>
                                     <th scope="row">{{ $post->id }}</th>
                                     <td>
-                                        <a href="{{ $post->url }}"
-                                            class="no-deco">{{ $post->title }}</a>
+                                        <a href="{{ $post->url }}" class="no-deco">{{ $post->title }}</a>
                                     </td>
                                     <td>
                                         @foreach ($post->tags as $tag)
@@ -121,7 +121,7 @@
                                     @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                         <td>
                                             @if ($post->status == 'published')
-                                                <form action="{{ route('admin.post.unapprove', $post->id) }}"
+                                                <form action="{{ route('admin.posts.unapprove', $post->id) }}"
                                                     method="post">
                                                     @csrf
                                                     <button class="btn btn-primary btn-sm"> <i
@@ -129,7 +129,7 @@
                                                 </form>
                                             @else
                                                 @if ($post->status == 'stagged')
-                                                    <form action="{{ route('admin.post.approve', $post->id) }}"
+                                                    <form action="{{ route('admin.posts.approve', $post->id) }}"
                                                         method="post">
                                                         @csrf
                                                         <button class="btn btn-warning btn-sm"><i
@@ -139,18 +139,17 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{ route('admin.post.edit', $post->id) }}"
+                                            <a href="{{ route('admin.posts.edit', $post->id) }}"
                                                 class="btn btn-success btn-sm"><i class="fa-solid fa-pencil"></i></a>
-                                            <a href="{{ route('admin.post.destroy', $post->id) }}"
+                                            <a href="{{ route('admin.posts.destroy', $post->id) }}"
                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"
                                                     aria-hidden="true"></i></a>
+                                            {{-- <a class="btn btn-sm btn-primary"
+                                                href="{{ route('admin.posts.show', $post->id) }}"><i
+                                                    class="fa-solid fa-eye"></i></a> --}}
                                             <a class="btn btn-sm btn-primary"
-                                                href="{{ route('posts.songs.create', $post->id) }}"><i
-                                                    class="fa-solid fa-plus"></i></a>
-                                            <a class="btn btn-sm btn-success"
-                                                href="{{ route('song.post.manage', $post->id) }}"><i
-                                                    class="fa-solid fa-list-check"></i></a>
-
+                                                href="{{ route('posts.songs', $post->id) }}"><i
+                                                    class="fa-solid fa-list"></i></a>
                                         </td>
                                     @endif
                                 </tr>

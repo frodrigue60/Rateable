@@ -1,75 +1,79 @@
 @extends('layouts.app')
-@section('meta')
-    @php
-        $title = $song_variant->song->post->title;
-        $suffix =
-            $song_variant->song->slug != null
-                ? $song_variant->song->slug
-                : $song_variant->song->type . ' v' . $song_variant->version_number;
-        $artist_names = [];
-        $artist_names = [];
-        $artists_string = null;
-        $song_name = null;
-        if (isset($song_variant->song->artists) && $song_variant->song->artists->count() != 0) {
-            foreach ($song_variant->song->artists as $artist) {
-                $artist_names[] = $artist->name;
-                $artists_string = implode(', ', $artist_names);
-            }
-        } else {
-            $artists_string = 'N/A';
-        }
 
-        if (isset($song_variant->song->song_romaji)) {
-            $song_name = $song_variant->song->song_romaji;
+@php
+    $song = $song_variant->song;
+    $post = $song->post;
+
+    $title = $song_variant->song->post->title;
+    $suffix =
+        $song_variant->song->slug != null
+            ? $song_variant->song->slug
+            : $song_variant->song->type . ' v' . $song_variant->version_number;
+    $artist_names = [];
+    $artist_names = [];
+    $artists_string = null;
+    $song_name = null;
+    if (isset($song_variant->song->artists) && $song_variant->song->artists->count() != 0) {
+        foreach ($song_variant->song->artists as $artist) {
+            $artist_names[] = $artist->name;
+            $artists_string = implode(', ', $artist_names);
+        }
+    } else {
+        $artists_string = 'N/A';
+    }
+
+    if (isset($song_variant->song->song_romaji)) {
+        $song_name = $song_variant->song->song_romaji;
+    } else {
+        if ($song_variant->song->song_en) {
+            $song_name = $song_variant->song->song_en;
         } else {
-            if ($song_variant->song->song_en) {
-                $song_name = $song_variant->song->song_en;
+            if ($song_variant->song->song_jp) {
+                $song_name = $song_variant->song->song_jp;
             } else {
-                if ($song_variant->song->song_jp) {
-                    $song_name = $song_variant->song->song_jp;
-                } else {
-                    $song_name = 'N/A';
-                }
+                $song_name = 'N/A';
             }
         }
-        $currentUrl = url()->current();
-        $thumbnailUrl = asset('/storage/thumbnails/' . $song_variant->song->post->thumbnail);
+    }
+    $currentUrl = url()->current();
+    $thumbnailUrl = asset('/storage/thumbnails/' . $song_variant->song->post->thumbnail);
 
-        if ($song_variant->views >= 1000000) {
-            $views = number_format(intval($song_variant->views / 1000000), 0) . 'M';
-        } elseif ($song_variant->views >= 1000) {
-            $views = number_format(intval($song_variant->views / 1000), 0) . 'K';
-        } else {
-            $views = $song_variant->views;
+    if ($song_variant->views >= 1000000) {
+        $views = number_format(intval($song_variant->views / 1000000), 0) . 'M';
+    } elseif ($song_variant->views >= 1000) {
+        $views = number_format(intval($song_variant->views / 1000), 0) . 'K';
+    } else {
+        $views = $song_variant->views;
+    }
+    $forward_text =
+        ($song_variant->song->slug ? $song_variant->song->slug : $song_variant->song->type) .
+        ' v' .
+        $song_variant->version_number;
+    $score_string = '';
+    if (Auth::User()) {
+        switch (Auth::User()->score_format) {
+            case 'POINT_5':
+                $score_string = $score != null ? $score . '/5' : 'N/A';
+                break;
+            case 'POINT_10':
+                $score_string = $score != null ? $score . '/10' : 'N/A';
+                break;
+            case 'POINT_10_DECIMAL':
+                $score_string = $score != null ? $score . '/10' : 'N/A';
+                break;
+            case 'POINT_100':
+                $score_string = $score != null ? $score . '%' : 'N/A';
+                break;
+            default:
+                $score_string = $score != null ? $score . '/10' : 'N/A';
+                break;
         }
-        $forward_text =
-            ($song_variant->song->slug ? $song_variant->song->slug : $song_variant->song->type) .
-            ' v' .
-            $song_variant->version_number;
-        $score_string = '';
-        if (Auth::User()) {
-            switch (Auth::User()->score_format) {
-                case 'POINT_5':
-                    $score_string = $score != null ? $score . '/5' : 'N/A';
-                    break;
-                case 'POINT_10':
-                    $score_string = $score != null ? $score . '/10' : 'N/A';
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $score_string = $score != null ? $score . '/10' : 'N/A';
-                    break;
-                case 'POINT_100':
-                    $score_string = $score != null ? $score . '%' : 'N/A';
-                    break;
-                default:
-                    $score_string = $score != null ? $score . '/10' : 'N/A';
-                    break;
-            }
-        } else {
-            $score_string = $score != null ? $score . '/10' : 'N/A';
-        }
-    @endphp
+    } else {
+        $score_string = $score != null ? $score . '/10' : 'N/A';
+    }
+@endphp
 
+@section('meta')
     <title>{{ $title }} {{ $suffix }}</title>
     <meta name="title" content="{{ $title }} {{ $suffix }}">
     <meta name="description" content="Song: {{ $song_name }}  - Artists: {{ $artists_string }}">
@@ -89,7 +93,6 @@
     <meta property="og:image:type" content="image/webp">
 @endsection
 @section('content')
-
     <div class="container">
         {{-- <div class="social-share-panel text-light">
             <div class="share-fb">
@@ -102,108 +105,109 @@
                 <button><i class="fa-brands fa-x-twitter"></i></button>
             </div>
         </div> --}}
-        <div class="row justify-content-center">
-            <div class="card-video card">
-                @if ($song_variant->video)
-                    @if ($song_variant->video->type == 'file')
-                        @php
-                            $video_url = '';
-                            if ($song_variant->video->type == 'file') {
-                                $video_url = Storage::url($song_variant->video->video_src);
-                            }
-                        @endphp
-                        <div class="card-body p-0" id="video_container">
-                            <video id="player" controls class="ratio-16x9" autoplay>
-                                <source src="{{ $video_url }}" type="video/webm" />
-                            </video>
-                        </div>
-                    @else
-                        <div class="d-flex ratio-16x9 justify-content-center">
-                            {!! $song_variant->video->embed_code !!}
-                        </div>
-                    @endif
-                @else
-                    <h3 class="text-light d-flex align-items-center justify-content-center">Videos not found</h3>
-                @endif
-            </div>
-
-        </div>
-    </div>
-
-    <div class="father-container ">
-        <div class="text-light my-2">
-            <h1 style="font-size:2rem;"><a href="{{ $song_variant->song->post->url }}"
-                    class="text-decoration-none text-light">{{ $song_variant->song->post->title }}
-                    {{ $forward_text }}</a></h1>
-        </div>
-        <div class="all-buttons-container">
-            <div class="buttons-container">
-                <div class="d-flex gap-1">
-                    <span class="px-2">{{ $score_string }} <i class="fa fa-star" aria-hidden="true"></i>
-                        <span class="px-2">{{ $views }} <i class="fa fa-eye" aria-hidden="true"></i>
-                        </span>
-                        <span class="px-2">{{ $song_variant->likeCount }} <i class="fa-solid fa-heart"></i>
-                        </span>
-
-                </div>
-                <div class="d-flex gap-1">
-                    @guest
-                        <a href="{{ route('login') }}" class="buttons-bottom px-2">{{ $song_variant->likeCount }} <i
-                                class="fa-regular fa-heart"></i>
-                        </a>
-                    @endguest
-                    @auth
-                        @if ($song_variant->liked())
-                            <form style="display: flex;width: 100%;height: 100%;"
-                                action="{{ route('variant.unlike', [$song_variant->id]) }}"
-                                method="post">
-                                @csrf
-                                <button class="buttons-bottom px-2"><i class="fa-solid fa-bookmark"></i></i>
-                                </button>
-                            </form>
-                        @else
-                            <form style="display: flex;width: 100%;height: 100%;"
-                                action="{{ route('variant.like', [$song_variant->id]) }}"
-                                method="post">
-                                @csrf
-                                <button class="buttons-bottom px-2"><i class="fa-regular fa-bookmark"></i>
-                                </button>
-                            </form>
-                        @endif
-                    @endauth
-                    <a href="{{ route('song.create.report', [$song_variant->song->id, $song_variant->id]) }}"
-                        class="buttons-bottom px-2" type="button"><i class="fa-solid fa-flag" aria-hidden="true"></i>
-                        Report</a>
-
-                    {{-- <button class="buttons-bottom px-2" type="button" data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop"><i class="fa fa-info-circle" aria-hidden="true"></i>
-                        Info</button> --}}
-                </div>
-            </div>
-        </div>
-        {{-- <div>
-            <h4 class="text-light">Anime: {{$song_variant->song->post->title}}</h4>
-        </div> --}}
-        <div class="text-light">
-            <p class="my-2"><span>Song: </span><strong>{{ $song_name }}</strong></p>
-            <p class="my-2"><span>Artists: </span>
-                @foreach ($song_variant->song->artists as $index => $item)
+        <div class="row mb-3">
+            @if ($song_variant->video)
+                @if ($song_variant->video->type == 'file')
                     @php
-                        $artistShowRoute = route('artist.show', [$item->id, $item->name_slug]);
-                        if ($item->name_jp != null) {
-                            $artistName = $item->name . ' (' . $item->name_jp . ')';
-                        } else {
-                            $artistName = $item->name;
+                        $video_url = '';
+                        if ($song_variant->video->type == 'file') {
+                            $video_url = Storage::url($song_variant->video->video_src);
                         }
                     @endphp
-                    <a class="text-light text-decoration-none"
-                        href="{{ $artistShowRoute }}"><strong>{{ $artistName }}</strong></a>
-                    @if ($index < count($song_variant->song->artists) - 1)
-                        ,
-                    @endif
-                @endforeach
-            </p>
+                    <div class="" id="video_container">
+                        <video id="player" controls class="ratio-16x9" {{-- autoplay="off" --}}>
+                            <source src="{{ $video_url }}" type="video/webm" />
+                        </video>
+                    </div>
+                @else
+                    <div class="d-flex ratio-16x9 justify-content-center">
+                        {!! $song_variant->video->embed_code !!}
+                    </div>
+                @endif
+            @else
+                <h3 class="text-light d-flex align-items-center justify-content-center">Videos not found</h3>
+            @endif
         </div>
+
+        <div class="text-light">
+            <div>
+                <h2>
+                    <a href="{{ $post->url }}" class="text-decoration-none text-light">{{ $post->title }}
+                        {{ $song->slug }} {{ $song_variant->slug }}</a>
+                </h2>
+                <div class="my-2">
+                    <a href="" class="text-decoration-none text-light">{{ $song_name }}</a> -
+                    @foreach ($song_variant->song->artists as $index => $item)
+                        @php
+                            /* $artistShowRoute = route('artists.show', [$item->id, $item->name_slug]); */
+                            if ($item->name_jp != null) {
+                                $artistName = $item->name . ' (' . $item->name_jp . ')';
+                            } else {
+                                $artistName = $item->name;
+                            }
+                        @endphp
+                        <a class="text-decoration-none text-light" href="{{ $item->url }}">{{ $artistName }}</a>
+                        @if ($index < count($song_variant->song->artists) - 1)
+                            ,
+                        @endif
+                    @endforeach
+
+                </div>
+
+                <p>Views {{ $song_variant->views }}</p>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex gap-2">
+                    @guest
+                        {{-- LIKES --}}
+                        <div>
+                            <button class="btn btn-sm btn-primary"><i class="fa-regular fa-thumbs-up"></i>
+                                <span id="like-counter">{{ $song_variant->likeCount }}</span>
+                            </button>
+                        </div>
+                        {{-- DISLIKES --}}
+                        <div>
+                            <button class="btn btn-sm btn-primary"><i class="fa-regular fa-thumbs-down"></i>
+                                <span id="dislike-counter">{{ '142K' }}</span>
+                            </button>
+                        </div>
+                    @endguest
+                    @auth
+                        {{-- LIKES --}}
+                        <div>
+                            <button id="like-button" class="btn btn-sm btn-primary"
+                                data-variant-id="{{ $song_variant->id }}"><i class="fa-regular fa-thumbs-up"></i>
+                                <span id="like-counter">{{ $song_variant->likeCount }}</span>
+                            </button>
+                        </div>
+                        {{-- DISLIKES --}}
+                        <div>
+                            <button id="dislike-button" class="btn btn-sm btn-primary"
+                                data-variant-id="{{ $song_variant->id }}">
+                                <i class="fa-regular fa-thumbs-down"></i> <span id="dislike-counter">{{ '142K' }}</span>
+                            </button>
+                        </div>
+                    @endauth
+
+                    {{-- SCORE --}}
+                    <div>
+                        <button class="btn btn-sm btn-primary">
+                            <i class="fa fa-star" aria-hidden="true"></i> {{ $score_string }}
+                        </button>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    @if ($song_variant->liked())
+                        <button class="btn btn-sm btn-primary"><i class="fa-solid fa-bookmark"></i> Favorite</button>
+                    @else
+                        <button class="btn btn-sm btn-primary"><i class="fa-regular fa-bookmark"></i> Favorite</button>
+                    @endif
+                    <button class="btn btn-sm btn-primary"><i class="fa-solid fa-triangle-exclamation"></i> Report</button>
+                </div>
+            </div>
+        </div>
+        <hr>
+
         <hr class="text-light">
         <div>
             <h3 class="text-light">Comments</h3>
@@ -217,8 +221,8 @@
         @auth
             <div class="py-2">
                 <div class="comment-form">
-                    <form action="{{ route('variant.rate', [$song_variant->id]) }}"
-                        method="post" class="d-flex flex-column gap-2">
+                    <form action="{{ route('variant.rate', [$song_variant->id]) }}" method="post"
+                        class="d-flex flex-column gap-2">
                         @csrf
                         <div class="score-form text-light d-flex flex-column">
                             {{-- <span>Rate this theme:</span> --}}
@@ -548,18 +552,12 @@
             </div>
         @endif
     </div>
+@endsection
 
-    @section('script')
-        {{-- @if (config('app.env') === 'local')
-            @vite(['resources/js/api_get_video.js'])
-        @else
-            <script src="{{ asset('build/api_get_video.js') }}"></script>
-        @endif --}}
-
-        <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-        <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-        <script>
-            const player = new Plyr('#player');
-        </script>
-    @endsection
+@section('script')
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script>
+        const player = new Plyr('#player');
+    </script>
 @endsection

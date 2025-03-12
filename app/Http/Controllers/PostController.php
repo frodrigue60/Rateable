@@ -213,15 +213,15 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($anilist_id, $slug)
+    public function show($slug)
     {
+        $post = Post::with('songs')->where('slug', $slug)->first();
+
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
         } else {
             $score_format = null;
         }
-
-        $post = Post::with('songs')->where('anilist_id', $anilist_id)->where('slug', $slug)->first();
 
         if ($post == null) {
             return redirect(route('/'))->with('warning','Item do not exist!');

@@ -76,7 +76,7 @@ class Post extends Model
     public function getUrlAttribute()
     {
         return route('post.show', [
-            'anilist_id' => $this->anilist_id,
+            /* 'anilist_id' => $this->anilist_id, */
             'slug' => $this->slug,
         ]);
     }

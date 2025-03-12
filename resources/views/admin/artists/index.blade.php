@@ -32,7 +32,7 @@
                             @foreach ($artists as $artist)
                                 <tr>
                                     <td>{{ $artist->id }}</td>
-                                    <td><a href="{{ route('artist.show', [$artist->id, $artist->name_slug]) }}"
+                                    <td><a href="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}"
                                             class="no-deco">{{ $artist->name }}</a>
                                     </td>
                                     <td>

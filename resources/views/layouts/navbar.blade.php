@@ -38,16 +38,16 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button"
                             data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('admin.post.index') }}">Post index</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.posts.index') }}">Post index</a></li>
                             <li><a class="dropdown-item" href="{{ route('admin.tags.index') }}">Tags index</a></li>
                             <li><a class="dropdown-item" href="{{ route('admin.artist.index') }}">Artist index</a></li>
                             @if (Auth::User()->isAdmin())
                                 <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
                                 </li>
                             @endif
-                            <li><a class="dropdown-item" href="{{ route('admin.report.index') }}">Reports index</a>
+                            <li><a class="dropdown-item" href="{{ route('admin.reports.index') }}">Reports index</a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('admin.request.index') }}">Requests index</a>
+                            <li><a class="dropdown-item" href="{{ route('admin.requests.index') }}">Requests index</a>
                             </li>
                         </ul>
                     </li>

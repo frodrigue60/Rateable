@@ -494,12 +494,12 @@
                         @endisset
                         @isset($song->artist->name)
                             <h4>Artist: <strong><a
-                                        href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
+                                        href="{{ route('artists.show', [$song->artist->id, $song->artist->name_slug]) }}"
                                         class="no-deco">{{ $song->artist->name }}</a></strong></h4>
                         @endisset
                         @isset($song->artist->name_jp)
                             <h4>Artist (JP): <strong><a
-                                        href="{{ route('artist.show', [$song->artist->id, $song->artist->name_slug]) }}"
+                                        href="{{ route('artists.show', [$song->artist->id, $song->artist->name_slug]) }}"
                                         class="no-deco">{{ $song->artist->name_jp }}</a></strong></h4>
                         @endisset
                     </div>

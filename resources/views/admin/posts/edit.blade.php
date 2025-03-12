@@ -1,12 +1,23 @@
 @extends('layouts.app')
 
+@section('meta')
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
+
+    <style>
+        .mult-select-tag ul li {
+            color: black;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
                 <div class="card-header">Create Post</div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.post.update', $post->id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('admin.posts.update', $post->id) }}" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                         <div class="mb-3">
@@ -53,61 +64,38 @@
                             <label for="formFileBanner" class="form-label">Upload Banner Thumbnail</label>
                             <input class="form-control" type="file" id="formFileBanner" name="banner">
                         </div>
-                        <div class="row">
-                            @php
-                                if (isset($post->tags[0])) {
-                                    [$name, $year] = explode(' ', $post->tags[0]->name);
-                                } else {
-                                    $name = null;
-                                    $year = null;
-                                }
-                            @endphp
-                            <div class="col-md mb-3">
-                                <label for="select-season">Select season</label>
-                                <select class="form-select" name="season" id="select-season">
-                                    <option value="">Select a season</option>
-                                    @isset($seasons)
-                                        @foreach ($seasons as $item)
-                                            <option value="{{ $item['value'] }}"
-                                                {{ $item['value'] == $name ? 'selected' : '' }}>{{ $item['name'] }}</option>
-                                        @endforeach
-                                    @endisset
-                                </select>
-                            </div>
-                            <div class="col-md mb-3">
-                                <label for="select-year">Select year</label>
-                                <select class="form-select" name="year" id="select-year">
-                                    <option value="">Select a year</option>
-                                    @isset($seasons)
-                                        @foreach ($years as $item)
-                                            <option value="{{ $item['value'] }}"
-                                                {{ $item['value'] == $year ? 'selected' : '' }}>{{ $item['name'] }}</option>
-                                        @endforeach
-                                    @endisset
-                                </select>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <button class="btn btn-primary w-100" type="submit">Submit</button>
+                        <div class="col-md mb-3">
+                            <label for="tags-select">Select tags</label>
+                            <select class="form-select" name="tags[]" id="tags-select" multiple>
+                                <option value="">Select tags</option>
+                                @isset($tags)
+                                    @php
+                                        $plucked = $post->tags->pluck('name')->toArray();
+
+                                    @endphp
+                                    @foreach ($tags as $tag)
+                                        <option value="{{ $tag->name }}" {{ in_array($tag->name, $plucked) ? 'selected' : '' }}>
+                                            {{ $tag->name }}</option>
+                                    @endforeach
+                                @endisset
+                            </select>
                         </div>
                 </div>
-                </form>
+                <div class="d-flex">
+                    <button class="btn btn-primary w-100" type="submit">Submit</button>
+                </div>
             </div>
-
+            </form>
         </div>
 
-    @section('script')
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        {{-- <script src="http://code.jquery.com/jquery-1.8.3.js"></script> --}}
-        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">
+    </div>
+@endsection
 
-        <script type="text/javascript">
-            $(function() {
-                $(".chzn-select").chosen();
-            });
-        </script>
-    @endsection
-</div>
+
+@section('script')
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+
+    <script>
+        new MultiSelectTag('tags-select');
+    </script>
 @endsection

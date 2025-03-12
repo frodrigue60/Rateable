@@ -2,19 +2,18 @@
 
 @section('content')
     <div class="container">
-        @include('admin.videos.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
                 <div class="card-header">
-                    <h5 class="card-title">Add Video</h5>
+                    <h5 class="card-title">{{$song_variant->song->post->title}} {{$song_variant->song->slug}} {{$song_variant->slug}} - Video</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.videos.store', $song->id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{route('variants.video.store',[$song_variant->id])}}" enctype="multipart/form-data">
                         @csrf
                         @method('post')
                         <div class="mb-3">
                             <label for="formFileBanner" class="form-label">Upload Video File</label>
-                            <input class="form-control" type="file" id="formFileBanner" name="video">
+                            <input class="form-control" type="file" id="formFileBanner" name="video" accept="video/mp4,video/webm">
                         </div>
                         <div class="mb-3">
                             <label for="embed" class="form-label">Embed Code</label>

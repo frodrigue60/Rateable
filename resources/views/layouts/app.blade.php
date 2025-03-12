@@ -71,6 +71,7 @@
         @include('layouts.navbar')
 
         <main class="py-2">
+            @include('layouts.breadcrumb')
             @include('layouts.alerts')
             @yield('content')
             {{-- Modal Search --}}
@@ -106,6 +107,8 @@
             <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
             {{-- BUILD --}}
             <script src="{{ asset('build/ajaxSearch.js') }}"></script>
+
+
         @endif
 
         @yield('script')

@@ -96,7 +96,7 @@ class UserRequestController extends Controller
         $userRequest = UserRequest::find($id);
         //dd($userRequest);
         $userRequest->delete();
-        return redirect()->back()->with('success','Request deleted successfully');
+        return redirect(route('admin.requests.index'))->with('success','Request deleted successfully');
     }
     public function paginate($posts, $perPage, $page = null, $options = [])
     {

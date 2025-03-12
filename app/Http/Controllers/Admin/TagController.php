@@ -168,7 +168,7 @@ class TagController extends Controller
         DB::table('tagging_tags')->where('id', '=', $id)->delete();
         return redirect(route('admin.tags.index'))->with('success', 'Data deleted');
     }
-    public function searchTag(Request $request)
+    public function search(Request $request)
     {
         $tags = DB::table('tagging_tags')
             ->where('name', 'LIKE', "%{$request->input('q')}%")

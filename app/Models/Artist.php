@@ -34,4 +34,12 @@ class Artist extends Model
             $artist->songs()->detach();
         });
     }
+
+    public function getUrlAttribute()
+    {
+        return route('artists.show', [
+            'artist' => $this->id,
+            'slug' => $this->name_slug,
+        ]);
+    }
 }

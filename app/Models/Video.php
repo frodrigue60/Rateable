@@ -16,7 +16,7 @@ class Video extends Model
         parent::boot();
 
         static::deleting(function ($video) {
-            if ($video->video_src == null && Storage::disk('public')->exists($video->video_src)) {
+            if ($video->video_src != null && Storage::disk('public')->exists($video->video_src)) {
                 Storage::disk('public')->delete($video->video_src);
             }
         });

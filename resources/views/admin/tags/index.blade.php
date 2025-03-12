@@ -13,7 +13,7 @@
                 {{-- CARD BODY --}}
                 <div class="card-body">
                     {{-- search form --}}
-                    <form class="d-flex" action="{{ route('search.tag') }}" method="GET">
+                    <form class="d-flex" action="{{ route('admin.tags.search') }}" method="GET">
                         <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>

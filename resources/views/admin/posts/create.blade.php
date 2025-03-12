@@ -1,5 +1,16 @@
 @extends('layouts.app')
 
+@section('meta')
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
+
+    <style>
+        .mult-select-tag ul li {
+            color: black;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -10,7 +21,7 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.post.store') }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('admin.posts.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="titleAnime" class="form-label">Post Title</label>
@@ -51,32 +62,22 @@
                             <label for="formFileBanner" class="form-label">Upload Banner Thumbnail</label>
                             <input class="form-control" type="file" id="formFileBanner" name="banner">
                         </div>
-                        <div class="row">
-                            <div class="col-md mb-3">
-                                <label for="select-season">Select season</label>
-                                <select class="form-select" name="season" id="select-season">
-                                    <option value="">Select a season</option>
-                                    @isset($seasons)
-                                        @foreach ($seasons as $item)
-                                            <option {{ old('season') == $item['value'] ? 'selected' : '' }}
-                                                value="{{ $item['value'] }}">{{ $item['name'] }}</option>
-                                        @endforeach
-                                    @endisset
-                                </select>
-                            </div>
-                            <div class="col-md mb-3">
-                                <label for="select-year">Select year</label>
-                                <select class="form-select" name="year" id="select-year">
-                                    <option value="">Select a year</option>
-                                    @isset($seasons)
-                                        @foreach ($years as $item)
-                                            <option {{ old('year') == $item['value'] ? 'selected' : '' }}
-                                                value="{{ $item['value'] }}">{{ $item['name'] }}</option>
-                                        @endforeach
-                                    @endisset
-                                </select>
-                            </div>
+                        <div class="col-md mb-3">
+                            <label for="tags-select">Select season</label>
+                            <select class="form-select" name="tags[]" id="tags-select" multiple>
+                                <option value="">Select tags</option>
+                                @isset($tags)
+                                    @php
+                                        $plucked = $tags->pluck('name')->toArray();
+                                    @endphp
+                                    @foreach ($tags as $tag)
+                                        <option {{ in_array(old('tags[]'), $plucked) ? 'selected' : '' }} value="{{ $tag->id }}">
+                                            {{ $tag->name }}</option>
+                                    @endforeach
+                                @endisset
+                            </select>
                         </div>
+
                         <div class="d-flex">
                             <button class="btn btn-primary w-100" type="submit">Submit</button>
                         </div>
@@ -85,4 +86,12 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+
+    <script>
+        new MultiSelectTag('tags-select');
+    </script>
 @endsection

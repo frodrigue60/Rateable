@@ -2,25 +2,23 @@
 
 @section('content')
     <div class="container">
-        @include('admin.videos.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
                 <div class="card-header">
-                    <h5 class="card-title">Add Video to</h5>
-                    <p>{{$song_variant->song->post->title}} {{$song_variant->song->slug}} {{$song_variant->slug}}</p>
+                    <h5 class="card-title">Edit variant</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{route('variants.videos.store',[$song_variant->id])}}" enctype="multipart/form-data">
+                    <form method="post" action="{{route('song.variant.update',[$songVariant->id])}}" enctype="multipart/form-data">
                         @csrf
                         @method('post')
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label for="formFileBanner" class="form-label">Upload Video File</label>
                             <input class="form-control" type="file" id="formFileBanner" name="video">
-                        </div>
+                        </div> --}}
                         <div class="mb-3">
-                            <label for="embed" class="form-label">Embed Code</label>
-                            <input type="text" class="form-control" placeholder="Embed Code" id="embed"
-                                name="embed" value="{{ old('embed') }}">
+                            <label for="version" class="form-label">Theme Version Number</label>
+                            <input type="number" class="form-control" placeholder="Theme Version 1,2,3..." id="version"
+                                name="version" value="{{ $songVariant->version_number }}">
                         </div>
                         <div class="d-flex">
                             <button class="btn btn-primary w-100" type="submit">Submit</button>

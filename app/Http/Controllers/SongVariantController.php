@@ -133,7 +133,7 @@ class SongVariantController extends Controller
 
         //dd($song_variant,$score,$comments,$comments_featured);
 
-        return view('public.songs.variants.show', compact('song_variant', 'score', 'comments', 'comments_featured', 'user_rate'));
+        return view('public.variants.show', compact('song_variant', 'score', 'comments', 'comments_featured', 'user_rate'));
     }
 
     /* public function showTest($anime_slug, $song_suffix, $variant_version_number)

@@ -7,6 +7,7 @@ use App\Http\Controllers\api\PostController as apiPostController;
 use App\Http\Controllers\api\VideoController as apiVideoController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes

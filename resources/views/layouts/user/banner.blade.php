@@ -1,34 +1,14 @@
 @php
-    $user_profile_pic = '';
-    $user_banner_pic = '';
+    $user_profile_pic = asset('resources/images/default-avatar.jpg');
+    $user_banner_pic = asset('resources/images/default-banner.jpg');
 
-    /* if (isset($user->image)) {
-        $user_profile_pic = $user->image;
-    } else {
-        $user_profile_pic = asset('/storage/profile/' . 'default.jpg');
-    } */
-
-    $user_profile_path = public_path('storage/profile/' . $user->image);
-
-    if (file_exists($user_profile_path)) {
-        $user_profile_pic = asset('storage/profile/' . $user->image);
-    } else {
-        $user_profile_pic = $user->image;
+    if ($user->image != null && Storage::disk('public')->exists($user->image)) {
+        $user_profile_pic = Storage::url($user->image);;
     }
 
-    $user_banner_path = public_path('storage/profile/' . $user->banner);
-
-    if (file_exists($user_profile_path)) {
-        $user_banner_pic = asset('storage/banner/' . $user->banner);
-    } else {
-        $user_banner_pic = $user->banner;
+    if ($user->banner != null && Storage::disk('public')->exists($user->banner)) {
+        $user_banner_pic = Storage::url($user->banner);;
     }
-
-    /* if (isset($user->banner)) {
-        $user_banner_pic = $user->banner;
-    } else {
-        $user_banner_pic = asset('/storage/profile/' . 'default.jpg');
-    } */
 
 @endphp
 <div class="header">

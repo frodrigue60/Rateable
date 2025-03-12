@@ -757,7 +757,7 @@ class UserController extends Controller
         //dd($song_variants);
         //dd($songs);
         if ($request->ajax()) {
-            $view = view('layouts.song-variant-cards', compact('song_variants'))->render();
+            $view = view('layouts.variant.cards', compact('song_variants'))->render();
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
         //dd($songs);

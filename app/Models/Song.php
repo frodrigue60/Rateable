@@ -70,4 +70,15 @@ class Song extends Model
     {
         return $this->hasMany(SongVariant::class);
     }
+
+    public function getNameAttribute()
+    {
+        if ($this->song_romaji != null) {
+            return $this->song_romaji;
+        } elseif ($this->song_jp != null) {
+            return $this->song_jp;
+        } else {
+            return 'n/a';
+        }
+    }
 }

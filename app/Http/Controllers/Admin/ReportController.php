@@ -91,7 +91,7 @@ class ReportController extends Controller
     {
         $report = Report::findOrFail($id);
         $report->delete();
-        return redirect(route('admin.report.index'));
+        return redirect(route('admin.reports.index'));
     }
     public function fixed($id)
     {

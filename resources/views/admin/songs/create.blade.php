@@ -4,22 +4,22 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
 
-        <style>
-            .mult-select-tag ul li {
-                color: black;
-            }
-        </style>
+    <style>
+        .mult-select-tag ul li {
+            color: black;
+        }
+    </style>
 @endsection
+
 @section('content')
     <div class="container">
-        @include('admin.songs.breadcumb')
         <div class="row justify-content-center">
             <div class="card bg-dark text-light">
                 <div class="card-header">
                     <h5 class="card-title">Add song</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('song.post.store', $post->id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('posts.songs.store', $post->id) }}" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="theme_num" class="form-label">OP/ED Number</label>
@@ -64,38 +64,21 @@
                             </div>
                         </div>
                         <div class="row">
-                            @php
-                                //[$name, $year] = explode(' ', $post->tags[0]->name);
-
-                                if (isset($post->tags[0])) {
-                                    [$name, $year] = explode(' ', $post->tags[0]->name);
-                                } else {
-                                    $name = null;
-                                    $year = null;
-                                }
-                            @endphp
                             <div class="col-md mb-3">
-                                <label for="select-year">Year</label>
-                                <select class="form-select" aria-label="Default select example" name="year"
-                                    id="select-year">
-                                    <option selected value="">Select a year</option>
-                                    @foreach ($years as $item)
-                                        <option value="{{ $item['value'] }}"
-                                            {{ $item['value'] == $year ? 'selected' : '' }}>{{ $item['name'] }}
+                                <label for="tags-select">Year</label>
+                                <select class="form-select" aria-label="Default select example" name="tags[]"
+                                    id="tags-select">
+                                    <option selected value="">Select tags</option>
+                                    @isset($tags)
+                                    @php
+                                        $plucked = $post->tags->pluck('name')->toArray();
+                                    @endphp
+                                        @foreach ($tags as $tag)
+                                        <option value="{{ $tag->name }}" {{ in_array($tag->name, $plucked) ? 'selected' : '' }}>{{ $tag->name }}
                                         </option>
                                     @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md mb-3">
-                                <label for="select-season">Season</label>
-                                <select class="form-select" aria-label="Default select example" name="season"
-                                    id="select-season">
-                                    <option selected value="">Select a season</option>
-                                    @foreach ($seasons as $item)
-                                        <option value="{{ $item['value'] }}"
-                                            {{ $item['value'] == $name ? 'selected' : '' }}>{{ $item['name'] }}
-                                        </option>
-                                    @endforeach
+                                    @endisset
+                                    
                                 </select>
                             </div>
                         </div>
@@ -106,12 +89,15 @@
                 </div>
             </div>
         </div>
-    @section('script')
-        <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
 
-        <script>
-            new MultiSelectTag('artists-select');
-        </script>
-    @endsection
-</div>
+    </div>
+@endsection
+
+@section('script')
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+
+    <script>
+        new MultiSelectTag('artists-select');
+        new MultiSelectTag('tags-select');
+    </script>
 @endsection

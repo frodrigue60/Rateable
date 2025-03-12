@@ -103,27 +103,27 @@
                 <div class="container d-flex pt-2 justify-content-center gap-2">
 
                     @if ($post->status == 'stagged')
-                        <form action="{{ route('admin.post.approve', $post->id) }}" method="post">
+                        <form action="{{ route('admin.posts.approve', $post->id) }}" method="post">
                             @csrf
                             <button class="btn btn-warning btn-sm"> <i class="fa fa-clock" aria-hidden="true">
                                     {{ $post->id }}</i></button>
                         </form>
                     @endif
                     @if ($post->status == 'published')
-                        <form action="{{ route('admin.post.unapprove', $post->id) }}" method="post">
+                        <form action="{{ route('admin.posts.unapprove', $post->id) }}" method="post">
                             @csrf
                             <button class="btn btn-primary btn-sm"> <i class="fa fa-check" aria-hidden="true">
                                     {{ $post->id }}</i></button>
                         </form>
                     @endif
 
-                    <a href="{{ route('admin.post.edit', $post->id) }}" class="btn btn-success btn-sm"><i
+                    <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-success btn-sm"><i
                             class="fa-solid fa-pencil"></i></a>
-                    <a href="{{ route('admin.post.destroy', $post->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                    <a href="{{ route('admin.posts.destroy', $post->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"
                             aria-hidden="true"></i></a>
                     <a class="btn btn-sm btn-primary" href="{{ route('song.post.create', $post->id) }}"><i
                             class="fa-solid fa-plus"></i></a>
-                    <a class="btn btn-sm btn-success" href="{{ route('song.post.manage', $post->id) }}"><i
+                    <a class="btn btn-sm btn-success" href="{{ route('posts.songs', $post->id) }}"><i
                             class="fa-solid fa-list-check"></i></a>
 
                 </div>
@@ -171,7 +171,7 @@
                                                 <span class="pe-2"><i class="fa-solid fa-user"></i></span>
                                                 @foreach ($song->artists as $index => $item)
                                                     @php
-                                                        $artistShowRoute = route('artist.show', [
+                                                        $artistShowRoute = route('artists.show', [
                                                             $item->id,
                                                             $item->name_slug,
                                                         ]);
@@ -287,7 +287,7 @@
                                                 <span class="pe-2"><i class="fa-solid fa-user"></i></span>
                                                 @foreach ($song->artists as $index => $item)
                                                     @php
-                                                        $artistShowRoute = route('artist.show', [
+                                                        $artistShowRoute = route('artists.show', [
                                                             $item->id,
                                                             $item->name_slug,
                                                         ]);

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
-use App\Jobs\ProcessVideo;
+use App\Services\Breadcrumb;
 
 class VideoController extends Controller
 {
@@ -35,13 +35,31 @@ class VideoController extends Controller
      */
     public function create($variant_id)
     {
-        if ($variant_id != null) {
-            $song_variant = SongVariant::find($variant_id);
-            $song = $song_variant->song;
-            return view('admin.songs.variants.videos.create', compact('song', 'song_variant'));
-        } else {
-            return view('admin.videos.create', compact('song'));
-        }
+
+        $song_variant = SongVariant::find($variant_id);
+        $song = $song_variant->song;
+        $post = $song->post;
+
+        $breadcrumb = Breadcrumb::generate([
+            [
+                'name' => 'Index',
+                'url' => route('admin.posts.index'),
+            ],
+            [
+                'name' => $post->title,
+                'url' => route('posts.songs', $post->id),
+            ],
+            [
+                'name' => $song->slug,
+                'url' => route('songs.variants.manage', $song->id),
+            ],
+            [
+                'name' => $song_variant->slug . ' - '. 'video',
+                'url' => '',
+            ],
+        ]);
+
+        return view('admin.videos.create', compact('song', 'song_variant', 'breadcrumb'));
     }
 
     /**
@@ -53,7 +71,7 @@ class VideoController extends Controller
     public function store(Request $request, $variant_id)
     {
         $song_variant = SongVariant::find($variant_id);
-        $song = Song::find($song_variant->id);
+        $song = $song_variant->song;
 
         try {
             $video = new Video();
@@ -115,10 +133,10 @@ class VideoController extends Controller
                     //Storage::disk('public')->put($path,$file_name.$request->video);
                     $request->video->storeAs($path, $file_name, 'public');
                 }
-                return redirect(route('song.post.manage', $song->post->id))->with('success', 'saved successfully');
+                return redirect(route('songs.variants.manage', $song->id))->with('success', 'saved successfully');
             }
         } catch (ModelNotFoundException $e) {
-            return redirect(route('song.post.manage', $song->post->id))->with('error', $e);
+            return redirect(route('songs.variants.manage', $song->id))->with('error', $e);
         }
     }
 
@@ -148,7 +166,29 @@ class VideoController extends Controller
     {
         try {
             $video = Video::findOrFail($id);
-            return view('admin.videos.edit', compact('video'));
+            $post = $video->songVariant->song->post;
+            $song = $video->songVariant->song;
+
+            $breadcrumb = Breadcrumb::generate([
+                [
+                    'name' => 'Index',
+                    'url' => route('admin.posts.index'),
+                ],
+                [
+                    'name' => $post->title,
+                    'url' => route('posts.songs', $post->id),
+                ],
+                [
+                    'name' => $song->slug,
+                    'url' => route('songs.variants.manage', $song->id),
+                ],
+                [
+                    'name' => $video->id,
+                    'url' => route('songs.variants.manage', $song->id),
+                ],
+            ]);
+
+            return view('admin.videos.edit', compact('video', 'breadcrumb'));
         } catch (ModelNotFoundException $e) {
             dd($e);
         }
@@ -165,6 +205,8 @@ class VideoController extends Controller
     {
         try {
             $video = Video::findOrFail($id);
+            $song_variant = $video->songVariant;
+            $song = $song_variant->song;
             //dd($request->all(),$video->song);
             if ($request->hasFile('video')) {
                 $validator = Validator::make($request->all(), [
@@ -218,31 +260,20 @@ class VideoController extends Controller
             //dd($old_file);
             $video->update();
 
-            switch ($video->type) {
-                case 'file':
-                    //Delete old video file
-                    //$filePath = str_replace('/storage', 'public', $old_file);
-                    if (isset($old_file) && Storage::disk('public')->exists($old_file)) {
-                        Storage::disk('public')->delete($old_file);
-                    }
+            if ($video->type == 'file') {
+                if (isset($old_file) && Storage::disk('public')->exists($old_file)) {
+                    Storage::disk('public')->delete($old_file);
+                }
 
-                    //Store new video file
-                    //Storage::disk('public')->put('$path',$file_name.$request->video);
-                    $request->video->storeAs($path, $file_name, 'public');
-
-                    return redirect(route('song.post.manage', $video->song->post->id))->with('success', 'saved successfully');
-                    break;
-
-                case 'embed':
-                    return redirect(route('song.post.manage', $video->song->post->id))->with('success', 'saved successfully');
-                    break;
-
-                default:
-                    return redirect(route('song.post.manage', $video->song->post->id))->with('warning', 'error saving video');
-                    break;
+                //Store new video file
+                //Storage::disk('public')->put('$path',$file_name.$request->video);
+                $request->video->storeAs($path, $file_name, 'public');
             }
+
+
+            return redirect(route('songs.variants.manage', $song->id))->with('sucess', 'Video updated successfully');
         } catch (ModelNotFoundException $e) {
-            return redirect(route('song.post.manage', $video->song->post->id))->with('error', $e);
+            return redirect(route('songs.variants.manage', $song->id))->with('error', $e);
         }
     }
 
@@ -255,12 +286,14 @@ class VideoController extends Controller
     public function destroy($id)
     {
         $video = Video::findOrFail($id);
+        $song_variant = $video->songVariant;
+        $song = $song_variant->song;
         try {
             if ($video->delete()) {
-                return redirect(route('song.post.manage', $video->song->post->id))->with('success', 'item deleted successfully');
+                return redirect(route('songs.variants.manage', $song->id))->with('success', 'item deleted successfully');
             }
         } catch (ModelNotFoundException $e) {
-            return redirect(route('admin.videos.index', $video->song->id))
+            return redirect(route('songs.variants.manage', $song->id))
                 ->with('error', $e);
         }
     }
@@ -281,5 +314,35 @@ class VideoController extends Controller
         ];
 
         return $mimeMap[$mimeType] ?? 'bin';
+    }
+
+    public function manage($variant_id)
+    {
+        $song_variant = SongVariant::find($variant_id);
+        //dd($song_variant);
+        $song = $song_variant->song;
+        $post = $song->post;
+        $video = $song_variant->video;
+
+        $breadcrumb = Breadcrumb::generate([
+            [
+                'name' => 'Index',
+                'url' => route('admin.posts.index'),
+            ],
+            [
+                'name' => $post->title,
+                'url' => route('posts.songs', $post->id),
+            ],
+            [
+                'name' => $song->slug,
+                'url' => route('songs.variants.manage', $song->id),
+            ],
+            [
+                'name' => $video->id,
+                'url' => route('songs.variants.manage', $song->id),
+            ],
+        ]);
+
+        return view("admin.videos.index", compact("song_variant", 'breadcrumb'));
     }
 }
