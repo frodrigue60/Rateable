@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Log;
 class Post extends Model
 {
     use HasFactory;
-    //use Rateable;
     use Taggable;
-    //use Likeable;
 
     protected $fillable = [
         'title',

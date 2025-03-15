@@ -29,10 +29,10 @@
                         <li><a class="dropdown-item" href="{{ route('artist.index') }}">Artists</a></li>
                     </ul>
                 </li>
-                @auth
+                {{-- @auth
                     <li><a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}"
                             href="{{ route('favorites') }}">My Favorites</a></li>
-                @endauth
+                @endauth --}}
                 @if (Auth::check() && Auth::user()->isStaff())
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button"
@@ -91,10 +91,15 @@
                                 <i class="fa-solid fa-user"></i>
                                 Profile
                             </a>
-                            @auth
+
+                            <a class="dropdown-item" href="{{ route('favorites') }}">
+                                <i class="fa-solid fa-star"></i>
+                                Favorites
+                            </a>
+                            
                                 <a class="dropdown-item" href="{{ route('request.create') }}">
                                     <i class="fa-solid fa-pen"></i> Request</a>
-                            @endauth
+                            
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><i

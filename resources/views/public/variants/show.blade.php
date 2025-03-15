@@ -161,48 +161,62 @@
                     @guest
                         {{-- LIKES --}}
                         <div>
-                            <button class="btn btn-sm btn-primary"><i class="fa-regular fa-thumbs-up"></i>
+                            <button class="btn btn-primary rounded-pill"><i class="fa-regular fa-thumbs-up"></i>
                                 <span id="like-counter">{{ $song_variant->likeCount }}</span>
                             </button>
                         </div>
                         {{-- DISLIKES --}}
                         <div>
-                            <button class="btn btn-sm btn-primary"><i class="fa-regular fa-thumbs-down"></i>
-                                <span id="dislike-counter">{{ '142K' }}</span>
+                            <button class="btn btn-primary rounded-pill"><i class="fa-regular fa-thumbs-down"></i>
+                                <span id="dislike-counter">{{ '3' }}</span>
                             </button>
                         </div>
                     @endguest
                     @auth
                         {{-- LIKES --}}
                         <div>
-                            <button id="like-button" class="btn btn-sm btn-primary"
-                                data-variant-id="{{ $song_variant->id }}"><i class="fa-regular fa-thumbs-up"></i>
-                                <span id="like-counter">{{ $song_variant->likeCount }}</span>
-                            </button>
+                            <form action="{{ route('variants.like', $song_variant->id) }}" method="post">
+                                @csrf
+                                <button id="like-button" class="btn btn-primary rounded-pill"><i
+                                        class="fa-regular fa-thumbs-up"></i>
+                                    <span id="like-counter">{{ $song_variant->likes()->count() }}</span>
+                                </button>
+
+                            </form>
                         </div>
                         {{-- DISLIKES --}}
                         <div>
-                            <button id="dislike-button" class="btn btn-sm btn-primary"
-                                data-variant-id="{{ $song_variant->id }}">
-                                <i class="fa-regular fa-thumbs-down"></i> <span id="dislike-counter">{{ '142K' }}</span>
-                            </button>
+                            <form action="{{ route('variants.dislike', $song_variant->id) }}" method="post">
+                                @csrf
+                                <button id="dislike-button" class="btn btn-primary rounded-pill"
+                                    data-variant-id="{{ $song_variant->id }}">
+                                    <i class="fa-regular fa-thumbs-down"></i> <span
+                                        id="dislike-counter">{{ $song_variant->dislikes()->count() }}</span>
+                                </button>
+                            </form>
                         </div>
                     @endauth
 
                     {{-- SCORE --}}
                     <div>
-                        <button class="btn btn-sm btn-primary">
+                        <button class="btn btn-primary rounded-pill">
                             <i class="fa fa-star" aria-hidden="true"></i> {{ $score_string }}
                         </button>
                     </div>
                 </div>
                 <div class="d-flex gap-2">
-                    @if ($song_variant->liked())
-                        <button class="btn btn-sm btn-primary"><i class="fa-solid fa-bookmark"></i> Favorite</button>
-                    @else
-                        <button class="btn btn-sm btn-primary"><i class="fa-regular fa-bookmark"></i> Favorite</button>
-                    @endif
-                    <button class="btn btn-sm btn-primary"><i class="fa-solid fa-triangle-exclamation"></i> Report</button>
+                    @php
+                        $class = ($song_variant->isFavorited()) ? 'solid' : 'regular' ;
+                    @endphp
+                    <form action="{{ route('favorite.toggle', $song_variant->id) }}" method="POST">
+                        @method('POST')
+                        @csrf
+                        <button type="submit" class="btn btn-primary rounded-pill"><i class="fa-{{ $class }} fa-bookmark"></i>
+                            Favorite</button>
+                    </form>
+
+                    <button class="btn btn-primary rounded-pill"><i class="fa-solid fa-triangle-exclamation"></i>
+                        Report</button>
                 </div>
             </div>
         </div>

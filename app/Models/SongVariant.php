@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
+use App\Models\Favorite;
 
 class SongVariant extends Model
 {
     use HasFactory;
     use Rateable;
-    use Likeable;
 
     protected $fillable = [
         'id',
@@ -50,12 +52,54 @@ class SongVariant extends Model
         return $this->comments()->with(['user:id,name,image']);
     }
 
-    /* public function featuredComments()
+    public function reactions()
     {
-        return $this->hasMany(Comment::class, 'rateable_id')
-            ->whereNotNull('comment');
+        return $this->morphMany(Reaction::class, 'reactable');
+    }
+
+    public function likes()
+    {
+        return $this->reactions()->where('type', 1);
+    }
+
+    public function dislikes()
+    {
+        return $this->reactions()->where('type', -1);
+    }
+
+    /* public function getLikesCountAttribute()
+    {
+        return $this->likes()->count();
     } */
 
+    /* public function getDislikesCountAttribute()
+    {
+        return $this->dislikes()->count();
+    } */
+
+    // Método para verificar si el usuario actual ha dado like
+    /* public function liked()
+    {
+        if (Auth::check()) { // Verifica si el usuario está autenticado
+            return $this->reactions()
+                ->where('user_id', Auth::id())
+                ->where('type', 1)
+                ->exists();
+        }
+        return false;
+    } */
+
+    // Método para verificar si el usuario actual ha dado dislike
+    /* public function disliked()
+    {
+        if (Auth::check()) { // Verifica si el usuario está autenticado
+            return $this->reactions()
+                ->where('user_id', Auth::id())
+                ->where('type', -1)
+                ->exists();
+        }
+        return false;
+    } */
 
     public function song()
     {
@@ -87,5 +131,47 @@ class SongVariant extends Model
             'song_slug' => $this->song->slug,
             'variant_version_number' => $this->version_number,
         ]);
+    }
+
+    // Método para obtener los posts que un usuario ha dado like
+    public function scopeWhereLikedBy($query, $userId)
+    {
+        return $query->whereHas('reactions', function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+                ->where('type', 1); // 1 para like
+        });
+    }
+
+    // Relación con el contador de reacciones (nombre corregido)
+    public function reactionsCounter()
+    {
+        return $this->morphOne(ReactionCounter::class, 'reactable');
+    }
+
+    // Método para actualizar los contadores
+    public function updateReactionCounters()
+    {
+        $likesCount = $this->reactions()->where('type', 1)->count();
+        $dislikesCount = $this->reactions()->where('type', -1)->count();
+
+        $this->reactionsCounter()->updateOrCreate(
+            ['reactable_id' => $this->id, 'reactable_type' => self::class],
+            ['likes_count' => $likesCount, 'dislikes_count' => $dislikesCount]
+        );
+    }
+
+    // Relación polimórfica para favoritos
+    public function favorites()
+    {
+        return $this->morphMany(Favorite::class, 'favoritable');
+    }
+
+    // Método para verificar si el usuario actual ha marcado este post como favorito
+    public function isFavorited()
+    {
+        if (Auth::check()) {
+            return $this->favorites()->where('user_id', Auth::id())->exists();
+        }
+        return false;
     }
 }

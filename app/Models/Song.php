@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class Song extends Model
 {
     use HasFactory;
-    use Rateable;
     use Taggable;
-    use Likeable;
 
     protected $fillable = [
         'id',

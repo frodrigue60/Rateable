@@ -20,6 +20,8 @@ use App\Http\Controllers\SongController as SongController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Admin\SongVariantController as AdminSongVariantController;
 use App\Http\Controllers\SongVariantController as SongVariantController;
+use App\Http\Controllers\FavoriteController as FavoriteController;
+//use App\Http\Controllers\ReactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,7 +80,7 @@ Route::group(['middleware' => 'staff'], function () {
         Route::get('/variants/{variant}/edit', [AdminSongVariantController::class, 'edit'])->name('songs.variants.edit');
         Route::get('/variants/{variant}/show', [AdminSongVariantController::class, 'show'])->name('songs.variants.show');
         Route::post('/variants/{variant}/update', [AdminSongVariantController::class, 'update'])->name('song.variant.update');
-        
+
 
         //VIDEOS
         Route::get('/variants/{variant}/videos', [AdminVideoController::class, 'manage'])->name('variant.videos.manage');
@@ -195,9 +197,15 @@ Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites'
 //Route::post('/post/{post}/unlike', [PostController::class, 'unlikePost'])->name('post.unlike');
 //Route::post('/post/{post}/ratepost', [PostController::class, 'ratePost'])->name('post.addrate');
 
-Route::get('variant/{song_variant_id}/report', [ReportController::class, 'createReport'])->name('variant.report.create');
+Route::get('variant/{variant}/report', [ReportController::class, 'createReport'])->name('variant.report.create');
 
 //SONG VARIANT ROUTES
-Route::post('/variant/{variant}/unlike', [SongVariantController::class, 'unlikeVariant'])->name('variant.unlike');
-Route::post('/variant/{variant}/like', [SongVariantController::class, 'likeVariant'])->name('variant.like');
+//Route::post('/variant/{variant}/dislike', [SongVariantController::class, 'dislikeVariant'])->name('variant.dislike');
+//Route::post('/variant/{variant}/favorite', [SongVariantController::class, 'favorite'])->name('variant.favorite');
 Route::post('/variant/{variant}/ratepost', [SongVariantController::class, 'rate'])->name('variant.rate');
+
+//Route::post('variant/{variant}/reaction/', [ReactionController::class, 'react'])->name('reaction');
+Route::post('variants/{variant}/like', [App\Http\Controllers\SongVariantController::class, 'like'])->name('variants.like');
+Route::post('variants/{variant}/dislike', [App\Http\Controllers\SongVariantController::class, 'dislike'])->name('variants.dislike');
+
+Route::post('variants/{variant}/favorite', [FavoriteController::class, 'toggle'])->name('favorite.toggle');

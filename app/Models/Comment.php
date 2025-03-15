@@ -9,7 +9,6 @@ use App\Models\SongVariant;
 
 class Comment extends Model
 {
-    use Likeable;
 
     use HasFactory;
 

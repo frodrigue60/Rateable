@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\Post;
 use App\Models\Song;
+use App\Models\Reaction;
 
 class SongVariantController extends Controller
 {
@@ -60,8 +61,10 @@ class SongVariantController extends Controller
 
         $song_variant = SongVariant::where('version_number', $variant_version_number)
             ->where('song_id', $song->id)
-            ->with('likeCounter')
+            ->with('reactionsCounter')
             ->firstOrFail();
+
+        //dd($song_variant);
 
         if ($song_variant == null) {
             return redirect(route('/'))->with('warning', 'Item no exist!');
@@ -146,7 +149,7 @@ class SongVariantController extends Controller
 
         $song_variant = SongVariant::where('version_number', $variant_version_number)
             ->where('song_id', $song->id)
-            ->with('likeCounter')
+            ->with('reactionsCounter')
             ->firstOrFail();
 
         if ($song_variant == null) {
@@ -358,20 +361,11 @@ class SongVariantController extends Controller
         return redirect()->route('login');
     }
 
-    public function likeVariant($variant_id)
+    public function favorite($variant_id)
     {
         if (Auth::check()) {
             SongVariant::find($variant_id)->like(Auth::user()->id);
             return redirect()->back()->with('success', 'Song Variant Like successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-
-    public function unlikeVariant($variant_id)
-    {
-        if (Auth::check()) {
-            SongVariant::find($variant_id)->unlike(Auth::user()->id);
-            return redirect()->back()->with('success', 'Song Variant Like undo successfully!');
         }
         return redirect()->route('/')->with('warning', 'Please login');
     }
@@ -383,5 +377,52 @@ class SongVariantController extends Controller
             ->where('rateable_id', $song_variant_id)
             ->where('user_id', $user_id)
             ->first(['comment', 'rating']);
+    }
+
+    public function like($songVariant_id)
+    {
+        $songVariant = SongVariant::find($songVariant_id);
+        $this->handleReaction($songVariant, 1); // 1 para like
+        $songVariant->updateReactionCounters(); // Actualiza los contadores manualmente
+        return redirect()->back(); // Redirige de vuelta a la página anterior
+    }
+
+    // Método para dislike
+    public function dislike($songVariant_id)
+    {
+        $songVariant = SongVariant::find($songVariant_id);
+        $this->handleReaction($songVariant, -1); // -1 para dislike
+        $songVariant->updateReactionCounters(); // Actualiza los contadores manualmente
+        return redirect()->back(); // Redirige de vuelta a la página anterior
+    }
+
+    // Método privado para manejar la reacción
+    private function handleReaction($songVariant, $type)
+    {
+        $user = Auth::user();
+
+        // Buscar si ya existe una reacción del usuario para este post
+        $reaction = Reaction::where('user_id', $user->id)
+            ->where('reactable_id', $songVariant->id)
+            ->where('reactable_type', SongVariant::class)
+            ->first();
+
+        if ($reaction) {
+            if ($reaction->type === $type) {
+                // Si la reacción es la misma, eliminarla (toggle)
+                $reaction->delete();
+            } else {
+                // Si la reacción es diferente, actualizarla
+                $reaction->update(['type' => $type]);
+            }
+        } else {
+            // Si no existe una reacción, crear una nueva
+            Reaction::create([
+                'user_id' => $user->id,
+                'reactable_id' => $songVariant->id,
+                'reactable_type' => SongVariant::class,
+                'type' => $type,
+            ]);
+        }
     }
 }

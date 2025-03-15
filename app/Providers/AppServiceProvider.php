@@ -7,6 +7,8 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\URL;
+use App\Models\Reaction;
+use App\Observers\ReactionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
+
+        Reaction::observe(ReactionObserver::class);
 
         if (!App::environment([
             'local',
