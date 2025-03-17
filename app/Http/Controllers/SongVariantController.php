@@ -53,7 +53,7 @@ class SongVariantController extends Controller
      */
     public function show($anime_slug, $song_suffix, $variant_version_number)
     {
-        $post = Post::where('slug', $anime_slug)->firstOrFail();
+        $post = Post::where('slug', $anime_slug)->firstOrFail(); 
 
         $song = Song::where('slug', $song_suffix)
             ->where('post_id', $post->id)
@@ -87,13 +87,13 @@ class SongVariantController extends Controller
                 break;
         }
 
-        $comments = $song_variant->commentsWithUser()
-            ->get();
+        $comments = $song_variant->comments;
+        //dd($comments);
 
-        $comments_featured = $song_variant->commentsWithUser()
+       /*  $comments_featured = $song_variant->commentsWithUser()
             ->get()
             ->sortByDesc('likeCount')
-            ->take(3);
+            ->take(3); */
 
         $score = null;
 
@@ -136,7 +136,7 @@ class SongVariantController extends Controller
 
         //dd($song_variant,$score,$comments,$comments_featured);
 
-        return view('public.variants.show', compact('song_variant', 'score', 'comments', 'comments_featured', 'user_rate'));
+        return view('public.variants.show', compact('song_variant', 'score', 'comments', 'user_rate'));
     }
 
     /* public function showTest($anime_slug, $song_suffix, $variant_version_number)

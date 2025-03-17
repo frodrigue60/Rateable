@@ -8,9 +8,10 @@
                     <h5 class="card-title">{{$song_variant->song->post->title}} {{$song_variant->song->slug}} {{$song_variant->slug}} - Video</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{route('variants.video.store',[$song_variant->id])}}" enctype="multipart/form-data">
+                    <form method="post" action="{{route('admin.videos.store')}}" enctype="multipart/form-data">
                         @csrf
                         @method('post')
+                        <input type="hidden" name="song_variant_id" value="{{ $song_variant->id }}">
                         <div class="mb-3">
                             <label for="formFileBanner" class="form-label">Upload Video File</label>
                             <input class="form-control" type="file" id="formFileBanner" name="video" accept="video/mp4,video/webm">

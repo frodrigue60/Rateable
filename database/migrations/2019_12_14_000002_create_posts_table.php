@@ -18,12 +18,14 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->bigInteger('anilist_id')->nullable();
+            $table->unsignedBigInteger('anilist_id')->nullable();
             $table->enum('status', ['stagged', 'published'])->default('stagged');
             $table->string('thumbnail')->nullable();
             $table->string('thumbnail_src')->nullable();
             $table->string('banner')->nullable();
             $table->string('banner_src')->nullable();
+            $table->foreignId('year_id')->constrained('years')->onDelete(null);
+            $table->foreignId('season_id')->constrained('seasons')->onDelete(null);
             $table->timestamps();
         });
     }

@@ -1653,27 +1653,6 @@ class PostController extends Controller
         }
     } */
 
-    public function likeComment($id)
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-            Comment::find($id)->like($user->id);
-            return Redirect::back()->with('success', 'Comment Like successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-
-    public function unlikeComment($id)
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-            Comment::find($id)->unlike($user->id);
-
-            return Redirect::back()->with('success', 'Comment Like undo successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-
     public function SeasonsYears($tags)
     {
         $tagNames = [];

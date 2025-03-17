@@ -9,6 +9,7 @@ use Conner\Tagging\Model\Tag;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
+use App\Models\Season;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
+use App\Models\Year;
 use GuzzleHttp\Client;
 use App\Services\Breadcrumb;
 
@@ -165,7 +164,7 @@ class PostController extends Controller
 
             $artist = $post->artist;
             $tags = $post->tagged;
-            //dd($post);
+            dd($post->season);
             return view('admin.posts.show', compact('post', 'tags', 'score_format', 'artist', 'ops', 'eds', 'breadcrumb'));
         }
     }
@@ -380,6 +379,7 @@ class PostController extends Controller
         $json = json_decode($body);
 
         $data[] = $json->data->Media;
+        //dd($data);
         $this->generateMassive($data);
         $success = 'Single post created successfully';
         return redirect(route('admin.posts.index'))->with('success', $success);
@@ -448,14 +448,6 @@ class PostController extends Controller
 
     public function generateMassive($data)
     {
-        $tag = $data[0]->season . ' ' . $data[0]->seasonYear;
-        $tag_exist = DB::table('tagging_tags')->where('name', $tag)->first();
-        if (!$tag_exist) {
-            DB::table('tagging_tags')->insert([
-                'name' => $tag,
-                'slug' => Str::slug($tag)
-            ]);
-        }
         //dd($data);
         foreach ($data as $item) {
             $post_exist = Post::where('title', $item->title->romaji)->first();
@@ -470,12 +462,31 @@ class PostController extends Controller
             $post->anilist_id = $item->id;
             $post->status = 'published';
 
+            $post->season_id = null;
+            $post->year_id = null;
+
             $this->saveAnimeBanner($item, $post);
             $this->saveAnimeThumbnail($item, $post);
 
-            if ($post->save()) {
-                $post->tag($tag);
+            //dd($item);
+
+            if (!empty($item->season)) {
+                $season = Season::firstOrCreate([
+                    'name' =>  $item->season,
+                ]);
+
+                $post->season_id = $season->id;
             }
+
+            if (!empty($item->seasonYear)) {
+                $year = Year::firstOrCreate([
+                    'name' =>  $item->seasonYear,
+                ]);
+
+                $post->year_id = $year->id;
+            }
+
+            $post->save();
         }
     }
 
@@ -487,10 +498,7 @@ class PostController extends Controller
     {
         $posts = Post::all();
         foreach ($posts as $post) {
-            $post->untag();
             $post->delete();
-            //Storage::disk('public')->delete('/thumbnails/' . $thumbnail);
-            //Storage::disk('public')->delete('/anime_banner/' . $banner);
         }
 
         $thumbnail_files = Storage::disk('public')->files('thumbnails');
@@ -499,16 +507,6 @@ class PostController extends Controller
         $banner_files = Storage::disk('public')->files('anime_banner');
         Storage::disk('public')->delete($banner_files);
 
-        /*  $opening_files = Storage::disk('public')->files('videos/openings');
-        Storage::disk('public')->delete($opening_files); */
-
-        /* $ending_files = Storage::disk('public')->files('videos/endings');
-        Storage::disk('public')->delete($ending_files); */
-
-        DB::table('likeable_likes')->delete();
-        DB::table('likeable_like_counters')->delete();
-        DB::table('ratings')->delete();
-        DB::table('tagging_tagged')->delete();
         $success = 'All posts deleted';
         return redirect(route('admin.posts.index'))->with('success', $success);
     }
@@ -803,5 +801,40 @@ class PostController extends Controller
     public function storeSingleImage($path, $imageContent)
     {
         Storage::disk('public')->put($path, $imageContent);
+    }
+
+    public function addSong($post_id)
+    {
+        $post = Post::find($post_id);
+        $seasons = Season::all();
+        $years = Year::all();
+        $types = [
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED']
+        ];
+        $artists = Artist::all();
+
+
+        return view('admin.songs.create', compact('artists', 'types', 'post', 'seasons','years'));
+    }
+
+    public function songs($post_id)
+    {
+        //dd(true);
+        $post = Post::with('songs')->find($post_id);
+
+        $breadcrumb = Breadcrumb::generate([
+            [
+                'name' => 'Index',
+                'url' => route('admin.posts.index'),
+            ],
+            [
+                'name' => $post->title,
+                'url' => route('posts.songs', $post->id),
+            ],
+        ]);
+
+
+        return view('admin.songs.manage', compact('post', 'breadcrumb'));
     }
 }

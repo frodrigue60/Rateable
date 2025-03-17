@@ -18,7 +18,7 @@ class SongVariantController extends Controller
      */
     public function index()
     {
-        
+        //
     }
 
     /**
@@ -37,12 +37,12 @@ class SongVariantController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $song_id)
+    public function store(Request $request)
     {
         //dd($song_id, $request->all());
-        $song = Song::find($song_id);
+        $song = Song::find($request->song_id);
 
-        $latestVersion = SongVariant::where('song_id', $song_id)
+        $latestVersion = SongVariant::where('song_id', $song->id)
             ->max('version_number');
 
         $newVersion = $latestVersion !== null ? $latestVersion + 1 : 1;
@@ -50,14 +50,16 @@ class SongVariantController extends Controller
         $slug ='v' . $newVersion;
 
         $songVariant = new SongVariant();
-        $songVariant->song_id = $song_id;
+        $songVariant->song_id = $song->id;
         $songVariant->version_number = $newVersion;
         $songVariant->slug = $slug;
+        $songVariant->season_id = $song->season_id;
+        $songVariant->year_id = $song->year_id;
 
         //dd($songVariant);
 
         if ($songVariant->save()) {
-            return redirect(route('songs.variants.manage', $song->id))->with('success', 'song variant added successfully');
+            return redirect(route('admin.songs.variants', $song->id))->with('success', 'song variant added successfully');
         } else {
             return redirect(route('posts.songs', $song->post->id))->with('error', 'error');
         }
@@ -99,7 +101,7 @@ class SongVariantController extends Controller
             ],
             [
                 'name' => $song->slug,
-                'url' => route('songs.variants.manage', $song->id),
+                'url' => route('admin.songs.variants', $song->id),
             ],
             [
                 'name' => $songVariant->slug,
@@ -120,12 +122,25 @@ class SongVariantController extends Controller
     public function update(Request $request, $id)
     {
         $songVariant = SongVariant::find($id);
-        $songVariant->version_number = $request->version_number;
+        $song = $songVariant->song;
+
+        $latestVersion = SongVariant::where('song_id', $song->id)
+            ->max('version_number');
+
+        $newVersion = $latestVersion !== null ? $latestVersion + 1 : 1;
+
+        $slug ='v' . $newVersion;
+
+        $songVariant->song_id = $song->id;
+        $songVariant->version_number = $newVersion;
+        $songVariant->slug = $slug;
+        $songVariant->season_id = $song->season_id;
+        $songVariant->year_id = $song->year_id;
 
         if ($songVariant->update()) {
-            return redirect(route('posts.songs', $songVariant->song->post_id))->with('success', 'Song updated success');
+            return redirect(route('admin.songs.variants', $songVariant->song->id))->with('success', 'Song updated success');
         } else {
-            return redirect(route('posts.songs', $songVariant->song->post_id))->with('error', 'Something has been wrong');
+            return redirect(route('admin.songs.variants', $songVariant->song->id))->with('error', 'Something has been wrong');
         }
     }
 
@@ -140,16 +155,19 @@ class SongVariantController extends Controller
         $songVariant = SongVariant::find($id);
 
         if ($songVariant->delete()) {
-            return redirect(route('songs.variants.manage', $songVariant->song->id))->with('success', 'song variant added successfully');
+            return redirect(route('admin.songs.variants', $songVariant->song->id))->with('success', 'song variant added successfully');
         } else {
-            return redirect(route('songs.variants.manage', $songVariant->song->id))->with('error', 'error');
+            return redirect(route('admin.songs.variants', $songVariant->song->id))->with('error', 'error');
         }
     }
 
-    public function manage($song_id){
-        $song = Song::find($song_id);
+    public function videos($variant_id)
+    {
+        $song_variant = SongVariant::find($variant_id);
+        //dd($song_variant);
+        $song = $song_variant->song;
         $post = $song->post;
-        $song_variants = $song->songVariants;
+        $video = $song_variant->video;
 
         $breadcrumb = Breadcrumb::generate([
             [
@@ -162,38 +180,43 @@ class SongVariantController extends Controller
             ],
             [
                 'name' => $song->slug,
-                'url' => route('songs.variants.manage', $song->id),
+                'url' => route('admin.songs.variants', $song->id),
+            ],
+            [
+                'name' => $video->id,
+                'url' => route('admin.songs.variants', $song->id),
             ],
         ]);
-        //dd($song_variants); 
-        return view('admin.variants.manage', compact('song_variants', 'song', 'breadcrumb'));
+
+        return view("admin.videos.index", compact("song_variant", 'breadcrumb'));
     }
 
-    
-
-    public function addVariant($song_id)
+    public function addVideos($variant_id)
     {
-        //dd($song_id, $request->all());
-        $song = Song::find($song_id);
 
-        $latestVersion = SongVariant::where('song_id', $song_id)
-            ->max('version_number');
+        $song_variant = SongVariant::find($variant_id);
+        $song = $song_variant->song;
+        $post = $song->post;
 
-        $newVersion = $latestVersion !== null ? $latestVersion + 1 : 1;
+        $breadcrumb = Breadcrumb::generate([
+            [
+                'name' => 'Index',
+                'url' => route('admin.posts.index'),
+            ],
+            [
+                'name' => $post->title,
+                'url' => route('posts.songs', $post->id),
+            ],
+            [
+                'name' => $song->slug,
+                'url' => route('admin.songs.variants', $song->id),
+            ],
+            [
+                'name' => $song_variant->slug . ' - '. 'video',
+                'url' => '',
+            ],
+        ]);
 
-        $slug ='v' . $newVersion;
-
-        $songVariant = new SongVariant();
-        $songVariant->song_id = $song_id;
-        $songVariant->version_number = $newVersion;
-        $songVariant->slug = $slug;
-
-        //dd($songVariant);
-
-        if ($songVariant->save()) {
-            return redirect(route('songs.variants.manage', $song->id))->with('success', 'song variant added successfully');
-        } else {
-            return redirect(route('posts.songs', $song->post->id))->with('error', 'error');
-        }
+        return view('admin.videos.create', compact('song', 'song_variant', 'breadcrumb'));
     }
 }

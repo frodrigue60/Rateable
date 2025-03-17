@@ -55,7 +55,8 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        //
+        $report = Report::find($id);
+        return view('admin.reports.show', compact('report'));
     }
 
     /**
@@ -91,22 +92,22 @@ class ReportController extends Controller
     {
         $report = Report::findOrFail($id);
         $report->delete();
-        return redirect(route('admin.reports.index'));
+        return redirect(route('admin.reports.index'))->with('warning', 'Report '.$report->id.' deleted');
     }
-    public function fixed($id)
-    {
+
+    public function toggleStatus($id){
         $report = Report::find($id);
-        $report->status = 'fixed';
+
+        if ($report->status == 'fixed') {
+            $report->status = 'pending';
+        } elseif ($report->status = 'pending') {
+            $report->status = 'fixed';
+        }
+
         $report->update();
-        return Redirect::back()->with('success', 'Report ' . $report->id . ' Fixed!');
+        return Redirect::route('admin.reports.index')->with('warning', 'Report status ' . $report->id . ' changed!');
     }
-    public function unfixed($id)
-    {
-        $report = Report::find($id);
-        $report->status = 'pending';
-        $report->update();
-        return Redirect::back()->with('warning', 'Report ' . $report->id . ' Unfixed!');
-    }
+
     public function paginate($reports, $perPage = 10, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();

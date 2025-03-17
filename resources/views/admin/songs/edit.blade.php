@@ -19,7 +19,7 @@
                     <h5 class="cart-title">Edit Song</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('posts.songs.update', $song->id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('admin.songs.update', $song->id) }}" enctype="multipart/form-data">
                         @method('put')
                         @csrf
                         <div class="mb-3">
@@ -71,22 +71,23 @@
                             </div>
                         </div>
 
-                        <div class="col-md mb-3">
-                            <label for="tags-select">Year</label>
-                            <select class="form-select" aria-label="Default select example" name="tags[]" id="tags-select" multiple>
-                                <option selected value="">Select tags</option>
-                                @isset($tags)
-                                    @php
-                                        $plucked = $song->tags->pluck('name')->toArray();
-                                    @endphp
-                                    @foreach ($tags as $tag)
-                                        <option value="{{ $tag->name }}"
-                                            {{ in_array($tag->name, $plucked) ? 'selected' : '' }}>{{ $tag->name }}
-                                        </option>
+                        <div class="row mb-3">
+                            <div class="mb-3 col-6">
+                                <label for="" class="form-label">Season</label>
+                                <select class="form-select" name="season_id" id="">
+                                    @foreach ($seasons as $season)
+                                        <option value="{{ $season->id }}" {{ old('season_id', $song->season_id) == $season->id ? 'selected' : '' }}>{{ $season->name }}</option>
                                     @endforeach
-                                @endisset
-
-                            </select>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-6">
+                                <label for="" class="form-label">Year</label>
+                                <select class="form-select" name="year_id" id="">
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year->id }}" {{ old('year_id', $song->year_id) == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <div class="d-flex">

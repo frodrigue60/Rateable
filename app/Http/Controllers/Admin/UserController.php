@@ -159,6 +159,7 @@ class UserController extends Controller
             return Redirect::route('admin.users.index')->with('warning', 'Somethis was wrong!');
         }
     }
+
     public function searchUser(Request $request)
     {
         $users = User::query()
@@ -167,6 +168,7 @@ class UserController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
+    
     public function paginate($posts, $perPage = null, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();

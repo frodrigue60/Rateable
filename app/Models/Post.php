@@ -4,11 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use willvincent\Rateable\Rateable;
 use Conner\Tagging\Taggable;
-use Conner\Likeable\Likeable;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model
 {
@@ -18,13 +16,8 @@ class Post extends Model
     protected $fillable = [
         'title',
         'slug',
-        'song_id',
-        'artist_id',
-        'ytlink',
-        'scndlink',
         'type',
         'thumbnail',
-        'view_count',
         'status',
     ];
 
@@ -64,7 +57,7 @@ class Post extends Model
 
     public function songs()
     {
-        return $this->hasMany('App\Models\Song');
+        return $this->hasMany(Song::class);
     }
     public function reports()
     {
@@ -74,8 +67,18 @@ class Post extends Model
     public function getUrlAttribute()
     {
         return route('post.show', [
-            /* 'anilist_id' => $this->anilist_id, */
             'slug' => $this->slug,
         ]);
     }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
+
+    public function season()
+    {
+        return $this->belongsTo(Season::class);
+    }
+
 }

@@ -15,7 +15,7 @@
                     <h5 class="card-title">Edit artist: {{isset($name) ? $name : ''}}</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.artist.update', $artist->id) }}"
+                    <form method="post" action="{{ route('admin.artists.update', $artist->id) }}"
                         enctype="multipart/form-data">
                         @method('PUT')
                         @csrf

@@ -22,7 +22,8 @@ return new class extends Migration
             $table->enum('type', ['OP', 'ED'])->default('OP');
             $table->string('slug');
             $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
-            //$table->string('slug')->unique();
+            $table->foreignId('season_id')->references('id')->on('seasons')->onDelete('cascade');
+            $table->foreignId('year_id')->references('id')->on('years')->onDelete('cascade');
             $table->timestamps();
         });
     }

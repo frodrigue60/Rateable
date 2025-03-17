@@ -35,13 +35,23 @@ class Song extends Model
                 if ($variant->video) {
 
                     $video = $variant->video;
-                    
+
                     if ($video->video_src != null && Storage::disk('public')->exists($video->video_src)) {
                         Storage::disk('public')->delete($video->video_src);
-                    } 
+                    }
                 }
             }
         });
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
+
+    public function season()
+    {
+        return $this->belongsTo(Season::class);
     }
 
     public function post()
@@ -53,11 +63,6 @@ class Song extends Model
     {
         return $this->belongsToMany(Artist::class);
     }
-
-    /* public function comments()
-    {
-        return $this->hasMany(Comment::class, 'rateable_id');
-    } */
 
     public function videos()
     {

@@ -10,7 +10,7 @@
                     <h5 class="card-title">Create artist</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('admin.artist.store') }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('admin.artists.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="nameArtist">Artist Name</label>

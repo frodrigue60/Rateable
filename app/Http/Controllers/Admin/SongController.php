@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Artist;
 use App\Models\Post;
+use App\Models\Season;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use Conner\Tagging\Model\Tag;
+use App\Models\SongVariant;
+use App\Models\Year;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 use App\Services\Breadcrumb;
 
@@ -23,28 +22,16 @@ class SongController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        
-    }
+    public function index() {}
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($post_id)
+    public function create()
     {
-        $post = Post::find($post_id);
-        $tags = Tag::all();
-        $types = [
-            ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
-        ];
-        $artists = Artist::all();
-        
-
-        return view('admin.songs.create', compact('artists', 'types', 'post', 'tags'));
+        //
     }
 
     /**
@@ -53,7 +40,7 @@ class SongController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $post_id)
+    public function store(Request $request)
     {
         //dd($request->all());
         //$post = Post::find($post_id);
@@ -61,7 +48,9 @@ class SongController extends Controller
         $song->song_romaji = $request->song_romaji;
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
-        $song->post_id = $post_id;
+        $song->post_id = $request->post_id;
+        $song->season_id = $request->season_id;
+        $song->year_id = $request->year_id;
         $song->type = $request->type;
 
         if ($request->theme_num != null) {
@@ -75,8 +64,8 @@ class SongController extends Controller
         //dd($song);
         if ($song->save()) {
             $song->artists()->sync($request->artists);
-            $song->retag($request->tags);
-            return redirect(route('posts.songs', $post_id))->with('success', 'song added successfully');
+            //$song->retag($request->tags);
+            return redirect(route('posts.songs', $request->post_id))->with('success', 'song added successfully');
         } else {
             return redirect(route('admin.posts.index'))->with('error', 'error');
         }
@@ -102,14 +91,16 @@ class SongController extends Controller
     public function edit($id)
     {
         $song = Song::find($id);
+        //$post = $song->post;
         $artists = Artist::all();
-        $tags = Tag::all();
+        $seasons = Season::all();
+        $years = Year::all();
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
             ['name' => 'Ending', 'value' => 'ED']
         ];
 
-        return view('admin.songs.edit', compact('song', 'artists', 'types', 'tags'));
+        return view('admin.songs.edit', compact('song', 'artists', 'types', 'seasons', 'years'));
     }
 
     /**
@@ -123,11 +114,13 @@ class SongController extends Controller
     {
         //dd($request->all());
         $song = Song::find($song_id);
-        
+
         $song->song_romaji = $this->decodeUnicodeIfNeeded($request->song_romaji);
         $song->song_jp = $request->song_jp;
         $song->song_en = $request->song_en;
         $song->post_id = $song->post->id;
+        $song->season_id = $request->season_id;
+        $song->year_id = $request->year_id;
         $song->type = $request->type;
         $song->theme_num = $request->theme_num;
 
@@ -136,14 +129,14 @@ class SongController extends Controller
         } else {
             $song->theme_num = 1;
         }
-        
+
         $song->slug = $song->type . $request->theme_num;
 
         //$song->slug = $post->slug . '/' . $song->type . $song->theme_num;
 
         if ($song->update()) {
             $song->artists()->sync($request->artists);
-            $song->retag($request->tags);
+            //$song->retag($request->tags);
             return redirect(route('posts.songs', $song->post_id))->with('success', 'Song updated success');
         } else {
             return redirect(route('admin.posts.index'))->with('error', 'error, something has been wrong');
@@ -161,20 +154,13 @@ class SongController extends Controller
         $song = Song::find($id);
         $song->artists()->detach();
         if ($song->delete()) {
-            DB::table('ratings')
-                ->where('rateable_id', '=', $id)->delete();
-            DB::table('likeable_likes')
-                ->where('likeable_id', '=', $id)->delete();
-            DB::table('likeable_like_counters')
-                ->where('likeable_id', '=', $id)->delete();
-
-            /* Storage::disk('public')->delete('/videos/' . $old_video); */
+            
             return redirect()->back()->with('success', 'Song ' . $song->id . ' has been deleted');
         } else {
             return redirect()->back()->with('error', 'A error has been ocurred');
         }
     }
-    
+
     public function SeasonsYears($tags)
     {
         $tagNames = [];
@@ -211,10 +197,39 @@ class SongController extends Controller
         return $string;
     }
 
-    public function manage($post_id)
+    public function addVariant($song_id)
     {
-        //dd(true);
-        $post = Post::with('songs')->find($post_id);
+        //dd($song_id, $request->all());
+        $song = Song::find($song_id);
+
+        $latestVersion = SongVariant::where('song_id', $song_id)
+            ->max('version_number');
+
+        $newVersion = $latestVersion !== null ? $latestVersion + 1 : 1;
+
+        $slug = 'v' . $newVersion;
+
+        $songVariant = new SongVariant();
+        $songVariant->song_id = $song_id;
+        $songVariant->version_number = $newVersion;
+        $songVariant->slug = $slug;
+        $songVariant->season_id = $song->season_id;
+        $songVariant->year_id = $song->year_id;
+
+        //dd($songVariant);
+
+        if ($songVariant->save()) {
+            return redirect(route('admin.songs.variants', $songVariant->song->id))->with('success', 'Song updated success');
+        } else {
+            return redirect(route('admin.songs.variants', $songVariant->song->id))->with('error', 'Something has been wrong');
+        }
+    }
+
+    public function variants($song_id)
+    {
+        $song = Song::find($song_id);
+        $post = $song->post;
+        $song_variants = $song->songVariants;
 
         $breadcrumb = Breadcrumb::generate([
             [
@@ -225,9 +240,12 @@ class SongController extends Controller
                 'name' => $post->title,
                 'url' => route('posts.songs', $post->id),
             ],
+            [
+                'name' => $song->slug,
+                'url' => route('admin.songs.variants', $song->id),
+            ],
         ]);
-
-        
-        return view('admin.songs.manage', compact('post', 'breadcrumb'));
+        //dd($song_variants); 
+        return view('admin.variants.manage', compact('song_variants', 'song', 'breadcrumb'));
     }
 }

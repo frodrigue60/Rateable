@@ -92,11 +92,8 @@
                                         <a href="{{ $post->url }}" class="no-deco">{{ $post->title }}</a>
                                     </td>
                                     <td>
-                                        @foreach ($post->tags as $tag)
-                                            <span
-                                                class="badge rounded-pill text-bg-primary">{{ isset($tag) ? $tag->name : 'N/A' }}</span>
-                                        @endforeach
-
+                                        <a href="{{ route('seasons.show', $post->season->id) }}" target="_blank" rel="noopener noreferrer">{{ $post->season->name }}</a>
+                                        <a href="{{ route('years.show', $post->year->id) }}" target="_blank" rel="noopener noreferrer">{{ $post->year->name }}</a>
                                     </td>
                                     <td>
                                         {{ $post->songs->count() }}
@@ -144,9 +141,9 @@
                                             <a href="{{ route('admin.posts.destroy', $post->id) }}"
                                                 class="btn btn-danger btn-sm"><i class="fa fa-trash"
                                                     aria-hidden="true"></i></a>
-                                            {{-- <a class="btn btn-sm btn-primary"
+                                            <a class="btn btn-sm btn-primary"
                                                 href="{{ route('admin.posts.show', $post->id) }}"><i
-                                                    class="fa-solid fa-eye"></i></a> --}}
+                                                    class="fa-solid fa-eye"></i></a>
                                             <a class="btn btn-sm btn-primary"
                                                 href="{{ route('posts.songs', $post->id) }}"><i
                                                     class="fa-solid fa-list"></i></a>

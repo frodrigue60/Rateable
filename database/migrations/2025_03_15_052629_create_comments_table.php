@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_requests', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->morphs('commentable'); // Crea las columnas 'commentable_type' y 'commentable_id'
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('content');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('attended_by')->references('id')->on('users')->onDelete('cascade')->default(null);
-            $table->enum('status', ['pending', 'attended'])->default('pending');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_requests');
+        Schema::dropIfExists('comments');
     }
 };

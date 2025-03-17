@@ -39,8 +39,9 @@
                             data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ route('admin.posts.index') }}">Post index</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.tags.index') }}">Tags index</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.artist.index') }}">Artist index</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.artists.index') }}">Artist index</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.years.index') }}">Years index</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.seasons.index') }}">Seasons index</a></li>
                             @if (Auth::User()->isAdmin())
                                 <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
                                 </li>

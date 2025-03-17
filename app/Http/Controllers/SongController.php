@@ -54,20 +54,6 @@ class SongController extends Controller
     {
 
         $song = Song::with(['post', 'artists','videos'])->find($id);
-        
-        $comments = Comment::with('user', 'likeCounter')
-            ->where('rateable_id', '=', $id)
-            ->where('comment', '!=', "")
-            ->latest()
-            ->limit(10)
-            ->get();
-
-        $comments_featured = Comment::with('user', 'likeCounter')
-            ->where('rateable_id', '=', $id)
-            ->where('comment', '!=', "")
-            ->get()
-            ->sortByDesc('likeCount')
-            ->take(3);
 
 
         if (Auth::check() == true && $song->averageRating == true) {
@@ -104,7 +90,7 @@ class SongController extends Controller
 
         /* $this->count_views($song); */
 
-        return view('public.songs.show', compact('song', 'score', 'comments', 'comments_featured'));
+        return view('public.songs.show', compact('song', 'score', 'comments'));
     }
 
     /**

@@ -53,10 +53,10 @@ class User extends Authenticatable
         return $this->hasMany(UserRequest::class);
     }
 
-    public function comments()
+    /* public function comments()
     {
         return $this->hasMany(Comment::class, 'user_id');
-    }
+    } */
 
     public function reactions()
     {
@@ -104,5 +104,10 @@ class User extends Authenticatable
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

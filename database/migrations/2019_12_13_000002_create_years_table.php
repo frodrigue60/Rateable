@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_requests', function (Blueprint $table) {
+        Schema::create('years', function (Blueprint $table) {
             $table->id();
-            $table->text('content');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('attended_by')->references('id')->on('users')->onDelete('cascade')->default(null);
-            $table->enum('status', ['pending', 'attended'])->default('pending');
+            $table->unsignedSmallInteger('name'); // Año (por ejemplo, 2023)
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_requests');
+        Schema::dropIfExists('years');
     }
 };

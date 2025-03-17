@@ -45,48 +45,6 @@ class ArtistController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    /* {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
-        ]);
-
-        if ($validator->fails()) {
-            $messageBag = $validator->getMessageBag();
-            return redirect()
-                ->back()
-                ->withInput([
-                    'name' => $request->input('name'),
-                    'name_jp' => $request->input('name_jp')
-                ])
-                ->with('error', $messageBag);
-        } else {
-            $name = preg_replace('/\s+/', ' ', $request->name);
-
-            if ($this->artistExists($name)) {
-                return redirect(route('admin.artist.index'))->with('warning', 'Artist already exist!');
-            } else {
-                $artist = new Artist();
-
-                $name_slug = Str::slug($name);
-                $artist->name = $name;
-
-                if ($request->name_jp != null) {
-                    $name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
-                    $artist->name_jp = $name_jp;
-                } else {
-                    $name_jp = null;
-                }
-
-                $artist->name_slug = $name_slug;
-
-                if ($artist->save()) {
-                    return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Inserted Successfully');
-                } else {
-                    return redirect(route('admin.artist.index'))->with('error', 'Something has wrong');
-                }
-            }
-        }
-    } */
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:50',
@@ -102,7 +60,7 @@ class ArtistController extends Controller
         $name = preg_replace('/\s+/', ' ', $request->name);
 
         if ($this->artistExists($name)) {
-            return redirect(route('admin.artist.index'))->with('warning', 'Artist ' . $name . ' already exists!');
+            return redirect(route('admin.artists.index'))->with('warning', 'Artist ' . $name . ' already exists!');
         }
 
         $artist = new Artist();
@@ -116,10 +74,10 @@ class ArtistController extends Controller
         $artist->name_slug = $name_slug;
 
         if ($artist->save()) {
-            return redirect(route('admin.artist.index'))->with('success', 'Data has been inserted successfully');
+            return redirect(route('admin.artists.index'))->with('success', 'Data has been inserted successfully');
         }
 
-        return redirect(route('admin.artist.index'))->with('error', 'Something went wrong');
+        return redirect(route('admin.artists.index'))->with('error', 'Something went wrong');
     }
 
     function artistExists($name)
@@ -218,10 +176,10 @@ class ArtistController extends Controller
         }
 
         if ($artist->save()) {
-            return redirect(route('admin.artist.index'))->with('success', 'Data has been updated successfully');
+            return redirect(route('admin.artists.index'))->with('success', 'Data has been updated successfully');
         }
 
-        return redirect(route('admin.artist.index'))->with('error', 'Something went wrong');
+        return redirect(route('admin.artists.index'))->with('error', 'Something went wrong');
     }
 
     /**
@@ -240,7 +198,7 @@ class ArtistController extends Controller
 
         $artist->delete();
 
-        return redirect(route('admin.artist.index'))->with('success', 'Data deleted');
+        return redirect(route('admin.artists.index'))->with('success', 'Data deleted');
     }
 
     public function searchArtist(Request $request)

@@ -40,7 +40,7 @@
                                             @if (Auth::User()->isStaff())
                                                 @if ($request->status == 'pending')
                                                     <a class="btn btn-secondary btn-sm"
-                                                        href="{{ route('admin.request.show', $request->id) }}">Show
+                                                        href="{{ route('admin.requests.show', $request->id) }}">Show
                                                     </a>
                                                 @else
                                                     @if ($request->status == 'attended')
@@ -49,7 +49,7 @@
                                                 @endif
                                             @endif
                                             <a class="btn btn-danger btn-sm"
-                                                href="{{ route('admin.request.destroy', $request->id) }}"><i
+                                                href="{{ route('admin.requests.destroy', $request->id) }}"><i
                                                     class="fa fa-trash" aria-hidden="true"></i></a>
                                         @endif
                                     </td>

@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            //$table->unsignedBigInteger('song_variant_id')->unique();
-            $table->foreignId('song_variant_id')->references('id')->on('song_variants')->unique()->onDelete('cascade');
-            $table->unsignedBigInteger('nums')->default(1);
-            $table->text('source');
+            $table->foreignId('song_variant_id')->references('id')->on('song_variants')->onDelete('cascade');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('source');
+            $table->string('title');
+            $table->text('content')->nullable();
             $table->enum('status', ['fixed', 'pending'])->default('pending');
             $table->timestamps();
         });

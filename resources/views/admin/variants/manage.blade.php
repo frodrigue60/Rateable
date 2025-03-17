@@ -4,7 +4,7 @@
     <div class="container">
         <div class="card text-light m-0 bg-dark">
             <div class="card-header">
-                <a href="{{ route('songs.variants.add', $song->id) }}" class="btn btn-sm btn-primary">Create Variant</a>
+                <a href="{{ route('admin.songs.variants.add', $song->id) }}" class="btn btn-sm btn-primary">Create Variant</a>
             </div>
             <div class="card-body">
 
@@ -28,23 +28,26 @@
                                         <td>
                                             @if ($variant->video)
                                                 <a class="btn-sm btn btn-primary"
-                                                    href="{{ route('variant.videos.manage', $variant->id) }}">Video
+                                                    href="{{ route('admin.variants.videos', $variant->id) }}">Video
                                                     {{ $variant->id }}</a>
                                             @else
                                                 <button class="btn-sm btn btn-primary" href="" disabled>Video</button>
                                             @endif
                                         </td>
 
-                                        <td>
+                                        <td class="d-flex gap-2">
                                             <a class="btn-sm btn btn-success"
-                                                href="{{ route('songs.variants.edit', $variant->id) }}"><i
+                                                href="{{ route('admin.variants.edit', $variant->id) }}"><i
                                                     class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn-sm btn btn-danger"
-                                                href="{{ route('songs.variants.destroy', $variant->id) }}"><i
-                                                    class="fa-solid fa-trash"></i></a>
+                                            <form class="d-flex" action="{{ route('admin.variants.destroy', $variant->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-sm btn btn-danger"><i
+                                                        class="fa-solid fa-trash"></i></button>
+                                            </form>
 
                                             <a class="btn btn-sm btn-primary"
-                                                href="{{ route('admin.videos.create', $variant->id) }}"><i
+                                                href="{{ route('admin.variants.videos.add', $variant->id) }}"><i
                                                     class="fa-solid fa-plus"></i>
                                             </a>
                                         </td>

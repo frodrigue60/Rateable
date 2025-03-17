@@ -19,8 +19,9 @@
                     <h5 class="card-title">Add song</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{{ route('posts.songs.store', $post->id) }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('admin.songs.store') }}" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="post_id" value="{{ $post->id }}">
                         <div class="mb-3">
                             <label for="theme_num" class="form-label">OP/ED Number</label>
                             <input type="number" class="form-control" placeholder="Opening Number" id="theme_num"
@@ -63,22 +64,21 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md mb-3">
-                                <label for="tags-select">Year</label>
-                                <select class="form-select" aria-label="Default select example" name="tags[]"
-                                    id="tags-select">
-                                    <option selected value="">Select tags</option>
-                                    @isset($tags)
-                                    @php
-                                        $plucked = $post->tags->pluck('name')->toArray();
-                                    @endphp
-                                        @foreach ($tags as $tag)
-                                        <option value="{{ $tag->name }}" {{ in_array($tag->name, $plucked) ? 'selected' : '' }}>{{ $tag->name }}
-                                        </option>
+                        <div class="row mb-3">
+                            <div class="mb-3 col-6">
+                                <label for="" class="form-label">Season</label>
+                                <select class="form-select" name="season_id" id="">
+                                    @foreach ($seasons as $season)
+                                        <option value="{{ $season->id }}" {{ old('season_id', $post->season_id) == $season->id ? 'selected' : '' }}>{{ $season->name }}</option>
                                     @endforeach
-                                    @endisset
-                                    
+                                </select>
+                            </div>
+                            <div class="mb-3 col-6">
+                                <label for="" class="form-label">Year</label>
+                                <select class="form-select" name="year_id" id="">
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year->id }}" {{ old('year_id', $post->year_id) == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -98,6 +98,5 @@
 
     <script>
         new MultiSelectTag('artists-select');
-        new MultiSelectTag('tags-select');
     </script>
 @endsection

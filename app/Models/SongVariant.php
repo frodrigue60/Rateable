@@ -39,19 +39,6 @@ class SongVariant extends Model
         });
     }
 
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'rateable_id')
-            ->whereNotNull('comment')
-            ->latest()
-            ->take(10);
-    }
-
-    public function commentsWithUser()
-    {
-        return $this->comments()->with(['user:id,name,image']);
-    }
-
     public function reactions()
     {
         return $this->morphMany(Reaction::class, 'reactable');
@@ -67,18 +54,18 @@ class SongVariant extends Model
         return $this->reactions()->where('type', -1);
     }
 
-    /* public function getLikesCountAttribute()
+    public function getLikesCountAttribute()
     {
         return $this->likes()->count();
-    } */
+    }
 
-    /* public function getDislikesCountAttribute()
+    public function getDislikesCountAttribute()
     {
         return $this->dislikes()->count();
-    } */
+    }
 
     // Método para verificar si el usuario actual ha dado like
-    /* public function liked()
+    public function liked()
     {
         if (Auth::check()) { // Verifica si el usuario está autenticado
             return $this->reactions()
@@ -87,10 +74,10 @@ class SongVariant extends Model
                 ->exists();
         }
         return false;
-    } */
+    }
 
     // Método para verificar si el usuario actual ha dado dislike
-    /* public function disliked()
+    public function disliked()
     {
         if (Auth::check()) { // Verifica si el usuario está autenticado
             return $this->reactions()
@@ -99,7 +86,7 @@ class SongVariant extends Model
                 ->exists();
         }
         return false;
-    } */
+    }
 
     public function song()
     {
@@ -173,5 +160,23 @@ class SongVariant extends Model
             return $this->favorites()->where('user_id', Auth::id())->exists();
         }
         return false;
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function reports(){
+        return $this->hasMany(Report::class);
+    }
+
+    public function year()
+    {
+        return $this->belongsTo(Year::class);
+    }
+    public function season()
+    {
+        return $this->belongsTo(Season::class);
     }
 }

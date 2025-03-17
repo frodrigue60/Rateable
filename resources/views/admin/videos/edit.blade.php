@@ -6,7 +6,6 @@
             <div class="card bg-dark text-light">
                 <div class="card-header">
                     <h5 class="card-title">Edit Video {{$video->id}}</h5>
-                    <p>{{$video->songVariant->song->post->title}} {{$video->songVariant->song->slug}} {{$video->songVariant->slug}}</p>
                 </div>
                 <div class="card-body">
                     <form method="post" action="{{route('admin.videos.update', $video->id)}}" enctype="multipart/form-data">
@@ -19,10 +18,10 @@
                         <div class="mb-3">
                             <label for="embed" class="form-label">Embed Code</label>
                             <input type="text" class="form-control" placeholder="Embed Code" id="embed"
-                                name="embed" value="{{ old('embed', $video->embed ?? '') }}">
+                                name="embed" value="{{ old('embed', $video->embed_code ?? '') }}">
                         </div>
                         <div class="d-flex">
-                            <button class="btn btn-primary w-100" type="submit">Submit</button>
+                            <button class="btn btn-primary w-100" type="submit">Update</button>
                         </div>
                     </form>
                 </div>

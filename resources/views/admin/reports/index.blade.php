@@ -12,17 +12,17 @@
                 {{-- CARD BODY --}}
                 <div class="card-body">
                     {{-- search form --}}
-                    <form class="d-flex" action="" method="GET">
+                    {{-- <form class="d-flex" action="" method="GET">
                         <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
+                    </form> --}}
                     <table class="table table-dark">
                         <thead>
                             <tr>
                                 {{-- <th scope="col">Song ID</th> --}}
-                                <th scope="col">Reports</th>
+                                <th scope="col">ID</th>
                                 <th scope="col">Source</th>
-                                <th scope="col">Status</th>
+                                <th scope="col">UserID</th>
                                 @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                     <th scope="col">Actions</th>
                                 @endif
@@ -31,43 +31,53 @@
                         <tbody>
                             @foreach ($reports as $report)
                                 <tr>
-                                    {{-- <td>
-                                        <a href="{{ $report->source }}">{{ $report->post_id }}</a>
-                                    </td> --}}
                                     <td>
-                                        {{ $report->nums }}
+                                        {{ $report->id }}
                                     </td>
                                     <td>
-                                        <a href="{{ $report->source }}">{{ $report->source }}</a>
+                                        <a href="{{ $report->source }}">{{ $report->songVariant->song->post->title }}</a>
                                     </td>
 
                                     <td>
-                                        @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
-                                            @if ($report->status == 'pending')
-                                                <a class="btn btn-secondary btn-sm"
-                                                    href="{{ route('admin.report.fixed', $report->id) }}"><i class="fa-solid fa-clock"></i></a>
-                                            @else
-                                                @if ($report->status == 'fixed')
-                                                    <a class="btn btn-success btn-sm"
-                                                        href="{{ route('admin.report.unfixed', $report->id) }}"><i class="fa-solid fa-check"></i></a>
-                                                @endif
-                                            @endif
-                                        @else
-                                            @if ($report->status == 'pending')
-                                                <button disabled class="btn btn-warning btn-sm"><i class="fa-solid fa-clock"></i></button>
-                                            @else
-                                                @if ($report->status == 'fixed')
-                                                    <button disabled class="btn btn-success btn-sm"><i class="fa-solid fa-check"></i></button>
-                                                @endif
-                                            @endif
-                                        @endif
+                                        {{ $report->user_id }}
 
                                     </td>
 
                                     @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
-                                        <td>
-                                            <a class="btn btn-danger btn-sm"
-                                                href="{{ route('admin.report.destroy', $report->id) }}"><i class="fa-solid fa-trash"></i></a>
+                                        <td class="d-flex gap-2">
+                                            @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
+                                                @if ($report->status == 'pending')
+                                                    <a class="btn btn-warning btn-sm"
+                                                        href="{{ route('admin.reports.toggle', $report->id) }}"><i
+                                                            class="fa-solid fa-clock"></i></a>
+                                                @else
+                                                    @if ($report->status == 'fixed')
+                                                        <a class="btn btn-success btn-sm"
+                                                            href="{{ route('admin.reports.toggle', $report->id) }}"><i
+                                                                class="fa-solid fa-check"></i></a>
+                                                    @endif
+                                                @endif
+                                            @else
+                                                @if ($report->status == 'pending')
+                                                    <button disabled class="btn btn-warning btn-sm"><i
+                                                            class="fa-solid fa-clock"></i></button>
+                                                @else
+                                                    @if ($report->status == 'fixed')
+                                                        <button disabled class="btn btn-success btn-sm"><i
+                                                                class="fa-solid fa-check"></i></button>
+                                                    @endif
+                                                @endif
+                                            @endif
+                                            <a href="{{ route('admin.reports.show', $report->id) }}" class="btn btn-sm btn-primary"><i
+                                                class="fa-solid fa-eye"></i></a>
+
+                                            <form class="d-flex" action="{{ route('admin.reports.destroy', $report->id) }}"
+                                                method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-danger btn-sm" type="submit"><i
+                                                        class="fa-solid fa-trash"></i></button>
+                                            </form>
                                         </td>
                                     @endif
 
