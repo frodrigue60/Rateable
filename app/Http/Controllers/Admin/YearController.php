@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Year;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class YearController extends Controller
 {
@@ -14,7 +15,7 @@ class YearController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
         $years = Year::all();
         return view('admin.years.index', compact('years'));
     }
@@ -37,9 +38,21 @@ class YearController extends Controller
      */
     public function store(Request $request)
     {
-        $year = Year::firstOrCreate([
+        $validator = Validator::make($request->all(), [
+            'year' => 'integer|required|unique:years,name|digits:4',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($validator);
+        }
+
+        $year = Year::Create([
             'name' => $request->year,
         ]);
+
         return redirect(route('admin.years.index'));
     }
 
@@ -50,7 +63,7 @@ class YearController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {   
+    {
         $year = Year::find($id);
         dd($year);
     }
@@ -76,9 +89,20 @@ class YearController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'year' => 'integer|required|unique:years,name|digits:4',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($validator);
+        }
+
         $year = Year::find($id);
         $year->update(['name' => $request->year]);
-        
+
         return redirect(route('admin.years.index'));
     }
 
@@ -89,7 +113,7 @@ class YearController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {   
+    {
         $year = Year::find($id);
         $year->delete();
         return redirect(route('admin.years.index'));

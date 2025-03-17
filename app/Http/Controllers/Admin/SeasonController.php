@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Season;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class SeasonController extends Controller
 {
@@ -14,7 +17,8 @@ class SeasonController extends Controller
      */
     public function index()
     {
-        //
+        $seasons = Season::all();
+        return view('admin.seasons.index', compact('seasons'));
     }
 
     /**
@@ -24,7 +28,7 @@ class SeasonController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.seasons.create');
     }
 
     /**
@@ -35,7 +39,25 @@ class SeasonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = Str::upper($request->season_name);
+
+        $validator = Validator::make($request->all(), [
+            'season_name' => 'string|required|unique:seasons,name',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors($validator);
+        }
+
+        $season = new Season();
+        $season->name = $name;
+
+        if ($season->save()) {
+            return redirect(route('admin.seasons.index'))->with('success', 'Season saved successfully!');
+        }
     }
 
     /**
@@ -57,7 +79,8 @@ class SeasonController extends Controller
      */
     public function edit($id)
     {
-        //
+        $season = Season::find($id);
+        return view('admin.seasons.edit', compact('season'));
     }
 
     /**
@@ -69,7 +92,23 @@ class SeasonController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $name = Str::upper($request->season_name);
+        $exists = Season::where('name', $name)->exists();
+
+        if ($exists) {
+            return redirect(route('admin.seasons.index'))->with('warning', 'Season ' . $name . ' already exists!');
+        }
+
+        $season = Season::find($id);
+
+        $season->name = $name;
+
+        if ($season->update()) {
+            return redirect(route('admin.seasons.index'))->with('success', 'Season updated successfully!');
+        } else {
+            return redirect(route('admin.seasons.index'))->with('danger', 'An error has been ocurred!');
+        }
     }
 
     /**
@@ -80,6 +119,12 @@ class SeasonController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $season = Season::find($id);
+
+        if ($season->delete()) {
+            return redirect(route('admin.seasons.index'))->with('success', 'Season deleted successfully!');
+        } else {
+            return redirect(route('admin.seasons.index'))->with('danger', 'An error has been ocurred!');
+        }
     }
 }

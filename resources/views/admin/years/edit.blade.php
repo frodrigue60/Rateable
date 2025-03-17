@@ -7,7 +7,8 @@
             @method('PUT')
             <div class="mb-3">
                 <label for="year-name" class="form-label">Year</label>
-                <input type="number" step="1" class="form-control" id="year-name" placeholder="Year" min="1945" name="year" value="{{ $year->name }}">
+                <input type="number" step="1" class="form-control" id="year-name" placeholder="Year" min="1945"
+                    max="2030" name="year" value="{{ old('year', $year->name) }}">
             </div>
             <div>
                 <button type="submit" class="btn btn-sm btn-primary">Update</button>
