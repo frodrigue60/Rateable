@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Season;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -17,6 +18,7 @@ use stdClass;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\SongVariant;
+use App\Models\Year;
 
 class UserController extends Controller
 {
@@ -47,9 +49,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-    }
+    public function create() {}
 
     /**
      * Store a newly created resource in storage.
@@ -57,9 +57,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -78,9 +76,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-    }
+    public function edit($id) {}
 
     /**
      * Update the specified resource in storage.
@@ -89,9 +85,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-    }
+    public function update(Request $request, $id) {}
 
     /**
      * Remove the specified resource from storage.
@@ -99,14 +93,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-    }
+    public function destroy($id) {}
 
     public function userList(Request $request, $userId)
     {
         //dd($userId);
-        $user = User::find($userId)->select('id', 'score_format', 'image', 'banner','name')->first();
+        $user = User::find($userId)->select('id', 'score_format', 'image', 'banner', 'name')->first();
 
         $score_format = $user->score_format;
 
@@ -167,7 +159,7 @@ class UserController extends Controller
                                 })
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -179,7 +171,7 @@ class UserController extends Controller
                                         ->where('title', 'LIKE', "{$char}%")
                                         ->withAnyTag($tag);
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -192,7 +184,7 @@ class UserController extends Controller
                                 })
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
                             $song_variants = SongVariant::with(['song'])
                                 ->whereHas('song', function ($query) use ($type) {
@@ -202,7 +194,7 @@ class UserController extends Controller
                                     $query->where('status', 'published')
                                         ->withAnyTag($tag);
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
                             //dd($song_variants);
@@ -216,7 +208,7 @@ class UserController extends Controller
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -225,7 +217,7 @@ class UserController extends Controller
                                         ->where('title', 'LIKE', "{$char}%")
                                         ->withAnyTag($tag);
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -237,7 +229,7 @@ class UserController extends Controller
                                     $query->where('status', 'published');
                                 })
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -245,7 +237,7 @@ class UserController extends Controller
                                     $query->where('status', 'published')
                                         ->withAnyTag($tag);
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
                             //dd($song_variants);
@@ -261,7 +253,7 @@ class UserController extends Controller
                                 })
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -272,7 +264,7 @@ class UserController extends Controller
                                     $query->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -284,7 +276,7 @@ class UserController extends Controller
                                 })
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -294,7 +286,7 @@ class UserController extends Controller
                                 ->whereHas('song.post', function ($query) use ($char) {
                                     $query->where('status', 'published');
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -310,7 +302,7 @@ class UserController extends Controller
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -318,7 +310,7 @@ class UserController extends Controller
                                     $query->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -329,14 +321,14 @@ class UserController extends Controller
                                     $query->where('status', 'published');
                                 })
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
                                 ->whereHas('song.post', function ($query) {
                                     $query->where('status', 'published');
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -376,7 +368,7 @@ class UserController extends Controller
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                //->with('reactionsCounter')
+                                //->with('likeCounter')
                                 //->with('post')
                                 ->get();
                             //dd($songs);
@@ -391,7 +383,7 @@ class UserController extends Controller
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                //->with('reactionsCounter')
+                                //->with('likeCounter')
                                 ->get();
                         }
                     } else {
@@ -405,7 +397,7 @@ class UserController extends Controller
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                //->with('reactionsCounter')
+                                //->with('likeCounter')
                                 ->get();
                         } else {
                             $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
@@ -416,7 +408,7 @@ class UserController extends Controller
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                //->with('reactionsCounter')
+                                //->with('likeCounter')
                                 ->get();
                         }
                     }
@@ -434,7 +426,7 @@ class UserController extends Controller
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                //->with('reactionsCounter')
+                                //->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -447,7 +439,7 @@ class UserController extends Controller
                                 })
                                 ->join('ratings', 'song_variants.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -463,7 +455,7 @@ class UserController extends Controller
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                //->with('reactionsCounter')
+                                //->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -475,7 +467,7 @@ class UserController extends Controller
                                 })
                                 ->join('ratings', 'song_variants.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -494,7 +486,7 @@ class UserController extends Controller
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                //->with('reactionsCounter')
+                                //->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -504,7 +496,7 @@ class UserController extends Controller
                                 })
                                 ->join('ratings', 'song_variants.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -519,7 +511,7 @@ class UserController extends Controller
                                 ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
                                 ->join('posts', 'songs.post_id', '=', 'posts.id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                //->with('reactionsCounter')
+                                //->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -528,7 +520,7 @@ class UserController extends Controller
                                 })
                                 ->join('ratings', 'song_variants.id', '=', 'ratings.rateable_id')
                                 ->where('ratings.user_id', '=', $user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -565,7 +557,7 @@ class UserController extends Controller
                                 })
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -577,7 +569,7 @@ class UserController extends Controller
                                         ->where('title', 'LIKE', "{$char}%")
                                         ->withAnyTag($tag);
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -590,7 +582,7 @@ class UserController extends Controller
                                 })
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
                             $song_variants = SongVariant::with(['song'])
                                 ->whereHas('song', function ($query) use ($type) {
@@ -600,7 +592,7 @@ class UserController extends Controller
                                     $query->where('status', 'published')
                                         ->withAnyTag($tag);
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
                             //dd($song_variants);
@@ -614,7 +606,7 @@ class UserController extends Controller
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -623,7 +615,7 @@ class UserController extends Controller
                                         ->where('title', 'LIKE', "{$char}%")
                                         ->withAnyTag($tag);
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -635,7 +627,7 @@ class UserController extends Controller
                                     $query->where('status', 'published');
                                 })
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -643,7 +635,7 @@ class UserController extends Controller
                                     $query->where('status', 'published')
                                         ->withAnyTag($tag);
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
                             //dd($song_variants);
@@ -659,7 +651,7 @@ class UserController extends Controller
                                 })
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -670,7 +662,7 @@ class UserController extends Controller
                                     $query->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -682,7 +674,7 @@ class UserController extends Controller
                                 })
                                 ->where('type', $type)
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -692,7 +684,7 @@ class UserController extends Controller
                                 ->whereHas('song.post', function ($query) use ($char) {
                                     $query->where('status', 'published');
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -708,7 +700,7 @@ class UserController extends Controller
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
@@ -716,7 +708,7 @@ class UserController extends Controller
                                     $query->where('status', 'published')
                                         ->where('title', 'LIKE', "{$char}%");
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -727,14 +719,14 @@ class UserController extends Controller
                                     $query->where('status', 'published');
                                 })
                                 ->whereLikedBy($user->id)
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->get(); */
 
                             $song_variants = SongVariant::with(['song'])
                                 ->whereHas('song.post', function ($query) {
                                     $query->where('status', 'published');
                                 })
-                                ->with('reactionsCounter')
+                                ->with('likeCounter')
                                 ->whereLikedBy($user->id)
                                 ->get();
 
@@ -762,6 +754,198 @@ class UserController extends Controller
         }
         //dd($songs);
         return view('public.songs.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+    }
+
+
+    public function favorites(Request $request)
+    {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+            $user = Auth::user();
+        } else {
+            return redirect()->route('login');
+        }
+
+        //$tags = Tag::all();
+        $season = $request->season;
+        $year = $request->year;
+        //$filterBy = $request->filterBy;
+        $type = $request->type;
+        $sort = $request->sort;
+        $char = $request->char;
+
+        $requested = new stdClass;
+        //$requested->filterBy = $filterBy;
+        $requested->type = $type;
+        $requested->season = $season;
+        $requested->year = $year;
+        $requested->sort = $sort;
+        $requested->char = $char;
+
+        $requested->year = $request->year;
+        $requested->season = $request->season;
+
+        $years = Year::all();
+        $seasons = Season::all();
+
+        //$filters = $this->filterTypesSortChar()['filters'];
+        $types = $this->filterTypesSortChar()['types'];
+        $sortMethods = $this->filterTypesSortChar()['sortMethods'];
+        $characters = $this->filterTypesSortChar()['characters'];
+
+        $song_variants = null;
+        //dd($char);
+
+        if ($request->year != null || $request->season != null) {
+            if ($type != null) {
+                if ($char != null) {
+                    #with character
+                    #with type
+                    #with season or year
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song', function ($query) use ($type) {
+                            $query->where('type', $type);
+                        })
+                        ->whereHas('song.post', function ($query) use ($char, $season, $year) {
+                            $query->where('status', 'published')
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->when($season, function ($query, $season) {
+                                    $query->where('season_id', $season);
+                                })
+                                ->when($year, function ($query, $year) {
+                                    $query->where('year_id', $year);
+                                });
+                        })
+                        ->whereLikedBy($user->id)
+                        ->get();
+                    //dd($song_variants);
+                } else {
+                    #with type
+                    #with season or year
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song', function ($query) use ($type) {
+                            $query->where('type', $type);
+                        })
+                        ->whereHas('song.post', function ($query) use ($season, $year) {
+                            $query->where('status', 'published')
+                                ->when($season, function ($query, $season) {
+                                    $query->where('season_id', $season);
+                                })
+                                ->when($year, function ($query, $year) {
+                                    $query->where('year_id', $year);
+                                });
+                        })
+
+                        ->whereLikedBy($user->id)
+                        ->get();
+                    //dd($song_variants);
+                }
+            } else {
+                if ($char != null) {
+                    #with character
+                    #with season or year
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($char, $season, $year) {
+                            $query->where('status', 'published')
+                                ->where('title', 'LIKE', "{$char}%")
+                                ->when($season, function ($query, $season) {
+                                    $query->where('season_id', $season);
+                                })
+                                ->when($year, function ($query, $year) {
+                                    $query->where('year_id', $year);
+                                });
+                        })
+                        ->whereLikedBy($user->id)
+                        ->get();
+
+                    //dd($song_variants);
+                } else {
+                    #with season or year
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($season, $year) {
+                            $query->where('status', 'published')
+                                ->when($season, function ($query, $season) {
+                                    $query->where('season_id', $season);
+                                })
+                                ->when($year, function ($query, $year) {
+                                    $query->where('year_id', $year);
+                                });
+                        })
+                        ->whereLikedBy($user->id)
+                        ->get();
+                    //dd($song_variants);
+                }
+            }
+        } else {
+            if ($type != null) {
+                if ($char != null) {
+                    #with type
+                    #with character
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song', function ($query) use ($type) {
+                            $query->where('type', $type);
+                        })
+                        ->whereHas('song.post', function ($query) use ($char) {
+                            $query->where('status', 'published')
+                                ->where('title', 'LIKE', "{$char}%");
+                        })
+                        ->whereLikedBy($user->id)
+                        ->get();
+                    //dd($song_variants);
+                } else {
+                    #with type
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song', function ($query) use ($type) {
+                            $query->where('type', $type);
+                        })
+                        ->whereHas('song.post', function ($query) use ($char) {
+                            $query->where('status', 'published');
+                        })
+                        ->whereLikedBy($user->id)
+                        ->get();
+                    //dd($song_variants);
+                }
+            } else {
+                if ($char != null) {
+                    #with character
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) use ($char) {
+                            $query->where('status', 'published')
+                                ->when($char, function ($query, $char) {
+                                    $query->where('title', 'LIKE', "{$char}%");
+                                });
+                        })
+                        ->whereLikedBy($user->id)
+                        ->get();
+                    //dd($song_variants);
+                } else {
+                    #default load
+                    $song_variants = SongVariant::with(['song'])
+                        ->whereHas('song.post', function ($query) {
+                            $query->where('status', 'published');
+                        })
+                        ->whereLikedBy($user->id)
+                        ->get();
+                    //dd($song_variants); 
+                }
+            }
+        }
+
+        //dd($song_variants);
+
+        //$songs = $this->setScore($songs, $score_format);
+        //$songs = $this->sort($sort, $songs);
+        //$songs = $this->paginate($songs, 24)->withQueryString();
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
+        $song_variants = $this->sort_variants($sort, $song_variants);
+        $song_variants = $this->paginate($song_variants);
+
+        if ($request->ajax()) {
+            $view = view('layouts.variant.cards', compact('song_variants'))->render();
+            return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
+        }
+        //dd($songs);
+        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'song_variants'));
     }
 
     public function paginate($songs, $perPage = 18, $page = null, $options = [])

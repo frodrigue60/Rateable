@@ -123,9 +123,8 @@ class SongVariant extends Model
     // Método para obtener los posts que un usuario ha dado like
     public function scopeWhereLikedBy($query, $userId)
     {
-        return $query->whereHas('reactions', function ($q) use ($userId) {
-            $q->where('user_id', $userId)
-                ->where('type', 1); // 1 para like
+        return $query->whereHas('favorites', function ($q) use ($userId) {
+            $q->where('user_id', $userId);
         });
     }
 

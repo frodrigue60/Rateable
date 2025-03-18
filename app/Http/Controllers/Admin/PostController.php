@@ -50,7 +50,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $tags = Tag::all();
+        //$tags = Tag::all();
         $artists = Artist::all();
 
         $types = [
@@ -75,7 +75,7 @@ class PostController extends Controller
         ]);
 
         //dd($tagsYears, $tagsNames);
-        return view('admin.posts.create', compact('tags', 'types', 'artists', 'postStatus', 'breadcrumb'));
+        return view('admin.posts.create', compact('types', 'artists', 'postStatus', 'breadcrumb'));
     }
 
     /**

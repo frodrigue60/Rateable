@@ -60,24 +60,6 @@
                         <form id="form-filter" action="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}"
                             method="get">
                     @endif
-                    @if (Request::routeIs('favorites') || Request::routeIs('user.list'))
-                        {{-- FILTER BY --}}
-                        <section class="searchItem">
-                            <div class="w-100 mb-1">
-                                <label for="select-filterBy" class="text-light">Filter By</label>
-                                <select class="form-select" aria-label="Default select example" id="select-filterBy"
-                                    name="filterBy">
-                                    <option value="">Select a filter method</option>
-                                    @foreach ($filters as $item)
-                                        <option value="{{ $item['value'] }}"
-                                            {{ $requested->filterBy == $item['value'] ? 'selected' : '' }}>
-                                            {{ $item['name'] }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </section>
-                    @endif
                     {{-- TYPE --}}
                     <section class="searchItem">
                         <div class="w-100 mb-1">
@@ -100,9 +82,9 @@
                             <label class="text-light" for="select-year">Year:</label>
                             <select class="form-select" aria-label="Default select example" name="year" id="select-year">
                                 <option selected value="">Select a year</option>
-                                @foreach ($years as $item)
-                                    <option value="{{ $item['value'] }}"
-                                        {{ $requested->year == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
+                                @foreach ($years as $year)
+                                    <option value="{{ $year->id }}"
+                                        {{ $requested->year == $year->id ? 'selected' : '' }}>{{ $year->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -112,9 +94,9 @@
                             <select class="form-select" aria-label="Default select example" name="season"
                                 id="select-season">
                                 <option selected value="">Select a season</option>
-                                @foreach ($seasons as $item)
-                                    <option value="{{ $item['value'] }}"
-                                        {{ $requested->season == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}
+                                @foreach ($seasons as $season)
+                                    <option value="{{ $season->id }}"
+                                        {{ $requested->season == $season->id ? 'selected' : '' }}>{{ $season->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -157,7 +139,7 @@
             {{-- POSTS --}}
             <section class="text-light">
                 <div class="contenedor-tarjetas-filtro" id="data">
-                    {{-- @include('public.songs.songs-cards') --}}
+                   {{--  @include('layouts.variant.cards') --}}
                 </div>
             </section>
         </div>

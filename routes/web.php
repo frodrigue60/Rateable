@@ -37,11 +37,11 @@ use App\Http\Controllers\YearController;
 |
 */
 //POST PUBLIC
-//Route::get('/',       [PostController::class, 'index'])->name('/');
+Route::get('/',       [PostController::class, 'index'])->name('/');
 
-Route::get('/', function () {
+/* Route::get('/', function () {
     return 'Aqui habia ponido mi sitio web';
-});
+})->name('/'); */
 
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
@@ -58,9 +58,6 @@ Route::get('/anime/{anime_slug}/{song_slug}/v{variant_version_number}', [SongVar
 Route::get('/offline', function () {
     return view('offline');
 });
-
-//Route::get('/anime/{anime}/{slug}',   [PostController::class, 'show'])->name('anime.show');
-//Route::get('/song/{song}/{slug}/{suffix}',       [SongController::class, 'show'])->name('song.show');
 
 //ARTIST PUBLIC
 Route::get('/artists/{artist}/{slug}',    [ArtistController::class, 'show'])->name('artists.show');
@@ -139,7 +136,7 @@ Route::post('/upload-profile-pic', [App\Http\Controllers\UserController::class, 
 Route::post('/upload-banner-pic', [App\Http\Controllers\UserController::class, 'uploadBannerPic'])->name('upload.banner.pic');
 
 //Variants ROUTES
-Route::get('/favorites', [PostController::class, 'favorites'])->name('favorites');
+Route::get('/favorites', [UserController::class, 'favorites'])->name('favorites');
 
 //REPORTS
 Route::post('reports/store', [ReportController::class, 'store'])->name('reports.store');

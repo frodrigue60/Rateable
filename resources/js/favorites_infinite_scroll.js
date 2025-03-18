@@ -10,14 +10,14 @@ document.addEventListener("DOMContentLoaded", (event) => {
     firstFetch();
 
     formFilter.addEventListener('change', function (event) {
-        let filterBy = document.querySelector('#select-filterBy').value;
+        //let filterBy = document.querySelector('#select-filterBy').value;
         let type = document.querySelector('#select-type').value;
         let year = document.querySelector('#select-year').value;
         let season = document.querySelector('#select-season').value;
         let sort = document.querySelector('#select-sort').value;
         let character = document.querySelector('#select-char').value;
 
-        filterFetch(filterBy,type,year, season,sort, character);
+        filterFetch(type,year, season,sort, character);
     });
 
     window.addEventListener("scroll", function () {
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let currentUrl = window.location.href;
         let urlParams = new URLSearchParams(window.location.search);
 
-        if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
+        if (urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
             urlParams.has('char')) {
             pageName = "&page=";
         } else {
@@ -96,10 +96,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
         fetchData(baseUrl);
     }
 
-    function filterFetch(filterBy,type,year, season,sort, character) {
+    function filterFetch(type,year, season,sort, character) {
         page = 1;
         clearDataDiv();
-        let queryUrl ="?"+"filterBy="+filterBy+"&type="+type+"&year="+year+"&season="+season+"&sort="+sort+"&char="+character;
+        let queryUrl ="?"+"type="+type+"&year="+year+"&season="+season+"&sort="+sort+"&char="+character;
         url = baseUrl + queryUrl;
         history.pushState(null, null, url);
         fetchData(url);
