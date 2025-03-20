@@ -18,9 +18,6 @@
                     <span class="catTitle">Artist</span>
                     <div id="artists">
                     </div>
-                    <span class="catTitle">Season</span>
-                    <div id="tags">
-                    </div>
                     <span class="catTitle">Users</span>
                     <div id="users">
                     </div>

@@ -32,14 +32,6 @@ class PostController extends Controller
             $score_format = null;
         }
 
-        /*  $recently = Song::with(['post'])
-            ->whereHas('post', function ($query) {
-                $query->where('status', '=', 'published');
-            })
-            ->get()
-            ->sortByDesc('created_at')
-            ->take(25); */
-
         $recently = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
                 $query->where('status', '=', 'published');
@@ -47,16 +39,6 @@ class PostController extends Controller
             ->get()
             ->sortByDesc('created_at')
             ->take(25);
-
-        //dd($recently);
-
-        /* $popular = Song::with(['post'])
-            ->whereHas('post', function ($query) {
-                $query->where('status', '=', 'published');
-            })
-            ->get()
-            ->sortByDesc('likeCount')
-            ->take(15); */
 
         $popular = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
@@ -68,16 +50,6 @@ class PostController extends Controller
 
         $popular = $this->setScoreOnlyVariants($popular, $score_format);
 
-        //dd($popular);
-
-        /* $viewed = Song::with(['post'])
-            ->whereHas('post', function ($query) {
-                $query->where('status', '=', 'published');
-            })
-            ->get()
-            ->sortByDesc('view_count')
-            ->take(15); */
-
         $viewed = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
                 $query->where('status', '=', 'published');
@@ -87,17 +59,6 @@ class PostController extends Controller
             ->take(15);
 
         $viewed = $this->setScoreOnlyVariants($viewed, $score_format);
-
-        //dd($viewed);
-
-        /* $openings = Song::with(['post'])
-            ->where('type', 'OP')
-            ->whereHas('post', function ($query) {
-                $query->where('status', '=', 'published');
-            })
-            ->get()
-            ->sortByDesc('averageRating')
-            ->take(5); */
 
         $openings = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
@@ -112,16 +73,6 @@ class PostController extends Controller
 
         $openings = $this->setScoreOnlyVariants($openings, $score_format);
 
-        //dd($openings);
-
-        /* $endings = Song::with(['post'])
-            ->where('type', 'ED')
-            ->whereHas('post', function ($query) {
-                $query->where('status', '=', 'published');
-            })
-            ->get()
-            ->sortByDesc('averageRating')
-            ->take(5); */
         $endings = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
                 $query->where('status', '=', 'published');

@@ -12,10 +12,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto">
-                <li><a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
+                {{--  <li><a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
                         href="{{ route('openings') }}">Openings</a></li>
                 <li><a class="nav-link {{ Request::is('endings') ? 'active' : '' }}"
-                        href="{{ route('endings') }}">Endings</a></li>
+                        href="{{ route('endings') }}">Endings</a></li> --}}
+
+                <li><a class="nav-link {{ Request::is('seasonal') ? 'active' : '' }}"
+                        href="{{ route('seasonal') }}">Seasonal</a></li>
 
                 <li><a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"
                         href="{{ route('global.ranking') }}">Ranking</a></li>
@@ -39,9 +42,11 @@
                             data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ route('admin.posts.index') }}">Post index</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.artists.index') }}">Artist index</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.artists.index') }}">Artist index</a>
+                            </li>
                             <li><a class="dropdown-item" href="{{ route('admin.years.index') }}">Years index</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.seasons.index') }}">Seasons index</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.seasons.index') }}">Seasons index</a>
+                            </li>
                             @if (Auth::User()->isAdmin())
                                 <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
                                 </li>
@@ -97,10 +102,10 @@
                                 <i class="fa-solid fa-star"></i>
                                 Favorites
                             </a>
-                            
-                                <a class="dropdown-item" href="{{ route('request.create') }}">
-                                    <i class="fa-solid fa-pen"></i> Request</a>
-                            
+
+                            <a class="dropdown-item" href="{{ route('request.create') }}">
+                                <i class="fa-solid fa-pen"></i> Request</a>
+
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();"><i

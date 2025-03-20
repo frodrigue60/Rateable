@@ -113,6 +113,13 @@
             <script src="{{ asset('build/ajaxSearch.js') }}"></script>
         @endif
 
+        <script>
+            const loaderContainer = document.querySelector('.loader-container');
+            document.addEventListener("DOMContentLoaded", function() {
+                loaderContainer.style.display = 'none';
+            });
+        </script>
+
         @yield('script')
 
         @include('layouts.footer')

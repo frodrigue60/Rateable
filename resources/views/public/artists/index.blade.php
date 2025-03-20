@@ -77,7 +77,7 @@
                     @if (!preg_match('/^[a-zA-Z]/', $artist->name))
                         <div class="artist-list-item">
                             <a class="no-deco"
-                                href="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }}</a>
+                                href="{{ $artist->url }}" target="_blank" rel="noopener">{{ $artist->name }}</a>
                         </div>
                     @endif
                 @endforeach
@@ -95,7 +95,7 @@
                         @if (Str::startsWith($artist->name, $char))
                             <div class="artist-list-item">
                                 <a class="no-deco"
-                                    href="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }} {{"(".$countThemes.")"}}</a>
+                                    href="{{ $artist->url }}" target="_blank" rel="noopener">{{ $artist->name }} {{"(".$countThemes.")"}}</a>
                             </div>
                         @endif
                     @endforeach

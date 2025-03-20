@@ -1,12 +1,11 @@
 const myModal = document.querySelector('#exampleModal');
 const postsDiv = document.querySelector("#posts");
 const artistsDiv = document.querySelector("#artists");
-const tagsDiv = document.querySelector("#tags");
 const usersDiv = document.querySelector("#users");
 const input = document.querySelector('#searchInputModal');
 const token = document.querySelector('meta[name="csrf-token"]').content;
 const titles = document.querySelectorAll('.post-titles');
-const loaderContainer = document.querySelector('.loader-container');
+//const loaderContainer = document.querySelector('.loader-container');
 const siteBody = document.querySelector('body');
 const modalBody = document.querySelector('#modalBody');
 const resDiv = document.querySelector('.res');
@@ -16,7 +15,7 @@ let typingTimer;
 const delay = 250;
 
 document.addEventListener("DOMContentLoaded", function () {
-    loaderContainer.style.display = 'none';
+    //loaderContainer.style.display = 'none';
     siteBody.removeAttribute('hidden');
     nullValueInput();
     cutTitles();
@@ -59,6 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         let a = document.createElement('a');
                         a.href = url;
+                        a.target = '_blank';
+                        a.rel = 'nofollow noopener noreferrer';
                         a.textContent = element.title;
 
                         resultDiv.appendChild(a);
@@ -66,13 +67,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     data.artists.forEach(element => {
-                        let url = siteUrl + "/artists/"+ element.name_slug;
+                        let url = siteUrl + "/artists/" + element.name_slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
 
                         let a = document.createElement('a');
                         a.href = url;
+                        a.target = '_blank';
+                        a.rel = 'nofollow noopener noreferrer';
                         a.textContent = element.name;
 
                         resultDiv.appendChild(a);
@@ -88,6 +91,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         let a = document.createElement('a');
                         a.href = url;
+                        a.target = '_blank';
+                        a.rel = 'nofollow noopener noreferrer';
                         a.textContent = element.name;
 
                         resultDiv.appendChild(a);
@@ -103,7 +108,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function resetDivs() {
         postsDiv.innerHTML = "";
         artistsDiv.innerHTML = "";
-        tagsDiv.innerHTML = "";
         usersDiv.innerHTML = "";
     }
     function nullValueInput() {
@@ -150,7 +154,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function insertLoader() {
         postsDiv.appendChild(createLoadingElement());
         artistsDiv.appendChild(createLoadingElement());
-        tagsDiv.appendChild(createLoadingElement());
         usersDiv.appendChild(createLoadingElement());
     }
 });

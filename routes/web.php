@@ -55,6 +55,8 @@ Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
 Route::get('/anime/{slug}',   [PostController::class, 'show'])->name('post.show');
 Route::get('/anime/{anime_slug}/{song_slug}/v{variant_version_number}', [SongVariantController::class, 'show'])->name('variants.show');
 
+Route::get('/seasonal',   [SongVariantController::class, 'seasonal'])->name('seasonal');
+
 Route::get('/offline', function () {
     return view('offline');
 });
@@ -69,27 +71,27 @@ Route::resource('seasons', SeasonController::class);
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {
         //SONGS
-        Route::resource('songs', AdminSongController::class,['as' => 'admin']);
+        Route::resource('songs', AdminSongController::class, ['as' => 'admin']);
         Route::get('songs/{song}/variants/add', [AdminSongController::class, 'addVariant'])->name('admin.songs.variants.add');
         Route::get('songs/{song}/variants', [AdminSongController::class, 'variants'])->name('admin.songs.variants');
 
         //VARIANTS
-        Route::resource('variants', AdminSongVariantController::class,['as' => 'admin']);
+        Route::resource('variants', AdminSongVariantController::class, ['as' => 'admin']);
         Route::get('/variants/{variant}/videos', [AdminSongVariantController::class, 'videos'])->name('admin.variants.videos');
         Route::get('/variants/{variant}/videos/add', [AdminSongVariantController::class, 'addVideos'])->name('admin.variants.videos.add');
 
         //VIDEOS
-        Route::resource('videos', AdminVideoController::class,['as' => 'admin']);
+        Route::resource('videos', AdminVideoController::class, ['as' => 'admin']);
 
         //REQUESTS
-        Route::resource('requests', AdminUserRequestController::class,['as' => 'admin']);
+        Route::resource('requests', AdminUserRequestController::class, ['as' => 'admin']);
 
         //REPORTS
-        Route::resource('reports', AdminReportController::class,['as' => 'admin']);
+        Route::resource('reports', AdminReportController::class, ['as' => 'admin']);
         Route::get('/reports/{report}/toggle', [AdminReportController::class, 'toggleStatus'])->name('admin.reports.toggle');
-        
+
         //POSTS
-        Route::resource('posts', AdminPostController::class,['as' => 'admin']);
+        Route::resource('posts', AdminPostController::class, ['as' => 'admin']);
         Route::get('/posts/search', [AdminPostController::class, 'search'])->name('admin.posts.search');
         Route::post('/posts/{post}/approve', [AdminPostController::class, 'approve'])->name('admin.posts.approve');
         Route::post('/posts/{post}/unapprove', [AdminPostController::class, 'unapprove'])->name('admin.posts.unapprove');

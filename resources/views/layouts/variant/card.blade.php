@@ -40,7 +40,7 @@
         <div class="{{ $variant->song->type == 'OP' ? 'tag' : 'tag2' }}">
             <span class="tag-content ">{{ $forward_text }}</span>
         </div>
-        <a class="no-deco" href="{{ $variant->url }}">
+        <a class="no-deco" href="{{ $variant->url }}" target="_blank" rel="noopener">
             <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $title }}"
                 title="{{ $title }}">
         </a>

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Post;
 use App\Models\Song;
 use App\Models\Reaction;
+use App\Models\Season;
+use App\Models\Year;
 
 class SongVariantController extends Controller
 {
@@ -338,5 +340,104 @@ class SongVariantController extends Controller
                 'type' => $type,
             ]);
         }
+    }
+
+    public function seasonal()
+    {
+        if (Auth::check()) {
+            $score_format = Auth::user()->score_format;
+        } else {
+            $score_format = null;
+        }
+
+        $type_OP = 'OP';
+        $type_ED = 'ED';
+        $currentSeason = Season::where('current', true)->first();
+        $currentYear = Year::where('current', true)->first();
+
+        $openings = SongVariant::with(['song'])
+            #SONG QUERY
+            ->whereHas('song', function ($query) use ($type_OP) {
+                $query->when($type_OP, function ($query, $type) {
+                    $query->where('type', $type);
+                });
+            })
+
+            ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear) {
+                #POST QUERY
+                $query->where('status', 'published')
+                    /* ->when($char, function ($query, $char) {
+                        $query->where('title', 'LIKE', "{$char}%");
+                    }) */
+                    ->when($currentSeason, function ($query, $currentSeason) {
+                        $query->where('season_id', $currentSeason->id);
+                    })
+                    ->when($currentYear, function ($query, $currentYear) {
+                        $query->where('year_id', $currentYear->id);
+                    });
+            })
+            #SONG VARIANT QUERY
+            ->get();
+
+        $endings = SongVariant::with(['song'])
+            #SONG QUERY
+            ->whereHas('song', function ($query) use ($type_ED) {
+                $query->when($type_ED, function ($query, $type) {
+                    $query->where('type', $type);
+                });
+            })
+
+            ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear) {
+                #POST QUERY
+                $query->where('status', 'published')
+                    /* ->when($char, function ($query, $char) {
+                        $query->where('title', 'LIKE', "{$char}%");
+                    }) */
+                    ->when($currentSeason, function ($query, $currentSeason) {
+                        $query->where('season_id', $currentSeason->id);
+                    })
+                    ->when($currentYear, function ($query, $currentYear) {
+                        $query->where('year_id', $currentYear->id);
+                    });
+            })
+            #SONG VARIANT QUERY
+            ->get();
+
+        //dd($openings, $endings);
+
+        $openings = $this->setScoreOnlyVariants($openings, $score_format);
+        $endings = $this->setScoreOnlyVariants($endings, $score_format);
+
+        return view('public.variants.seasonal', compact('openings', 'endings', 'currentSeason', 'currentYear'));
+    }
+
+    public function setScoreOnlyVariants($variantsArray, $score_format)
+    {
+        $variantsArray->each(function ($variant) use ($score_format) {
+            $factor = 1;
+
+            switch ($score_format) {
+                case 'POINT_100':
+                    $factor = 1;
+                    break;
+                case 'POINT_10_DECIMAL':
+                    $factor = 0.1;
+                    break;
+                case 'POINT_10':
+                    $factor = 1 / 10;
+                    break;
+                case 'POINT_5':
+                    $factor = 1 / 20;
+                    break;
+                default:
+                    $factor = 1 / 10;
+                    break;
+            }
+
+            $variant->score = round($variant->averageRating * $factor);
+            $variant->user_score = $variant->rating ? round($variant->rating * $factor) : null;
+        });
+
+        return $variantsArray;
     }
 }
