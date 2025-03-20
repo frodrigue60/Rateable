@@ -186,7 +186,6 @@ return [
          * Package Service Providers...
          */
         willvincent\Rateable\RateableServiceProvider::class,
-        Conner\Tagging\Providers\TaggingServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...

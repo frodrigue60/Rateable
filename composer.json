@@ -16,7 +16,6 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
-        "rtconner/laravel-tagging": "^4.1",
         "spatie/laravel-sitemap": "^6.2",
         "willvincent/laravel-rateable": "^3.0"
     },

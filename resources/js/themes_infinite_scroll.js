@@ -14,9 +14,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let year = document.querySelector('#select-year').value;
         let season = document.querySelector('#select-season').value;
         let sort = document.querySelector('#select-sort').value;
-        let character = document.querySelector('#select-char').value;
+        /* let character = document.querySelector('#select-char').value; */
 
-        filterFetch(type,year, season,sort, character);
+        filterFetch(type,year, season,sort/* , character */);
     });
 
     window.addEventListener("scroll", function () {
@@ -79,8 +79,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let currentUrl = window.location.href;
         let urlParams = new URLSearchParams(window.location.search);
 
-        if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
-            urlParams.has('char')) {
+        if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') /* ||
+            urlParams.has('char') */) {
             pageName = "&page=";
         } else {
             pageName = "?page=";
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         fetchData(baseUrl);
     }
 
-    function filterFetch(type,year, season,sort, character) {
+    function filterFetch(type,year, season,sort/* , character */) {
         let currentUrl = new URL(window.location.href);
         page = 1;
         clearDataDiv();
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         currentUrl.searchParams.set('year', year);
         currentUrl.searchParams.set('season', season);
         currentUrl.searchParams.set('sort', sort);
-        currentUrl.searchParams.set('character', character);
+       /*  currentUrl.searchParams.set('character', character); */
         //let queryUrl ="?"+"type="+type+"&year="+year+"&season="+season+"&sort="+sort+"&char="+character;
         let newUrl = currentUrl.toString();
         //url = baseUrl + queryUrl;

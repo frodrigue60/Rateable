@@ -49,7 +49,7 @@ Route::get('/seasonal-ranking',       [PostController::class, 'seasonalRanking']
 Route::get('/global-ranking',       [PostController::class, 'globalRanking'])->name('global.ranking');
 Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
-Route::get('/user/{user}', [UserController::class, 'userList'])->name('user.list');
+Route::get('/users/{slug}', [UserController::class, 'userList'])->name('user.list');
 
 Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
 Route::get('/anime/{slug}',   [PostController::class, 'show'])->name('post.show');
@@ -60,7 +60,7 @@ Route::get('/offline', function () {
 });
 
 //ARTIST PUBLIC
-Route::get('/artists/{artist}/{slug}',    [ArtistController::class, 'show'])->name('artists.show');
+Route::get('/artists/{slug}',    [ArtistController::class, 'show'])->name('artists.show');
 Route::get('/artists',    [ArtistController::class, 'index'])->name('artist.index');
 
 Route::resource('years', YearController::class);
@@ -111,9 +111,11 @@ Route::group(['middleware' => 'staff'], function () {
 
         //YEARS
         Route::resource('years', AdminYearController::class, ['as' => 'admin']);
+        Route::get('years/{year}/toggle', [AdminYearController::class, 'toggle'])->name('admin.years.toggle');
 
         //SEASONS
         Route::resource('seasons', AdminSeasonController::class, ['as' => 'admin']);
+        Route::get('seasons/{season}/toggle', [AdminSeasonController::class, 'toggle'])->name('admin.seasons.toggle');
     });
 });
 

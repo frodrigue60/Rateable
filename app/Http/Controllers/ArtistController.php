@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use App\Models\Season;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Song;
+use App\Models\Year;
 use stdClass;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -35,7 +37,7 @@ class ArtistController extends Controller
      * @param  mixed  $name_slug
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id, $name_slug)
+    public function show(Request $request, $slug)
     {
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
@@ -43,10 +45,12 @@ class ArtistController extends Controller
         } else {
             $score_format = null;
         }
-        $tags = Tag::all();
+        //$tags = Tag::all();
         $type = $request->type;
         $sort = $request->sort;
         $char = $request->char;
+        $year = $request->year;
+        $season = $request->season;
 
         $requested = new stdClass;
         $requested->type = $type;
@@ -55,8 +59,8 @@ class ArtistController extends Controller
         $requested->year = $request->year;
         $requested->season = $request->season;
 
-        $years = $this->SeasonsYears($tags)['years'];
-        $seasons = $this->SeasonsYears($tags)['seasons'];
+        $years = Year::all();
+        $seasons = Season::all();
 
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
@@ -71,140 +75,26 @@ class ArtistController extends Controller
             ['name' => 'Popular', 'value' => 'likeCount']
         ];
 
-        $characters = range('A', 'Z');
-
-        $artist = Artist::where('name_slug', $name_slug)->where('id', $id)->first();
-
-        /* if ($request->year != null || $request->season != null) {
-            if ($request->year != null && $request->season != null) {
-                $tag = $request->season . ' ' . $request->year;
-            } else {
-                $tag = DB::table('tagging_tags')
-                    ->where(function ($query) use ($request) {
-                        if ($request->year != null) {
-                            $query->where('name', 'LIKE', '%' . $request->year . '%');
-                        } else {
-                            $query->where('name', 'LIKE', '%' . $request->season . '%');
-                        }
-                    })
-                    ->limit(4)
-                    ->get()
-                    ->pluck('name')
-                    ->toArray();
-            }
-            if ($type != null) {
-                if ($char != null) {
-
-                    $songs = Song::whereHas('artists', function ($query) use ($artist) {
-                        $query->where('artists.id', $artist->id);
-                    })
-                        ->withAnyTag($tag)
-                        ->whereHas('post', function ($query) use ($char) {
-                            $query->where('status', 'published')
-                                ->where('title', 'LIKE', "{$char}%");
-                        })
-                        ->where('type', $type)
-                        ->get();
-                } else {
-
-                    $songs = Song::whereHas('artists', function ($query) use ($artist) {
-                        $query->where('artists.id', $artist->id);
-                    })
-                        ->withAnyTag($tag)
-                        ->whereHas('post', function ($query) {
-                            $query->where('status', 'published');
-                        })
-                        ->where('type', $type)
-                        ->get();
-                }
-            } else {
-                if ($char != null) {
-
-                    $songs = Song::whereHas('artists', function ($query) use ($artist) {
-                        $query->where('artists.id', $artist->id);
-                    })
-                        ->withAnyTag($tag)
-                        ->whereHas('post', function ($query) use ($char) {
-                            $query->where('status', 'published')
-                                ->where('title', 'LIKE', "{$char}%");
-                        })->get();
-                } else {
-
-                    $songs = Song::whereHas('artists', function ($query) use ($artist) {
-                        $query->where('artists.id', $artist->id);
-                    })
-                        ->withAnyTag([$tag])
-                        ->whereHas('post', function ($query) {
-                            $query->where('status', 'published');
-                        })
-                        ->get();
-                }
-            }
-        } else {
-            if ($type != null) {
-                if ($char != null) {
-
-                    $songs = Song::whereHas('artists', function ($query) use ($artist) {
-                        $query->where('artists.id', $artist->id);
-                    })
-                        ->whereHas('post', function ($query) use ($char) {
-                            $query->where('status', 'published')
-                                ->where('title', 'LIKE', "{$char}%");
-                        })
-                        ->where('type', $type)
-                        ->get();
-                } else {
-
-                    $songs = Song::whereHas('artists', function ($query) use ($artist) {
-                        $query->where('artists.id', $artist->id);
-                    })
-                        ->whereHas('post', function ($query) {
-                            $query->where('status', 'published');
-                        })
-                        ->where('type', $type)
-                        ->get();
-                }
-            } else {
-                if ($char != null) {
-
-                    $songs = Song::whereHas('artists', function ($query) use ($artist) {
-                        $query->where('artists.id', $artist->id);
-                    })
-                        ->whereHas('post', function ($query) use ($char) {
-                            $query
-                                ->where('status', 'published')
-                                ->where('title', 'LIKE', "{$char}%");
-                        })->get();
-                } else {
-
-
-                    $songs = Song::whereHas('artists', function ($query) use ($artist) {
-                        $query->where('artists.id', $artist->id);
-                    })
-                        ->whereHas('post', function ($query) {
-                            $query->where('status', 'published');
-                        })->get();
-                }
-            }
-        } */
-
+        $artist = Artist::where('name_slug', $slug)->first();
 
         $song_variants = Song::whereHas('artists', function ($query) use ($artist) {
             $query->where('artists.id', $artist->id);
         })
-            ->when($request->year || $request->season, function ($query) use ($request) {
-                $query->withAnyTag($this->getTag($request));
+            ->when($year, function ($query) use ($year) {
+                $query->where('year_id', $year);
+            })
+            ->when($season, function ($query) use ($season) {
+                $query->where('season_id', $season);
             })
             ->whereHas('post', function ($query) use ($request, $char) {
-                $query->where('status', 'published');
-                if ($char) {
-                    $query->where('title', 'LIKE', "{$char}%");
-                }
+                $query->where('status', 'published')
+                    ->when($char, function ($query) use ($char) {
+                        $query->where('title', 'LIKE', "{$char}%");
+                    });
             })
             ->when($type, function ($query) use ($type) {
                 $query->where('type', $type);
             })
-
             ->get()
             ->flatMap(function ($song) {
                 return $song->songVariants;
@@ -226,32 +116,9 @@ class ArtistController extends Controller
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
 
-        return view('public.songs.filter', compact('artist', 'seasons', 'years', 'requested', 'sortMethods', 'types', 'characters'));
+        return view('public.variants.filter', compact('artist', 'seasons', 'years', 'requested', 'sortMethods', 'types'));
     }
 
-    /**
-     * Obtiene la etiqueta basada en las opciones de la URL.
-     *
-     * @param  Request $request
-     * @return string|array|null
-     */
-    private function getTag($request)
-    {
-        if ($request->year && $request->season) {
-            return $request->season . ' ' . $request->year;
-        }
-
-        return Tag::where(function ($query) use ($request) {
-            if ($request->year) {
-                $query->where('name', 'LIKE', '%' . $request->year . '%');
-            } elseif ($request->season) {
-                $query->where('name', 'LIKE', '%' . $request->season . '%');
-            }
-        })
-            ->limit(4)
-            ->pluck('name')
-            ->toArray();
-    }
     public function setScore($songs, $score_format)
     {
         $songs->each(function ($song) use ($score_format) {

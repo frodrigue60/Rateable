@@ -5,15 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Season;
 use Illuminate\Http\Request;
 use App\Models\User;
-
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use App\Models\Song;
-use Conner\Tagging\Model\Tag;
 use stdClass;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -95,34 +92,45 @@ class UserController extends Controller
      */
     public function destroy($id) {}
 
-    public function userList(Request $request, $userId)
+    public function userList(Request $request, $slug)
     {
         //dd($userId);
-        $user = User::find($userId)->select('id', 'score_format', 'image', 'banner', 'name')->first();
+        $user = User::where('slug', $slug)->select('id', 'score_format', 'image', 'banner', 'name')->first();
+
+        if (!$user) {
+            return redirect('/')->with('warning', 'User does not exist');
+        }
+
+        $years = Year::all();
+        $seasons = Season::all();
 
         $score_format = $user->score_format;
 
-        $tags = Tag::all();
-        $tag = $request->tag;
+        //$tags = Tag::all();
+        //$tag = $request->tag;
         $filterBy = $request->filterBy;
         $type = $request->type;
         $sort = $request->sort;
         $char = $request->char;
+        $season = $request->season;
+        $year = $request->year;
 
         $requested = new stdClass;
         $requested->filterBy = $filterBy;
         $requested->type = $type;
-        $requested->tag = $tag;
+        //$requested->tag = $tag;
         $requested->sort = $sort;
         $requested->char = $char;
+        $requested->season = $season;
+        $requested->year = $year;
 
         $requested->year = $request->year;
         $requested->season = $request->season;
 
-        $years = $this->SeasonsYears($tags)['years'];
-        $seasons = $this->SeasonsYears($tags)['seasons'];
+        //$years = $this->SeasonsYears($tags)['years'];
+        //$seasons = $this->SeasonsYears($tags)['seasons'];
 
-        $filters = $this->filterTypesSortChar()['filters'];
+        //$filters = $this->filterTypesSortChar()['filters'];
         $types = $this->filterTypesSortChar()['types'];
         $sortMethods = $this->filterTypesSortChar()['sortMethods'];
         $characters = $this->filterTypesSortChar()['characters'];
@@ -130,612 +138,29 @@ class UserController extends Controller
         $song_variants = null;
         //dd($char);
 
-        switch ($filterBy) {
-            case 'all':
-                if ($request->year != null || $request->season != null) {
-                    if ($request->year != null && $request->season != null) {
-                        $tag = $request->season . ' ' . $request->year;
-                    } else {
-                        $tag = DB::table('tagging_tags')
-                            ->where(function ($query) use ($request) {
-                                if ($request->year != null) {
-                                    $query->where('name', 'LIKE', '%' . $request->year . '%');
-                                } else {
-                                    $query->where('name', 'LIKE', '%' . $request->season . '%');
-                                }
-                            })
-                            ->limit(4)
-                            ->get()
-                            ->pluck('name')
-                            ->toArray();
-                    }
-                    if ($type != null) {
-                        if ($char != null) {
-                            /* $songs = Song::with(['post'])
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->whereHas('song.post', function ($query) use ($char, $tag) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%")
-                                        ->withAnyTag($tag);
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* $songs = Song::with(['post'])
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->whereHas('song.post', function ($query) use ($tag) {
-                                    $query->where('status', 'published')
-                                        ->withAnyTag($tag);
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-                            //dd($song_variants);
-                        }
-                    } else {
-                        if ($char != null) {
-                            /* $songs = Song::with(['post'])
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) use ($char, $tag) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%")
-                                        ->withAnyTag($tag);
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* $songs = Song::with(['post'])
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) use ($tag) {
-                                    $query->where('status', 'published')
-                                        ->withAnyTag($tag);
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-                            //dd($song_variants);
-                        }
-                    }
-                } else {
-                    if ($type != null) {
-                        if ($char != null) {
-                            /* $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->whereHas('song.post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->whereHas('song.post', function ($query) use ($char) {
-                                    $query->where('status', 'published');
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        }
-                        //dd($song_variants);
-                    } else {
-                        if ($char != null) {
-                            /* $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query
-                                        ->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        }
-                    }
-                }
-                break;
-            case 'rated':
-                if ($request->year != null || $request->season != null) {
-                    if ($request->year != null && $request->season != null) {
-                        $tag = $request->season . ' ' . $request->year;
-                    } else {
-                        $tag = DB::table('tagging_tags')
-                            ->where(function ($query) use ($request) {
-                                if ($request->year != null) {
-                                    $query->where('name', 'LIKE', '%' . $request->year . '%');
-                                } else {
-                                    $query->where('name', 'LIKE', '%' . $request->season . '%');
-                                }
-                            })
-                            ->limit(4)
-                            ->get()
-                            ->pluck('name')
-                            ->toArray();
-                    }
-                    if ($type != null) {
-                        if ($char != null) {
-                            /* ONLY RATED, HAS TYPE, HAS SEASON */
-                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
-                                ->withAnyTag($tag)
-                                ->with(['post' => function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                }])
-                                ->where('type', $type)
-                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
-                                ->join('posts', 'songs.post_id', '=', 'posts.id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                //->with('likeCounter')
-                                //->with('post')
-                                ->get();
-                            //dd($songs);
-                        } else {
-                            /* ONLY RATED, TYPE, SEASON */
-                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
-                                ->withAnyTag($tag)
-                                ->with(['post' => function ($query) {
-                                    $query->where('status', 'published');
-                                }])
-                                ->where('type', $type)
-                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
-                                ->join('posts', 'songs.post_id', '=', 'posts.id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                //->with('likeCounter')
-                                ->get();
-                        }
-                    } else {
-                        if ($char != null) {
-                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
-                                ->join('posts', 'songs.post_id', '=', 'posts.id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                //->with('likeCounter')
-                                ->get();
-                        } else {
-                            $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
-                                ->join('posts', 'songs.post_id', '=', 'posts.id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                //->with('likeCounter')
-                                ->get();
-                        }
-                    }
-                } else {
-                    if ($type != null) {
-                        if ($char != null) {
-                            /* ONLY RATED, TYPE, CHAR */
-
-                            /* $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->where('type', $type)
-                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
-                                ->join('posts', 'songs.post_id', '=', 'posts.id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                //->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->join('ratings', 'song_variants.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* ONLY RATED, TYPE */
-
-                            /* $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
-                                ->with(['post' => function ($query) {
-                                    $query->where('status', 'published');
-                                }])
-                                ->where('type', $type)
-                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
-                                ->join('posts', 'songs.post_id', '=', 'posts.id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                //->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->join('ratings', 'song_variants.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        }
-                    } else {
-                        if ($char != null) {
-                            /* ONLY RATED, CHAR SELECT */
-
-                            /* $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query
-                                        ->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
-                                ->join('posts', 'songs.post_id', '=', 'posts.id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                //->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->join('ratings', 'song_variants.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* ONLY RATED */
-
-                            /* $songs = Song::select('songs.*', 'posts.title', 'posts.thumbnail', 'ratings.rating')
-                                ->with(['post' => function ($query) {
-                                    $query->where('status', 'published');
-                                }])
-                                ->join('ratings', 'songs.id', '=', 'ratings.rateable_id')
-                                ->join('posts', 'songs.post_id', '=', 'posts.id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                //->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->join('ratings', 'song_variants.id', '=', 'ratings.rateable_id')
-                                ->where('ratings.user_id', '=', $user->id)
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        }
-                    }
-                }
-                break;
-            default:
-                if ($request->year != null || $request->season != null) {
-                    if ($request->year != null && $request->season != null) {
-                        $tag = $request->season . ' ' . $request->year;
-                    } else {
-                        $tag = DB::table('tagging_tags')
-                            ->where(function ($query) use ($request) {
-                                if ($request->year != null) {
-                                    $query->where('name', 'LIKE', '%' . $request->year . '%');
-                                } else {
-                                    $query->where('name', 'LIKE', '%' . $request->season . '%');
-                                }
-                            })
-                            ->limit(4)
-                            ->get()
-                            ->pluck('name')
-                            ->toArray();
-                    }
-                    if ($type != null) {
-                        if ($char != null) {
-                            /* $songs = Song::with(['post'])
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->whereHas('song.post', function ($query) use ($char, $tag) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%")
-                                        ->withAnyTag($tag);
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* $songs = Song::with(['post'])
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->whereHas('song.post', function ($query) use ($tag) {
-                                    $query->where('status', 'published')
-                                        ->withAnyTag($tag);
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-                            //dd($song_variants);
-                        }
-                    } else {
-                        if ($char != null) {
-                            /* $songs = Song::with(['post'])
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) use ($char, $tag) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%")
-                                        ->withAnyTag($tag);
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* $songs = Song::with(['post'])
-                                ->withAnyTag($tag)
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) use ($tag) {
-                                    $query->where('status', 'published')
-                                        ->withAnyTag($tag);
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-                            //dd($song_variants);
-                        }
-                    }
-                } else {
-                    if ($type != null) {
-                        if ($char != null) {
-                            /* $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->whereHas('song.post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->where('type', $type)
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song', function ($query) use ($type) {
-                                    $query->where('type', $type);
-                                })
-                                ->whereHas('song.post', function ($query) use ($char) {
-                                    $query->where('status', 'published');
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        }
-                        //dd($song_variants);
-                    } else {
-                        if ($char != null) {
-                            /* $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) use ($char) {
-                                    $query
-                                        ->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) use ($char) {
-                                    $query->where('status', 'published')
-                                        ->where('title', 'LIKE', "{$char}%");
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        } else {
-                            /* $songs = Song::with(['post'])
-                                ->whereHas('post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->whereLikedBy($user->id)
-                                ->with('likeCounter')
-                                ->get(); */
-
-                            $song_variants = SongVariant::with(['song'])
-                                ->whereHas('song.post', function ($query) {
-                                    $query->where('status', 'published');
-                                })
-                                ->with('likeCounter')
-                                ->whereLikedBy($user->id)
-                                ->get();
-
-                            //dd($song_variants);
-                        }
-                    }
-                }
-                break;
-        }
+        $song_variants = SongVariant::with(['song'])
+            #SONG QUERY
+            ->whereHas('song', function ($query) use ($type) {
+                $query->when($type, function ($query, $type) {
+                    $query->where('type', $type);
+                });
+            })
+            #POST QUERY
+            ->whereHas('song.post', function ($query) use ($char, $season, $year) {
+                $query->where('status', 'published')
+                    ->when($season, function ($query, $season) {
+                        $query->where('season_id', $season);
+                    })
+                    ->when($year, function ($query, $year) {
+                        $query->where('year_id', $year);
+                    })
+                    ->when($char, function ($query, $char) {
+                        $query->where('title', 'LIKE', "{$char}%");
+                    });
+            })
+            #SONG VARIANT QUERY
+            ->whereLikedBy($user->id)
+            ->get();
 
         //dd($song_variants);
 
@@ -753,7 +178,7 @@ class UserController extends Controller
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
         //dd($songs);
-        return view('public.songs.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user', 'filters'));
+        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'characters', 'score_format', 'user'));
     }
 
 
@@ -793,143 +218,32 @@ class UserController extends Controller
         $sortMethods = $this->filterTypesSortChar()['sortMethods'];
         $characters = $this->filterTypesSortChar()['characters'];
 
-        $song_variants = null;
+        $song_variants = [];
         //dd($char);
 
-        if ($request->year != null || $request->season != null) {
-            if ($type != null) {
-                if ($char != null) {
-                    #with character
-                    #with type
-                    #with season or year
-                    $song_variants = SongVariant::with(['song'])
-                        ->whereHas('song', function ($query) use ($type) {
-                            $query->where('type', $type);
-                        })
-                        ->whereHas('song.post', function ($query) use ($char, $season, $year) {
-                            $query->where('status', 'published')
-                                ->where('title', 'LIKE', "{$char}%")
-                                ->when($season, function ($query, $season) {
-                                    $query->where('season_id', $season);
-                                })
-                                ->when($year, function ($query, $year) {
-                                    $query->where('year_id', $year);
-                                });
-                        })
-                        ->whereLikedBy($user->id)
-                        ->get();
-                    //dd($song_variants);
-                } else {
-                    #with type
-                    #with season or year
-                    $song_variants = SongVariant::with(['song'])
-                        ->whereHas('song', function ($query) use ($type) {
-                            $query->where('type', $type);
-                        })
-                        ->whereHas('song.post', function ($query) use ($season, $year) {
-                            $query->where('status', 'published')
-                                ->when($season, function ($query, $season) {
-                                    $query->where('season_id', $season);
-                                })
-                                ->when($year, function ($query, $year) {
-                                    $query->where('year_id', $year);
-                                });
-                        })
-
-                        ->whereLikedBy($user->id)
-                        ->get();
-                    //dd($song_variants);
-                }
-            } else {
-                if ($char != null) {
-                    #with character
-                    #with season or year
-                    $song_variants = SongVariant::with(['song'])
-                        ->whereHas('song.post', function ($query) use ($char, $season, $year) {
-                            $query->where('status', 'published')
-                                ->where('title', 'LIKE', "{$char}%")
-                                ->when($season, function ($query, $season) {
-                                    $query->where('season_id', $season);
-                                })
-                                ->when($year, function ($query, $year) {
-                                    $query->where('year_id', $year);
-                                });
-                        })
-                        ->whereLikedBy($user->id)
-                        ->get();
-
-                    //dd($song_variants);
-                } else {
-                    #with season or year
-                    $song_variants = SongVariant::with(['song'])
-                        ->whereHas('song.post', function ($query) use ($season, $year) {
-                            $query->where('status', 'published')
-                                ->when($season, function ($query, $season) {
-                                    $query->where('season_id', $season);
-                                })
-                                ->when($year, function ($query, $year) {
-                                    $query->where('year_id', $year);
-                                });
-                        })
-                        ->whereLikedBy($user->id)
-                        ->get();
-                    //dd($song_variants);
-                }
-            }
-        } else {
-            if ($type != null) {
-                if ($char != null) {
-                    #with type
-                    #with character
-                    $song_variants = SongVariant::with(['song'])
-                        ->whereHas('song', function ($query) use ($type) {
-                            $query->where('type', $type);
-                        })
-                        ->whereHas('song.post', function ($query) use ($char) {
-                            $query->where('status', 'published')
-                                ->where('title', 'LIKE', "{$char}%");
-                        })
-                        ->whereLikedBy($user->id)
-                        ->get();
-                    //dd($song_variants);
-                } else {
-                    #with type
-                    $song_variants = SongVariant::with(['song'])
-                        ->whereHas('song', function ($query) use ($type) {
-                            $query->where('type', $type);
-                        })
-                        ->whereHas('song.post', function ($query) use ($char) {
-                            $query->where('status', 'published');
-                        })
-                        ->whereLikedBy($user->id)
-                        ->get();
-                    //dd($song_variants);
-                }
-            } else {
-                if ($char != null) {
-                    #with character
-                    $song_variants = SongVariant::with(['song'])
-                        ->whereHas('song.post', function ($query) use ($char) {
-                            $query->where('status', 'published')
-                                ->when($char, function ($query, $char) {
-                                    $query->where('title', 'LIKE', "{$char}%");
-                                });
-                        })
-                        ->whereLikedBy($user->id)
-                        ->get();
-                    //dd($song_variants);
-                } else {
-                    #default load
-                    $song_variants = SongVariant::with(['song'])
-                        ->whereHas('song.post', function ($query) {
-                            $query->where('status', 'published');
-                        })
-                        ->whereLikedBy($user->id)
-                        ->get();
-                    //dd($song_variants); 
-                }
-            }
-        }
+        $song_variants = SongVariant::with(['song'])
+            #SONG QUERY
+            ->whereHas('song', function ($query) use ($type) {
+                $query->when($type, function ($query, $type) {
+                    $query->where('type', $type);
+                });
+            })
+            #POST QUERY
+            ->whereHas('song.post', function ($query) use ($char, $season, $year) {
+                $query->where('status', 'published')
+                    ->when($char, function ($query, $char) {
+                        $query->where('title', 'LIKE', "{$char}%");
+                    })
+                    ->when($season, function ($query, $season) {
+                        $query->where('season_id', $season);
+                    })
+                    ->when($year, function ($query, $year) {
+                        $query->where('year_id', $year);
+                    });
+            })
+            #SONG VARIANT QUERY
+            ->whereLikedBy($user->id)
+            ->get();
 
         //dd($song_variants);
 

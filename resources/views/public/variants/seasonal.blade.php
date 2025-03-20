@@ -56,9 +56,9 @@
                     @if (Request::is('openings'))
                         <div>
                             @if (isset($currentSeason->name))
-                                <h2 class="text-light">Openings {{ $currentSeason->name }}</h2>
+                                <h2 class="text-light m-0">OPENINGS {{ $currentSeason->name }} {{$currentYear->name}}</h2>
                             @else
-                                <h2 class="text-light">Openings</h2>
+                                <h2 class="text-light m-0">OPENINGS</h2>
                             @endif
 
                         </div>
@@ -66,9 +66,9 @@
                     @if (Request::is('endings'))
                         <div>
                             @if (isset($currentSeason->name))
-                                <h2 class="text-light">Endings {{ $currentSeason->name }}</h2>
+                                <h2 class="text-light m-0">ENDINGS {{ $currentSeason->name }} {{$currentYear->name}}</h2>
                             @else
-                                <h2 class="text-light">Endings</h2>
+                                <h2 class="text-light m-0">ENDINGS</h2>
                             @endif
                         </div>
                     @endif
@@ -83,7 +83,7 @@
             <aside>
                 {{-- DIV BANNER --}}
                 <section class="contenedor-banner">
-                    <section class="seasons-container">
+                    {{-- <section class="seasons-container">
                         <div class="top-header">
                             <div>
                                 <span>Seasons</span>
@@ -103,7 +103,7 @@
                                 </article>
                             @endforeach
                         </div>
-                    </section>
+                    </section> --}}
                     <section class="container-items-seasonal">
                         <div class="top-header">
                             <div>
@@ -160,4 +160,8 @@
             </aside>
         </div>
     </div>
+@endsection
+
+@section('script')
+    
 @endsection

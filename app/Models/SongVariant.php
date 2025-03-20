@@ -7,13 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Song;
 use App\Models\Video;
 use willvincent\Rateable\Rateable;
-use Conner\Likeable\Likeable;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Builder;
 use App\Models\Favorite;
 
 class SongVariant extends Model

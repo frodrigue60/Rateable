@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\UserRequest;
 use App\Models\Comment;
 use App\Models\Favorite;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -27,6 +28,7 @@ class User extends Authenticatable
         'password',
         'image',
         'score_format',
+        'slug'
     ];
 
     /**
@@ -51,16 +53,6 @@ class User extends Authenticatable
     public function userRequests()
     {
         return $this->hasMany(UserRequest::class);
-    }
-
-    /* public function comments()
-    {
-        return $this->hasMany(Comment::class, 'user_id');
-    } */
-
-    public function reactions()
-    {
-        return $this->hasMany(Reaction::class);
     }
 
     public function isStaff()
@@ -99,6 +91,25 @@ class User extends Authenticatable
         } else {
             return false;
         }
+    }
+
+    public function generateSlug()
+    {
+        $slug = Str::slug($this->name); // Genera el slug a partir del nombre
+        $originalSlug = $slug;
+        $count = 1;
+
+        // Verifica si el slug ya existe y agrega un sufijo numérico si es necesario
+        while (User::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count++;
+        }
+
+        $this->slug = $slug;
+    }
+
+    public function reactions()
+    {
+        return $this->hasMany(Reaction::class);
     }
 
     public function favorites()

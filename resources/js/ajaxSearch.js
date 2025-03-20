@@ -10,7 +10,7 @@ const loaderContainer = document.querySelector('.loader-container');
 const siteBody = document.querySelector('body');
 const modalBody = document.querySelector('#modalBody');
 const resDiv = document.querySelector('.res');
-const siteUrl = 'https://anirank.work';
+const siteUrl = 'http://127.0.0.1:8000';
 
 let typingTimer;
 const delay = 250;
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     resetDivs();
 
                     data.posts.forEach(element => {
-                        let url = siteUrl + "/anime/" + element.id + "/" + element.slug;
+                        let url = siteUrl + "/anime/" + element.slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     data.artists.forEach(element => {
-                        let url = siteUrl + "/artist/" + element.id + "/" + element.name_slug;
+                        let url = siteUrl + "/artists/"+ element.name_slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -79,25 +79,9 @@ document.addEventListener("DOMContentLoaded", function () {
                         artistsDiv.appendChild(resultDiv);
                     });
 
-                    data.tags.forEach(element => {
-                        let partes = element.name.split(' ');
-                        let season = partes[0];
-                        let year = partes[1];
-                        let url = siteUrl + "/animes?type=&year=" + year + "&season=" + season + "&sort=&char=";
-
-                        let resultDiv = document.createElement('div');
-                        resultDiv.classList.add('result');
-
-                        let a = document.createElement('a');
-                        a.href = url;
-                        a.textContent = element.name;
-
-                        resultDiv.appendChild(a);
-                        tagsDiv.appendChild(resultDiv);
-                    });
                     data.users.forEach(element => {
 
-                        let url = siteUrl + "/user/" + element.id;
+                        let url = siteUrl + "/users/" + element.slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -125,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function nullValueInput() {
         postsDiv.appendChild(createResultDiv('posts'));
         artistsDiv.appendChild(createResultDiv('artists'));
-        tagsDiv.appendChild(createResultDiv('tags'));
         usersDiv.appendChild(createResultDiv('users'));
     }
     function cutTitles() {

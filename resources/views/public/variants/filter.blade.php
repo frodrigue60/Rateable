@@ -117,19 +117,6 @@
                             </select>
                         </div>
                     </section>
-                    {{-- LETTER --}}
-                    <section class="searchItem">
-                        <div class="w-100 mb-1">
-                            <label for="select-char" class="text-light">Select a character</label>
-                            <select class="form-select" aria-label="Default select example" id="select-char" name="char">
-                                <option value="">Select a character</option>
-                                @foreach ($characters as $item)
-                                    <option value="{{ $item }}" class="text-uppercase"
-                                        {{ $requested->char == $item ? 'selected' : '' }}>{{ $item }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </section>
                     {{-- <div class="d-flex mt-1">
                         <button class="btn btn-primary w-100" type="submit">Do it</button>
                     </div> --}}

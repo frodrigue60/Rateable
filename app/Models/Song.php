@@ -4,9 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use willvincent\Rateable\Rateable;
-use Conner\Tagging\Taggable;
-use Conner\Likeable\Likeable;
 use App\Models\Post;
 use App\Models\SongVariant;
 use Illuminate\Support\Facades\Storage;
@@ -14,7 +11,6 @@ use Illuminate\Support\Facades\Storage;
 class Song extends Model
 {
     use HasFactory;
-    use Taggable;
 
     protected $fillable = [
         'id',

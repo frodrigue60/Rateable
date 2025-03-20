@@ -40,14 +40,14 @@
                     title="{{ $title }}">
             </a>
             <div class="tarjeta-footer text-light">
-                <span>{{ $variant->likeCount }} <i class="fa fa-heart"></i></span>
+                <span>{{ $variant->likesCount }} <i class="fa fa-heart"></i></span>
                 <span>{{ $views }} <i class="fa fa-eye"></i></span>
                 @if (isset($variant->rating))
                     <span style="color: rgb(162, 240, 181)">{{ $variant->rating != null ? $variant->rating : '0' }}
                         <i class="fa fa-star" aria-hidden="true"></i>
                     </span>
                 @else
-                    <span>{{ $variant->score != null ? $variant->score : 'N/A' }} <i class="fa fa-star"
+                    <span>{{ $variant->score }} <i class="fa fa-star"
                             aria-hidden="true"></i>
                     </span>
                 @endif

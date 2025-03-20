@@ -41,8 +41,8 @@
                                 <select class="form-select" aria-label="Default select example" name="year"
                                     id="select-year">
                                     <option selected value="">Select a year</option>
-                                    @foreach ($years as $item)
-                                        <option value="{{ $item['value'] }}" {{ $requested->year == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}</option>
+                                    @foreach ($years as $year)
+                                        <option value="{{ $year->id }}" {{ $requested->year == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -51,8 +51,8 @@
                                 <select class="form-select" aria-label="Default select example" name="season"
                                     id="select-season">
                                     <option selected value="">Select a season</option>
-                                    @foreach ($seasons as $item)
-                                        <option value="{{ $item['value'] }}" {{ $requested->season == $item['value'] ? 'selected' : '' }}>{{ $item['name'] }}</option>
+                                    @foreach ($seasons as $season)
+                                        <option value="{{ $season->id }}" {{ $requested->season == $season->id ? 'selected' : '' }}>{{ $season->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -79,7 +79,7 @@
             {{-- POSTS --}}
             <section class="text-light">
                 <div class="contenedor-tarjetas-filtro" id="data">
-                    {{-- @include('public.posts.posts-cards') --}}
+                    {{-- @include('layouts.post.cards') --}}
                 </div>
             </section>
         </div>

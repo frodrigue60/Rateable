@@ -118,4 +118,12 @@ class YearController extends Controller
         $year->delete();
         return redirect(route('admin.years.index'));
     }
+
+    public function toggle(Year $year)
+    {
+        Year::where('id', $year->id)->update(['current' => true]);
+        Year::where('id', '!=', $year->id)->update(['current' => false]);
+
+        return redirect(route('admin.years.index'))->with('success', 'Year updated successfully!');
+    }
 }

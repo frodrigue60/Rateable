@@ -22,8 +22,16 @@
         </div>
     </div>
 @endif
+@if (session('danger'))
+    <div class="container">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Holy guacamole!</strong> {{ session('danger') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+@endif
 
-@if ($errors->any())
+{{-- @if ($errors->any())
     <div class="container">
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <ul>
@@ -34,4 +42,4 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>
-@endif
+@endif --}}

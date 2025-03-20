@@ -127,4 +127,12 @@ class SeasonController extends Controller
             return redirect(route('admin.seasons.index'))->with('danger', 'An error has been ocurred!');
         }
     }
+
+    public function toggle(Season $season)
+    {
+        Season::where('id', $season->id)->update(['current' => true]);
+        Season::where('id', '!=', $season->id)->update(['current' => false]);
+
+        return redirect(route('admin.seasons.index'))->with('success', 'Season updated successfully!');
+    }
 }

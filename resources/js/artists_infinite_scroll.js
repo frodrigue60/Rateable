@@ -15,9 +15,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let year = document.querySelector('#select-year').value;
         let season = document.querySelector('#select-season').value;
         let sort = document.querySelector('#select-sort').value;
-        let character = document.querySelector('#select-char').value;
+        /* let character = document.querySelector('#select-char').value; */
 
-        filterFetch(/* filterBy, */type,year, season,sort, character);
+        filterFetch(/* filterBy, */type,year, season,sort/* , character */);
     });
 
     window.addEventListener("scroll", function () {
@@ -96,10 +96,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
         fetchData(baseUrl);
     }
 
-    function filterFetch(/* filterBy, */type,year, season,sort, character) {
+    function filterFetch(/* filterBy, */type,year, season,sort/* , character */) {
         page = 1;
         clearDataDiv();
-        let queryUrl = "?"+"type="+type+"&year="+year+"&season="+season+"&sort="+sort+"&char="+character;
+        let queryUrl = "?"+"type="+type+"&year="+year+"&season="+season+"&sort="+sort/* +"&char="+character */;
         url = baseUrl + queryUrl;
         history.pushState(null, null, url);
         fetchData(url);

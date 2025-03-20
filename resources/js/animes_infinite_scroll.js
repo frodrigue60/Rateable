@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let currentUrl = window.location.href;
         let urlParams = new URLSearchParams(window.location.search);
 
-        if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
+        if (urlParams.has('type') || urlParams.has('sort') ||
             urlParams.has('char')) {
             pageName = "&page=";
         } else {

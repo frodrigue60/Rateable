@@ -51,7 +51,7 @@
                             @if (isset($variant->song->artists) && count($variant->song->artists) != 0)
                                 @foreach ($variant->song->artists as $index => $artist)
                                     <a class="no-deco text-light"
-                                        href="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }}</a>
+                                        href="{{ $artist->url }}">{{ $artist->name }}</a>
                                     @if ($index < count($variant->song->artists) - 1)
                                         ,
                                     @endif

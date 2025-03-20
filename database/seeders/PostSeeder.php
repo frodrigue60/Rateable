@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
 use App\Models\Post;
-use Conner\Tagging\Taggable;
 
 class PostSeeder extends Seeder
 {
