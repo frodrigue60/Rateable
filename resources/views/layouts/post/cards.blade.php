@@ -11,19 +11,19 @@
 
     @endphp
     <article class="tarjeta">
-        <div class="textos">
-            <div class="tarjeta-header text-light">
-                <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
-            </div>
-            <a class="no-deco" href="{{ $post->url }}" target="_blank" rel="nofollow noopener noreferrer">
+        <a class="no-deco" href="{{ $post->url }}" target="_blank" rel="noopener noreferrer">
+            <div class="textos">
+                <div class="tarjeta-header text-light">
+                    <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
+                </div>
                 <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $post->title }}"
                     title="{{ $post->title }}">
-            </a>
-            <div class="tarjeta-footer justify-content-center">
-                <span class="text-light">
-                    {{ $post->songs->count() }} <i class="fa-solid fa-music"></i>
-                </span>
+                <div class="tarjeta-footer justify-content-center">
+                    <span class="text-light">
+                        {{ $post->songs->count() }} <i class="fa-solid fa-music"></i>
+                    </span>
+                </div>
             </div>
-        </div>
+        </a>
     </article>
 @endforeach

@@ -8,6 +8,7 @@
     <meta property="og:site_name" content="{{ env('APP_NAME') }}">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="Author" lang="en" content="Luis Rodz">
+    <meta name="base-url" content="{{ env('APP_URL') }}">
     @yield('meta')
 
     <!-- CSRF Token -->

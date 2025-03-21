@@ -99,7 +99,7 @@
                             </a>
 
                             <a class="dropdown-item" href="{{ route('favorites') }}">
-                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-heart"></i>
                                 Favorites
                             </a>
 

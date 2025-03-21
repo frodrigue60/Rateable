@@ -6,16 +6,30 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let lastPage = undefined;
     let url = undefined;
     const baseUrl = window.location.href;
+    const nameInput = document.querySelector('#input-name');
 
     firstFetch();
 
-    formFilter.addEventListener('change', function (event) {
+    // Debounce para limitar las llamadas a filterFetch
+    function debounce(func, timeout = 300) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
+
+    // Función para manejar cambios en los filtros
+    const handleFilterChange = debounce(() => {
         let year = document.querySelector('#select-year').value;
         let season = document.querySelector('#select-season').value;
-        let character = document.querySelector('#select-char').value;
 
-        filterFetch(year, season, character)
+        filterFetch(year, season, nameInput.value);
     });
+
+    // Escucha cambios en el formulario y en el input de nombre
+    formFilter.addEventListener('change', handleFilterChange);
+    nameInput.addEventListener('keyup', handleFilterChange);
 
     window.addEventListener("scroll", function () {
         if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
@@ -30,6 +44,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
             }
         }
     });
+
 
     function fetchData(url) {
         fetch(url, {
@@ -56,7 +71,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 } else {
                     //console.log(data);
                     lastPage = data.lastPage;
-                    dataDiv.innerHTML += data.html;
+                    dataDiv.innerHTML = data.html;
 
                     let titles = document.querySelectorAll('.post-titles');
 
@@ -78,7 +93,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let urlParams = new URLSearchParams(window.location.search);
 
         if (urlParams.has('type') || urlParams.has('sort') ||
-            urlParams.has('char')) {
+            urlParams.has('name')) {
             pageName = "&page=";
         } else {
             pageName = "?page=";
@@ -93,14 +108,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
         fetchData(baseUrl);
     }
 
-    function filterFetch(year, season, character) {
+    function filterFetch(year, season, name) {
+        //console.log(year, season, name);
+
         page = 1;
         clearDataDiv();
-        let queryUrl ="?"+"year=" + year + "&season=" + season + "&char=" + character;
+        let queryUrl = "?" + "year=" + year + "&season=" + season + "&name=" + name;
         url = baseUrl + queryUrl;
-        history.pushState(null, null, url);
+        history.replaceState(null, '', url)
         fetchData(url);
     }
+    
     function clearDataDiv() {
         dataDiv.innerHTML = "";
     }

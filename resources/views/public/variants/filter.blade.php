@@ -63,6 +63,12 @@
                     {{-- TYPE --}}
                     <section class="searchItem">
                         <div class="w-100 mb-1">
+                            <label for="input-name" class="text-light">Name:</label>
+                            <input type="text" class="form-control" name="name" id="input-name">
+                        </div>
+                    </section>
+                    <section class="searchItem">
+                        <div class="w-100 mb-1">
                             <label for="select-type" class="text-light">Select type</label>
                             <select class="form-select" aria-label="Default select example" id="select-type" name="type">
                                 <option value="">Select a theme type</option>
@@ -83,8 +89,8 @@
                             <select class="form-select" aria-label="Default select example" name="year" id="select-year">
                                 <option selected value="">Select a year</option>
                                 @foreach ($years as $year)
-                                    <option value="{{ $year->id }}"
-                                        {{ $requested->year == $year->id ? 'selected' : '' }}>{{ $year->name }}
+                                    <option value="{{ $year->name }}"
+                                        {{ $requested->year == $year->name ? 'selected' : '' }}>{{ $year->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -95,8 +101,8 @@
                                 id="select-season">
                                 <option selected value="">Select a season</option>
                                 @foreach ($seasons as $season)
-                                    <option value="{{ $season->id }}"
-                                        {{ $requested->season == $season->id ? 'selected' : '' }}>{{ $season->name }}
+                                    <option value="{{ $season->name }}"
+                                        {{ $requested->season == $season->name ? 'selected' : '' }}>{{ $season->name }}
                                     </option>
                                 @endforeach
                             </select>

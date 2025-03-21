@@ -93,28 +93,27 @@ class PostController extends Controller
 
     public function animes(Request $request)
     {
-        $char = $request->char;
-        $season = $request->season;
-        $year = $request->year;
+        $name = $request->name;
+        $season = Season::where('name', $request->season)->first();
+        $year = Year::where('name', $request->year)->first();
 
         $requested = new stdClass;
-        $requested->char = $char;
+        $requested->name = $name;
         $requested->year = $request->year;
         $requested->season = $request->season;
 
         $seasons = Season::all();
         $years = Year::all();
-        $characters = range('A', 'Z');
 
         $posts = Post::where('status', 'published')
             ->when($season, function ($query, $season) {
-                $query->where('season_id', $season);
+                $query->where('season_id', $season->id);
             })
             ->when($year, function ($query, $year) {
-                $query->where('year_id', $year);
+                $query->where('year_id', $year->id);
             })
-            ->when($char, function ($query, $char) {
-                $query->where('title', 'LIKE', "{$char}%");
+            ->when($name, function ($query, $name) {
+                $query->where('title', 'LIKE', "%$name%");
             })
             ->get();
 
@@ -130,7 +129,7 @@ class PostController extends Controller
             return response()->json(['html' => $view, "lastPage" => $posts->lastPage()]);
         }
 
-        return view('public.posts.filter', compact('characters', 'requested', 'seasons', 'years'));
+        return view('public.posts.filter', compact('requested', 'seasons', 'years'));
     }
 
 
@@ -389,18 +388,18 @@ class PostController extends Controller
             $score_format = null;
         }
 
-        $tag = $request->tag;
+
         $type = $request->type;
         $sort = $request->sort;
-        $char = '';
-        $season = $request->season;
-        $year = $request->year;
+        $name = $request->name;
+        $season = Season::where('name', $request->season)->first();
+        $year = Year::where('name', $request->year)->first();
 
         $requested = new stdClass;
         $requested->type = $type;
-        $requested->tag = $tag;
+
         $requested->sort = $sort;
-        //$requested->char = $char;
+        $requested->name = $name;
 
         $requested->year = $request->year;
         $requested->season = $request->season;
@@ -410,7 +409,6 @@ class PostController extends Controller
 
         $types = $this->filterTypesSortChar()['types'];
         $sortMethods = $this->filterTypesSortChar()['sortMethods'];
-        //$characters = $this->filterTypesSortChar()['characters'];
 
         $song_variants = null;
 
@@ -422,31 +420,24 @@ class PostController extends Controller
                 });
             })
             #POST QUERY
-            ->whereHas('song.post', function ($query) use ($char, $season, $year) {
+            ->whereHas('song.post', function ($query) use ($name, $season, $year) {
                 $query->where('status', 'published')
-                    ->when($char, function ($query, $char) {
-                        $query->where('title', 'LIKE', "{$char}%");
+                    ->when($name, function ($query, $name) {
+                        $query->where('title', 'LIKE', "%$name%");
                     })
                     ->when($season, function ($query, $season) {
-                        $query->where('season_id', $season);
+                        $query->where('season_id', $season->id);
                     })
                     ->when($year, function ($query, $year) {
-                        $query->where('year_id', $year);
+                        $query->where('year_id', $year->id);
                     });
             })
             #SONG VARIANT QUERY
             ->get();
 
-        //dd($song_variants);
-
-        //$songs = $this->setScore($songs, $score_format);
-        //$songs = $this->paginate($songs, 24)->withQueryString();
-        //$songs = $this->sort($sort, $songs);
-
         $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
         $song_variants = $this->sort_variants($sort, $song_variants);
         $song_variants = $this->paginate($song_variants);
-
 
         //dd($song_variants);
 

@@ -342,7 +342,7 @@ class SongVariantController extends Controller
         }
     }
 
-    public function seasonal()
+    public function seasonal(Request $request)
     {
         if (Auth::check()) {
             $score_format = Auth::user()->score_format;
@@ -362,13 +362,9 @@ class SongVariantController extends Controller
                     $query->where('type', $type);
                 });
             })
-
             ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear) {
                 #POST QUERY
                 $query->where('status', 'published')
-                    /* ->when($char, function ($query, $char) {
-                        $query->where('title', 'LIKE', "{$char}%");
-                    }) */
                     ->when($currentSeason, function ($query, $currentSeason) {
                         $query->where('season_id', $currentSeason->id);
                     })
@@ -386,7 +382,6 @@ class SongVariantController extends Controller
                     $query->where('type', $type);
                 });
             })
-
             ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear) {
                 #POST QUERY
                 $query->where('status', 'published')
@@ -402,13 +397,12 @@ class SongVariantController extends Controller
             })
             #SONG VARIANT QUERY
             ->get();
-
         //dd($openings, $endings);
 
-        $openings = $this->setScoreOnlyVariants($openings, $score_format);
-        $endings = $this->setScoreOnlyVariants($endings, $score_format);
+        //$openings = $this->setScoreOnlyVariants($openings, $score_format);
+        //$endings = $this->setScoreOnlyVariants($endings, $score_format);
 
-        return view('public.variants.seasonal', compact('openings', 'endings', 'currentSeason', 'currentYear'));
+        return view('public.variants.seasonal', compact('currentSeason', 'currentYear'));
     }
 
     public function setScoreOnlyVariants($variantsArray, $score_format)

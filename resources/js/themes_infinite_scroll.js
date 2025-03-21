@@ -6,18 +6,31 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let lastPage = undefined;
     let url = undefined;
     const baseUrl = window.location.href;
+    const nameInput = document.querySelector('#input-name');
 
     firstFetch();
 
-    formFilter.addEventListener('change', function (event) {
+    function debounce(func, timeout = 300) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
+
+    const handleFilterChange = debounce(() => {
         let type = document.querySelector('#select-type').value;
         let year = document.querySelector('#select-year').value;
         let season = document.querySelector('#select-season').value;
         let sort = document.querySelector('#select-sort').value;
-        /* let character = document.querySelector('#select-char').value; */
 
-        filterFetch(type,year, season,sort/* , character */);
+        filterFetch(type, year, season, sort, nameInput.value);
     });
+
+    formFilter.addEventListener('change', handleFilterChange);
+    nameInput.addEventListener('keyup', handleFilterChange);
+
+
 
     window.addEventListener("scroll", function () {
         if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
@@ -95,7 +108,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         fetchData(baseUrl);
     }
 
-    function filterFetch(type,year, season,sort/* , character */) {
+    function filterFetch(type, year, season, sort, name) {
         let currentUrl = new URL(window.location.href);
         page = 1;
         clearDataDiv();
@@ -103,13 +116,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
         currentUrl.searchParams.set('year', year);
         currentUrl.searchParams.set('season', season);
         currentUrl.searchParams.set('sort', sort);
-       /*  currentUrl.searchParams.set('character', character); */
-        //let queryUrl ="?"+"type="+type+"&year="+year+"&season="+season+"&sort="+sort+"&char="+character;
+        currentUrl.searchParams.set('name', name);
         let newUrl = currentUrl.toString();
-        //url = baseUrl + queryUrl;
 
-        history.pushState(null, null, newUrl);
-        
+        history.replaceState(null, null, newUrl);
+
         fetchData(newUrl);
     }
     function clearDataDiv() {

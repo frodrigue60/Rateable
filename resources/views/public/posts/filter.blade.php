@@ -36,13 +36,21 @@
                 <div class="searchPanel">
                     <form action="{{ route('animes') }}" method="get" id="form-filter">
                         <section class="searchItem">
+                            <section class="searchItem">
+                                <div class="w-100 mb-1">
+                                    <label for="input-name" class="text-light">Name:</label>
+                                    <input type="text" class="form-control" name="char" id="input-name">
+                                </div>
+                            </section>
                             <div class="w-100 mb-1">
                                 <label class="text-light" for="select-year">Year:</label>
                                 <select class="form-select" aria-label="Default select example" name="year"
                                     id="select-year">
                                     <option selected value="">Select a year</option>
                                     @foreach ($years as $year)
-                                        <option value="{{ $year->id }}" {{ $requested->year == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
+                                        <option value="{{ $year->name }}"
+                                            {{ $requested->year == $year->name ? 'selected' : '' }}>{{ $year->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -52,24 +60,14 @@
                                     id="select-season">
                                     <option selected value="">Select a season</option>
                                     @foreach ($seasons as $season)
-                                        <option value="{{ $season->id }}" {{ $requested->season == $season->id ? 'selected' : '' }}>{{ $season->name }}</option>
+                                        <option value="{{ $season->name }}"
+                                            {{ $requested->season == $season->name ? 'selected' : '' }}>{{ $season->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         </section>
-                        <section class="searchItem">
-                            <div class="w-100 mb-1">
-                                <label for="select-char" class="text-light">Character:</label>
-                                <select class="form-select" aria-label="Default select example" id="select-char"
-                                    name="char">
-                                    <option value="">Select a character</option>
-                                    @foreach ($characters as $item)
-                                        <option value="{{ $item }}" class="text-uppercase"
-                                            {{ $requested->char === $item ? 'selected' : '' }}>{{ $item }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </section>
+
                         {{-- <div class="d-flex mt-1">
                             <button class="btn btn-primary w-100" type="submit">Filter</button>
                         </div> --}}

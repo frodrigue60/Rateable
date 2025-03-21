@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\PostController as apiPostController;
 use App\Http\Controllers\api\VideoController as apiVideoController;
+use App\Http\Controllers\Api\SongVariantController as apiSongVarianCrontroller;
 
 
 
@@ -24,4 +25,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::controller(apiPostController::class)->group(function () {
     Route::post('/search', 'search');
+});
+
+Route::controller(apiSongVarianCrontroller::class)->group(function () {
+    Route::post('/seasonal', 'seasonal');
 });

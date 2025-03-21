@@ -3,7 +3,8 @@
     $post_slug = $variant->song->post->slug;
     $suffix = $variant->song->slug != null ? $variant->song->slug : $variant->song->type;
     $version = $variant->version_number;
-    $forward_text = ($variant->song->slug ? $variant->song->slug : $variant->song->type) . 'v' . $variant->version_number;
+    $forward_text =
+        ($variant->song->slug ? $variant->song->slug : $variant->song->type) . 'v' . $variant->version_number;
 
     $post = $variant->song->post;
 
@@ -33,29 +34,29 @@
 @endphp
 
 <article class="tarjeta">
-    <div class="textos">
-        <div class="tarjeta-header text-light">
-            <h3 class="text-shadow text-uppercase post-titles">{{ $title }}</h3>
-        </div>
-        <div class="{{ $variant->song->type == 'OP' ? 'tag' : 'tag2' }}">
-            <span class="tag-content ">{{ $forward_text }}</span>
-        </div>
-        <a class="no-deco" href="{{ $variant->url }}" target="_blank" rel="noopener">
+    <a class="no-deco" href="{{ $variant->url }}" target="_blank" rel="nofollow noopener noreferrer">
+        <div class="textos">
+            <div class="tarjeta-header text-light">
+                <h3 class="text-shadow text-uppercase post-titles">{{ $title }}</h3>
+            </div>
+            <div class="{{ $variant->song->type == 'OP' ? 'tag' : 'tag2' }}">
+                <span class="tag-content ">{{ $forward_text }}</span>
+            </div>
             <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $title }}"
                 title="{{ $title }}">
-        </a>
-        <div class="tarjeta-footer text-light">
-            <span>{{ $likeCount }} <i class="fa fa-heart"></i></span>
-            <span>{{ $views }} <i class="fa fa-eye"></i></span>
-            @if (isset($variant->rating))
-                <span style="color: rgb(162, 240, 181)">{{ $variant->rating != null ? $variant->rating : '0' }}
-                    <i class="fa fa-star" aria-hidden="true"></i>
-                </span>
-            @else
-                <span>{{ $variant->score != null ? $variant->score : 'n/a' }} <i class="fa fa-star"
-                        aria-hidden="true"></i>
-                </span>
-            @endif
+            <div class="tarjeta-footer text-light">
+                <span>{{ $likeCount }} <i class="fa-solid fa-heart"></i></span>
+                <span>{{ $views }} <i class="fa-solid fa-eye"></i></span>
+                @if (isset($variant->rating))
+                    <span style="color: rgb(162, 240, 181)">{{ $variant->rating != null ? $variant->rating : '0' }}
+                        <i class="fa-solid fa-star" aria-hidden="true"></i>
+                    </span>
+                @else
+                    <span>{{ $variant->score != null ? $variant->score : '0' }} <i class="fa-solid fa-star"
+                            aria-hidden="true"></i>
+                    </span>
+                @endif
+            </div>
         </div>
-    </div>
+    </a>
 </article>

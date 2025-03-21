@@ -49,30 +49,31 @@
 @endsection
 @section('content')
     <div class="container mb-3 text-light">
-        <div class="d-flex justify-content-between bg-dark align-items-center">
+        <div class="d-flex justify-content-between align-items-center">
             <h3 class="p-0 m-0">{{ $currentSeason->name }} {{ $currentYear->name }}</h3>
-            <button class="btn btn-primary">
+            {{-- <button class="btn btn-secondary text-light">
                 <i class="fa-solid fa-ranking-star"></i>
-            </button>
+            </button> --}}
         </div>
+        <hr>
         <div>
             <div class="my-2">
                 <h4>OPENINGS</h4>
             </div>
-            <div class="d-flex gap-3 mb-3">
-                @foreach ($openings as $variant)
+            <div class="d-flex gap-3 mb-3" id="div-openings">
+                {{-- @foreach ($openings as $variant)
                     @include('layouts.variant.card')
-                @endforeach
+                @endforeach --}}
             </div>
         </div>
         <div>
             <div class="my-2">
                 <h4>ENDINGS</h4>
             </div>
-            <div class="d-flex gap-3 mb-3">
-                @foreach ($endings as $variant)
+            <div class="d-flex gap-3 mb-3" id="div-endings">
+                {{-- @foreach ($endings as $variant)
                     @include('layouts.variant.card')
-                @endforeach
+                @endforeach --}}
             </div>
         </div>
     </div>
@@ -82,7 +83,50 @@
     <script>
         document.addEventListener("DOMContentLoaded", (event) => {
             console.log('DOM LOADED');
-            
+            const baseUrl = document.querySelector('meta[name="base-url"]').content;
+            const csrf_token = document.querySelector('meta[name="csrf-token"]').content;
+            const divOpenings = document.querySelector('#div-openings');
+            const divEndings = document.querySelector('#div-endings');
+
+            fetch(baseUrl + '/api/seasonal', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
+                        'X-CSRF-TOKEN': csrf_token,
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        console.log(response.status);
+                        return;
+                    } else {
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    if (data === "") {
+                        console.error("No data from backend");
+                        return;
+                    } else {
+                        //console.log(data);
+
+                        divOpenings.innerHTML += data.openings;
+                        divEndings.innerHTML += data.endings;
+
+                        /* let titles = document.querySelectorAll('.post-titles');
+
+                        function cutTitles() {
+                            titles.forEach(title => {
+                                if (title.textContent.length > 25) {
+                                    title.textContent = title.textContent.substr(0, 25) + "...";
+                                }
+                            });
+                        }
+                        cutTitles(); */
+                    }
+                })
+                .catch(error => console.error(error));
         });
     </script>
 @endsection

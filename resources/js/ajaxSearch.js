@@ -9,7 +9,7 @@ const titles = document.querySelectorAll('.post-titles');
 const siteBody = document.querySelector('body');
 const modalBody = document.querySelector('#modalBody');
 const resDiv = document.querySelector('.res');
-const siteUrl = 'http://127.0.0.1:8000';
+const baseUrl = document.querySelector('meta[name="base-url"]').content;
 
 let typingTimer;
 const delay = 250;
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function apiSearch() {
             try {
-                fetch(siteUrl + '/api/search', {
+                fetch(baseUrl + '/api/search', {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     resetDivs();
 
                     data.posts.forEach(element => {
-                        let url = siteUrl + "/anime/" + element.slug;
+                        let url = baseUrl + "/anime/" + element.slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     data.artists.forEach(element => {
-                        let url = siteUrl + "/artists/" + element.name_slug;
+                        let url = baseUrl + "/artists/" + element.name_slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     data.users.forEach(element => {
 
-                        let url = siteUrl + "/users/" + element.slug;
+                        let url = baseUrl + "/users/" + element.slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');

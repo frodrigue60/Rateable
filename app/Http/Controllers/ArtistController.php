@@ -48,14 +48,14 @@ class ArtistController extends Controller
         //$tags = Tag::all();
         $type = $request->type;
         $sort = $request->sort;
-        $char = $request->char;
-        $year = $request->year;
-        $season = $request->season;
+        $name = $request->name;
+        $year = Year::where('name',$request->year)->first();
+        $season = Season::where('name',$request->season)->first();
 
         $requested = new stdClass;
         $requested->type = $type;
         $requested->sort = $sort;
-        $requested->char = $char;
+        $requested->name = $name;
         $requested->year = $request->year;
         $requested->season = $request->season;
 
@@ -81,15 +81,15 @@ class ArtistController extends Controller
             $query->where('artists.id', $artist->id);
         })
             ->when($year, function ($query) use ($year) {
-                $query->where('year_id', $year);
+                $query->where('year_id', $year->id);
             })
             ->when($season, function ($query) use ($season) {
-                $query->where('season_id', $season);
+                $query->where('season_id', $season->id);
             })
-            ->whereHas('post', function ($query) use ($request, $char) {
+            ->whereHas('post', function ($query) use ($name) {
                 $query->where('status', 'published')
-                    ->when($char, function ($query) use ($char) {
-                        $query->where('title', 'LIKE', "{$char}%");
+                    ->when($name, function ($query) use ($name) {
+                        $query->where('title', 'LIKE', "%{$name}%");
                     });
             })
             ->when($type, function ($query) use ($type) {
