@@ -115,7 +115,7 @@
                         }
                     @endphp
                     <div class="" id="video_container">
-                        <video id="player" controls class="ratio-16x9" {{-- autoplay="off" --}}>
+                        <video id="player"class="ratio-16x9" controls>
                             <source src="{{ $video_url }}" type="video/webm" />
                         </video>
                     </div>
@@ -177,8 +177,8 @@
                         <div>
                             <form action="{{ route('variants.like', $song_variant->id) }}" method="post">
                                 @csrf
-                                <button id="like-button" class="btn btn-primary rounded-pill"><i
-                                        class="fa-regular fa-thumbs-up"></i>
+                                <button id="like-button" data-variant-id="{{ $song_variant->id }}"
+                                    class="btn btn-primary rounded-pill"><i class="fa-regular fa-thumbs-up"></i>
                                     <span id="like-counter">{{ $song_variant->likes()->count() }}</span>
                                 </button>
 
@@ -208,7 +208,7 @@
                     @php
                         $class = $song_variant->isFavorited() ? 'solid' : 'regular';
                     @endphp
-                    <form action="{{ route('favorite.toggle', $song_variant->id) }}" method="POST">
+                    <form action="{{ route('variants.toggle.favorite', $song_variant->id) }}" method="POST">
                         @method('POST')
                         @csrf
                         <button type="submit" class="btn btn-primary rounded-pill"><i
@@ -231,7 +231,7 @@
 
         <div class="modal fade" tabindex="-1" id="report-modal">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+                <div class="modal-content bg-dark text-light">
                     @if (Auth::check())
                         <form action="{{ route('reports.store') }}" method="post">
                             @csrf
@@ -283,107 +283,102 @@
         @endguest
         @auth
             <div class="py-2">
-                <div class="comment-form">
+                <div class="text-light mb-2 d-flex">
+                    <form action="{{ route('variant.rate', $song_variant->id) }}" method="post" class="d-flex w-100">
+                        @csrf
+                        @php
+                            if ($user_rate != null) {
+                                $user_score = $user_rate->format_rating;
+                            } else {
+                                $user_score = 0;
+                            }
+                        @endphp
+                        @switch(Auth::user()->score_format)
+                            @case('POINT_100')
+                                <div class="w-100">
+                                    <label for="score-input" class="form-label">Rate: <span
+                                            id="rangeValue">{{ $user_score }}</span>/100</label>
+                                    <div class="d-flex gap-2">
+                                        <input type="number" class="form-control" min="0" max="100" step="1"
+                                            id="score-input" name="score" value="{{ $user_score }}" required>
+                                        <button class="btn btn-primary" type="submit">Vote</button>
+                                    </div>
+                                </div>
+                            @break
+
+                            @case('POINT_10_DECIMAL')
+                                <div class="w-100">
+                                    {{-- <input type="number" max="10" min="0" step=".1" class="form-control"
+                                                id="exampleFormControlInput1" name="score" placeholder="1.0 to 10.0" required> --}}
+                                    <label for="score-input" class="form-label">Rate: <span
+                                            id="rangeValue">{{ $user_score }}</span>/10</label>
+                                    <input type="range" class="form-range" min="0" max="10" step="0.1"
+                                        id="score-input" name="score" value="{{ $user_score }}" required>
+                                </div>
+                            @break
+
+                            @case('POINT_10')
+                                <div class="w-100">
+                                    {{-- <input type="number" max="10" min="0" step="1" class="form-control"
+                                                id="exampleFormControlInput1" name="score" placeholder="1 to 10" required> --}}
+                                    <label for="score-input" class="form-label">Rate: <span
+                                            id="rangeValue">{{ $user_score }}</span>/10</label>
+                                    <input type="range" class="form-range" min="0" max="10" step="1"
+                                        id="score-input" name="score" value="{{ $user_score }}" required>
+                                </div>
+                            @break
+
+                            @case('POINT_5')
+                                <span class="align-self-start">Rate</span>
+                                <div class="stars align-self-start">
+                                    <input class="star star-5" id="star-5" type="radio" name="score" value="100"
+                                        {{ $user_score == 100 ? 'checked' : '' }} />
+                                    <label class="star star-5" for="star-5"></label>
+
+                                    <input class="star star-4" id="star-4" type="radio" name="score" value="80"
+                                        {{ $user_score == 80 ? 'checked' : '' }} />
+                                    <label class="star star-4" for="star-4"></label>
+
+                                    <input class="star star-3" id="star-3" type="radio" name="score" value="60"
+                                        {{ $user_score == 60 ? 'checked' : '' }} />
+                                    <label class="star star-3" for="star-3"></label>
+
+                                    <input class="star star-2" id="star-2" type="radio" name="score" value="40"
+                                        {{ $user_score == 40 ? 'checked' : '' }} />
+                                    <label class="star star-2" for="star-2"></label>
+
+                                    <input class="star star-1" id="star-1" type="radio" name="score" value="20"
+                                        {{ $user_score == 20 ? 'checked' : '' }} />
+                                    <label class="star star-1" for="star-1"></label>
+                                </div>
+                            @break
+
+                            @default
+                                <div class="stars">
+                                    <input class="star star-5" id="star-5" type="radio" name="score" value="100" />
+                                    <label class="star star-5" for="star-5"></label>
+
+                                    <input class="star star-4" id="star-4" type="radio" name="score" value="80" />
+                                    <label class="star star-4" for="star-4"></label>
+
+                                    <input class="star star-3" id="star-3" type="radio" name="score" value="60" />
+                                    <label class="star star-3" for="star-3"></label>
+
+                                    <input class="star star-2" id="star-2" type="radio" name="score" value="40" />
+                                    <label class="star star-2" for="star-2"></label>
+
+                                    <input class="star star-1" id="star-1" type="radio" name="score" value="20" />
+                                    <label class="star star-1" for="star-1"></label>
+                                </div>
+                        @endswitch
+                    </form>
+                </div>
+                <div>
                     <form action="{{ route('comments.store') }}" method="post" class="d-flex flex-column gap-2">
                         @csrf
                         <input type="hidden" name="song_variant_id" value="{{ $song_variant->id }}">
-                        <div class="score-form text-light d-flex flex-column">
-                            {{-- <span>Rate this theme:</span> --}}
-                            @if (Auth::check())
-                                @php
-                                    if ($user_rate != null) {
-                                        $user_score = $user_rate->format_rating;
-                                    } else {
-                                        $user_score = 0;
-                                    }
-
-                                @endphp
-                                @switch(Auth::user()->score_format)
-                                    @case('POINT_100')
-                                        <div class="w-100">
-                                            {{-- <input type="number" max="100" min="0" step="1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1 to 100" required> --}}
-                                            <label for="score-input" class="form-label">Rate: <span
-                                                    id="rangeValue">{{ $user_score }}</span>/100</label>
-                                            <input type="number" class="form-input" min="0" max="100" step="1"
-                                                id="score-input" name="score" value="{{ $user_score }}" required>
-                                        </div>
-                                    @break
-
-                                    @case('POINT_10_DECIMAL')
-                                        <div class="w-100">
-                                            {{-- <input type="number" max="10" min="0" step=".1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1.0 to 10.0" required> --}}
-                                            <label for="score-input" class="form-label">Rate: <span
-                                                    id="rangeValue">{{ $user_score }}</span>/10</label>
-                                            <input type="range" class="form-range" min="0" max="10" step="0.1"
-                                                id="score-input" name="score" value="{{ $user_score }}" required>
-                                        </div>
-                                    @break
-
-                                    @case('POINT_10')
-                                        <div class="w-100">
-                                            {{-- <input type="number" max="10" min="0" step="1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1 to 10" required> --}}
-                                            <label for="score-input" class="form-label">Rate: <span
-                                                    id="rangeValue">{{ $user_score }}</span>/10</label>
-                                            <input type="range" class="form-range" min="0" max="10" step="1"
-                                                id="score-input" name="score" value="{{ $user_score }}" required>
-                                        </div>
-                                    @break
-
-                                    @case('POINT_5')
-                                        <span class="align-self-start">Rate</span>
-                                        <div class="stars align-self-start">
-                                            <input class="star star-5" id="star-5" type="radio" name="score" value="100"
-                                                {{ $user_score == 100 ? 'checked' : '' }} />
-                                            <label class="star star-5" for="star-5"></label>
-
-                                            <input class="star star-4" id="star-4" type="radio" name="score" value="80"
-                                                {{ $user_score == 80 ? 'checked' : '' }} />
-                                            <label class="star star-4" for="star-4"></label>
-
-                                            <input class="star star-3" id="star-3" type="radio" name="score" value="60"
-                                                {{ $user_score == 60 ? 'checked' : '' }} />
-                                            <label class="star star-3" for="star-3"></label>
-
-                                            <input class="star star-2" id="star-2" type="radio" name="score" value="40"
-                                                {{ $user_score == 40 ? 'checked' : '' }} />
-                                            <label class="star star-2" for="star-2"></label>
-
-                                            <input class="star star-1" id="star-1" type="radio" name="score" value="20"
-                                                {{ $user_score == 20 ? 'checked' : '' }} />
-                                            <label class="star star-1" for="star-1"></label>
-                                        </div>
-                                    @break
-
-                                    @default
-                                        <div class="stars">
-                                            <input class="star star-5" id="star-5" type="radio" name="score"
-                                                value="100" />
-                                            <label class="star star-5" for="star-5"></label>
-
-                                            <input class="star star-4" id="star-4" type="radio" name="score"
-                                                value="80" />
-                                            <label class="star star-4" for="star-4"></label>
-
-                                            <input class="star star-3" id="star-3" type="radio" name="score"
-                                                value="60" />
-                                            <label class="star star-3" for="star-3"></label>
-
-                                            <input class="star star-2" id="star-2" type="radio" name="score"
-                                                value="40" />
-                                            <label class="star star-2" for="star-2"></label>
-
-                                            <input class="star star-1" id="star-1" type="radio" name="score"
-                                                value="20" />
-                                            <label class="star star-1" for="star-1"></label>
-                                        </div>
-                                @endswitch
-                            @endif
-                        </div>
                         <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="2"
-                            placeholder="Comment ... (optional)" maxlength="255">{{ $user_rate != '' ? $user_rate->comment : '' }}</textarea>
+                            placeholder="Comment ... (optional)" maxlength="255"></textarea>
                         <button class="btn btn-primary" type="submit">Submit</button>
                     </form>
                 </div>
@@ -524,53 +519,10 @@
                                         <div style="display: flex; gap: 10px;">
                                             <div class="user-name">
                                                 <a class="no-deco text-light"
-                                                    href="{{ route('user.list', $comment->user->id) }}">{{ $comment->user->name }}</a>
+                                                    href="{{ route('user.list', $comment->user->slug) }}">{{ $comment->user->name }}</a>
                                             </div>
                                             <div class="user-score">
-                                                @switch($comment->rating)
-                                                    @case($comment->rating <= 20)
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                    @break
-
-                                                    @case($comment->rating > 20 && $comment->rating <= 40)
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                    @break
-
-                                                    @case($comment->rating > 40 && $comment->rating <= 60)
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                    @break
-
-                                                    @case($comment->rating > 60 && $comment->rating <= 80)
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-regular fa-star"></i>
-                                                    @break
-
-                                                    @case($comment->rating >= 80)
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                        <i class="fa-solid fa-star"></i>
-                                                    @break
-
-                                                    @default
-                                                @endswitch
-
+                                                <i class="fa-solid fa-bookmark"></i>
                                             </div>
                                         </div>
                                         <div class="like-buttons">

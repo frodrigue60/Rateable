@@ -28,8 +28,13 @@
                         <td>
                             <a href="{{ route('admin.videos.edit', $video->id) }}" class="btn btn-sm btn-success">Edit</a>
                             <a href="{{ route('admin.videos.show', $video->id) }}" class="btn btn-sm btn-primary">Show</a>
-                            <a href="{{ route('admin.videos.destroy', $video->id) }}"
-                                class="btn btn-sm btn-danger">Delete</a>
+                            <form action="{{ route('admin.videos.destroy', $video->id) }}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
 

@@ -4,14 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
 use App\Models\Artist;
-use App\Models\Song;
-use Conner\Tagging\Model\Tag;
-use Illuminate\Support\Facades\DB;
-
 use App\Http\Controllers\Controller;
 use App\Models\Season;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
@@ -50,8 +45,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        //$tags = Tag::all();
         $artists = Artist::all();
+        $seasons = Season::all();
+        $years = Year::all();
 
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
@@ -74,8 +70,7 @@ class PostController extends Controller
             ],
         ]);
 
-        //dd($tagsYears, $tagsNames);
-        return view('admin.posts.create', compact('types', 'artists', 'postStatus', 'breadcrumb'));
+        return view('admin.posts.create', compact('years','seasons','types', 'artists', 'postStatus', 'breadcrumb'));
     }
 
     /**
@@ -178,8 +173,10 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
-        $tags = Tag::all();
+        //$tags = Tag::all();
         $artists = Artist::all();
+        $seasons = Season::all();
+        $years = Year::all();
 
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
@@ -202,7 +199,7 @@ class PostController extends Controller
             ],
         ]);
 
-        return view('admin.posts.edit', compact('post', 'tags', 'types', 'artists', 'postStatus', 'breadcrumb'));
+        return view('admin.posts.edit', compact('post', 'types', 'artists', 'postStatus', 'breadcrumb'));
     }
 
     /**
@@ -244,10 +241,9 @@ class PostController extends Controller
             $this->storePostImages($post, $request);
 
             if ($post->update()) {
-                $post->retag($request->tags);
 
-                Storage::disk('public')->delete('/thumbnails/' . $old_thumbnail);
-                Storage::disk('public')->delete('/anime_banner/' . $old_banner);
+                Storage::disk('public')->delete($old_thumbnail);
+                Storage::disk('public')->delete($old_banner);
                 return redirect(route('admin.posts.index'))->with('success', 'Post Updated Successfully');
             } else {
                 return redirect(route('admin.posts.index'))->with('error', 'Something has wrong');
@@ -310,7 +306,7 @@ class PostController extends Controller
         //dd($request->all());
         $q = $request->q;
         $arr_types = $request->types;
-        $client = new \GuzzleHttp\Client();
+        
 
         $variables = [
             'search' => $q,
@@ -319,6 +315,7 @@ class PostController extends Controller
 
         $query = $this->buildGraphQLQuerySearch();
 
+        $client = new Client();
         $response = $client->post('https://graphql.anilist.co', [
             'json' => [
                 'query' => $query,
@@ -337,9 +334,9 @@ class PostController extends Controller
         //dd($posts);
         return view('admin.posts.select', compact('posts'));
     }
-    public function getById(Request $request)
+    public function getById($anilist_id)
     {
-        //dd($request->all());
+        //dd($id);
         // Here we define our query as a multi-line string
         $query = '
         query ($id: Int) { # Define which variables will be used in the query (id)
@@ -364,7 +361,7 @@ class PostController extends Controller
         ';
 
         $variables = [
-            "id" => $request->id
+            "id" => $anilist_id
         ];
         //dd($variables);
 
@@ -401,7 +398,7 @@ class PostController extends Controller
             return redirect(route('admin.posts.index'))->with('error', $messageBag);
         }
 
-        $client = new \GuzzleHttp\Client();
+        $client = new Client();
 
         if ($season != null) {
             $query = $this->buildGraphQLQuerySeasonal();

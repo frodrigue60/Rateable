@@ -42,7 +42,22 @@
                             <input type="text" class="form-control" placeholder="Song Name EN" id="songEn"
                                 name="song_en" value="{{ $song->song_en }}">
                         </div>
-                        <div class="row">
+
+                        <div class="mb-3">
+                            @php
+                                $artists_string = '';
+                                if (isset($song->artists) && $song->artists->count() != 0) {
+                                    foreach ($song->artists as $artist) {
+                                        $artist_names[] = $artist->name;
+                                        $artists_string = implode(',', $artist_names);
+                                    }
+                                }
+                            @endphp
+                            <label for="artists-input" class="form-label">Artists names</label>
+                            <input type="text" class="form-control" placeholder="Artist 1, Artist 2, Artist 3,..."
+                                id="artists-input" name="artists" value="{{ old('artists', $artists_string) }}">
+                        </div>
+                        {{-- <div class="row">
                             <div class="col-md mb-3">
                                 <label for="artists-select" class="form-label">Artist</label>
                                 <select class="form-select" multiple name="artists[]" id="artists-select">
@@ -69,27 +84,31 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
 
-                        <div class="row mb-3">
-                            <div class="mb-3 col-6">
-                                <label for="" class="form-label">Season</label>
-                                <select class="form-select" name="season_id" id="">
-                                    @foreach ($seasons as $season)
-                                        <option value="{{ $season->id }}" {{ old('season_id', $song->season_id) == $season->id ? 'selected' : '' }}>{{ $season->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-3 col-6">
+
+                        <div class="mb-3">
+                            <label for="" class="form-label">Season</label>
+                            <select class="form-select" name="season_id" id="">
+                                @foreach ($seasons as $season)
+                                    <option value="{{ $season->id }}"
+                                        {{ old('season_id', $song->season_id) == $season->id ? 'selected' : '' }}>
+                                        {{ $season->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <div class="">
                                 <label for="" class="form-label">Year</label>
                                 <select class="form-select" name="year_id" id="">
                                     @foreach ($years as $year)
-                                        <option value="{{ $year->id }}" {{ old('year_id', $song->year_id) == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
+                                        <option value="{{ $year->id }}"
+                                            {{ old('year_id', $song->year_id) == $year->id ? 'selected' : '' }}>
+                                            {{ $year->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-
                         <div class="d-flex">
                             <button class="btn btn-primary w-100" type="submit">Submit</button>
                         </div>
@@ -100,12 +119,11 @@
             </div>
         </div>
     @section('script')
-        <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script> --}}
 
-        <script>
+        {{-- <script>
             new MultiSelectTag('artists-select');
-            new MultiSelectTag('tags-select');
-        </script>
+        </script> --}}
     @endsection
 </div>
 @endsection

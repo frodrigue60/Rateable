@@ -7,6 +7,7 @@ use App\Models\SongVariant;
 use Illuminate\Http\Request;
 use App\Models\Year;
 use App\Models\Season;
+use Illuminate\Support\Facades\Auth;
 
 class SongVariantController extends Controller
 {
@@ -67,11 +68,13 @@ class SongVariantController extends Controller
 
     public function like(Request $request)
     {
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Unautorized', 'request' => $request->all()], 403);
+        }
         // Validar la solicitud
-        /* $request->validate([
-            'variant_id' => 'required|integer|exists:song_variants,id',
-            'user_id' => 'required|integer|exists:users,id',
-        ]); */
+        $request->validate([
+            'songVariant_id' => 'required|integer|exists:song_variants,id',
+        ]);
 
         // Obtener el video
         $songVariant = SongVariant::find($request->variant_id);
@@ -80,9 +83,8 @@ class SongVariantController extends Controller
         $songVariant->like($request->user_id);
 
         // Devolver la respuesta en formato JSON
-        return response()->json([
-            'likes' => $songVariant->likeCount,
-        ]);
+        return response()->json(['success' => true, 'message' => 'SongVariant Liked'], 200);
+
     }
 
     public function seasonal()
@@ -143,7 +145,7 @@ class SongVariantController extends Controller
         $renderOps = view('layouts.variant.cards', compact('song_variants'))->render();
 
         $song_variants = $endings;
-        $renderEds = view('layouts.variant.cards', compact('song_variants'))->render();   
+        $renderEds = view('layouts.variant.cards', compact('song_variants'))->render();
 
         $data = ['openings' => $renderOps, 'endings' => $renderEds];
 

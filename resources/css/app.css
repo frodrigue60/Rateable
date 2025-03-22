@@ -256,8 +256,8 @@ footer {
 
 .item-post-info-seasonal {
 	white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .item-score-seasonal {
@@ -816,7 +816,7 @@ footer {
 
 	.contenedor-tarjetas {
 		display: grid;
-		grid-template-columns: repeat(4, 1fr);
+		grid-template-columns: repeat(6, 1fr);
 		grid-template-rows: repeat(1, auto);
 	}
 

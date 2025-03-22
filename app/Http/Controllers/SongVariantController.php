@@ -12,6 +12,7 @@ use App\Models\Song;
 use App\Models\Reaction;
 use App\Models\Season;
 use App\Models\Year;
+use App\Models\Favorite;
 
 class SongVariantController extends Controller
 {
@@ -54,6 +55,9 @@ class SongVariantController extends Controller
      */
     public function show($anime_slug, $song_suffix, $variant_version_number)
     {
+        $score = null;
+        $user_rate = null;
+
         $post = Post::where('slug', $anime_slug)->firstOrFail();
 
         $song = Song::where('slug', $song_suffix)
@@ -96,11 +100,10 @@ class SongVariantController extends Controller
             ->sortByDesc('likeCount')
             ->take(3); */
 
-        $score = null;
 
         if (Auth::check() && $song_variant->averageRating) {
 
-            $user_rate = $this->user_rate($song_variant->id, Auth::user()->id);
+            $user_rate = $this->userRate($song_variant->id, Auth::user()->id);
 
             switch (Auth::user()->score_format) {
                 case 'POINT_100':
@@ -130,7 +133,6 @@ class SongVariantController extends Controller
             }
         } else {
             $score = round($song_variant->averageRating / 10);
-            $user_rate = null;
         }
 
         $song_variant->incrementViews();
@@ -176,6 +178,7 @@ class SongVariantController extends Controller
 
     public function rate(Request $request, $variant_id)
     {
+        //dd($request->all());
         if (Auth::check()) {
 
             $songVariant = SongVariant::find($variant_id);
@@ -267,7 +270,7 @@ class SongVariantController extends Controller
             // Validar el rango del score
             if ($score >= 1 && $score <= 100) {
                 // Utilizar el score ajustado
-                $songVariant->rateOnce($score, $request->comment);
+                $songVariant->rateOnce($score, Auth::User()->id);
                 return redirect()->back()->with('success', 'Post rated Successfully');
             } else {
                 return redirect()->back()->with('warning', 'Only values between 1 and 100');
@@ -277,22 +280,14 @@ class SongVariantController extends Controller
         }
     }
 
-    public function favorite($variant_id)
-    {
-        if (Auth::check()) {
-            SongVariant::find($variant_id)->like(Auth::user()->id);
-            return redirect()->back()->with('success', 'Song Variant Like successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-
-    public function user_rate($song_variant_id, $user_id)
+    public function userRate($song_variant_id, $user_id)
     {
         return DB::table('ratings')
-            ->where('rateable_type', 'App\Models\SongVariant')
+            ->where('rateable_type', SongVariant::class)
             ->where('rateable_id', $song_variant_id)
             ->where('user_id', $user_id)
-            ->first(['comment', 'rating']);
+            ->first(['rating']);
+        //dd('rate');
     }
 
     public function like($songVariant_id)
@@ -433,5 +428,34 @@ class SongVariantController extends Controller
         });
 
         return $variantsArray;
+    }
+
+    public function toggleFavorite($songVariant_id)
+    {
+
+        if (!Auth::check()) {
+            return redirect()->back()->with('warning', 'Please login');
+        }
+
+        $songVariant = SongVariant::find($songVariant_id);
+        $user = Auth::user();
+
+        // Verificar si el post ya está en favoritos
+        $favorite = Favorite::where('user_id', $user->id)
+            ->where('favoritable_id', $songVariant->id)
+            ->where('favoritable_type', SongVariant::class)
+            ->first();
+
+        if ($favorite) {
+            $favorite->delete();
+            return redirect()->back()->with('success', 'Theme removed to favorites');
+        } else {
+            Favorite::create([
+                'user_id' => $user->id,
+                'favoritable_id' => $songVariant->id,
+                'favoritable_type' => SongVariant::class,
+            ]);
+            return redirect()->back()->with('success', 'Theme added to favorites');
+        }
     }
 }

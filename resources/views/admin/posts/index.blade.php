@@ -26,7 +26,8 @@
                                     data-bs-parent="#accordionExample">
                                     <div class="accordion-body bg-dark">
                                         <form class="d-flex gap-1" action="{{ route('admin.search.animes') }}"
-                                            method="GET">
+                                            method="POST">
+                                            @csrf
                                             <input class="form-control" type="text" name="q" placeholder="Search"
                                                 required />
                                             <select class="form-select" aria-label="Default select example" name="types">
@@ -41,7 +42,8 @@
                                         </form>
                                         <br>
                                         <form class="d-flex gap-1" action="{{ route('get.seasonal.animes') }}"
-                                            method="GET">
+                                            method="POST">
+                                            @csrf
                                             <input class="form-control" type="number" name="year" placeholder="YEAR"
                                                 required />
                                             <select class="form-select" aria-label="Default select example" name="season">
@@ -92,8 +94,15 @@
                                         <a href="{{ $post->url }}" class="no-deco">{{ $post->title }}</a>
                                     </td>
                                     <td>
-                                        <a href="{{ route('seasons.show', $post->season->id) }}" target="_blank" rel="noopener noreferrer">{{ $post->season->name }}</a>
-                                        <a href="{{ route('years.show', $post->year->id) }}" target="_blank" rel="noopener noreferrer">{{ $post->year->name }}</a>
+                                        @isset($post->season->id)
+                                            <a href="{{ route('seasons.show', $post->season->id) }}" target="_blank"
+                                                rel="noopener noreferrer">{{ $post->season->name }}</a>
+                                        @endisset
+                                        @isset($post->year->id)
+                                            <a href="{{ route('years.show', $post->year->id) }}" target="_blank"
+                                                rel="noopener noreferrer">{{ $post->year->name }}</a>
+                                        @endisset
+
                                     </td>
                                     <td>
                                         {{ $post->songs->count() }}

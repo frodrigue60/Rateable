@@ -50,7 +50,7 @@
 @section('content')
     <div class="container mb-3 text-light">
         <div class="d-flex justify-content-between align-items-center">
-            <h3 class="p-0 m-0">{{ $currentSeason->name }} {{ $currentYear->name }}</h3>
+            <h2 class="p-0 m-0">{{ $currentSeason->name }} {{ $currentYear->name }}</h2>
             {{-- <button class="btn btn-secondary text-light">
                 <i class="fa-solid fa-ranking-star"></i>
             </button> --}}
@@ -58,9 +58,9 @@
         <hr>
         <div>
             <div class="my-2">
-                <h4>OPENINGS</h4>
+                <h3>OPENINGS</h3>
             </div>
-            <div class="d-flex gap-3 mb-3" id="div-openings">
+            <div class="contenedor-tarjetas mb-3" id="div-openings">
                 {{-- @foreach ($openings as $variant)
                     @include('layouts.variant.card')
                 @endforeach --}}
@@ -68,9 +68,9 @@
         </div>
         <div>
             <div class="my-2">
-                <h4>ENDINGS</h4>
+                <h3>ENDINGS</h3>
             </div>
-            <div class="d-flex gap-3 mb-3" id="div-endings">
+            <div class="contenedor-tarjetas" id="div-endings">
                 {{-- @foreach ($endings as $variant)
                     @include('layouts.variant.card')
                 @endforeach --}}

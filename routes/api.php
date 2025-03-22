@@ -30,3 +30,5 @@ Route::controller(apiPostController::class)->group(function () {
 Route::controller(apiSongVarianCrontroller::class)->group(function () {
     Route::post('/seasonal', 'seasonal');
 });
+
+Route::post('variants/{variant}/like', [apiSongVarianCrontroller::class, 'like'])->name('variants.like');

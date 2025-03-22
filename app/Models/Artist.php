@@ -12,6 +12,7 @@ class Artist extends Model
     protected $fillable = [
         'name',
         'name_jp',
+        'name_slug',
     ];
 
     /* public function posts()

@@ -42,8 +42,13 @@
                             <input type="text" class="form-control" placeholder="Song Name EN" id="songEn"
                                 name="song_en" value="{{ old('song_en') }}">
                         </div>
+                        <div class="mb-3">
+                            <label for="artists-input" class="form-label">Artists</label>
+                            <input type="text" class="form-control" placeholder="Artist 1, Artist 2, Artist 3..." id="artists-input"
+                                name="artists" value="{{ old('artists') }}">
+                        </div>
 
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md mb-3">
                                 <label for="artists-select" class="form-label">Artist</label>
                                 <select class="form-select" multiple name="artists[]" id="artists-select">
@@ -63,21 +68,37 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div> --}}
+
+                        <div class="mb-3">
+                            <label for="type" class="form-label">Type</label>
+                            <select class="form-select" name="type" id="type">
+                                @foreach ($types as $item)
+                                    <option {{ old('type') == $item['value'] ? 'selected' : '' }}
+                                        value="{{ $item['value'] }}">{{ $item['name'] }}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="row mb-3">
-                            <div class="mb-3 col-6">
+                        <div class="mb-3">
+                            <div class="">
                                 <label for="" class="form-label">Season</label>
                                 <select class="form-select" name="season_id" id="">
                                     @foreach ($seasons as $season)
-                                        <option value="{{ $season->id }}" {{ old('season_id', $post->season_id) == $season->id ? 'selected' : '' }}>{{ $season->name }}</option>
+                                        <option value="{{ $season->id }}"
+                                            {{ old('season_id', $post->season_id) == $season->id ? 'selected' : '' }}>
+                                            {{ $season->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="mb-3 col-6">
+                        </div>
+                        <div class="mb-3">
+                            <div class="">
                                 <label for="" class="form-label">Year</label>
                                 <select class="form-select" name="year_id" id="">
                                     @foreach ($years as $year)
-                                        <option value="{{ $year->id }}" {{ old('year_id', $post->year_id) == $year->id ? 'selected' : '' }}>{{ $year->name }}</option>
+                                        <option value="{{ $year->id }}"
+                                            {{ old('year_id', $post->year_id) == $year->id ? 'selected' : '' }}>
+                                            {{ $year->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -94,9 +115,9 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script> --}}
 
-    <script>
+    {{-- <script>
         new MultiSelectTag('artists-select');
-    </script>
+    </script> --}}
 @endsection

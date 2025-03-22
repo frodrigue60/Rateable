@@ -185,7 +185,6 @@ return [
         /*
          * Package Service Providers...
          */
-        willvincent\Rateable\RateableServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...

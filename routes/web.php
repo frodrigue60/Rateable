@@ -97,9 +97,9 @@ Route::group(['middleware' => 'staff'], function () {
         Route::post('/posts/{post}/unapprove', [AdminPostController::class, 'unapprove'])->name('admin.posts.unapprove');
         Route::get('/posts/{post}/songs/add', [AdminPostController::class, 'addSong'])->name('admin.posts.songs.add');
         Route::get('/posts/{post}/songs', [AdminPostController::class, 'songs'])->name('posts.songs');
-        Route::get('/posts/search-animes', [AdminPostController::class, 'searchAnimes'])->name('admin.search.animes');
-        Route::get('/posts/get-by-id', [AdminPostController::class, 'getById'])->name('get.by.id');
-        Route::get('/posts/get-seasonal-animes', [AdminPostController::class, 'getSeasonalAnimes'])->name('get.seasonal.animes');
+        Route::post('/posts/search-animes', [AdminPostController::class, 'searchAnimes'])->name('admin.search.animes');
+        Route::get('/posts/get-by-id/{id}', [AdminPostController::class, 'getById'])->name('get.by.id');
+        Route::post('/posts/get-seasonal-animes', [AdminPostController::class, 'getSeasonalAnimes'])->name('get.seasonal.animes');
         Route::get('/posts/force-update', [AdminPostController::class, 'forceUpdate'])->name('force.update');
         Route::get('/posts/posts/wipe', [AdminPostController::class, 'wipePosts'])->name('posts.wipe');
 
@@ -147,6 +147,6 @@ Route::post('reports/store', [ReportController::class, 'store'])->name('reports.
 
 //SONG VARIANT ROUTES
 Route::post('/variant/{variant}/rate', [SongVariantController::class, 'rate'])->name('variant.rate');
-Route::post('variants/{variant}/like', [App\Http\Controllers\SongVariantController::class, 'like'])->name('variants.like');
-Route::post('variants/{variant}/dislike', [App\Http\Controllers\SongVariantController::class, 'dislike'])->name('variants.dislike');
-Route::post('variants/{variant}/favorite', [FavoriteController::class, 'toggle'])->name('favorite.toggle');
+Route::post('variants/{variant}/like', [SongVariantController::class, 'like'])->name('variants.like');
+Route::post('variants/{variant}/dislike', [SongVariantController::class, 'dislike'])->name('variants.dislike');
+Route::post('variants/{variant}/favorite', [SongVariantController::class, 'toggleFavorite'])->name('variants.toggle.favorite');

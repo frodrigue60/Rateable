@@ -13,23 +13,6 @@
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">
-                    {{-- search form --}}
-                    {{-- <form class="d-flex text-light gap-3" action="" method="GET">
-                        <div class="mb-3 d-flex w-100 flex-column">
-                            <label for="" class="form-label">Season</label>
-                            <select class="form-select form-select-lg" name="" id="">
-                                <option value="">Option 1</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 d-flex w-100 flex-column">
-                            <label for="" class="form-label">Year</label>
-                            <select class="form-select form-select-lg" name="" id="">
-                                <option value="">Option 1</option>
-                            </select>
-                        </div>
-
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form> --}}
                     <table class="table table-dark">
                         <thead>
                             <tr>
@@ -61,10 +44,10 @@
                                         <a class="text-light" href="{{ $song->post->url }}">{{ $song_name }}</a>
                                     </td>
                                     <td>
-                                        @isset($song->artist)
+                                        {{-- @isset($song->artist)
                                             <a class="text-light"
-                                                href="{{ route('artists.show', [$song->artist->id, $song->artist->name_slug]) }}">{{ $song->artist->name }}</a>
-                                        @endisset
+                                                href="{{ $artist->url }}">{{ $song->artist->name }}</a>
+                                        @endisset --}}
                                         @isset($song->artists)
                                             {{ count($song->artists) }}
                                         @endisset
@@ -79,9 +62,12 @@
                                             <a class="btn btn-sm btn-success"
                                                 href="{{ route('admin.songs.edit', $song->id) }}"><i
                                                     class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn btn-sm btn-danger"
-                                                href="{{ route('admin.songs.destroy', $song->id) }}"><i
-                                                    class="fa-solid fa-trash"></i></a>
+                                            <form action="{{ route('admin.songs.destroy', $song->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger" type="submit"><i
+                                                        class="fa-solid fa-trash"></i></button>
+                                            </form>
                                             {{-- <a class="btn btn-sm btn-primary"
                                                 href="{{ route('admin.variants.show', $song->id) }}"><i
                                                     class="fa-solid fa-eye"></i></a> --}}

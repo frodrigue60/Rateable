@@ -88,31 +88,29 @@ class FavoriteController extends Controller
     public function toggle($songVariant_id)
     {
 
-        if (Auth::check()) {
-            $songVariant = SongVariant::find($songVariant_id);
-            $user = Auth::user();
-
-            // Verificar si el post ya está en favoritos
-            $favorite = Favorite::where('user_id', $user->id)
-                ->where('favoritable_id', $songVariant->id)
-                ->where('favoritable_type', SongVariant::class)
-                ->first();
-
-            if ($favorite) {
-                // Si ya está en favoritos, lo quitamos
-                $favorite->delete();
-                session()->flash('success', 'Post eliminado de favoritos.');
-            } else {
-                // Si no está en favoritos, lo agregamos
-                Favorite::create([
-                    'user_id' => $user->id,
-                    'favoritable_id' => $songVariant->id,
-                    'favoritable_type' => SongVariant::class,
-                ]);
-                session()->flash('success', 'Post agregado a favoritos.');
-            }
+        if (!Auth::check()) {
+            return redirect()->back()->with('warning', 'Please login');
         }
 
-        return redirect()->back()->with('warning', 'Please login'); // Redirige de vuelta a la página anterior
+        $songVariant = SongVariant::find($songVariant_id);
+        $user = Auth::user();
+
+        // Verificar si el post ya está en favoritos
+        $favorite = Favorite::where('user_id', $user->id)
+            ->where('favoritable_id', $songVariant->id)
+            ->where('favoritable_type', SongVariant::class)
+            ->first();
+
+        if ($favorite) {
+            $favorite->delete();
+            return redirect()->back()->with('success', 'Theme removed to favorites');
+        } else {
+            Favorite::create([
+                'user_id' => $user->id,
+                'favoritable_id' => $songVariant->id,
+                'favoritable_type' => SongVariant::class,
+            ]);
+            return redirect()->back()->with('success', 'Theme added to favorites');
+        }
     }
 }

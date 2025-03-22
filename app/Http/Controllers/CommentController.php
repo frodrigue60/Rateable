@@ -36,16 +36,16 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $songVariant_id)
+    public function store(Request $request)
     {
+        //dd($request->all());
         $user = Auth::User();
-        //dd($request->all(), $songVariant_id, $user);
 
         $validatedData = $request->validate([
             'content' => 'required',
         ]);
 
-        $songVariant = SongVariant::findOrFail($songVariant_id);
+        $songVariant = SongVariant::findOrFail($request->song_variant_id);
 
         $comment = new Comment($validatedData);
         $comment->user_id = $user->id;
