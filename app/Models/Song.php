@@ -76,6 +76,8 @@ class Song extends Model
             return $this->song_romaji;
         } elseif ($this->song_jp != null) {
             return $this->song_jp;
+        } elseif ($this->song_en != null) {
+            return $this->song_en;
         } else {
             return 'n/a';
         }

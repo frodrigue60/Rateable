@@ -35,13 +35,18 @@
                                     <td><a href="{{ route('user.list', $item->id) }}">{{ $item->name }}</a></td>
                                     <td>{{ $item->email }}</td>
                                     <td>{{ $item->type }}</td>
-                                    <td>
+                                    <td class="d-flex gap-2">
                                         @if (Auth::User()->isAdmin())
                                             <a class="btn btn-success btn-sm"
                                                 href="{{ route('admin.users.edit', $item->id) }}" role="button"><i
                                                     class="fa-solid fa-pencil"></i></a>
-                                            <a class="btn btn-danger btn-sm"
-                                                href="{{ route('admin.users.destroy', $item->id) }}" role="button"><i class="fa-solid fa-trash"></i></a>
+                                            <form action="{{ route('admin.users.destroy', $item->id) }}" method="post" class="d-flex">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
                                         @endif
                                     </td>
                             @endforeach

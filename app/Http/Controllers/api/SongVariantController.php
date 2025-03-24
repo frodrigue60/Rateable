@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use App\Models\Year;
 use App\Models\Season;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Reaction;
+use App\Models\Favorite;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class SongVariantController extends Controller
 {
@@ -68,23 +72,61 @@ class SongVariantController extends Controller
 
     public function like(Request $request)
     {
-        if (!Auth::check()) {
-            return response()->json(['success' => false, 'message' => 'Unautorized', 'request' => $request->all()], 403);
+        $songVariant = SongVariant::find($request->songVariant_id);
+        $this->handleReaction($songVariant, 1); // 1 para like
+        $songVariant->updateReactionCounters(); // Actualiza los contadores manualmente
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Liked',
+            'likesCount' => $songVariant->likesCount,
+            'dislikesCount' => $songVariant->dislikesCount,
+        ], 200);
+    }
+
+    // Método para dislike
+    public function dislike(Request $request)
+    {
+        $songVariant = SongVariant::find($request->songVariant_id);
+        $this->handleReaction($songVariant, -1); // -1 para dislike
+        $songVariant->updateReactionCounters(); // Actualiza los contadores manualmente
+
+        return response()->json([
+            'success' => true,
+            'message' => 'disliked',
+            'likesCount' => $songVariant->likesCount,
+            'dislikesCount' => $songVariant->dislikesCount,
+        ], 200);
+    }
+
+    // Método privado para manejar la reacción
+    private function handleReaction($songVariant, $type)
+    {
+        $user = Auth::user();
+
+        // Buscar si ya existe una reacción del usuario para este post
+        $reaction = Reaction::where('user_id', $user->id)
+            ->where('reactable_id', $songVariant->id)
+            ->where('reactable_type', SongVariant::class)
+            ->first();
+
+        if ($reaction) {
+            if ($reaction->type === $type) {
+                // Si la reacción es la misma, eliminarla (toggle)
+                $reaction->delete();
+            } else {
+                // Si la reacción es diferente, actualizarla
+                $reaction->update(['type' => $type]);
+            }
+        } else {
+            // Si no existe una reacción, crear una nueva
+            Reaction::create([
+                'user_id' => $user->id,
+                'reactable_id' => $songVariant->id,
+                'reactable_type' => SongVariant::class,
+                'type' => $type,
+            ]);
         }
-        // Validar la solicitud
-        $request->validate([
-            'songVariant_id' => 'required|integer|exists:song_variants,id',
-        ]);
-
-        // Obtener el video
-        $songVariant = SongVariant::find($request->variant_id);
-
-        // Incrementar el contador de likes
-        $songVariant->like($request->user_id);
-
-        // Devolver la respuesta en formato JSON
-        return response()->json(['success' => true, 'message' => 'SongVariant Liked'], 200);
-
     }
 
     public function seasonal()
@@ -150,5 +192,104 @@ class SongVariantController extends Controller
         $data = ['openings' => $renderOps, 'endings' => $renderEds];
 
         return response()->json($data);
+    }
+
+    public function toggleFavorite(Request $request)
+    {
+
+        $songVariant = SongVariant::find($request->songVariant_id);
+        $user = Auth::user();
+
+        // Verificar si el post ya está en favoritos
+        $favorite = Favorite::where('user_id', $user->id)
+            ->where('favoritable_id', $songVariant->id)
+            ->where('favoritable_type', SongVariant::class)
+            ->first();
+
+        if ($favorite) {
+            $favorite->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Removed from favorites',
+                'favorite' => false,
+            ], 200);
+        } else {
+            Favorite::create([
+                'user_id' => $user->id,
+                'favoritable_id' => $songVariant->id,
+                'favoritable_type' => SongVariant::class,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Added to favorites',
+                'favorite' => true,
+            ], 200);
+        }
+    }
+
+    public function rate(Request $request, $variant_id)
+    {
+        $user = Auth::user();
+        $songVariant = SongVariant::find($variant_id);
+
+        $score_format = $user->score_format;
+
+        $validator = Validator::make($request->all(), [
+            'score' => 'required|numeric|max:100'
+        ]);
+
+        if ($validator->fails()) {
+            $messageBag = $validator->getMessageBag();
+            return response()->json([
+                'success' => false,
+                'message' => $messageBag,
+                'score' => $request->score,
+            ], 200);
+        } else {
+            $score = $request->score;
+        }
+
+        switch ($score_format) {
+            case 'POINT_5':
+                $score = max(20, min(100, ceil($score / 20) * 20));
+                break;
+
+            case 'POINT_10':
+                $score = round($score * 10);
+                break;
+
+            case 'POINT_10_DECIMAL':
+                $score = round($score * 10, 1);
+                break;
+
+            case 'POINT_100':
+                $score = round($score);
+                break;
+            default:
+                $score = round($score);
+                break;
+        }
+
+        // Utilizar el score ajustado
+        $songVariant->rateOnce($score, $user->id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Rated sucessfully',
+            'score' => $score,
+            'scoreString' => $songVariant->scoreString,
+        ], 200);
+    }
+
+    public function userRate($song_variant_id, $user_id)
+    {
+        return DB::table('ratings')
+            ->where('rateable_type', SongVariant::class)
+            ->where('rateable_id', $song_variant_id)
+            ->where('user_id', $user_id)
+            ->first(['rating']);
+        //dd('rate');
     }
 }

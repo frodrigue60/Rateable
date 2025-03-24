@@ -6,7 +6,7 @@
             <div class="card text-light">
                 <div class="card-header">{{ __('Login') }}</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('login') }}" id="loginForm">
                         @csrf
                         <div class="row mb-3">
                             <label for="email"
@@ -66,10 +66,51 @@
                                     </a>
                                 @endif
                             </div>
+                            <div id="responseMessage"></div>
+
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            loginWithAjax();
+        });
+
+        function loginWithAjax() {
+            const form = document.getElementById('loginForm');
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.token) {
+                            localStorage.setItem('api_token', data.token); // Almacenar el token
+                        }
+                        window.location.href = '/profile'; // Redirigir al dashboard
+                    } else {
+                        document.getElementById('responseMessage').textContent = data.message ||
+                            'Error en el inicio de sesión';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('responseMessage').textContent = 'Error en la solicitud';
+                });
+        }
+    </script>
 @endsection

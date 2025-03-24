@@ -31,4 +31,10 @@ Route::controller(apiSongVarianCrontroller::class)->group(function () {
     Route::post('/seasonal', 'seasonal');
 });
 
-Route::post('variants/{variant}/like', [apiSongVarianCrontroller::class, 'like'])->name('variants.like');
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::resource('variants', apiSongVarianCrontroller::class);
+    Route::post('variants/{variant}/like', [apiSongVarianCrontroller::class, 'like'])->name('api.variants.like');
+    Route::post('variants/{variant}/dislike', [apiSongVarianCrontroller::class, 'dislike'])->name('api.variants.dislike');
+    Route::post('variants/{variant}/favorite', [apiSongVarianCrontroller::class, 'toggleFavorite'])->name('api.variants.favorite');
+    Route::post('variants/{variant}/rate', [apiSongVarianCrontroller::class, 'rate'])->name('api.variants.rate');
+});

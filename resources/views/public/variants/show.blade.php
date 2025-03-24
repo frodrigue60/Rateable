@@ -10,9 +10,8 @@
             ? $song_variant->song->slug
             : $song_variant->song->type . ' v' . $song_variant->version_number;
     $artist_names = [];
-    $artist_names = [];
     $artists_string = null;
-    $song_name = null;
+
     if (isset($song_variant->song->artists) && $song_variant->song->artists->count() != 0) {
         foreach ($song_variant->song->artists as $artist) {
             $artist_names[] = $artist->name;
@@ -22,68 +21,21 @@
         $artists_string = 'N/A';
     }
 
-    if (isset($song_variant->song->song_romaji)) {
-        $song_name = $song_variant->song->song_romaji;
-    } else {
-        if ($song_variant->song->song_en) {
-            $song_name = $song_variant->song->song_en;
-        } else {
-            if ($song_variant->song->song_jp) {
-                $song_name = $song_variant->song->song_jp;
-            } else {
-                $song_name = 'N/A';
-            }
-        }
-    }
     $currentUrl = url()->current();
     $thumbnailUrl = asset('/storage/thumbnails/' . $song_variant->song->post->thumbnail);
-
-    if ($song_variant->views >= 1000000) {
-        $views = number_format(intval($song_variant->views / 1000000), 0) . 'M';
-    } elseif ($song_variant->views >= 1000) {
-        $views = number_format(intval($song_variant->views / 1000), 0) . 'K';
-    } else {
-        $views = $song_variant->views;
-    }
-    $forward_text =
-        ($song_variant->song->slug ? $song_variant->song->slug : $song_variant->song->type) .
-        ' v' .
-        $song_variant->version_number;
-    $score_string = '';
-    if (Auth::User()) {
-        switch (Auth::User()->score_format) {
-            case 'POINT_5':
-                $score_string = $score != null ? $score . '/5' : 'N/A';
-                break;
-            case 'POINT_10':
-                $score_string = $score != null ? $score . '/10' : 'N/A';
-                break;
-            case 'POINT_10_DECIMAL':
-                $score_string = $score != null ? $score . '/10' : 'N/A';
-                break;
-            case 'POINT_100':
-                $score_string = $score != null ? $score . '%' : 'N/A';
-                break;
-            default:
-                $score_string = $score != null ? $score . '/10' : 'N/A';
-                break;
-        }
-    } else {
-        $score_string = $score != null ? $score . '/10' : 'N/A';
-    }
 @endphp
 
 @section('meta')
     <title>{{ $title }} {{ $suffix }}</title>
     <meta name="title" content="{{ $title }} {{ $suffix }}">
-    <meta name="description" content="Song: {{ $song_name }}  - Artists: {{ $artists_string }}">
+    <meta name="description" content="Song: {{ $song->name }}  - Artists: {{ $artists_string }}">
     <meta name="robots" content="index, follow, max-image-preview:standard">
     <link rel="canonical" href="{{ $currentUrl }}">
     <meta property="article:section" content="{{ $song_variant->song->type == 'OP' ? 'Opening' : 'Ending' }}">
 
     <meta property="og:type" content="article">
     <meta property="og:title" content="{{ $title }} {{ $suffix }}">
-    <meta name="og:description" content="Song: {{ $song_name }} - Artist: {{ $artists_string }}">
+    <meta name="og:description" content="Song: {{ $song->name }} - Artist: {{ $artists_string }}">
     <meta property="og:url" content="{{ $currentUrl }}">
     <meta property="og:image" content="{{ $thumbnailUrl }}" alt="{{ $title . ' thumbnail' }}">
     <meta property="og:image:secure_url" content="{{ $thumbnailUrl }}" alt="{{ $title . ' thumbnail' }}">
@@ -130,34 +82,36 @@
         </div>
 
         <div class="text-light">
-            <div>
+            <div class="mb-3">
                 <h2>
                     <a href="{{ $post->url }}" class="text-decoration-none text-light">{{ $post->title }}
                         {{ $song->slug }} {{ $song_variant->slug }}</a>
                 </h2>
                 <div class="my-2">
-                    <a href="" class="text-decoration-none text-light">{{ $song_name }}</a> -
-                    @foreach ($song_variant->song->artists as $index => $item)
+                    <a href="#" class="text-decoration-none text-light">{{ $song->name }}</a> -
+                    @foreach ($song_variant->song->artists as $index => $artist)
                         @php
                             /* $artistShowRoute = route('artists.show', [$item->id, $item->name_slug]); */
-                            if ($item->name_jp != null) {
-                                $artistName = $item->name . ' (' . $item->name_jp . ')';
-                            } else {
-                                $artistName = $item->name;
+                            if ($artist->name_jp != null) {
+                                $artistNameJp = '('.$artist->name_jp.')';
+                            }else{
+                                $artistNameJp = '';
                             }
                         @endphp
-                        <a class="text-decoration-none text-light" href="{{ $item->url }}">{{ $artistName }}</a>
+                        <a class="text-decoration-none text-light" href="{{ $artist->url }}">{{ $artist->name }} {{$artistNameJp}}</a>
                         @if ($index < count($song_variant->song->artists) - 1)
                             ,
                         @endif
                     @endforeach
 
                 </div>
-
-                <p>Views {{ $song_variant->views }}</p>
+                <div class="d-flex mb-2">
+                    <span>Views {{ $song_variant->viewsString }}</span>
+                </div>
             </div>
+            {{-- Actions buttons --}}
             <div class="d-flex justify-content-between">
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-3">
                     @guest
                         {{-- LIKES --}}
                         <div>
@@ -175,60 +129,57 @@
                     @auth
                         {{-- LIKES --}}
                         <div>
-                            <form action="{{ route('variants.like', $song_variant->id) }}" method="post">
-                                @csrf
-                                <button id="like-button" data-variant-id="{{ $song_variant->id }}"
-                                    class="btn btn-primary rounded-pill"><i class="fa-regular fa-thumbs-up"></i>
-                                    <span id="like-counter">{{ $song_variant->likes()->count() }}</span>
-                                </button>
-
-                            </form>
+                            <button id="like-button" data-variant="{{ $song_variant->id }}"
+                                class="btn btn-primary rounded-pill"><i class="fa-regular fa-thumbs-up"></i>
+                                <span id="like-counter">{{ $song_variant->likes()->count() }}</span>
+                            </button>
                         </div>
                         {{-- DISLIKES --}}
                         <div>
-                            <form action="{{ route('variants.dislike', $song_variant->id) }}" method="post">
-                                @csrf
-                                <button id="dislike-button" class="btn btn-primary rounded-pill"
-                                    data-variant-id="{{ $song_variant->id }}">
-                                    <i class="fa-regular fa-thumbs-down"></i> <span
-                                        id="dislike-counter">{{ $song_variant->dislikes()->count() }}</span>
-                                </button>
-                            </form>
+                            <button id="dislike-button" class="btn btn-primary rounded-pill"
+                                data-variant="{{ $song_variant->id }}">
+                                <i class="fa-regular fa-thumbs-down"></i> <span
+                                    id="dislike-counter">{{ $song_variant->dislikes()->count() }}</span>
+                            </button>
                         </div>
                     @endauth
 
                     {{-- SCORE --}}
                     <div>
-                        <button class="btn btn-primary rounded-pill">
-                            <i class="fa fa-star" aria-hidden="true"></i> {{ $score_string }}
+                        @php
+                            if (Auth::check()) {
+                                $class = $user_rate ? 'btn-warning' : 'btn-primary';
+                            } else {
+                                $class = 'btn-primary';
+                            }
+
+                        @endphp
+                        <button class="btn {{ $class }} rounded-pill" data-bs-toggle="modal"
+                            data-bs-target="#rating-modal" id="rating-button">
+                            <i class="fa fa-star" aria-hidden="true"></i> <span
+                                id="score-span">{{ $song_variant->scoreString }}</span>
                         </button>
                     </div>
                 </div>
                 <div class="d-flex gap-2">
-                    @php
-                        $class = $song_variant->isFavorited() ? 'solid' : 'regular';
-                    @endphp
-                    <form action="{{ route('variants.toggle.favorite', $song_variant->id) }}" method="POST">
-                        @method('POST')
-                        @csrf
-                        <button type="submit" class="btn btn-primary rounded-pill"><i
-                                class="fa-{{ $class }} fa-bookmark"></i>
-                            Favorite</button>
-                    </form>
+                    <button type="submit"
+                        class="btn {{ $song_variant->isFavorited() ? 'btn-danger' : 'btn-primary' }} rounded-pill d-flex gap-2 align-items-center"
+                        id="favorite-button" data-variant="{{ $song_variant->id }}"><i
+                            class="fa-{{ $song_variant->isFavorited() ? 'solid' : 'regular' }} fa-heart"
+                            id="i-favorite"></i><span class="d-none d-sm-flex">
+                            Favorite</span></button>
 
-                    {{-- <a href="{{ route('variants.reports.create', $song_variant->id) }}"
-                        class="btn btn-primary rounded-pill"><i class="fa-solid fa-triangle-exclamation"></i>
-                        Report</a> --}}
-                    <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal"
+
+                    <button type="button" class="btn btn-primary rounded-pill d-flex gap-2 align-items-center" data-bs-toggle="modal"
                         data-bs-target="#report-modal">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                        Report
+                        <i class="fa-solid fa-triangle-exclamation"></i> <span class="d-none d-sm-flex">Report</span>
                     </button>
                 </div>
             </div>
         </div>
         <hr>
 
+        {{-- Report Modal --}}
         <div class="modal fade" tabindex="-1" id="report-modal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content bg-dark text-light">
@@ -247,7 +198,7 @@
                                 <div class="mb-3">
                                     <label for="title-input" class="form-label">Report title</label>
                                     <input type="text" class="form-control" id="title-input"
-                                        placeholder="Title report..." name="title">
+                                        placeholder="Title report..." name="title" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="content-textarea" class="form-label">Report content</label>
@@ -269,8 +220,190 @@
             </div>
         </div>
 
+        {{-- Rate Modal --}}
+        <div class="modal fade" tabindex="-1" id="rating-modal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content bg-dark text-light">
+                    @if (Auth::check())
+                        @csrf
+                        @php
+                            if ($user_rate != null) {
+                                $user_score = $user_rate->format_rating;
+                            } else {
+                                $user_score = 0;
+                            }
+                        @endphp
+                        <div class="text-light d-flex flex-column align-items-center">
+                            @php
+                                $format_rating = '';
+                                if (isset($user_rate->format_rating)) {
+                                    $format_rating = $user_rate->format_rating;
+                                }
+                            @endphp
+                            @switch(Auth::user()->score_format)
+                                @case('POINT_100')
+                                    <form action="{{ route('variant.rate', $song_variant->id) }}" method="post"
+                                        id="rating-form" class="d-flex flex-column w-100 p-4 text-center"
+                                        data-variant="{{ $song_variant->id }}">
+
+                                        <div class="input-group">
+                                            <div class="mb-3 w-100">
+                                                <label for="scoreInput" class="form-label">You score</label>
+                                                <input type="number" class="form-control" id="scoreInput"
+                                                    placeholder="Max 100 without decimal" name="score" max="100"
+                                                    min="0" step="1" value="{{ $format_rating }}">
+                                            </div>
+                                            <div class="w-100">
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    Button
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @break
+
+                                @case('POINT_10_DECIMAL')
+                                    <form action="{{ route('variant.rate', $song_variant->id) }}" method="post"
+                                        id="rating-form" class="d-flex flex-column w-100 p-4 text-center"
+                                        data-variant="{{ $song_variant->id }}"
+                                        data-scoreformat="{{ Auth::user()->score_format }}">
+
+                                        <div class="input-group">
+                                            <div class="mb-3 w-100">
+                                                <label for="scoreInput" class="form-label">You score</label>
+                                                <input type="number" class="form-control" id="scoreInput"
+                                                    placeholder="Max 10 with decimal" name="score" max="10"
+                                                    min="0" step=".1" value="{{ $format_rating }}">
+                                            </div>
+                                            <div class="w-100">
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    Button
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @break
+
+                                @case('POINT_10')
+                                    <form action="{{ route('variant.rate', $song_variant->id) }}" method="post"
+                                        id="rating-form" class="d-flex flex-column w-100 p-4 text-center"
+                                        data-variant="{{ $song_variant->id }}"
+                                        data-scoreformat="{{ Auth::user()->score_format }}">
+
+                                        <div class="input-group">
+                                            <div class="mb-3 w-100">
+                                                <label for="scoreInput" class="form-label">You score</label>
+                                                <input type="number" class="form-control" id="scoreInput"
+                                                    placeholder="Max 10 without decimal" name="score" max="10"
+                                                    min="0" step="1" value="{{ $format_rating }}">
+                                            </div>
+                                            <div class="w-100">
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    Button
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @break
+
+                                @case('POINT_5')
+                                    <form action="{{ route('variant.rate', $song_variant->id) }}" method="post"
+                                        id="rating-form" class="d-flex flex-column py-4" data-variant="{{ $song_variant->id }}">
+                                        <style>
+                                            .rate {
+                                                float: left;
+                                                height: 46px;
+                                                padding: 0 10px;
+                                            }
+
+                                            .rate:not(:checked)>input {
+                                                position: absolute;
+                                                top: -9999px;
+                                            }
+
+                                            .rate:not(:checked)>label {
+                                                float: right;
+                                                width: 1em;
+                                                overflow: hidden;
+                                                white-space: nowrap;
+                                                cursor: pointer;
+                                                font-size: 40px;
+                                                color: #ccc;
+                                            }
+
+                                            .rate:not(:checked)>label:before {
+                                                content: '★ ';
+                                            }
+
+                                            .rate>input:checked~label {
+                                                color: #ffc700;
+                                            }
+
+                                            .rate:not(:checked)>label:hover,
+                                            .rate:not(:checked)>label:hover~label {
+                                                color: #deb217;
+                                            }
+
+                                            .rate>input:checked+label:hover,
+                                            .rate>input:checked+label:hover~label,
+                                            .rate>input:checked~label:hover,
+                                            .rate>input:checked~label:hover~label,
+                                            .rate>label:hover~input:checked~label {
+                                                color: #c59b08;
+                                            }
+                                        </style>
+                                        <div class="rate">
+                                            <input type="radio" id="star5" name="score" value="100" />
+                                            <label for="star5" title="text">5 stars</label>
+                                            <input type="radio" id="star4" name="score" value="80" />
+                                            <label for="star4" title="text">4 stars</label>
+                                            <input type="radio" id="star3" name="score" value="60" />
+                                            <label for="star3" title="text">3 stars</label>
+                                            <input type="radio" id="star2" name="score" value="40" />
+                                            <label for="star2" title="text">2 stars</label>
+                                            <input type="radio" id="star1" name="score" value="20" />
+                                            <label for="star1" title="text">1 star</label>
+                                        </div>
+                                    </form>
+                                @break
+
+                                @default
+                                    <form action="{{ route('variant.rate', $song_variant->id) }}" method="post"
+                                        id="rating-form" class="d-flex flex-column w-100 p-4 text-center"
+                                        data-variant="{{ $song_variant->id }}">
+
+                                        <div class="input-group">
+                                            <div class="mb-3 w-100">
+                                                <label for="scoreInput" class="form-label">You score</label>
+                                                <input type="number" class="form-control" id="scoreInput"
+                                                    placeholder="Max 100 without decimal" name="score" max="100"
+                                                    min="0" step="1" value="{{ $format_rating }}">
+                                            </div>
+                                            <div class="w-100">
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    Button
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                            @endswitch
+                        </div>
+                    @else
+                        <div class="d-flex justify-content-center comment-form text-light text-center">
+                            <h3>Please <a class="text-light" href="{{ route('login') }}">login</a>
+                                <br>
+                                or
+                                <br>
+                                <a class="text-light" href="{{ route('register') }}">register</a> for rate
+                            </h3>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
 
 
+        {{-- Make Comment Section --}}
         <hr class="text-light">
         <div>
             <h3 class="text-light">Comments</h3>
@@ -283,96 +416,6 @@
         @endguest
         @auth
             <div class="py-2">
-                <div class="text-light mb-2 d-flex">
-                    <form action="{{ route('variant.rate', $song_variant->id) }}" method="post" class="d-flex w-100">
-                        @csrf
-                        @php
-                            if ($user_rate != null) {
-                                $user_score = $user_rate->format_rating;
-                            } else {
-                                $user_score = 0;
-                            }
-                        @endphp
-                        @switch(Auth::user()->score_format)
-                            @case('POINT_100')
-                                <div class="w-100">
-                                    <label for="score-input" class="form-label">Rate: <span
-                                            id="rangeValue">{{ $user_score }}</span>/100</label>
-                                    <div class="d-flex gap-2">
-                                        <input type="number" class="form-control" min="0" max="100" step="1"
-                                            id="score-input" name="score" value="{{ $user_score }}" required>
-                                        <button class="btn btn-primary" type="submit">Vote</button>
-                                    </div>
-                                </div>
-                            @break
-
-                            @case('POINT_10_DECIMAL')
-                                <div class="w-100">
-                                    {{-- <input type="number" max="10" min="0" step=".1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1.0 to 10.0" required> --}}
-                                    <label for="score-input" class="form-label">Rate: <span
-                                            id="rangeValue">{{ $user_score }}</span>/10</label>
-                                    <input type="range" class="form-range" min="0" max="10" step="0.1"
-                                        id="score-input" name="score" value="{{ $user_score }}" required>
-                                </div>
-                            @break
-
-                            @case('POINT_10')
-                                <div class="w-100">
-                                    {{-- <input type="number" max="10" min="0" step="1" class="form-control"
-                                                id="exampleFormControlInput1" name="score" placeholder="1 to 10" required> --}}
-                                    <label for="score-input" class="form-label">Rate: <span
-                                            id="rangeValue">{{ $user_score }}</span>/10</label>
-                                    <input type="range" class="form-range" min="0" max="10" step="1"
-                                        id="score-input" name="score" value="{{ $user_score }}" required>
-                                </div>
-                            @break
-
-                            @case('POINT_5')
-                                <span class="align-self-start">Rate</span>
-                                <div class="stars align-self-start">
-                                    <input class="star star-5" id="star-5" type="radio" name="score" value="100"
-                                        {{ $user_score == 100 ? 'checked' : '' }} />
-                                    <label class="star star-5" for="star-5"></label>
-
-                                    <input class="star star-4" id="star-4" type="radio" name="score" value="80"
-                                        {{ $user_score == 80 ? 'checked' : '' }} />
-                                    <label class="star star-4" for="star-4"></label>
-
-                                    <input class="star star-3" id="star-3" type="radio" name="score" value="60"
-                                        {{ $user_score == 60 ? 'checked' : '' }} />
-                                    <label class="star star-3" for="star-3"></label>
-
-                                    <input class="star star-2" id="star-2" type="radio" name="score" value="40"
-                                        {{ $user_score == 40 ? 'checked' : '' }} />
-                                    <label class="star star-2" for="star-2"></label>
-
-                                    <input class="star star-1" id="star-1" type="radio" name="score" value="20"
-                                        {{ $user_score == 20 ? 'checked' : '' }} />
-                                    <label class="star star-1" for="star-1"></label>
-                                </div>
-                            @break
-
-                            @default
-                                <div class="stars">
-                                    <input class="star star-5" id="star-5" type="radio" name="score" value="100" />
-                                    <label class="star star-5" for="star-5"></label>
-
-                                    <input class="star star-4" id="star-4" type="radio" name="score" value="80" />
-                                    <label class="star star-4" for="star-4"></label>
-
-                                    <input class="star star-3" id="star-3" type="radio" name="score" value="60" />
-                                    <label class="star star-3" for="star-3"></label>
-
-                                    <input class="star star-2" id="star-2" type="radio" name="score" value="40" />
-                                    <label class="star star-2" for="star-2"></label>
-
-                                    <input class="star star-1" id="star-1" type="radio" name="score" value="20" />
-                                    <label class="star star-1" for="star-1"></label>
-                                </div>
-                        @endswitch
-                    </form>
-                </div>
                 <div>
                     <form action="{{ route('comments.store') }}" method="post" class="d-flex flex-column gap-2">
                         @csrf
@@ -385,6 +428,7 @@
             </div>
         @endauth
 
+        {{-- All Coments Section --}}
         {{-- @if ($comments_featured != null && count($comments_featured) > 0)
             <div class="my-2">
                 <h4 class="text-light my-2">Featured comments</h4>
@@ -567,4 +611,339 @@
     <script>
         const player = new Plyr('#player');
     </script>
+
+    @auth
+        <script>
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            const baseUrl = document.querySelector('meta[name="base-url"]').content;
+            const token = localStorage.getItem('api_token');
+
+            const rateForm = document.querySelector('#rating-form');
+            const ratingBtn = document.querySelector('#rating-button');
+            const scoreSpan = document.querySelector('#score-span');
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", (event) => {
+                const likeBtn = document.querySelector('#like-button');
+                const likesSpan = document.querySelector('#like-counter');
+
+                const dislikeBtn = document.querySelector('#dislike-button');
+                const dislikesSpan = document.querySelector('#dislike-counter');
+
+                const favoriteBtn = document.querySelector('#favorite-button');
+
+                likeBtn.addEventListener("click", likeVariant);
+                dislikeBtn.addEventListener("click", dislikeVariant);
+                favoriteBtn.addEventListener("click", toggleFavorite);
+
+                function likeVariant() {
+                    try {
+                        fetch(baseUrl + "/api/variants/" + likeBtn.dataset.variant + "/like", {
+                            headers: {
+                                'X-Request-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Authorization': 'Bearer ' + token,
+                            },
+                            method: "POST",
+                            body: JSON.stringify({
+                                songVariant_id: likeBtn.dataset.variant,
+                            }),
+                        }).then(response => {
+                            return response.json()
+                        }).then((data) => {
+                            likesSpan.textContent = data.likesCount;
+                            dislikesSpan.textContent = data.dislikesCount;
+                        });
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+
+                function dislikeVariant() {
+                    try {
+                        fetch(baseUrl + "/api/variants/" + dislikeBtn.dataset.variant + "/dislike", {
+                            headers: {
+                                'X-Request-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Authorization': 'Bearer ' + token,
+                            },
+                            method: "POST",
+                            body: JSON.stringify({
+                                songVariant_id: dislikeBtn.dataset.variant,
+                            }),
+                        }).then(response => {
+                            return response.json()
+                        }).then((data) => {
+                            //console.log(data);
+                            likesSpan.textContent = data.likesCount;
+                            dislikesSpan.textContent = data.dislikesCount;
+                        });
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+
+                function toggleFavorite() {
+                    try {
+                        fetch(baseUrl + "/api/variants/" + favoriteBtn.dataset.variant + "/favorite", {
+                            headers: {
+                                'X-Request-With': 'XMLHttpRequest',
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken,
+                                'Authorization': 'Bearer ' + token,
+                            },
+                            method: "POST",
+                            body: JSON.stringify({
+                                songVariant_id: favoriteBtn.dataset.variant,
+                            }),
+                        }).then(response => {
+                            return response.json()
+                        }).then((data) => {
+                            //console.log(data);
+                            //console.log(iFavorite.classList);
+                            let iFavorite = document.querySelector('#i-favorite');
+                            if (data.favorite == true) {
+                                iFavorite.classList.remove('fa-regular');
+                                iFavorite.classList.add('fa-solid');
+                                favoriteBtn.classList.remove('btn-primary');
+                                favoriteBtn.classList.add('btn-danger');
+                            } else {
+                                iFavorite.classList.remove('fa-solid');
+                                iFavorite.classList.add('fa-regular');
+                                favoriteBtn.classList.remove('btn-danger');
+                                favoriteBtn.classList.add('btn-primary');
+                            }
+                        });
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+
+            });
+        </script>
+
+        @switch(Auth::user()->score_format)
+            @case('POINT_100')
+                <script>
+                    rateForm.addEventListener("submit", function(event) {
+                        event.preventDefault()
+
+                        let userScore = document.querySelector('#scoreInput').value;
+
+                        if (userScore != '' && userScore > 0 && userScore <= 100) {
+                            rate(userScore)
+                        }
+
+                        function rate(userScore) {
+                            try {
+                                fetch(baseUrl + "/api/variants/" + rateForm.dataset.variant + "/rate", {
+                                    headers: {
+                                        'X-Request-With': 'XMLHttpRequest',
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken,
+                                        'Authorization': 'Bearer ' + token,
+                                    },
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                        songVariant_id: rateForm.dataset.variant,
+                                        score: userScore,
+                                    }),
+                                }).then(response => {
+                                    return response.json()
+                                }).then((data) => {
+                                    //console.log(data);
+                                    ratingBtn.classList.remove('btn-primary');
+                                    ratingBtn.classList.add('btn-warning');
+                                    scoreSpan.textContent = data.scoreString;
+
+                                });
+                            } catch (error) {
+                                //console.log(error)
+                            }
+                        }
+
+                    });
+                </script>
+            @break
+
+            @case('POINT_10_DECIMAL')
+                <script>
+                    rateForm.addEventListener("submit", function(event) {
+                        event.preventDefault()
+
+                        let userScore = document.querySelector('#scoreInput').value;
+
+                        if (userScore != '' && userScore > 0 && userScore <= 10) {
+                            rate(userScore)
+                        }
+
+                        function rate(userScore) {
+                            try {
+                                fetch(baseUrl + "/api/variants/" + rateForm.dataset.variant + "/rate", {
+                                    headers: {
+                                        'X-Request-With': 'XMLHttpRequest',
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken,
+                                        'Authorization': 'Bearer ' + token,
+                                    },
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                        songVariant_id: rateForm.dataset.variant,
+                                        score: userScore,
+                                    }),
+                                }).then(response => {
+                                    return response.json()
+                                }).then((data) => {
+                                    //console.log(data);
+                                    ratingBtn.classList.remove('btn-primary');
+                                    ratingBtn.classList.add('btn-warning');
+                                    scoreSpan.textContent = data.scoreString;
+
+                                });
+                            } catch (error) {
+                                //console.log(error)
+                            }
+                        }
+
+                    });
+                </script>
+            @break
+
+            @case('POINT_10')
+                <script>
+                    rateForm.addEventListener("submit", function(event) {
+                        event.preventDefault()
+
+                        let userScore = document.querySelector('#scoreInput').value;
+
+                        if (userScore != '' && userScore > 0 && userScore <= 10) {
+                            rate(userScore)
+                            console.log('score: ' + userScore);
+                        }
+
+                        function rate(userScore) {
+                            try {
+                                fetch(baseUrl + "/api/variants/" + rateForm.dataset.variant + "/rate", {
+                                    headers: {
+                                        'X-Request-With': 'XMLHttpRequest',
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken,
+                                        'Authorization': 'Bearer ' + token,
+                                    },
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                        songVariant_id: rateForm.dataset.variant,
+                                        score: userScore,
+                                    }),
+                                }).then(response => {
+                                    return response.json()
+                                }).then((data) => {
+                                    //console.log(data);
+                                    ratingBtn.classList.remove('btn-primary');
+                                    ratingBtn.classList.add('btn-warning');
+                                    scoreSpan.textContent = data.scoreString;
+                                });
+                            } catch (error) {
+                                //console.log(error)
+                            }
+                        }
+
+                    });
+                </script>
+            @break
+
+            @case('POINT_5')
+                <script>
+                    const checkboxes = document.querySelectorAll('#rating-form input[name="score"]');
+
+                    function actualizarPuntuacionesSeleccionadas() {
+                        const checkedValue = Array.from(checkboxes)
+                            .filter(cb => cb.checked)
+                            .map(cb => cb.value);
+
+                        userScore = checkedValue.join();
+
+                        if (checkedValue.join() != 0) {
+                            rate(userScore)
+                        }
+                    }
+
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', actualizarPuntuacionesSeleccionadas);
+                    });
+
+                    function rate(userScore) {
+                        try {
+                            fetch(baseUrl + "/api/variants/" + rateForm.dataset.variant + "/rate", {
+                                headers: {
+                                    'X-Request-With': 'XMLHttpRequest',
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken,
+                                    'Authorization': 'Bearer ' + token,
+                                },
+                                method: "POST",
+                                body: JSON.stringify({
+                                    songVariant_id: rateForm.dataset.variant,
+                                    score: userScore,
+                                }),
+                            }).then(response => {
+                                return response.json()
+                            }).then((data) => {
+                                //console.log(data);
+                                ratingBtn.classList.remove('btn-primary');
+                                ratingBtn.classList.add('btn-warning');
+                                scoreSpan.textContent = data.scoreString;
+                            });
+                        } catch (error) {
+                            //console.log(error)
+                        }
+                    }
+                </script>
+            @break
+
+            @default
+                <script>
+                    rateForm.addEventListener("submit", function(event) {
+                        event.preventDefault()
+
+                        let userScore = document.querySelector('#scoreInput').value;
+
+                        if (userScore != '' && userScore > 0 && userScore <= 100) {
+                            rate(userScore)
+                        }
+
+                        function rate(userScore) {
+                            try {
+                                fetch(baseUrl + "/api/variants/" + rateForm.dataset.variant + "/rate", {
+                                    headers: {
+                                        'X-Request-With': 'XMLHttpRequest',
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': csrfToken,
+                                        'Authorization': 'Bearer ' + token,
+                                    },
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                        songVariant_id: rateForm.dataset.variant,
+                                        score: userScore,
+                                    }),
+                                }).then(response => {
+                                    return response.json()
+                                }).then((data) => {
+                                    //console.log(data);
+                                    ratingBtn.classList.remove('btn-primary');
+                                    ratingBtn.classList.add('btn-warning');
+                                    scoreSpan.textContent = data.scoreString;
+
+                                });
+                            } catch (error) {
+                                //console.log(error)
+                            }
+                        }
+
+                    });
+                </script>
+        @endswitch
+    @endauth
 @endsection

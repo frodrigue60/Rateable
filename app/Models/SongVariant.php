@@ -109,6 +109,19 @@ class SongVariant extends Model
         }
     }
 
+    public function getViewsStringAttribute()
+    {
+        if ($this->views >= 1000000) {
+            $views = number_format(intval($this->views / 1000000), 0) . 'M';
+        } elseif ($this->views >= 1000) {
+            $views = number_format(intval($this->views / 1000), 0) . 'K';
+        } else {
+            $views = $this->views;
+        }
+
+        return $views;
+    }
+
     public function getUrlAttribute()
     {
         return route('variants.show', [
@@ -116,6 +129,40 @@ class SongVariant extends Model
             'song_slug' => $this->song->slug,
             'variant_version_number' => $this->version_number,
         ]);
+    }
+
+    public function getScoreStringAttribute()
+    {
+        $score_string = '';
+        if (Auth::User()) {
+            switch (Auth::User()->score_format) {
+                case 'POINT_5':
+                    $score = round($this->averageRating / 20);
+                    $score_string = $score != null ? $score . '/5' : 'N/A';
+                    break;
+                case 'POINT_10':
+                    $score = round($this->averageRating / 10);
+                    $score_string = $score != null ? $score . '/10' : 'N/A';
+                    break;
+                case 'POINT_10_DECIMAL':
+                    $score = round($this->averageRating / 10, 1);
+                    $score_string = $score != null ? $score . '/10' : 'N/A';
+                    break;
+                case 'POINT_100':
+                    $score = round($this->averageRating);
+                    $score_string = $score != null ? $score . '/100' : 'N/A';
+                    break;
+                default:
+                    $score = round($this->averageRating);
+                    $score_string = $score != null ? $score . '/10' : 'N/A';
+                    break;
+            }
+        } else {
+            $score = round($this->averageRating);
+            $score_string = $score != null ? $score . '/100' : 'N/A';
+        }
+
+        return $score_string;
     }
 
     // Método para obtener los posts que un usuario ha dado like
@@ -164,7 +211,8 @@ class SongVariant extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
-    public function reports(){
+    public function reports()
+    {
         return $this->hasMany(Report::class);
     }
 
