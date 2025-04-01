@@ -22,36 +22,16 @@
             <div class="item-info" style="background-image: url({{ $img_url }})">
                 <div class="item-info-filter"></div>
                 @isset($variant->song)
-                    @php
-                        $song_id = $variant->song->id;
-                        $post_slug = $variant->song->post->slug;
-                        $suffix = $variant->song->slug != null ? $variant->song->slug : $variant->song->type;
-                        $version = $variant->version_number;
-                        $forward_text =
-                            ($variant->song->slug ? $variant->song->slug : $variant->song->type) .
-                            ' v' .
-                            $variant->version_number;
-
-                        $song_name = null;
-
-                        $song_name =
-                            $variant->song->song_romaji ?? ($variant->song->song_en ?? $variant->song->song_jp);
-                    @endphp
                     <div class="item-song-info">
                         {{-- SONG TITLE --}}
                         <div class="text-ellipsis">
-                            @if ($song_name != null)
-                                <a class="no-deco text-light bold" href="{{ $variant->url }}">{{ $song_name }} </a>
-                            @else
-                                <strong>N/A</strong>
-                            @endif
+                            <a class="no-deco text-light bold" href="{{ $variant->url }}">{{ $variant->song->name }} </a>
                         </div>
                         {{-- SONG ARTISTS --}}
                         <div class="text-ellipsis">
                             @if (isset($variant->song->artists) && count($variant->song->artists) != 0)
                                 @foreach ($variant->song->artists as $index => $artist)
-                                    <a class="no-deco text-light"
-                                        href="{{ $artist->url }}">{{ $artist->name }}</a>
+                                    <a class="no-deco text-light" href="{{ $artist->url }}">{{ $artist->name }}</a>
                                     @if ($index < count($variant->song->artists) - 1)
                                         ,
                                     @endif
@@ -69,8 +49,13 @@
                 </div>
             </div>
             <div class="item-score">
-                <span>{{ $variant->score != null ? $variant->score : 'N/A' }} <i class="fa fa-star"
-                        aria-hidden="true"></i></span>
+                <span>{{ $variant->score }}
+                    @if ($variant->userScore)
+                        <i style="color: rgb(162, 240, 181)" class="fa fa-star" aria-hidden="true"></i>
+                    @else
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                    @endif
+                </span>
             </div>
         </div>
     @endisset

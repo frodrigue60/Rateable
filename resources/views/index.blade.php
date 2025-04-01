@@ -35,10 +35,6 @@
                 <section class="container-items limit-items-index">
                     @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
                         <h2 hidden class="text-light">Best Anime Openings of All Time</h2>
-                    @else
-                        @if (Request::routeIs('seasonal.ranking') && isset($currentSeason))
-                            <h2 hidden>Top Anime Openings {{ $currentSeason->name }}</h2>
-                        @endif
                     @endif
                     <div class="top-header-ranking">
                         <div>
@@ -46,16 +42,7 @@
                         </div>
                         <div>
                             @if (Request::routeIs('/'))
-
-                                <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Ranking</a>
-                            @else
-                                @if (Request::routeIs('global.ranking'))
-                                    <a href="{{ route('seasonal.ranking') }}" class="btn btn-sm color4">Seasonal Ranking</a>
-                                @else
-                                    @if (Request::routeIs('seasonal.ranking'))
-                                        <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Global Ranking</a>
-                                    @endif
-                                @endif
+                                <a href="{{ route('ranking') }}" class="btn btn-sm color4">Ranking</a>
                             @endif
                         </div>
 
@@ -70,10 +57,6 @@
                 <section class="container-items limit-items-index">
                     @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
                         <h2 hidden class="text-light">Best Anime Endings of All Time</h2>
-                    @else
-                        @if (Request::routeIs('seasonal.ranking') && isset($currentSeason))
-                            <h2 hidden>Top Anime Endings {{ $currentSeason->name }}</h2>
-                        @endif
                     @endif
                     <div class="top-header-ranking">
                         <div>
@@ -81,18 +64,7 @@
                         </div>
                         <div>
                             @if (Request::routeIs('/'))
-
-                                <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Ranking</a>
-                            @else
-                                @if (Request::routeIs('global.ranking'))
-                                    <a href="{{ route('seasonal.ranking') }}" class="btn btn-sm color4">Seasonal
-                                        Ranking</a>
-                                @else
-                                    @if (Request::routeIs('seasonal.ranking'))
-                                        <a href="{{ route('global.ranking') }}" class="btn btn-sm color4">Global
-                                            Ranking</a>
-                                    @endif
-                                @endif
+                                <a href="{{ route('ranking') }}" class="btn btn-sm color4">Ranking</a>
                             @endif
                         </div>
                     </div>

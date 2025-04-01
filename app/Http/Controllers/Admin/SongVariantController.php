@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use App\Models\SongVariant;
-use App\Models\Video;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Breadcrumb;
 
 class SongVariantController extends Controller

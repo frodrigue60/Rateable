@@ -1,7 +1,7 @@
 @php
     $j = 1;
 @endphp
-@foreach ($endings as $variant)
+@foreach ($items as $variant)
     @isset($variant->song->post)
         @php
             $img_url = null;

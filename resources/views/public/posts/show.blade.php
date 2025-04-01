@@ -173,7 +173,7 @@
                                                     @php
                                                         $artistShowRoute = route('artists.show', [
                                                             $item->id,
-                                                            $item->name_slug,
+                                                            $item->slug,
                                                         ]);
                                                         if ($item->name_jp != null) {
                                                             $artistName = $item->name . ' (' . $item->name_jp . ')';
@@ -289,7 +289,7 @@
                                                     @php
                                                         $artistShowRoute = route('artists.show', [
                                                             $item->id,
-                                                            $item->name_slug,
+                                                            $item->slug,
                                                         ]);
                                                         if ($item->name_jp != null) {
                                                             $artistName = $item->name . ' (' . $item->name_jp . ')';

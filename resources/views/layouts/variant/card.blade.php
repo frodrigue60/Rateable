@@ -1,12 +1,10 @@
 @php
-    $song_id = $variant->song->id;
-    $post_slug = $variant->song->post->slug;
-    $suffix = $variant->song->slug != null ? $variant->song->slug : $variant->song->type;
     $version = $variant->version_number;
     $forward_text =
         ($variant->song->slug ? $variant->song->slug : $variant->song->type) . 'v' . $variant->version_number;
 
     $post = $variant->song->post;
+    $title = $post->title;
 
     if (Storage::disk('public')->exists($post->thumbnail)) {
         $thumbnail_url = Storage::url($post->thumbnail);
@@ -14,22 +12,13 @@
         $thumbnail_url = $post->thumbnail_src;
     }
 
-    $title = $variant->song->post->title;
-
-    if ($variant->views >= 1000000) {
-        $views = number_format(intval($variant->views / 1000000), 0) . 'M';
-    } elseif ($variant->views >= 1000) {
-        $views = number_format(intval($variant->views / 1000), 0) . 'K';
+    $likeCount = 0;
+    if ($variant->likesCount >= 1000000) {
+        $likeCount = number_format(intval($variant->likesCount / 1000000), 0) . 'M';
+    } elseif ($variant->likesCount >= 1000) {
+        $likeCount = number_format(intval($variant->likesCount / 1000), 0) . 'K';
     } else {
-        $views = $variant->views;
-    }
-    $likeCount = null;
-    if ($variant->likeCount >= 1000000) {
-        $likeCount = number_format(intval($variant->likeCount / 1000000), 0) . 'M';
-    } elseif ($variant->likeCount >= 1000) {
-        $likeCount = number_format(intval($variant->likeCount / 1000), 0) . 'K';
-    } else {
-        $likeCount = $variant->likeCount;
+        $likeCount = $variant->likesCount;
     }
 @endphp
 
@@ -46,16 +35,14 @@
                 title="{{ $title }}">
             <div class="tarjeta-footer text-light">
                 <span>{{ $likeCount }} <i class="fa-solid fa-heart"></i></span>
-                <span>{{ $views }} <i class="fa-solid fa-eye"></i></span>
-                @if (isset($variant->rating))
-                    <span style="color: rgb(162, 240, 181)">{{ $variant->rating != null ? $variant->rating : '0' }}
+                <span>{{ $variant->viewsString }} <i class="fa-solid fa-eye"></i></span>
+                <span>{{ $variant->score }}
+                    @if (isset($variant->userScore))
+                        <i style="color: rgb(162, 240, 181);" class="fa-solid fa-star" aria-hidden="true"></i>
+                    @else
                         <i class="fa-solid fa-star" aria-hidden="true"></i>
-                    </span>
-                @else
-                    <span>{{ $variant->score != null ? $variant->score : '0' }} <i class="fa-solid fa-star"
-                            aria-hidden="true"></i>
-                    </span>
-                @endif
+                    @endif
+                </span>
             </div>
         </div>
     </a>

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Favorite;
 use App\Models\Rateable;
+use PhpParser\Node\Stmt\Return_;
 
 class SongVariant extends Model
 {
@@ -131,40 +132,6 @@ class SongVariant extends Model
         ]);
     }
 
-    public function getScoreStringAttribute()
-    {
-        $score_string = '';
-        if (Auth::User()) {
-            switch (Auth::User()->score_format) {
-                case 'POINT_5':
-                    $score = round($this->averageRating / 20);
-                    $score_string = $score != null ? $score . '/5' : 'N/A';
-                    break;
-                case 'POINT_10':
-                    $score = round($this->averageRating / 10);
-                    $score_string = $score != null ? $score . '/10' : 'N/A';
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $score = round($this->averageRating / 10, 1);
-                    $score_string = $score != null ? $score . '/10' : 'N/A';
-                    break;
-                case 'POINT_100':
-                    $score = round($this->averageRating);
-                    $score_string = $score != null ? $score . '/100' : 'N/A';
-                    break;
-                default:
-                    $score = round($this->averageRating);
-                    $score_string = $score != null ? $score . '/10' : 'N/A';
-                    break;
-            }
-        } else {
-            $score = round($this->averageRating);
-            $score_string = $score != null ? $score . '/100' : 'N/A';
-        }
-
-        return $score_string;
-    }
-
     // Método para obtener los posts que un usuario ha dado like
     public function scopeWhereLikedBy($query, $userId)
     {
@@ -191,10 +158,16 @@ class SongVariant extends Model
         );
     }
 
-    // Relación polimórfica para favoritos
+    // Relación polimórfica para favoritos, retorna array con la relacion
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'favoritable');
+    }
+
+    // retorna el la cantidad de veces que ha sido marcado como favorito
+    public function getFavoritesCountAttribute()
+    {
+        return $this->favorites()->count();
     }
 
     // Método para verificar si el usuario actual ha marcado este post como favorito
@@ -223,5 +196,59 @@ class SongVariant extends Model
     public function season()
     {
         return $this->belongsTo(Season::class);
+    }
+
+    // Accesor para manejar el formato de puntuación
+    public function getFormattedScoresAttribute()
+    {
+        $user = auth()->user();
+        $variant = $this;
+
+        $factor = 1; // Valor por defecto (POINT_100)
+        $isIntegerFormat = true; // Por defecto, asumimos formatos enteros
+
+        if ($user) {
+            switch ($user->score_format) {
+                case 'POINT_100':
+                    $factor = 1;
+                    break;
+                case 'POINT_10_DECIMAL':
+                    $factor = 0.1;
+                    $isIntegerFormat = false; // Permitir decimales
+                    break;
+                case 'POINT_10':
+                    $factor = 1 / 10;
+                    break;
+                case 'POINT_5':
+                    $factor = 1 / 20;
+                    $isIntegerFormat = false; // Permitir decimales (ej: 4.5 estrellas)
+                    break;
+            }
+
+            // Asignar user_score (siempre como float cuando hay decimales)
+            if ($userRating = $this->getUserRating($variant->id, $user->id)) {
+                $variant->user_score = $userRating->rating * $factor;
+            } else {
+                $variant->user_score = null;
+            }
+        }
+
+        // Calcular score promedio (decimal o entero según el formato)
+        $variant->score = $isIntegerFormat
+            ? (int) round($variant->averageRating * $factor)  // Formato entero
+            : round($variant->averageRating * $factor, 1);    // Formato decimal (1 dígito)
+
+        return $variant;
+    }
+
+    public function getUserRating($song_variant_id, $user_id)
+    {
+        $userRating = DB::table('ratings')
+            ->where('rateable_type', SongVariant::class)
+            ->where('rateable_id', $song_variant_id)
+            ->where('user_id', $user_id)
+            ->first(['rating']);
+
+        return $userRating;
     }
 }

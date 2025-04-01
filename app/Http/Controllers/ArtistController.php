@@ -13,7 +13,7 @@ use stdClass;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Conner\Tagging\Model\Tag;
+use App\Models\SongVariant;
 
 
 class ArtistController extends Controller
@@ -34,23 +34,18 @@ class ArtistController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @param  mixed  $name_slug
+     * @param  mixed  $slug
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, $slug)
     {
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-            $user = Auth::user();
-        } else {
-            $score_format = null;
-        }
+        $user = Auth::check() ? Auth::user() : null;
         //$tags = Tag::all();
         $type = $request->type;
         $sort = $request->sort;
         $name = $request->name;
-        $year = Year::where('name',$request->year)->first();
-        $season = Season::where('name',$request->season)->first();
+        $year = Year::where('name', $request->year)->first();
+        $season = Season::where('name', $request->season)->first();
 
         $requested = new stdClass;
         $requested->type = $type;
@@ -75,7 +70,7 @@ class ArtistController extends Controller
             ['name' => 'Popular', 'value' => 'likeCount']
         ];
 
-        $artist = Artist::where('name_slug', $slug)->first();
+        $artist = Artist::where('slug', $slug)->first();
 
         $song_variants = Song::whereHas('artists', function ($query) use ($artist) {
             $query->where('artists.id', $artist->id);
@@ -105,7 +100,7 @@ class ArtistController extends Controller
         //$songs = $this->setScore($query, $score_format);
         //$songs = $this->sort($sort, $songs);
 
-        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
         $song_variants = $this->sort_variants($sort, $song_variants);
         $song_variants = $this->paginate($song_variants, 24)->withQueryString();
 
@@ -233,76 +228,47 @@ class ArtistController extends Controller
         ];
         return $data;
     }
-    public function setScoreOnlyVariants($variantsArray, $score_format)
+    public function setScoreOnlyVariants($variants, $user = null)
     {
-        /* $variantsArray->each(function ($variant) use ($score_format) {
-            $variant->score = null;
-            $variant->user_score = null;
-            switch ($score_format) {
-                case 'POINT_100':
-                    $variant->score = round($variant->averageRating);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating);
-                    }
-
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $variant->score = round($variant->averageRating / 10, 1);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating / 10, 1);
-                    }
-
-                    break;
-                case 'POINT_10':
-                    $variant->score = round($variant->averageRating / 10);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating / 10);
-                    }
-
-                    break;
-                case 'POINT_5':
-                    $variant->score = round($variant->averageRating / 20);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating / 20);
-                    }
-
-                    break;
-                default:
-                    $variant->score = round($variant->averageRating / 10);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating / 10);
-                    }
-                    break;
-            }
-        });
-        return $variantsArray; */
-
-        $variantsArray->each(function ($variant) use ($score_format) {
+        $variants->each(function ($variant) use ($user) {
+            $variant->userScore = null;
             $factor = 1;
+            $isDecimalFormat = false; // Determina si el formato permite decimales
 
-            switch ($score_format) {
-                case 'POINT_100':
-                    $factor = 1;
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $factor = 0.1;
-                    break;
-                case 'POINT_10':
-                    $factor = 1 / 10;
-                    break;
-                case 'POINT_5':
-                    $factor = 1 / 20;
-                    break;
-                default:
-                    $factor = 1 / 10;
-                    break;
+            if ($user) {
+                switch ($user->score_format) {
+                    case 'POINT_100':
+                        $factor = 1;
+                        break;
+                    case 'POINT_10_DECIMAL':
+                        $factor = 0.1;
+                        $isDecimalFormat = true;
+                        break;
+                    case 'POINT_10':
+                        $factor = 1 / 10;
+                        break;
+                    case 'POINT_5':
+                        $factor = 1 / 20;
+                        $isDecimalFormat = true;
+                        break;
+                    default:
+                        $factor = 1;
+                        break;
+                }
+
+                if ($userRating = $this->getUserRating($variant->id, $user->id)) {
+                    $variant->userScore = $isDecimalFormat
+                        ? round($userRating->rating * $factor, 1) // Conserva 1 decimal
+                        : (int) round($userRating->rating * $factor); // Fuerza entero
+                }
             }
 
-            $variant->score = round($variant->averageRating * $factor);
-            $variant->user_score = $variant->rating ? round($variant->rating * $factor) : null;
+            $variant->score = $isDecimalFormat
+                ? round($variant->averageRating * $factor, 1) // Conserva 1 decimal
+                : (int) round($variant->averageRating * $factor); // Fuerza entero
         });
 
-        return $variantsArray;
+        return $variants;
     }
     public function sort_variants($sort, $song_variants)
     {
@@ -340,5 +306,16 @@ class ArtistController extends Controller
                 return $song_variants;
                 break;
         }
+    }
+
+    public function getUserRating($song_variant_id, $user_id)
+    {
+        $user_rating = DB::table('ratings')
+            ->where('rateable_type', SongVariant::class)
+            ->where('rateable_id', $song_variant_id)
+            ->where('user_id', $user_id)
+            ->first(['rating']);
+
+        return $user_rating;
     }
 }

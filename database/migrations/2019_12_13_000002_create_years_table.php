@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedSmallInteger('name'); // Año (por ejemplo, 2023)
             $table->timestamps();
+            $table->boolean('current')->default(false);
         });
     }
 

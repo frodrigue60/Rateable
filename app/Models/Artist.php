@@ -12,7 +12,7 @@ class Artist extends Model
     protected $fillable = [
         'name',
         'name_jp',
-        'name_slug',
+        'slug',
     ];
 
     /* public function posts()
@@ -39,7 +39,7 @@ class Artist extends Model
     public function getUrlAttribute()
     {
         return route('artists.show', [
-            'slug' => $this->name_slug,
+            'slug' => $this->slug,
         ]);
     }
 }

@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $password = 'a12edc21cd';
         $post = new User;
         $post->name = 'Luis Rodz';
+        $post->slug = Str::slug($post->name);
         $post->email = 'frodrigue60@gmail.com';
         $post->password = bcrypt($password);
         $post->type = 'admin';

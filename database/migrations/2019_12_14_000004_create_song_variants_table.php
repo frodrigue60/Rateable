@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('version_number')->default(1);
             $table->foreignId('song_id')->references('id')->on('songs')->onDelete('cascade');
             $table->unsignedBigInteger('views')->default(0);
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->foreignId('season_id')->references('id')->on('seasons')->onDelete('cascade');
             $table->foreignId('year_id')->references('id')->on('years')->onDelete('cascade');
             $table->timestamps();

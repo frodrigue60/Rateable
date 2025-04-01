@@ -39,7 +39,7 @@
         @if (Request::routeIs('artists.show'))
             <div class="top-header color1  mb-1 mt-1">
                 <h2><a class="no-deco text-light"
-                        href="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}">{{ $artist->name }}
+                        href="{{ route('artists.show', [$artist->id, $artist->slug]) }}">{{ $artist->name }}
                         {{ $artist->name_jp != null ? '(' . $artist->name_jp . ')' : '' }}</a></h2>
             </div>
         @endif
@@ -57,7 +57,7 @@
                         <form id="form-filter" action="{{ route('user.list', $user->id) }}" method="get">
                     @endif
                     @if (Request::routeIs('artists.show'))
-                        <form id="form-filter" action="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}"
+                        <form id="form-filter" action="{{ route('artists.show', [$artist->id, $artist->slug]) }}"
                             method="get">
                     @endif
                     {{-- TYPE --}}

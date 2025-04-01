@@ -49,31 +49,19 @@
 @endsection
 @section('content')
     <div class="container mb-3 text-light">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-center align-items-center">
             <h2 class="p-0 m-0">{{ $currentSeason->name }} {{ $currentYear->name }}</h2>
-            {{-- <button class="btn btn-secondary text-light">
-                <i class="fa-solid fa-ranking-star"></i>
-            </button> --}}
-        </div>
-        <hr>
-        <div>
-            <div class="my-2">
-                <h3>OPENINGS</h3>
-            </div>
-            <div class="contenedor-tarjetas mb-3" id="div-openings">
-                {{-- @foreach ($openings as $variant)
-                    @include('layouts.variant.card')
-                @endforeach --}}
-            </div>
         </div>
         <div>
-            <div class="my-2">
-                <h3>ENDINGS</h3>
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+                <h3 id="section-header" class="p-0 m-0">OPENINGS</h3>
+                <button type="button" class="btn btn-primary" id="toggle-type-btn">
+                    <i class="fa-solid fa-rotate"></i>
+                </button>
+
             </div>
-            <div class="contenedor-tarjetas" id="div-endings">
-                {{-- @foreach ($endings as $variant)
-                    @include('layouts.variant.card')
-                @endforeach --}}
+            <div class="contenedor-tarjetas mb-3" id="content-container">
+                {{-- DATA --}}
             </div>
         </div>
     </div>
@@ -82,51 +70,70 @@
 @section('script')
     <script>
         document.addEventListener("DOMContentLoaded", (event) => {
-            console.log('DOM LOADED');
+            //console.log('DOM LOADED');
             const baseUrl = document.querySelector('meta[name="base-url"]').content;
             const csrf_token = document.querySelector('meta[name="csrf-token"]').content;
-            const divOpenings = document.querySelector('#div-openings');
-            const divEndings = document.querySelector('#div-endings');
+            const token = localStorage.getItem('api_token');
 
-            fetch(baseUrl + '/api/seasonal', {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-Requested-With": "XMLHttpRequest",
-                        'X-CSRF-TOKEN': csrf_token,
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        console.log(response.status);
-                        return;
-                    } else {
-                        return response.json();
-                    }
-                })
-                .then(data => {
-                    if (data === "") {
-                        console.error("No data from backend");
-                        return;
-                    } else {
-                        //console.log(data);
+            // Estado inicial
+            let currentType = 'OP';
+            const contentContainer = document.getElementById('content-container');
+            const sectionHeader = document.getElementById('section-header');
+            const toggleBtn = document.getElementById('toggle-type-btn');
 
-                        divOpenings.innerHTML += data.openings;
-                        divEndings.innerHTML += data.endings;
+            fetchData(currentType);
 
-                        /* let titles = document.querySelectorAll('.post-titles');
+            // Función para hacer el fetch
+            async function fetchData(type) {
+                toggleBtn.disabled = true;
 
-                        function cutTitles() {
-                            titles.forEach(title => {
-                                if (title.textContent.length > 25) {
-                                    title.textContent = title.textContent.substr(0, 25) + "...";
-                                }
-                            });
-                        }
-                        cutTitles(); */
-                    }
-                })
-                .catch(error => console.error(error));
+                try {
+                    const response = await fetch(baseUrl + '/api/seasonal', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrf_token,
+                            'Authorization': 'Bearer ' + token,
+                        },
+                        body: JSON.stringify({
+                            type: type
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('Network response was not ok');
+
+                    const data = await response.json();
+
+                    renderData(data);
+                    updateHeader(type);
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    // Mostrar mensaje de error al usuario
+                    contentContainer.innerHTML = `<p class="error">Error loading ${type} data</p>`;
+                } finally {
+                    toggleBtn.disabled = false;
+                }
+            }
+
+            // Función para actualizar el encabezado
+            function updateHeader(type) {
+                sectionHeader.textContent = type === 'OP' ?
+                    'OPENINGS' :
+                    'ENDINGS';
+            }
+
+            // Función para renderizar datos (ejemplo básico)
+            function renderData(data) {
+                contentContainer.innerHTML = data.themes;
+
+            }
+
+            // Manejador del botón
+            toggleBtn.addEventListener('click', () => {
+                currentType = currentType === 'OP' ? 'ED' : 'OP';
+                fetchData(currentType);
+            });
         });
     </script>
 @endsection

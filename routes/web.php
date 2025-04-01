@@ -45,8 +45,6 @@ Route::get('/',       [PostController::class, 'index'])->name('/');
 
 Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
 Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
-Route::get('/seasonal-ranking',       [PostController::class, 'seasonalRanking'])->name('seasonal.ranking');
-Route::get('/global-ranking',       [PostController::class, 'globalRanking'])->name('global.ranking');
 Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/users/{slug}', [UserController::class, 'userList'])->name('user.list');
@@ -56,6 +54,7 @@ Route::get('/anime/{slug}',   [PostController::class, 'show'])->name('post.show'
 Route::get('/anime/{anime_slug}/{song_slug}/v{variant_version_number}', [SongVariantController::class, 'show'])->name('variants.show');
 
 Route::get('/seasonal',   [SongVariantController::class, 'seasonal'])->name('seasonal');
+Route::get('/ranking',   [SongVariantController::class, 'ranking'])->name('ranking');
 
 Route::get('/offline', function () {
     return view('offline');

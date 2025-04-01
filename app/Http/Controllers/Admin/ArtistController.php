@@ -24,7 +24,7 @@ class ArtistController extends Controller
     {
         $artists =  Artist::all();
         $artists = $artists->sortByDesc('created_at');
-        $artists = $this->paginate($artists);
+        $artists = $this->paginate($artists, 15);
         return view('admin.artists.index', compact('artists'));
     }
 
@@ -64,14 +64,14 @@ class ArtistController extends Controller
         }
 
         $artist = new Artist();
-        $name_slug = Str::slug($name);
+        
         $artist->name = $name;
 
         if ($request->name_jp) {
             $artist->name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
         }
 
-        $artist->name_slug = $name_slug;
+        $artist->slug = $this->generateUniqueSlug($request->name);
 
         if ($artist->save()) {
             return redirect(route('admin.artists.index'))->with('success', 'Data has been inserted successfully');
@@ -82,7 +82,9 @@ class ArtistController extends Controller
 
     function artistExists($name)
     {
-        return Artist::where('name', $name)->exists();
+        return Artist::where('name', $name)
+        ->where('slug', Str::slug($name))
+        ->exists();
     }
 
     /**
@@ -116,41 +118,6 @@ class ArtistController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    /* {
-        $artist = Artist::find($id);
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:50',
-        ]);
-
-        if ($validator->fails()) {
-            $messageBag = $validator->getMessageBag();
-            return redirect()
-                ->back()
-                ->withInput([
-                    'name' => $request->input('name'),
-                    'name_jp' => $request->input('name_jp')
-                ])
-                ->with('error', $messageBag);
-        } else {
-            $name = preg_replace('/\s+/', ' ', $request->name);
-            $artist->name = $name;
-            $name_slug = Str::slug($name);
-            if ($request->name_jp != null) {
-                $name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
-                $artist->name_jp = $name_jp;
-            } else {
-                $name_jp = null;
-            }
-            $artist->name_slug = $name_slug;
-
-            if ($artist->update()) {
-                return redirect(route('admin.artist.index'))->with('success', 'Data Has Been Updated Successfully');
-            } else {
-                return redirect(route('admin.artist.index'))->with('error', 'Something has wrong');
-            }
-        }
-    } */
     {
         $artist = Artist::find($id);
 
@@ -167,7 +134,8 @@ class ArtistController extends Controller
 
         $name = preg_replace('/\s+/', ' ', $request->name);
         $artist->name = $name;
-        $artist->name_slug = Str::slug($name);
+        
+        $artist->slug = $this->generateUniqueSlug($request->name);
 
         if ($request->name_jp) {
             $artist->name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
@@ -191,11 +159,6 @@ class ArtistController extends Controller
     public function destroy($id)
     {
         $artist = Artist::find($id);
-
-        DB::table('artist_song')
-            ->where('artist_id', $artist->id)
-            ->delete();
-
         $artist->delete();
 
         return redirect(route('admin.artists.index'))->with('success', 'Data deleted');
@@ -217,5 +180,26 @@ class ArtistController extends Controller
         $items = $artists instanceof Collection ? $artists : Collection::make($artists);
         $artists = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
         return $artists;
+    }
+
+    /**
+     * Genera un slug único agregando un número incremental si es necesario
+     * 
+     * @param string $name Nombre original del artista
+     * @return string Slug único
+     */
+    public function generateUniqueSlug($name)
+    {
+        $baseSlug = Str::slug($name);
+        $slug = $baseSlug;
+        $count = 1;
+
+        // Verificar si el slug ya existe en la base de datos
+        while (Artist::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $count;
+            $count++;
+        }
+
+        return $slug;
     }
 }

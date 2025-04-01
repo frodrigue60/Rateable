@@ -104,7 +104,7 @@ class UserController extends Controller
         $years = Year::all();
         $seasons = Season::all();
 
-        $score_format = $user->score_format;
+        //$score_format = $user->score_format;
 
         $filterBy = $request->filterBy;
         $type = $request->type;
@@ -153,7 +153,7 @@ class UserController extends Controller
             ->whereLikedBy($user->id)
             ->get();
 
-        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
+        $song_variants = $this->setScoreOnlyVariants($song_variants);
         $song_variants = $this->sort_variants($sort, $song_variants);
         $song_variants = $this->paginate($song_variants);
 
@@ -164,7 +164,7 @@ class UserController extends Controller
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
         //dd($songs);
-        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'score_format', 'user'));
+        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'user'));
     }
 
 
@@ -174,9 +174,9 @@ class UserController extends Controller
             return redirect()->route('login');
         }
 
-        
+
         $user = Auth::user();
-        $score_format = $user->score_format;
+        //$score_format = $user->score_format;
 
         $season = Season::where('name', $request->season)->first();
         $year = Year::where('name', $request->year)->first();
@@ -226,7 +226,7 @@ class UserController extends Controller
             ->whereLikedBy($user->id)
             ->get();
 
-        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
         $song_variants = $this->sort_variants($sort, $song_variants);
         $song_variants = $this->paginate($song_variants);
 
@@ -235,7 +235,7 @@ class UserController extends Controller
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
         //dd($songs);
-        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'score_format', 'user'));
+        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'user'));
     }
 
     public function paginate($songs, $perPage = 18, $page = null, $options = [])
@@ -341,31 +341,26 @@ class UserController extends Controller
             }
 
             //$user_email = Auth::user()->email;
-            $user_id = Auth::user()->id;
-            $old_user_image = Auth::user()->image;
-
-            $file_type = $request->image->extension();
-            $file_name = 'profile_' . time() . '.' . $file_type;
-
-            Storage::disk('public')->delete('/profile/' . $old_user_image);
-            $request->image->storeAs('profile', $file_name, 'public');
-
-            DB::table('users')
-                ->where('id', $user_id)
-                ->update(['image' => $file_name]);
-
-            return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
-        } else {
-            //dd($request->all());
-
             $user = Auth::user();
+            $old_user_image = $user->image;
+
+            $extension = $request->image->extension();
+            $file_name = 'profile_' . time() . '.' . $extension;
+            $path = 'profile/';
+
+            $request->image->storeAs($path, $file_name, 'public');
+
+            if (isset($old_user_image) && Storage::disk('public')->exists($old_user_image)) {
+                Storage::disk('public')->delete($old_user_image);
+            }
 
             DB::table('users')
                 ->where('id', $user->id)
-                ->update(['image' => $request->profile_pic_url]);
+                ->update(['image' => $path.$file_name]);
 
             return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
-        }
+        } 
+
         return redirect(route('profile'))->with('warning', 'File not found');
     }
     public function uploadBannerPic(Request $request)
@@ -382,29 +377,22 @@ class UserController extends Controller
             }
 
             $user_id = Auth::user()->id;
+            $old_banner_image = Auth::user()->banner;
 
-            $file_type = $request->banner->extension();
-            $file_name = 'banner_' . time() . '.' . $file_type;
 
-            if (Auth::user()->banner != null) {
-                Storage::disk('public')->delete('/banner/' . Auth::user()->banner);
+            $extension = $request->banner->extension();
+            $file_name = 'banner_' . time() . '.' . $extension;
+            $path = 'banner/';
+
+            $request->banner->storeAs($path, $file_name, 'public');
+
+            if (isset($old_banner_image) && Storage::disk('public')->exists($old_banner_image)) {
+                Storage::disk('public')->delete($old_banner_image);
             }
-
-            $request->banner->storeAs('banner', $file_name, 'public');
 
             DB::table('users')
                 ->where('id', $user_id)
-                ->update(['banner' => $file_name]);
-
-            return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
-        } else {
-            //dd($request->all());
-
-            $user = Auth::user();
-
-            DB::table('users')
-                ->where('id', $user->id)
-                ->update(['banner' => $request->banner_pic_url]);
+                ->update(['banner' => $path.$file_name]);
 
             return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
         }
@@ -497,34 +485,47 @@ class UserController extends Controller
         return $data;
     }
 
-    public function setScoreOnlyVariants($variantsArray, $score_format)
+    public function setScoreOnlyVariants($variants, $user = null)
     {
-        $variantsArray->each(function ($variant) use ($score_format) {
+        $variants->each(function ($variant) use ($user) {
+            $variant->userScore = null;
             $factor = 1;
+            $isDecimalFormat = false; // Determina si el formato permite decimales
 
-            switch ($score_format) {
-                case 'POINT_100':
-                    $factor = 1;
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $factor = 0.1;
-                    break;
-                case 'POINT_10':
-                    $factor = 1 / 10;
-                    break;
-                case 'POINT_5':
-                    $factor = 1 / 20;
-                    break;
-                default:
-                    $factor = 1 / 10;
-                    break;
+            if ($user) {
+                switch ($user->score_format) {
+                    case 'POINT_100':
+                        $factor = 1;
+                        break;
+                    case 'POINT_10_DECIMAL':
+                        $factor = 0.1;
+                        $isDecimalFormat = true;
+                        break;
+                    case 'POINT_10':
+                        $factor = 1 / 10;
+                        break;
+                    case 'POINT_5':
+                        $factor = 1 / 20;
+                        $isDecimalFormat = true;
+                        break;
+                    default:
+                        $factor = 1;
+                        break;
+                }
+
+                if ($userRating = $this->getUserRating($variant->id, $user->id)) {
+                    $variant->userScore = $isDecimalFormat
+                        ? round($userRating->rating * $factor, 1) // Conserva 1 decimal
+                        : (int) round($userRating->rating * $factor); // Fuerza entero
+                }
             }
 
-            $variant->score = round($variant->averageRating * $factor);
-            $variant->user_score = $variant->rating ? round($variant->rating * $factor) : null;
+            $variant->score = $isDecimalFormat
+                ? round($variant->averageRating * $factor, 1) // Conserva 1 decimal
+                : (int) round($variant->averageRating * $factor); // Fuerza entero
         });
 
-        return $variantsArray;
+        return $variants;
     }
 
     public function sort_variants($sort, $song_variants)
@@ -563,5 +564,15 @@ class UserController extends Controller
                 return $song_variants;
                 break;
         }
+    }
+    public function getUserRating($song_variant_id, $user_id)
+    {
+        $userRating = DB::table('ratings')
+            ->where('rateable_type', SongVariant::class)
+            ->where('rateable_id', $song_variant_id)
+            ->where('user_id', $user_id)
+            ->first(['rating']);
+
+        return $userRating;
     }
 }

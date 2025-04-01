@@ -1,13 +1,11 @@
 @foreach ($song_variants as $variant)
     @php
-        $song_id = $variant->song->id;
-        $post_slug = $variant->song->post->slug;
-        $suffix = $variant->song->slug != null ? $variant->song->slug : $variant->song->type;
         $version = $variant->version_number;
         $forward_text =
             ($variant->song->slug ? $variant->song->slug : $variant->song->type) . 'v' . $variant->version_number;
 
         $post = $variant->song->post;
+        $title = $post->title;
         $thumbnail_url = '';
 
         if (Storage::disk('public')->exists($post->thumbnail)) {
@@ -16,15 +14,6 @@
             $thumbnail_url = $post->thumbnail_src;
         }
 
-        $title = $variant->song->post->title;
-
-        if ($variant->views >= 1000000) {
-            $views = number_format(intval($variant->views / 1000000), 0) . 'M';
-        } elseif ($variant->views >= 1000) {
-            $views = number_format(intval($variant->views / 1000), 0) . 'K';
-        } else {
-            $views = $variant->views;
-        }
     @endphp
 
     <article class="tarjeta">
@@ -39,16 +28,15 @@
                 <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $title }}"
                     title="{{ $title }}">
                 <div class="tarjeta-footer text-light">
-                    <span>{{ $variant->likesCount }} <i class="fa-solid fa-heart"></i></span>
-                    <span>{{ $views }} <i class="fa-solid fa-eye"></i></span>
-                    @if (isset($variant->rating))
-                        <span style="color: rgb(162, 240, 181)">{{ $variant->rating != null ? $variant->rating : '0' }}
+                    <span>{{ $variant->favoritesCount }} <i class="fa-solid fa-heart"></i></span>
+                    <span>{{ $variant->viewsString }} <i class="fa-solid fa-eye"></i></span>
+                    <span>{{ $variant->score }}
+                        @if ($variant->userScore)
+                            <i style="color: rgb(162, 240, 181);" class="fa-solid fa-star" aria-hidden="true"></i>
+                        @else
                             <i class="fa-solid fa-star" aria-hidden="true"></i>
-                        </span>
-                    @else
-                        <span>{{ $variant->score != null ? $variant->score : '0' }} <i class="fa-solid fa-star" aria-hidden="true"></i>
-                        </span>
-                    @endif
+                        @endif
+                    </span>
                 </div>
             </div>
         </a>

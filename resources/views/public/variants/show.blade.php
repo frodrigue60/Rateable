@@ -91,14 +91,14 @@
                     <a href="#" class="text-decoration-none text-light">{{ $song->name }}</a> -
                     @foreach ($song_variant->song->artists as $index => $artist)
                         @php
-                            /* $artistShowRoute = route('artists.show', [$item->id, $item->name_slug]); */
                             if ($artist->name_jp != null) {
-                                $artistNameJp = '('.$artist->name_jp.')';
-                            }else{
+                                $artistNameJp = '(' . $artist->name_jp . ')';
+                            } else {
                                 $artistNameJp = '';
                             }
                         @endphp
-                        <a class="text-decoration-none text-light" href="{{ $artist->url }}">{{ $artist->name }} {{$artistNameJp}}</a>
+                        <a class="text-decoration-none text-light" href="{{ $artist->url }}">{{ $artist->name }}
+                            {{ $artistNameJp }}</a>
                         @if ($index < count($song_variant->song->artists) - 1)
                             ,
                         @endif
@@ -148,7 +148,7 @@
                     <div>
                         @php
                             if (Auth::check()) {
-                                $class = $user_rate ? 'btn-warning' : 'btn-primary';
+                                $class = $userRating != null ? 'btn-warning' : 'btn-primary';
                             } else {
                                 $class = 'btn-primary';
                             }
@@ -157,7 +157,7 @@
                         <button class="btn {{ $class }} rounded-pill" data-bs-toggle="modal"
                             data-bs-target="#rating-modal" id="rating-button">
                             <i class="fa fa-star" aria-hidden="true"></i> <span
-                                id="score-span">{{ $song_variant->scoreString }}</span>
+                                id="score-span">{{ $song_variant->score }}</span>
                         </button>
                     </div>
                 </div>
@@ -170,8 +170,8 @@
                             Favorite</span></button>
 
 
-                    <button type="button" class="btn btn-primary rounded-pill d-flex gap-2 align-items-center" data-bs-toggle="modal"
-                        data-bs-target="#report-modal">
+                    <button type="button" class="btn btn-primary rounded-pill d-flex gap-2 align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#report-modal">
                         <i class="fa-solid fa-triangle-exclamation"></i> <span class="d-none d-sm-flex">Report</span>
                     </button>
                 </div>
@@ -227,8 +227,8 @@
                     @if (Auth::check())
                         @csrf
                         @php
-                            if ($user_rate != null) {
-                                $user_score = $user_rate->format_rating;
+                            if ($userRating != null) {
+                                $user_score = $userRating->formatRating;
                             } else {
                                 $user_score = 0;
                             }
@@ -236,8 +236,8 @@
                         <div class="text-light d-flex flex-column align-items-center">
                             @php
                                 $format_rating = '';
-                                if (isset($user_rate->format_rating)) {
-                                    $format_rating = $user_rate->format_rating;
+                                if (isset($userRating->format_rating)) {
+                                    $format_rating = $userRating->format_rating;
                                 }
                             @endphp
                             @switch(Auth::user()->score_format)
@@ -309,6 +309,12 @@
                                 @case('POINT_5')
                                     <form action="{{ route('variant.rate', $song_variant->id) }}" method="post"
                                         id="rating-form" class="d-flex flex-column py-4" data-variant="{{ $song_variant->id }}">
+                                        @php
+                                            $formatRating = 0;
+                                            if (isset($userRating)) {
+                                                $formatRating = $userRating->formatRating;
+                                            }
+                                        @endphp
                                         <style>
                                             .rate {
                                                 float: left;
@@ -353,15 +359,20 @@
                                             }
                                         </style>
                                         <div class="rate">
-                                            <input type="radio" id="star5" name="score" value="100" />
+                                            <input type="radio" id="star5" name="score" value="100"
+                                                {{ $formatRating == 100 ? 'checked' : '' }} />
                                             <label for="star5" title="text">5 stars</label>
-                                            <input type="radio" id="star4" name="score" value="80" />
+                                            <input type="radio" id="star4" name="score" value="80"
+                                                {{ $formatRating == 80 ? 'checked' : '' }} />
                                             <label for="star4" title="text">4 stars</label>
-                                            <input type="radio" id="star3" name="score" value="60" />
+                                            <input type="radio" id="star3" name="score" value="60"
+                                                {{ $formatRating == 60 ? 'checked' : '' }} />
                                             <label for="star3" title="text">3 stars</label>
-                                            <input type="radio" id="star2" name="score" value="40" />
+                                            <input type="radio" id="star2" name="score" value="40"
+                                                {{ $formatRating == 40 ? 'checked' : '' }} />
                                             <label for="star2" title="text">2 stars</label>
-                                            <input type="radio" id="star1" name="score" value="20" />
+                                            <input type="radio" id="star1" name="score" value="20"
+                                                {{ $formatRating == 20 ? 'checked' : '' }} />
                                             <label for="star1" title="text">1 star</label>
                                         </div>
                                     </form>
@@ -545,7 +556,7 @@
                     @php
                         $user_pp_url = '';
 
-                        if (isset($comment->user->image)) {
+                        if ($comment->user->image != null && Storage::disk('public')->exists($comment->user->image)) {
                             $user_pp_url = $comment->user->image;
                         } else {
                             $user_pp_url = asset('/storage/profile/' . 'default.jpg');
@@ -756,7 +767,7 @@
                                     //console.log(data);
                                     ratingBtn.classList.remove('btn-primary');
                                     ratingBtn.classList.add('btn-warning');
-                                    scoreSpan.textContent = data.scoreString;
+                                    scoreSpan.textContent = data.average;
 
                                 });
                             } catch (error) {
@@ -799,7 +810,7 @@
                                     //console.log(data);
                                     ratingBtn.classList.remove('btn-primary');
                                     ratingBtn.classList.add('btn-warning');
-                                    scoreSpan.textContent = data.scoreString;
+                                    scoreSpan.textContent = data.average;
 
                                 });
                             } catch (error) {
@@ -843,7 +854,7 @@
                                     //console.log(data);
                                     ratingBtn.classList.remove('btn-primary');
                                     ratingBtn.classList.add('btn-warning');
-                                    scoreSpan.textContent = data.scoreString;
+                                    scoreSpan.textContent = data.average;
                                 });
                             } catch (error) {
                                 //console.log(error)
@@ -891,10 +902,10 @@
                             }).then(response => {
                                 return response.json()
                             }).then((data) => {
-                                //console.log(data);
+                                console.log(data);
                                 ratingBtn.classList.remove('btn-primary');
                                 ratingBtn.classList.add('btn-warning');
-                                scoreSpan.textContent = data.scoreString;
+                                scoreSpan.textContent = data.average;
                             });
                         } catch (error) {
                             //console.log(error)
@@ -931,10 +942,10 @@
                                 }).then(response => {
                                     return response.json()
                                 }).then((data) => {
-                                    //console.log(data);
+                                    console.log(data);
                                     ratingBtn.classList.remove('btn-primary');
                                     ratingBtn.classList.add('btn-warning');
-                                    scoreSpan.textContent = data.scoreString;
+                                    scoreSpan.textContent = data.average;
 
                                 });
                             } catch (error) {

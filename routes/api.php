@@ -29,7 +29,9 @@ Route::controller(apiPostController::class)->group(function () {
 
 Route::controller(apiSongVarianCrontroller::class)->group(function () {
     Route::post('/seasonal', 'seasonal');
+    Route::post('/ranking', 'ranking');
 });
+
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('variants', apiSongVarianCrontroller::class);

@@ -26,11 +26,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-        } else {
-            $score_format = null;
-        }
+        $user = Auth::check() ? Auth::User() : null;
 
         $recently = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
@@ -39,6 +35,8 @@ class PostController extends Controller
             ->get()
             ->sortByDesc('created_at')
             ->take(25);
+        $popular = $this->setScoreOnlyVariants($recently, $user);
+
 
         $popular = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
@@ -48,7 +46,7 @@ class PostController extends Controller
             ->sortByDesc('likeCount')
             ->take(15);
 
-        $popular = $this->setScoreOnlyVariants($popular, $score_format);
+        $popular = $this->setScoreOnlyVariants($popular, $user);
 
         $viewed = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
@@ -58,7 +56,7 @@ class PostController extends Controller
             ->sortByDesc('views')
             ->take(15);
 
-        $viewed = $this->setScoreOnlyVariants($viewed, $score_format);
+        $viewed = $this->setScoreOnlyVariants($viewed, $user);
 
         $openings = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
@@ -71,7 +69,7 @@ class PostController extends Controller
             ->sortByDesc('averageRating')
             ->take(5);
 
-        $openings = $this->setScoreOnlyVariants($openings, $score_format);
+        $openings = $this->setScoreOnlyVariants($openings, $user);
 
         $endings = SongVariant::with(['song.post'])
             ->whereHas('song.post', function ($query) {
@@ -84,11 +82,11 @@ class PostController extends Controller
             ->sortByDesc('averageRating')
             ->take(5);
 
-        $endings = $this->setScore($endings, $score_format);
+        $endings = $this->setScoreOnlyVariants($endings, $user);
 
         //dd($endings);
 
-        return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'score_format'));
+        return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed'));
     }
 
     public function animes(Request $request)
@@ -269,124 +267,10 @@ class PostController extends Controller
         return view('public.variants.seasonal', compact('song_variants', 'score_format', 'currentSeason', 'currentYear'));
     }
 
-    public function ratePost(Request $request, $id)
-    {
-        if (Auth::check()) {
-            $post = Post::find($id);
-
-            //dd($request->all());
-            $validator = Validator::make($request->all(), [
-                'comment' => 'nullable|string|max:255',
-                'score' => 'required|numeric'
-            ]);
-
-            if ($validator->fails()) {
-                $messageBag = $validator->getMessageBag();
-                return redirect()
-                    ->back()
-                    ->with('error', $messageBag);
-            } else {
-                $score = $request->score;
-            }
-
-            switch (Auth::user()->score_format) {
-                case 'POINT_100':
-                    if (($score >= 1) && ($score <= 100)) {
-                        $post->rateOnce($score);
-                        return redirect()->back()->with('success', 'Post rated Successfully');
-                    } else {
-                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
-                    }
-                    break;
-
-                case 'POINT_10_DECIMAL':
-                    if (($score >= 1) && ($score <= 10)) {
-                        $post->rateOnce($score * 10);
-                        return redirect()->back()->with('success', 'Post rated Successfully');
-                    } else {
-                        return redirect()->back()->with('warning', 'Only values between 1 and 10 (can use decimals)');
-                    }
-                    break;
-
-                case 'POINT_10':
-                    if (($score >= 1) && ($score <= 10)) {
-                        $post->rateOnce($score * 10);
-                        return redirect()->back()->with('success', 'Post rated Successfully');
-                    } else {
-                        return redirect()->back()->with('warning', 'Only values between 1 and 10 (only integer numbers)');
-                    }
-                    break;
-
-                case 'POINT_5':
-                    if (($score >= 1) && ($score <= 100)) {
-                        if ($score <= 20) {
-                            $score = 20;
-                        }
-                        if (($score > 20) && ($score <= 40)) {
-                            $score = 40;
-                        }
-                        if (($score > 40) && ($score <= 60)) {
-                            $score = 60;
-                        }
-                        if (($score > 60) && ($score <= 80)) {
-                            $score = 80;
-                        }
-                        if ($score > 80) {
-                            $score = 100;
-                        }
-                        $post->rateOnce($score);
-
-                        return redirect()->back()->with('success', 'Post rated Successfully');
-                    } else {
-                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
-                    }
-                    break;
-
-
-                default:
-                    if (($score >= 1) && ($score <= 10)) {
-                        $post->rateOnce($score * 10);
-                        return redirect()->back()->with('success', 'Post rated Successfully');
-                    } else {
-                        return redirect()->back()->with('warning', 'Only values between 1 and 100');
-                    }
-                    break;
-            }
-        }
-        return redirect()->route('login');
-    }
-
-
-    public function likePost($id)
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-            Post::find($id)->like($user->id);
-
-            return Redirect::back()->with('success', 'Post Like successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-
-    public function unlikePost($id)
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-            Post::find($id)->unlike($user->id);
-
-            return Redirect::back()->with('success', 'Post Like undo successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-
     //public seasrch posts
     public function themes(Request $request)
     {
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-        } else {
-            $score_format = null;
-        }
+        $user = Auth::check() ? Auth::user() : null;
 
 
         $type = $request->type;
@@ -435,7 +319,7 @@ class PostController extends Controller
             #SONG VARIANT QUERY
             ->get();
 
-        $song_variants = $this->setScoreOnlyVariants($song_variants, $score_format);
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
         $song_variants = $this->sort_variants($sort, $song_variants);
         $song_variants = $this->paginate($song_variants);
 
@@ -448,121 +332,48 @@ class PostController extends Controller
 
         return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types'));
     }
-    public function setScore($songs, $score_format)
+
+    public function setScoreOnlyVariants($variants, $user = null)
     {
-        $songs->each(function ($song) use ($score_format) {
-            $song->score = null;
-            $song->user_score = null;
-            switch ($score_format) {
-                case 'POINT_100':
-                    $song->score = round($song->averageRating);
-                    if ($song->rating != null) {
-                        $song->user_score = round($song->rating);
-                    }
-
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $song->score = round($song->averageRating / 10, 1);
-                    if ($song->rating != null) {
-                        $song->user_score = round($song->rating / 10, 1);
-                    }
-
-                    break;
-                case 'POINT_10':
-                    $song->score = round($song->averageRating / 10);
-                    if ($song->rating != null) {
-                        $song->user_score = round($song->rating / 10);
-                    }
-
-                    break;
-                case 'POINT_5':
-                    $song->score = round($song->averageRating / 20);
-                    if ($song->rating != null) {
-                        $song->user_score = round($song->rating / 20);
-                    }
-
-                    break;
-                default:
-                    $song->score = round($song->averageRating / 10);
-                    if ($song->rating != null) {
-                        $song->user_score = round($song->rating / 10);
-                    }
-                    break;
-            }
-        });
-        return $songs;
-    }
-
-    public function setScoreOnlyVariants($variantsArray, $score_format)
-    {
-        /* $variantsArray->each(function ($variant) use ($score_format) {
-            $variant->score = null;
-            $variant->user_score = null;
-            switch ($score_format) {
-                case 'POINT_100':
-                    $variant->score = round($variant->averageRating);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating);
-                    }
-
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $variant->score = round($variant->averageRating / 10, 1);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating / 10, 1);
-                    }
-
-                    break;
-                case 'POINT_10':
-                    $variant->score = round($variant->averageRating / 10);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating / 10);
-                    }
-
-                    break;
-                case 'POINT_5':
-                    $variant->score = round($variant->averageRating / 20);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating / 20);
-                    }
-
-                    break;
-                default:
-                    $variant->score = round($variant->averageRating / 10);
-                    if ($variant->rating != null) {
-                        $variant->user_score = round($variant->rating / 10);
-                    }
-                    break;
-            }
-        });
-        return $variantsArray; */
-
-        $variantsArray->each(function ($variant) use ($score_format) {
+        $variants->each(function ($variant) use ($user) {
+            $variant->userScore = null;
             $factor = 1;
+            $isDecimalFormat = false; // Determina si el formato permite decimales
 
-            switch ($score_format) {
-                case 'POINT_100':
-                    $factor = 1;
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $factor = 0.1;
-                    break;
-                case 'POINT_10':
-                    $factor = 1 / 10;
-                    break;
-                case 'POINT_5':
-                    $factor = 1 / 20;
-                    break;
-                default:
-                    $factor = 1 / 10;
-                    break;
+            if ($user) {
+                switch ($user->score_format) {
+                    case 'POINT_100':
+                        $factor = 1;
+                        break;
+                    case 'POINT_10_DECIMAL':
+                        $factor = 0.1;
+                        $isDecimalFormat = true;
+                        break;
+                    case 'POINT_10':
+                        $factor = 1 / 10;
+                        break;
+                    case 'POINT_5':
+                        $factor = 1 / 20;
+                        $isDecimalFormat = true;
+                        break;
+                    default:
+                        $factor = 1;
+                        break;
+                }
+
+                if ($userRating = $this->getUserRating($variant->id, $user->id)) {
+                    $variant->userScore = $isDecimalFormat
+                        ? round($userRating->rating * $factor, 1) // Conserva 1 decimal
+                        : (int) round($userRating->rating * $factor); // Fuerza entero
+                }
             }
 
-            $variant->score = round($variant->averageRating * $factor);
-            $variant->user_score = $variant->rating ? round($variant->rating * $factor) : null;
+            $variant->score = $isDecimalFormat
+                ? round($variant->averageRating * $factor, 1) // Conserva 1 decimal
+                : (int) round($variant->averageRating * $factor); // Fuerza entero
         });
 
-        return $variantsArray;
+        return $variants;
     }
 
     public function setScoreToSongVariants($songsArray, $score_format)
@@ -693,171 +504,6 @@ class PostController extends Controller
         }
     }
 
-    public function seasonalRanking()
-    {
-        $currentSeason = DB::table('tagging_tags')->where('flag', '1')->first();
-
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-        } else {
-            $score_format = null;
-        }
-        if ($currentSeason == null) {
-
-            $openings = SongVariant::with(['song'])
-                ->whereHas('song.post', function ($query) {
-                    $query->where('status', 'published');
-                })
-                ->whereHas('song', function ($query) {
-                    $query->where('type', 'OP');
-                })
-                ->get()
-                ->sortByDesc('averageRating')
-                ->take(100);
-
-            $endings = SongVariant::with(['song'])
-                ->whereHas('song.post', function ($query) {
-                    $query->where('status', 'published');
-                })
-                ->whereHas('song', function ($query) {
-                    $query->where('type', 'ED');
-                })
-                ->get()
-                ->sortByDesc('averageRating')
-                ->take(100);
-
-            $this->setScoreOnlyVariants($openings, $score_format);
-            $this->setScoreOnlyVariants($endings, $score_format);
-
-            return view('public.posts.ranking', compact('openings', 'endings', 'score_format'));
-        } else {
-            $openings = SongVariant::with(['song'])
-                ->whereHas('song.post', function ($query) use ($currentSeason) {
-                    $query->where('status', 'published')
-                        ->withAnyTag($currentSeason->name);
-                })
-                ->whereHas('song', function ($query) {
-                    $query->where('type', 'OP');
-                })
-                ->get()
-                ->sortByDesc('averageRating')
-                ->take(100);
-
-            $endings = SongVariant::with(['song'])
-                ->whereHas('song.post', function ($query) use ($currentSeason) {
-                    $query->where('status', 'published')
-                        ->withAnyTag($currentSeason->name);
-                })
-                ->whereHas('song', function ($query) {
-                    $query->where('type', 'ED');
-                })
-                ->get()
-                ->sortByDesc('averageRating')
-                ->take(100);
-
-            $this->setScoreOnlyVariants($openings, $score_format);
-            $this->setScoreOnlyVariants($endings, $score_format);
-
-            return view('public.posts.ranking', compact('openings', 'endings', 'currentSeason', 'score_format'));
-        }
-    }
-    public function globalRanking()
-    {
-        if (Auth::check()) {
-            $score_format = Auth::user()->score_format;
-        } else {
-            $score_format = null;
-        }
-
-        $getOpenings = SongVariant::with(['song.post'])
-            ->whereHas('song.post', function ($query) {
-                $query->where('status', '=', 'published');
-            })
-            ->whereHas('song', function ($query) {
-                $query->where('type', 'OP');
-            })
-            ->get()
-            ->sortByDesc('averageRating')
-            ->take(100);
-
-        $openings = $getOpenings->sortByDesc('averageRating')->take(100);
-
-        $openings = $this->setScoreOnlyVariants($openings, $score_format);
-
-        $getEndings = SongVariant::with(['song.post'])
-            ->whereHas('song.post', function ($query) {
-                $query->where('status', '=', 'published');
-            })
-            ->whereHas('song', function ($query) {
-                $query->where('type', 'ED');
-            })
-            ->get()
-            ->sortByDesc('averageRating')
-            ->take(100);
-
-        $endings = $getEndings->sortByDesc('averageRating')->take(100);
-
-        $endings = $this->setScoreOnlyVariants($endings, $score_format);
-
-        return view('public.posts.ranking', compact('openings', 'endings',  'score_format'));
-    }
-
-    /* public function count_views($post)
-    {
-        if (!Session::has('page_visited_' . $post->id)) {
-            DB::table('posts')
-                ->where('id', $post->id)
-                ->increment('view_count');
-            Session::put('page_visited_' . $post->id, true);
-        }
-    } */
-
-    public function likeComment($id)
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-            Comment::find($id)->like($user->id);
-            return Redirect::back()->with('success', 'Comment Like successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-
-    public function unlikeComment($id)
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-            Comment::find($id)->unlike($user->id);
-
-            return Redirect::back()->with('success', 'Comment Like undo successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-
-    public function SeasonsYears($tags)
-    {
-        $tagNames = [];
-        $tagYears = [];
-
-        for ($i = 0; $i < count($tags); $i++) {
-            [$name, $year] = explode(' ', $tags[$i]->name);
-
-            if (!in_array($year, $tagNames)) {
-                $years[] = ['name' => $year, 'value' => $year];
-                $tagNames[] = $year; // Agregamos el año al array de nombres para evitar duplicados
-            }
-
-            if (!in_array($name, $tagYears)) {
-                $seasons[] = ['name' => $name, 'value' => $name];
-                $tagYears[] = $name; // Agregamos el año al array de nombres para evitar duplicados
-            }
-        }
-
-        $data = [
-            'years' => $years,
-            'seasons' => $seasons
-        ];
-        return $data;
-    }
     public function filterTypesSortChar()
     {
         $filters = [
@@ -887,5 +533,16 @@ class PostController extends Controller
             'characters' => $characters
         ];
         return $data;
+    }
+
+    public function getUserRating($song_variant_id, $user_id)
+    {
+        $user_rating = DB::table('ratings')
+            ->where('rateable_type', SongVariant::class)
+            ->where('rateable_id', $song_variant_id)
+            ->where('user_id', $user_id)
+            ->first(['rating']);
+
+        return $user_rating;
     }
 }

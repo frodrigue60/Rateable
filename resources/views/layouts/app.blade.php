@@ -73,7 +73,7 @@
         </div>
         @include('layouts.navbar')
 
-        <main class="py-2">
+        <main class="">
             @include('layouts.breadcrumb')
             @include('layouts.alerts')
             @yield('content')

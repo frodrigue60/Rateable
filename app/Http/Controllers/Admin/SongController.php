@@ -58,7 +58,7 @@ class SongController extends Controller
             $name = preg_replace('/\s+/', ' ', $name);
             $artist = Artist::firstOrCreate(
                 [
-                    'name_slug' => Str::slug($name),
+                    'slug' => Str::slug($name),
                 ],
                 [
                     'name' =>  $name,
@@ -145,7 +145,7 @@ class SongController extends Controller
             $name = preg_replace('/\s+/', ' ', $name);
             $artist = Artist::firstOrCreate(
                 [
-                    'name_slug' => Str::slug($name),
+                    'slug' => Str::slug($name),
                 ],
                 [
                     'name' =>  $name,

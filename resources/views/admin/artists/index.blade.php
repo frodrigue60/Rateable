@@ -32,7 +32,7 @@
                             @foreach ($artists as $artist)
                                 <tr>
                                     <td>{{ $artist->id }}</td>
-                                    <td><a href="{{ route('artists.show', [$artist->id, $artist->name_slug]) }}"
+                                    <td><a href="{{ route('artists.show', [$artist->id, $artist->slug]) }}"
                                             class="no-deco">{{ $artist->name }}</a>
                                     </td>
                                     <td>
@@ -43,7 +43,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $artist->name_slug }}
+                                        {{ $artist->slug }}
                                     </td>
                                     <td class="d-flex gap-2">
                                         @if (Auth::User()->isAdmin())

@@ -134,7 +134,7 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        if (Auth::check() && Auth::user()->type == 'admin' || Auth::user()->type == 'editor') {
+        if (Auth::check() && Auth::user()->isStaff()) {
 
             $post = Post::findOrFail($id);
             $score_format = Auth::user()->score_format;
@@ -142,7 +142,7 @@ class PostController extends Controller
             $breadcrumb = Breadcrumb::generate([
                 [
                     'name' => 'Index',
-                    'url' => route('admin.posts.index', $post->id),
+                    'url' => route('admin.posts.index'),
                 ],
                 [
                     'name' => $post->title,
@@ -157,10 +157,8 @@ class PostController extends Controller
                 return $song->type === 'ED';
             });
 
-            $artist = $post->artist;
-            $tags = $post->tagged;
-            dd($post->season);
-            return view('admin.posts.show', compact('post', 'tags', 'score_format', 'artist', 'ops', 'eds', 'breadcrumb'));
+            //dd($ops, $eds);
+            return view('admin.posts.show', compact('post', 'score_format', 'ops', 'eds', 'breadcrumb'));
         }
     }
 
@@ -173,7 +171,6 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
-        //$tags = Tag::all();
         $artists = Artist::all();
         $seasons = Season::all();
         $years = Year::all();

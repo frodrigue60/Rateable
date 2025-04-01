@@ -21,7 +21,7 @@
                         href="{{ route('seasonal') }}">Seasonal</a></li>
 
                 <li><a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"
-                        href="{{ route('global.ranking') }}">Ranking</a></li>
+                        href="{{ route('ranking') }}">Ranking</a></li>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button"
