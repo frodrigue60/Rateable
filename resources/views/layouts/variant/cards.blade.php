@@ -22,7 +22,7 @@
                 <div class="tarjeta-header text-light">
                     <h3 class="text-shadow text-uppercase post-titles">{{ $title }}</h3>
                 </div>
-                <div class="{{ $variant->song->type == 'OP' ? 'tag' : 'tag2' }}">
+                <div class="{{ $variant->song->type == '1' ? 'tag' : 'tag2' }}">
                     <span class="tag-content ">{{ $forward_text }}</span>
                 </div>
                 <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $title }}"

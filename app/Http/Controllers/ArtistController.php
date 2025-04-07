@@ -40,6 +40,7 @@ class ArtistController extends Controller
     public function show(Request $request, $slug)
     {
         $user = Auth::check() ? Auth::user() : null;
+        $status = true;
         //$tags = Tag::all();
         $type = $request->type;
         $sort = $request->sort;
@@ -58,8 +59,9 @@ class ArtistController extends Controller
         $seasons = Season::all();
 
         $types = [
-            ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
+            ['name' => 'Opening', 'value' => '1'],
+            ['name' => 'Ending', 'value' => '2'],
+            ['name' => 'Insert', 'value' => '3']
         ];
 
         $sortMethods = [
@@ -81,10 +83,10 @@ class ArtistController extends Controller
             ->when($season, function ($query) use ($season) {
                 $query->where('season_id', $season->id);
             })
-            ->whereHas('post', function ($query) use ($name) {
-                $query->where('status', 'published')
+            ->whereHas('post', function ($query) use ($name, $status) {
+                $query->where('status', $status)
                     ->when($name, function ($query) use ($name) {
-                        $query->where('title', 'LIKE', "%{$name}%");
+                        $query->where('title', 'like', '%'.$name.'%');
                     });
             })
             ->when($type, function ($query) use ($type) {

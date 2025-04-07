@@ -168,7 +168,7 @@ class ArtistController extends Controller
     {
 
         $artists = DB::table('artists')
-            ->where('name', 'LIKE', "%{$request->input('q')}%")
+            ->where('name', 'LIKE', '%'.$request->input('q').'%')
             ->paginate(10);
         return view('admin.artists.index', compact('artists'));
     }

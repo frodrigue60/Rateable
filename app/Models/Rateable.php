@@ -50,9 +50,9 @@ trait Rateable
     {
         $user_id = $this->byUser($user_id);
         $rating = Rating::query()
-            ->where('rateable_type', '=', $this->getMorphClass())
-            ->where('rateable_id', '=', $this->id)
-            ->where('user_id', '=', $user_id)
+            ->where('rateable_type', $this->getMorphClass())
+            ->where('rateable_id', $this->id)
+            ->where('user_id', $user_id)
             ->first();
 
         if ($rating) {

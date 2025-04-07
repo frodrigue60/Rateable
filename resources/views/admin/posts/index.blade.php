@@ -114,11 +114,11 @@
                                             @if ($post->status == null)
                                                 <button disabled class="btn btn-sm btn-secondary">N/A</button>
                                             @endif
-                                            @if ($post->status == 'stagged')
+                                            @if ($post->status == false)
                                                 <button disabled class="btn btn-warning btn-sm"><i
                                                         class="fa-solid fa-clock"></i></button>
                                             @endif
-                                            @if ($post->status == 'published')
+                                            @if ($post->status == true)
                                                 <button disabled class="btn btn-primary btn-sm"><i
                                                         class="fa-solid fa-clock"></i></button>
                                             @endif
@@ -126,7 +126,7 @@
                                     @endif
                                     @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                         <td>
-                                            @if ($post->status == 'published')
+                                            @if ($post->status == true)
                                                 <form action="{{ route('admin.posts.unapprove', $post->id) }}"
                                                     method="post">
                                                     @csrf
@@ -134,7 +134,7 @@
                                                             class="fa-solid fa-toggle-on"></i></button>
                                                 </form>
                                             @else
-                                                @if ($post->status == 'stagged')
+                                                @if ($post->status == false)
                                                     <form action="{{ route('admin.posts.approve', $post->id) }}"
                                                         method="post">
                                                         @csrf

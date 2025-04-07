@@ -134,6 +134,7 @@ class SongVariantController extends Controller
 
     public function seasonal(Request $request)
     {
+        $status = true;
         $type = $request->type;
         $currentSeason = Season::where('current', true)->first();
         $currentYear = Year::where('current', true)->first();
@@ -147,9 +148,9 @@ class SongVariantController extends Controller
                     $query->where('type', $type);
                 });
             })
-            ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear) {
+            ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear, $status) {
                 /* POST QUERY */
-                $query->where('status', 'published')
+                $query->where('status', $status)
                     ->when($currentSeason, function ($query, $currentSeason) {
                         $query->where('season_id', $currentSeason->id);
                     })
@@ -170,7 +171,6 @@ class SongVariantController extends Controller
 
     public function ranking(Request $request)
     {
-
         $validated = $request->validate([
             'ranking_type' => 'required|integer'
         ]);
@@ -181,6 +181,7 @@ class SongVariantController extends Controller
         $currentSeason = null;
         $currentYear = null;
         $limit = 100;
+        $status = true;
 
         switch ($rankingType) {
             #GLOBAL
@@ -188,11 +189,11 @@ class SongVariantController extends Controller
                 $openings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', 'OP');
+                        $query->where('type', '1');
                     })
-                    ->whereHas('song.post', function ($query) {
+                    ->whereHas('song.post', function ($query) use ($status) {
                         /* POST QUERY */
-                        $query->where('status', 'published');
+                        $query->where('status', $status);
                     })
                     /* SONG VARIANT QUERY */
                     ->get()
@@ -202,11 +203,11 @@ class SongVariantController extends Controller
                 $endings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', 'ED');
+                        $query->where('type', '2');
                     })
-                    ->whereHas('song.post', function ($query) {
+                    ->whereHas('song.post', function ($query) use ($status) {
                         /* POST QUERY */
-                        $query->where('status', 'published');
+                        $query->where('status', $status);
                     })
                     /* SONG VARIANT QUERY */
                     ->get()
@@ -221,11 +222,11 @@ class SongVariantController extends Controller
                 $openings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', 'OP');
+                        $query->where('type', '1');
                     })
-                    ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear) {
+                    ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear, $status) {
                         /* POST QUERY */
-                        $query->where('status', 'published')
+                        $query->where('status', $status)
                             ->when($currentSeason, function ($query, $currentSeason) {
                                 $query->where('season_id', $currentSeason->id);
                             })
@@ -241,11 +242,11 @@ class SongVariantController extends Controller
                 $endings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', 'ED');
+                        $query->where('type', '2');
                     })
-                    ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear) {
+                    ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear, $status) {
                         /* POST QUERY */
-                        $query->where('status', 'published')
+                        $query->where('status', $status)
                             ->when($currentSeason, function ($query, $currentSeason) {
                                 $query->where('season_id', $currentSeason->id);
                             })
@@ -265,11 +266,11 @@ class SongVariantController extends Controller
                 $openings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', 'OP');
+                        $query->where('type', '1');
                     })
-                    ->whereHas('song.post', function ($query) {
+                    ->whereHas('song.post', function ($query) use ($status) {
                         /* POST QUERY */
-                        $query->where('status', 'published');
+                        $query->where('status', $status);
                     })
                     /* SONG VARIANT QUERY */
                     ->get()
@@ -279,11 +280,11 @@ class SongVariantController extends Controller
                 $endings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', 'ED');
+                        $query->where('type', '2');
                     })
-                    ->whereHas('song.post', function ($query) {
+                    ->whereHas('song.post', function ($query) use ($status) {
                         /* POST QUERY */
-                        $query->where('status', 'published');
+                        $query->where('status', $status);
                     })
                     /* SONG VARIANT QUERY */
                     ->get()
@@ -302,9 +303,9 @@ class SongVariantController extends Controller
         //$endings = view('partials.top.positions', ['items' => $endings])->render();
 
         $data = [
-            'openings' => view('partials.top.positions', ['items' => $openings])->render(), 
-            'endings' => view('partials.top.positions', ['items' => $endings])->render(), 
-            'currentSeason' => $currentSeason, 
+            'openings' => view('partials.top.positions', ['items' => $openings])->render(),
+            'endings' => view('partials.top.positions', ['items' => $endings])->render(),
+            'currentSeason' => $currentSeason,
             'currentYear' => $currentYear
         ];
         //$data = ['themes' => $themes];
@@ -411,7 +412,7 @@ class SongVariantController extends Controller
         ], 200);
     }
 
-    public function getUserRating(string $song_variant_id, string $user_id)
+    public function getUserRating(int $song_variant_id, int $user_id)
     {
         return DB::table('ratings')
             ->where('rateable_type', SongVariant::class)
@@ -425,42 +426,66 @@ class SongVariantController extends Controller
         $variants->each(function ($variant) use ($user) {
             $variant->userScore = null;
             $factor = 1;
-            $isDecimalFormat = false; // Determina si el formato permite decimales
+            $isDecimalFormat = false;
+            $denominator = 100; // Por defecto para POINT_100
 
             if ($user) {
                 switch ($user->score_format) {
                     case 'POINT_100':
                         $factor = 1;
+                        $denominator = 100;
                         break;
                     case 'POINT_10_DECIMAL':
                         $factor = 0.1;
+                        $denominator = 10;
                         $isDecimalFormat = true;
                         break;
                     case 'POINT_10':
                         $factor = 1 / 10;
+                        $denominator = 10;
                         break;
                     case 'POINT_5':
                         $factor = 1 / 20;
+                        $denominator = 5;
                         $isDecimalFormat = true;
-                        break;
-                    default:
-                        $factor = 1;
                         break;
                 }
 
                 if ($userRating = $this->getUserRating($variant->id, $user->id)) {
                     $variant->userScore = $isDecimalFormat
-                        ? round($userRating->rating * $factor, 1) // Conserva 1 decimal
-                        : (int) round($userRating->rating * $factor); // Fuerza entero
+                        ? round($userRating->rating * $factor, 1)
+                        : (int) round($userRating->rating * $factor);
                 }
             }
 
             $variant->score = $isDecimalFormat
-                ? round($variant->averageRating * $factor, 1) // Conserva 1 decimal
-                : (int) round($variant->averageRating * $factor); // Fuerza entero
+                ? round($variant->averageRating * $factor, 1)
+                : (int) round($variant->averageRating * $factor);
+
+            // Agregar la propiedad scoreString formateada
+            $variant->scoreString = $this->formatScoreString(
+                $variant->score,
+                $user->score_format ?? 'POINT_100',
+                $denominator
+            );
         });
 
         return $variants;
+    }
+    protected function formatScoreString($score, $format, $denominator)
+    {
+        switch ($format) {
+            case 'POINT_100':
+                return $score . '/' . $denominator;
+            case 'POINT_10_DECIMAL':
+                return number_format($score, 1) . '/' . $denominator;
+            case 'POINT_10':
+                return $score . '/' . $denominator;
+            case 'POINT_5':
+                return number_format($score, 1) . '/' . $denominator;
+            default:
+                return $score . '/' . $denominator;
+        }
     }
 
     public function paginate($collection, $perPage = 18, $page = null, $options = [])
@@ -470,5 +495,15 @@ class SongVariantController extends Controller
         $items = $collection instanceof Collection ? $collection : Collection::make($collection);
         $collection = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
         return $collection;
+    }
+
+    public function comments(SongVariant $variant)
+    {
+        $comments = $variant->comments;
+        return response()->json([
+            'success' => true,
+            'message' => 'Comments',
+            'comments' => $comments,
+        ], 200);
     }
 }

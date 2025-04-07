@@ -199,7 +199,7 @@ class SongVariant extends Model
     }
 
     // Accesor para manejar el formato de puntuación
-    public function getFormattedScoresAttribute()
+    /* public function getFormattedScoresAttribute()
     {
         $user = auth()->user();
         $variant = $this;
@@ -239,7 +239,7 @@ class SongVariant extends Model
             : round($variant->averageRating * $factor, 1);    // Formato decimal (1 dígito)
 
         return $variant;
-    }
+    } */
 
     public function getUserRating($song_variant_id, $user_id)
     {

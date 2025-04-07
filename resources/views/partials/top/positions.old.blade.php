@@ -1,7 +1,7 @@
 @php
     $j = 1;
 @endphp
-@foreach ($openings as $variant)
+@foreach ($items as $variant)
     @isset($variant->song->post)
         @php
             $img_url = null;
@@ -48,8 +48,11 @@
                         href="{{ $variant->song->post->url }}">{{ $variant->song->post->title }}</a>
                 </div>
             </div>
-            <div class="item-score">
-                <span>{{ $variant->score }}
+            <div class="item-score d-flex flex-column">
+                <span>
+                    {{ $variant->scoreString }}
+                </span>
+                <span>
                     @if ($variant->userScore)
                         <i style="color: rgb(162, 240, 181)" class="fa fa-star" aria-hidden="true"></i>
                     @else

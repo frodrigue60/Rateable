@@ -15,22 +15,22 @@
             }
 
         @endphp
-        <div class="card-2 mb-2">
+        <div class="position-relative overflow-hidden" style="min-height: 95px;border-radius:5px;">
             <img class="card-2-bg" src="{{ $img_url }}" alt="{{ $variant->song->post->title }}">
             <div class="gradient-1">
-                <div class="m-2 fs-5">
-                    {{-- <span><i class="fa-solid fa-award"></i></span> --}}
-                    <span class="text-light">
-                        # {{ $j++ }}
-                    </span>
-                </div>
             </div>
             <div class="card-2-data p-2 d-flex flex-row justify-content-between w-100 gap-2">
                 <div class="d-flex flex-column overflow-hidden">
+                    <div class="m-2 fs-5">
+                        {{-- <span><i class="fa-solid fa-award"></i></span> --}}
+                        <span class="text-light">
+                            # {{ $j++ }}
+                        </span>
+                    </div>
                     @isset($variant->song)
                         <a class="no-deco text-light bold text-truncate" href="{{ $variant->url }}">{{ $variant->song->name }}
                         </a>
-                        <span class="d-inline-block text-truncate">
+                        {{-- <span class="d-inline-block text-truncate">
                             @if (isset($variant->song->artists) && count($variant->song->artists) != 0)
                                 @foreach ($variant->song->artists as $index => $artist)
                                     <a class="no-deco text-light" href="{{ $artist->url }}">{{ $artist->name }}</a>
@@ -41,13 +41,13 @@
                             @else
                                 <span>N/A</span>
                             @endif
-                        </span>
+                        </span> --}}
                         <a class="no-deco text-light text-truncate" target="_blank"
                             href="{{ $variant->song->post->url }}">{{ $variant->song->post->title }}</a>
                     @endisset
                 </div>
                 <div class="d-flex align-items-end">
-                    <div class="badge rounded-pill bg-dark fw-medium">
+                    <div class="badge rounded-pill bg-dark fw-light">
                         <span id="score">{{ $variant->scoreString }}</span>
                         <span>
                             @if ($variant->userScore)

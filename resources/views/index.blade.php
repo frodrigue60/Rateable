@@ -30,7 +30,6 @@
 @section('content')
     <section class="container">
         {{-- TOP SECTION --}}
-        <section class="contenedor-main">
             <div class="container-top">
                 <section class="container-items limit-items-index">
                     @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
@@ -45,13 +44,11 @@
                                 <a href="{{ route('ranking') }}" class="btn btn-sm color4">Ranking</a>
                             @endif
                         </div>
-
-
                     </div>
-                    @php
-                        $j = 1;
-                    @endphp
-                    @include('layouts.top.openings')
+                    <div class="d-flex flex-column gap-2 w-100">
+                        @include('layouts.top.positions', ['items' => $openings])
+                    </div>
+                    
                 </section>
 
                 <section class="container-items limit-items-index">
@@ -68,14 +65,11 @@
                             @endif
                         </div>
                     </div>
-                    @php
-                        $j = 1;
-                    @endphp
-                    @include('layouts.top.endings')
+                    <div class="d-flex flex-column gap-2 w-100">
+                        @include('layouts.top.positions', ['items' => $endings])
+                    </div>
                 </section>
             </div>
-        </section>
-
         {{-- POSTS SECTION --}}
         @include('layouts.index.recents-carousel')
         @include('layouts.index.posts-index')

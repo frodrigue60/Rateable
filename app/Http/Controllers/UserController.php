@@ -146,7 +146,7 @@ class UserController extends Controller
                         $query->where('year_id', $year->id);
                     })
                     ->when($name, function ($query, $name) {
-                        $query->where('title', 'LIKE', "%{$name}%");
+                        $query->where('title', 'LIKE', '%'.$name.'%');
                     });
             })
             #SONG VARIANT QUERY
@@ -213,7 +213,7 @@ class UserController extends Controller
             ->whereHas('song.post', function ($query) use ($name, $season, $year) {
                 $query->where('status', 'published')
                     ->when($name, function ($query, $name) {
-                        $query->where('title', 'LIKE', "%{$name}%");
+                        $query->where('title', 'LIKE', '%'.$name.'%');
                     })
                     ->when($season, function ($query, $season) {
                         $query->where('season_id', $season->id);

@@ -105,15 +105,16 @@ class SongController extends Controller
     public function edit($id)
     {
         $song = Song::find($id);
-        //$artists = Artist::all();
+        /* $artists = Artist::all(); */
         $seasons = Season::all();
         $years = Year::all();
         $types = [
-            ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
+            ['name' => 'Opening', 'value' => '1'],
+            ['name' => 'Ending', 'value' => '2'],
+            ['name' => 'Insert', 'value' => '3']
         ];
 
-        return view('admin.songs.edit', compact('song', 'artists', 'types', 'seasons', 'years'));
+        return view('admin.songs.edit', compact('song', /* 'artists', */ 'types', 'seasons', 'years'));
     }
 
     /**

@@ -65,11 +65,11 @@ class PostController extends Controller
     {
         $q = $request->input('q');
 
-        $posts = Post::where('title', 'LIKE', "%$q%")->limit(5)->get(['title', 'slug']);
+        $posts = Post::where('title', 'LIKE', '%'.$q.'%')->limit(5)->get(['title', 'slug']);
 
-        $artists = Artist::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
+        $artists = Artist::where('name', 'LIKE', '%'.$q.'%')->limit(5)->get(['name', 'slug']);
 
-        $users = User::where('name', 'LIKE', "%$q%")->limit(5)->get(['name', 'slug']);
+        $users = User::where('name', 'LIKE', '%'.$q.'%')->limit(5)->get(['name', 'slug']);
 
         $data = [
             "posts" => $posts,

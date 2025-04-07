@@ -151,7 +151,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        $deleteRatings = DB::table('ratings')->where('user_id', '=', $user->id)->delete();
+        $deleteRatings = DB::table('ratings')->where('user_id', $user->id)->delete();
 
         if ($user->delete()) {
             return Redirect::route('admin.users.index')->with('success', 'User deleted successfully');
@@ -163,7 +163,7 @@ class UserController extends Controller
     public function searchUser(Request $request)
     {
         $users = User::query()
-            ->where('name', 'LIKE', "%{$request->input('q')}%")
+            ->where('name', 'LIKE', '%'.$request->input('q').'%')
             ->paginate(10);
 
         return view('admin.users.index', compact('users'));

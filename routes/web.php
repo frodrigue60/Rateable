@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\SeasonController as AdminSeasonController;
 use App\Http\Controllers\CommentController as CommentController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\YearController;
+use App\Http\Controllers\Admin\CommentControlle as AdminCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +118,9 @@ Route::group(['middleware' => 'staff'], function () {
         //SEASONS
         Route::resource('seasons', AdminSeasonController::class, ['as' => 'admin']);
         Route::get('seasons/{season}/toggle', [AdminSeasonController::class, 'toggle'])->name('admin.seasons.toggle');
+
+        //COMMENTS
+        Route::resource('comments', AdminCommentController::class, ['as' => 'admin']);
     });
 });
 

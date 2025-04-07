@@ -58,8 +58,6 @@ class SongVariantController extends Controller
      */
     public function show($anime_slug, $song_suffix, $variant_version_number)
     {
-
-
         $user = Auth::check() ? Auth::User() : null;
 
         $post = Post::where('slug', $anime_slug)->firstOrFail();
@@ -125,8 +123,7 @@ class SongVariantController extends Controller
             $userRating = null;
         }
 
-        //dd($userRating->rating, $userRating->formatRating);
-        //$song_variant = $song_variant->formatted_scores; // Accede al accesor
+        $song_variant = $this->setScoreOnlyOneVariant($song_variant, $user);
 
         //dd($song_variant);
 
@@ -272,13 +269,13 @@ class SongVariantController extends Controller
 
     public function seasonal(Request $request)
     {
-        $type_OP = 'OP';
-        $type_ED = 'ED';
+        /*  $type_OP = 'OP'; */
+        /* $type_ED = 'ED'; */
         $currentSeason = Season::where('current', true)->first();
         $currentYear = Year::where('current', true)->first();
-        $user = Auth::check() ? Auth::User() : null;
+        /*  $user = Auth::check() ? Auth::User() : null; */
 
-        $openings = SongVariant::with(['song'])
+        /* $openings = SongVariant::with(['song'])
             #SONG QUERY
             ->whereHas('song', function ($query) use ($type_OP) {
                 $query->when($type_OP, function ($query, $type) {
@@ -296,7 +293,7 @@ class SongVariantController extends Controller
                     });
             })
             #SONG VARIANT QUERY
-            ->get();
+            ->get(); */
 
         /* $endings = SongVariant::with(['song'])
             #SONG QUERY
@@ -333,77 +330,100 @@ class SongVariantController extends Controller
         $variants->each(function ($variant) use ($user) {
             $variant->userScore = null;
             $factor = 1;
-            $isDecimalFormat = false; // Determina si el formato permite decimales
+            $isDecimalFormat = false;
+            $denominator = 100; // Por defecto para POINT_100
 
             if ($user) {
                 switch ($user->score_format) {
                     case 'POINT_100':
                         $factor = 1;
+                        $denominator = 100;
                         break;
                     case 'POINT_10_DECIMAL':
                         $factor = 0.1;
+                        $denominator = 10;
                         $isDecimalFormat = true;
                         break;
                     case 'POINT_10':
                         $factor = 1 / 10;
+                        $denominator = 10;
                         break;
                     case 'POINT_5':
                         $factor = 1 / 20;
+                        $denominator = 5;
                         $isDecimalFormat = true;
-                        break;
-                    default:
-                        $factor = 1;
                         break;
                 }
 
                 if ($userRating = $this->getUserRating($variant->id, $user->id)) {
                     $variant->userScore = $isDecimalFormat
-                        ? round($userRating->rating * $factor, 1) // Conserva 1 decimal
-                        : (int) round($userRating->rating * $factor); // Fuerza entero
+                        ? round($userRating->rating * $factor, 1)
+                        : (int) round($userRating->rating * $factor);
                 }
             }
 
             $variant->score = $isDecimalFormat
-                ? round($variant->averageRating * $factor, 1) // Conserva 1 decimal
-                : (int) round($variant->averageRating * $factor); // Fuerza entero
+                ? round($variant->averageRating * $factor, 1)
+                : (int) round($variant->averageRating * $factor);
+
+            // Agregar la propiedad scoreString formateada
+            $variant->scoreString = $this->formatScoreString(
+                $variant->score,
+                $user->score_format ?? 'POINT_100',
+                $denominator
+            );
         });
 
         return $variants;
     }
 
-    public function setScoreOneVariant($variant, $user = null)
+    #New
+    public function setScoreOnlyOneVariant($variant, $user = null)
     {
-        $variant->user_score = null;
-
+        $variant->userScore = null;
         $factor = 1;
+        $isDecimalFormat = false;
+        $denominator = 100; // Por defecto para POINT_100
 
         if ($user) {
             switch ($user->score_format) {
                 case 'POINT_100':
                     $factor = 1;
+                    $denominator = 100;
                     break;
                 case 'POINT_10_DECIMAL':
                     $factor = 0.1;
+                    $denominator = 10;
+                    $isDecimalFormat = true;
                     break;
                 case 'POINT_10':
                     $factor = 1 / 10;
+                    $denominator = 10;
                     break;
                 case 'POINT_5':
                     $factor = 1 / 20;
-                    break;
-                default:
-                    $factor = 1;
+                    $denominator = 5;
+                    $isDecimalFormat = true;
                     break;
             }
 
-            $userRating = $this->userRating($variant->id, $user->id);
-
-            if ($userRating) {
-                $variant->user_score = $userRating->rating * $factor;
+            if ($userRating = $this->getUserRating($variant->id, $user->id)) {
+                $variant->userScore = $isDecimalFormat
+                    ? round($userRating->rating * $factor, 1)
+                    : (int) round($userRating->rating * $factor);
             }
         }
 
-        $variant->score = round($variant->averageRating * $factor);
+        $variant->score = $isDecimalFormat
+            ? round($variant->averageRating * $factor, 1)
+            : (int) round($variant->averageRating * $factor);
+
+        // Agregar la propiedad scoreString formateada
+        $variant->scoreString = $this->formatScoreString(
+            $variant->score,
+            $user->score_format ?? 'POINT_100',
+            $denominator
+        );
 
 
         return $variant;
@@ -440,6 +460,24 @@ class SongVariantController extends Controller
 
     public function ranking()
     {
+        $user = Auth::check() ? Auth::user() : null;
+        $status = true;
+
+        $openings = SongVariant::with(['song.post'])
+            ->whereHas('song.post', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->whereHas('song', function ($query) {
+                $query->where('type', 'OP');
+            })
+            ->get()
+            ->sortByDesc('averageRating')
+            ->take(100);
+
+        $openings = $this->setScoreOnlyVariants($openings, $user);
+
+        //dd($openings[0]);
+
         return view('public.variants.ranking');
     }
 
@@ -515,10 +553,11 @@ class SongVariantController extends Controller
     public function globalRanking()
     {
         $user = Auth::check() ? Auth::user() : null;
+        $status = true;
 
         $openings = SongVariant::with(['song.post'])
-            ->whereHas('song.post', function ($query) {
-                $query->where('status', '=', 'published');
+            ->whereHas('song.post', function ($query) use ($status) {
+                $query->where('status', $status);
             })
             ->whereHas('song', function ($query) {
                 $query->where('type', 'OP');
@@ -532,8 +571,8 @@ class SongVariantController extends Controller
         $openings = $this->setScoreOnlyVariants($openings, $user);
 
         $endings = SongVariant::with(['song.post'])
-            ->whereHas('song.post', function ($query) {
-                $query->where('status', '=', 'published');
+            ->whereHas('song.post', function ($query) use ($status) {
+                $query->where('status', $status);
             })
             ->whereHas('song', function ($query) {
                 $query->where('type', 'ED');
@@ -556,5 +595,21 @@ class SongVariantController extends Controller
         $items = $collection instanceof Collection ? $collection : Collection::make($collection);
         $collection = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
         return $collection;
+    }
+
+    protected function formatScoreString($score, $format, $denominator)
+    {
+        switch ($format) {
+            case 'POINT_100':
+                return $score . '/' . $denominator;
+            case 'POINT_10_DECIMAL':
+                return number_format($score, 1) . '/' . $denominator;
+            case 'POINT_10':
+                return $score . '/' . $denominator;
+            case 'POINT_5':
+                return number_format($score, 1) . '/' . $denominator;
+            default:
+                return $score . '/' . $denominator;
+        }
     }
 }

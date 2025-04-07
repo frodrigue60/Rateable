@@ -56,7 +56,7 @@
             <div class="mb-3 d-flex justify-content-between align-items-center">
                 <h3 id="section-header" class="p-0 m-0">OPENINGS</h3>
                 <button type="button" class="btn btn-primary" id="toggle-type-btn">
-                    <i class="fa-solid fa-rotate"></i>
+                    <i class="fa-solid fa-rotate"></i> <span id="btn-toggle-text">Endings</span>
                 </button>
 
             </div>
@@ -76,7 +76,7 @@
             const token = localStorage.getItem('api_token');
 
             // Estado inicial
-            let currentType = 'OP';
+            let currentType = '1';
             const contentContainer = document.getElementById('content-container');
             const sectionHeader = document.getElementById('section-header');
             const toggleBtn = document.getElementById('toggle-type-btn');
@@ -118,9 +118,12 @@
 
             // Función para actualizar el encabezado
             function updateHeader(type) {
-                sectionHeader.textContent = type === 'OP' ?
+                sectionHeader.textContent = type === '1' ?
                     'OPENINGS' :
                     'ENDINGS';
+                document.querySelector('#btn-toggle-text').textContent = type === '1' ?
+                    'Endings' :
+                    'Openings';
             }
 
             // Función para renderizar datos (ejemplo básico)
@@ -131,7 +134,7 @@
 
             // Manejador del botón
             toggleBtn.addEventListener('click', () => {
-                currentType = currentType === 'OP' ? 'ED' : 'OP';
+                currentType = currentType === '1' ? '2' : '1';
                 fetchData(currentType);
             });
         });

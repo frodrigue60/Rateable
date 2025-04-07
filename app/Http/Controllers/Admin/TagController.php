@@ -136,7 +136,7 @@ class TagController extends Controller
             try {
                 DB::transaction(function () use ($tag, $id) {
                     DB::table('tagging_tags')
-                        ->where('id', '=', $id)
+                        ->where('id', $id)
                         ->update([
                             'slug' => $tag->slug,
                             'name' => $tag->name
@@ -157,7 +157,7 @@ class TagController extends Controller
      */
     public function destroy($id)
     {
-        $tag = DB::table('tagging_tags')->where('id', '=', $id)->first();
+        $tag = DB::table('tagging_tags')->where('id', $id)->first();
 
         $posts = Post::withAnyTag($tag->name)->get();
 
@@ -165,13 +165,13 @@ class TagController extends Controller
             $post->untag($tag->name);
         }
 
-        DB::table('tagging_tags')->where('id', '=', $id)->delete();
+        DB::table('tagging_tags')->where('id', $id)->delete();
         return redirect(route('admin.tags.index'))->with('success', 'Data deleted');
     }
     public function search(Request $request)
     {
         $tags = DB::table('tagging_tags')
-            ->where('name', 'LIKE', "%{$request->input('q')}%")
+            ->where('name', 'LIKE', '%'.$request->input('q').'%')
             ->paginate(10);
         return view('admin.tags.index', compact('tags'));
     }

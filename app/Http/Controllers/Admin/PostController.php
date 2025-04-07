@@ -95,17 +95,17 @@ class PostController extends Controller
 
             switch (Auth::user()->type) {
                 case 'creator':
-                    $post->status = 'stagged';
+                    $post->status = false;
                     break;
                 case 'admin' || 'editor':
                     if ($request->postStatus == null) {
-                        $post->status = 'stagged';
+                        $post->status = false;
                     } else {
                         $post->status = $request->postStatus;
                     }
                     break;
                 default:
-                    $post->status = 'stagged';
+                    $post->status = true;
                     break;
             }
 
@@ -221,17 +221,17 @@ class PostController extends Controller
 
             switch (Auth::user()->type) {
                 case 'creator':
-                    $post->status = 'stagged';
+                    $post->status = false;
                     break;
                 case 'admin' || 'editor':
                     if ($request->postStatus == null) {
-                        $post->status = 'stagged';
+                        $post->status = false;
                     } else {
                         $post->status = $request->postStatus;
                     }
                     break;
                 default:
-                    $post->status = 'stagged';
+                    $post->status = false;
                     break;
             }
 
@@ -272,7 +272,7 @@ class PostController extends Controller
     public function search(Request $request)
     {
         $posts = Post::query()
-            ->where('title', 'LIKE', "%{$request->input('q')}%")
+            ->where('title', 'LIKE', '%'.$request->input('q').'%')
             ->paginate(10);
 
         return view('admin.posts.index', compact('posts'));
@@ -281,7 +281,7 @@ class PostController extends Controller
     {
         if (Auth::check()) {
             $post = Post::find($id);
-            $post->status = 'published';
+            $post->status = true;
             $post->update();
             return Redirect::back()->with('success', 'Post ' . $post->id . ' Approved successfully!');
         }
@@ -291,7 +291,7 @@ class PostController extends Controller
     {
         if (Auth::check()) {
             $post = Post::find($id);
-            $post->status = 'stagged';
+            $post->status = false;
             $post->update();
             return Redirect::back()->with('warning', 'Post ' . $post->id . ' Unapproved successfully!');
         }
@@ -454,7 +454,7 @@ class PostController extends Controller
             $post->slug = Str::slug($post->title);
             $post->description = $item->description;
             $post->anilist_id = $item->id;
-            $post->status = 'published';
+            $post->status = true;
 
             $post->season_id = null;
             $post->year_id = null;
@@ -803,8 +803,9 @@ class PostController extends Controller
         $seasons = Season::all();
         $years = Year::all();
         $types = [
-            ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
+            ['name' => 'Opening', 'value' => '1'],
+            ['name' => 'Ending', 'value' => '2'],
+            ['name' => 'Insert', 'value' => '3']
         ];
         $artists = Artist::all();
 

@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
 
                     data.artists.forEach(element => {
-                        let url = baseUrl + "/artists/" + element.name_slug;
+                        let url = baseUrl + "/artists/" + element.slug;
 
                         let resultDiv = document.createElement('div');
                         resultDiv.classList.add('result');

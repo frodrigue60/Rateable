@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->unsignedBigInteger('anilist_id')->nullable();
-            $table->enum('status', ['stagged', 'published'])->default('stagged');
+            $table->boolean('status')->default(false);
             $table->string('thumbnail')->nullable();
             $table->string('thumbnail_src')->nullable();
             $table->string('banner')->nullable();

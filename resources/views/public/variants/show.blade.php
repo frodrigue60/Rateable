@@ -428,10 +428,11 @@
         @auth
             <div class="py-2">
                 <div>
-                    <form action="{{ route('comments.store') }}" method="post" class="d-flex flex-column gap-2">
+                    <form id="commnent-form" action="{{ route('comments.store') }}" method="post"
+                        class="d-flex flex-column gap-2">
                         @csrf
-                        <input type="hidden" name="song_variant_id" value="{{ $song_variant->id }}">
-                        <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="2"
+                        <input type="hidden" id="song_variant_id" name="song_variant_id" value="{{ $song_variant->id }}">
+                        <textarea id="comment-content" name="content" class="form-control" id="exampleFormControlTextarea1" rows="2"
                             placeholder="Comment ... (optional)" maxlength="255"></textarea>
                         <button class="btn btn-primary" type="submit">Submit</button>
                     </form>
@@ -550,67 +551,12 @@
         @endif --}}
 
         @if (isset($comments))
-            <div class="my-2">
-                <h4 class="text-light my-2">Recents comments</h4>
-                @foreach ($comments as $comment)
-                    @php
-                        $user_pp_url = '';
-
-                        if ($comment->user->image != null && Storage::disk('public')->exists($comment->user->image)) {
-                            $user_pp_url = $comment->user->image;
-                        } else {
-                            $user_pp_url = asset('/storage/profile/' . 'default.jpg');
-                        }
-
-                    @endphp
-                    <div class="py-2">
-                        <div class="comment-container">
-                            <div class="profile-pic-container">
-                                <img class="user-profile-pic" src="{{ $user_pp_url }}" alt="User profile pic">
-                            </div>
-                            <div class="comment-details">
-                                <div>
-                                    <div class="user-details">
-                                        <div style="display: flex; gap: 10px;">
-                                            <div class="user-name">
-                                                <a class="no-deco text-light"
-                                                    href="{{ route('user.list', $comment->user->slug) }}">{{ $comment->user->name }}</a>
-                                            </div>
-                                            <div class="user-score">
-                                                <i class="fa-solid fa-bookmark"></i>
-                                            </div>
-                                        </div>
-                                        <div class="like-buttons">
-
-                                            <form action="{{ route('comments.like', $comment->id) }}" method="post">
-                                                @csrf
-                                                <button class="no-deco text-light"
-                                                    style="background-color: transparent;border:none;">{{ $comment->likesCount }}
-                                                    <i class="fa-regular fa-thumbs-up"></i></button>
-                                            </form>
-
-                                            <form action="{{ route('comments.dislike', $comment->id) }}" method="post">
-                                                @csrf
-                                                <button class="no-deco text-light"
-                                                    style="background-color: transparent;border:none;">{{ $comment->dislikesCount }}
-                                                    <i class="fa-regular fa-thumbs-down"></i></button>
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                    <div class="date">
-                                        <span>{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
-                                        </span>
-                                    </div>
-                                    <div class="comment-content">
-                                        <span>{{ $comment->content }}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                @endforeach
+        <div>
+            <h4 class="text-light my-2">Recents comments</h4>
+        </div>
+            <div class="my-2" id="comments-container">
+                {{-- PARTIAL COMMENTS --}}
+                @include('partials.comments.comments')
             </div>
         @endif
     </div>
@@ -632,6 +578,9 @@
             const rateForm = document.querySelector('#rating-form');
             const ratingBtn = document.querySelector('#rating-button');
             const scoreSpan = document.querySelector('#score-span');
+
+            const commentForm = document.querySelector('#commnent-form');
+            const commentContainer = document.querySelector('#comments-container');
         </script>
         <script>
             document.addEventListener("DOMContentLoaded", (event) => {
@@ -731,6 +680,47 @@
                         console.log(error)
                     }
                 }
+
+                commentForm.addEventListener("submit", function(event) {
+                    event.preventDefault()
+                    console.log('listen form submit');
+
+                    let commentTextarea = document.querySelector('#comment-content');
+                    let songVariantId = document.querySelector('#song_variant_id').value;
+
+                    if (commentTextarea.value != '') {
+                        makeComment(commentTextarea.value)
+                    }
+
+                    function makeComment(commentContent) {
+                        try {
+                            fetch(baseUrl + "/api/comments", {
+                                headers: {
+                                    'X-Request-With': 'XMLHttpRequest',
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken,
+                                    'Authorization': 'Bearer ' + token,
+                                },
+                                method: "POST",
+                                body: JSON.stringify({
+                                    content: commentContent,
+                                    song_variant_id: songVariantId,
+                                }),
+                            }).then(response => {
+                                return response.json()
+                            }).then((data) => {
+                                //console.log(data);
+                                commentTextarea.value = '';
+                                //commentContainer.innerHTML += data.comment;
+                                commentContainer.insertAdjacentHTML('afterbegin', data.comment);
+                            });
+                        } catch (error) {
+                            //console.log(error)
+                        }
+                    }
+
+                });
+
 
             });
         </script>
