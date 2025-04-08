@@ -104,7 +104,7 @@ class UserController extends Controller
         $years = Year::all();
         $seasons = Season::all();
 
-        //$score_format = $user->score_format;
+        $status = true;
 
         $filterBy = $request->filterBy;
         $type = $request->type;
@@ -137,8 +137,8 @@ class UserController extends Controller
                 });
             })
             #POST QUERY
-            ->whereHas('song.post', function ($query) use ($name, $season, $year) {
-                $query->where('status', 'published')
+            ->whereHas('song.post', function ($query) use ($name, $season, $year, $status) {
+                $query->where('status', $status)
                     ->when($season, function ($query, $season) {
                         $query->where('season_id', $season->id);
                     })
@@ -146,7 +146,7 @@ class UserController extends Controller
                         $query->where('year_id', $year->id);
                     })
                     ->when($name, function ($query, $name) {
-                        $query->where('title', 'LIKE', '%'.$name.'%');
+                        $query->where('title', 'LIKE', '%' . $name . '%');
                     });
             })
             #SONG VARIANT QUERY
@@ -213,7 +213,7 @@ class UserController extends Controller
             ->whereHas('song.post', function ($query) use ($name, $season, $year) {
                 $query->where('status', 'published')
                     ->when($name, function ($query, $name) {
-                        $query->where('title', 'LIKE', '%'.$name.'%');
+                        $query->where('title', 'LIKE', '%' . $name . '%');
                     })
                     ->when($season, function ($query, $season) {
                         $query->where('season_id', $season->id);
@@ -345,7 +345,7 @@ class UserController extends Controller
             $old_user_image = $user->image;
 
             $extension = $request->image->extension();
-            $file_name = 'profile_' . time() . '.' . $extension;
+            $file_name = $user->slug . '.' . $extension;
             $path = 'profile/';
 
             $request->image->storeAs($path, $file_name, 'public');
@@ -356,10 +356,10 @@ class UserController extends Controller
 
             DB::table('users')
                 ->where('id', $user->id)
-                ->update(['image' => $path.$file_name]);
+                ->update(['image' => $path . $file_name]);
 
             return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
-        } 
+        }
 
         return redirect(route('profile'))->with('warning', 'File not found');
     }
@@ -376,12 +376,12 @@ class UserController extends Controller
                 return redirect(route('profile'))->with('error', $errors);
             }
 
-            $user_id = Auth::user()->id;
-            $old_banner_image = Auth::user()->banner;
+            $user = Auth::user()->id;
+            $old_banner_image = $user->banner;
 
 
             $extension = $request->banner->extension();
-            $file_name = 'banner_' . time() . '.' . $extension;
+            $file_name = $user->slug . '.' . $extension;
             $path = 'banner/';
 
             $request->banner->storeAs($path, $file_name, 'public');
@@ -391,8 +391,8 @@ class UserController extends Controller
             }
 
             DB::table('users')
-                ->where('id', $user_id)
-                ->update(['banner' => $path.$file_name]);
+                ->where('id', $user->id)
+                ->update(['banner' => $path . $file_name]);
 
             return redirect(route('profile'))->with('success', 'Image uploaded successfully!');
         }
@@ -463,7 +463,9 @@ class UserController extends Controller
 
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
+            ['name' => 'Ending', 'value' => 'ED'],
+            ['name' => 'Insert', 'value' => 'INS'],
+            ['name' => 'Other', 'value' => 'OTH']
         ];
 
         $sortMethods = [

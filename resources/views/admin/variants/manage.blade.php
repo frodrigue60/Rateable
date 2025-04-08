@@ -35,7 +35,7 @@
                                             @endif
                                         </td>
 
-                                        <td class="d-flex gap-2">
+                                        <td class="d-flex gap-1">
                                             <a class="btn-sm btn btn-success"
                                                 href="{{ route('admin.variants.edit', $variant->id) }}"><i
                                                     class="fa-solid fa-pencil"></i></a>

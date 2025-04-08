@@ -144,12 +144,15 @@
                                                 @endif
                                             @endif
                                         </td>
-                                        <td>
+                                        <td class="d-flex gap-1">
                                             <a href="{{ route('admin.posts.edit', $post->id) }}"
                                                 class="btn btn-success btn-sm"><i class="fa-solid fa-pencil"></i></a>
-                                            <a href="{{ route('admin.posts.destroy', $post->id) }}"
-                                                class="btn btn-danger btn-sm"><i class="fa fa-trash"
-                                                    aria-hidden="true"></i></a>
+                                            <form class="d-flex" action="{{ route('admin.posts.destroy', $post->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"
+                                                        aria-hidden="true"></i></button>
+                                            </form>
                                             <a class="btn btn-sm btn-primary"
                                                 href="{{ route('admin.posts.show', $post->id) }}"><i
                                                     class="fa-solid fa-eye"></i></a>

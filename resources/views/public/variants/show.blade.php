@@ -88,7 +88,7 @@
                         {{ $song->slug }} {{ $song_variant->slug }}</a>
                 </h2>
                 <div class="my-2">
-                    <a href="#" class="text-decoration-none text-light">{{ $song->name }}</a> -
+                    <span class="text-light">{{ $song->name }}</span> -
                     @foreach ($song_variant->song->artists as $index => $artist)
                         @php
                             if ($artist->name_jp != null) {

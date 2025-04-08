@@ -64,7 +64,7 @@ class PostController extends Controller
                 $query->where('status', $status);
             })
             ->whereHas('song', function ($query) {
-                $query->where('type', '1');
+                $query->where('type', 'OP');
             })
             ->get()
             ->sortByDesc('averageRating')
@@ -77,7 +77,7 @@ class PostController extends Controller
                 $query->where('status', $status);
             })
             ->whereHas('song', function ($query) {
-                $query->where('type', '2');
+                $query->where('type', 'ED');
             })
             ->get()
             ->sortByDesc('averageRating')
@@ -150,13 +150,13 @@ class PostController extends Controller
         }
 
         $openings = $post->songs->filter(function ($song) {
-            return $song->type === '1';
+            return $song->type === 'OP';
         });
 
         $openings = $this->setScoreToSongVariants($openings, $user);
 
         $endings = $post->songs->filter(function ($song) {
-            return $song->type === '2';
+            return $song->type === 'ED';
         });
 
         $endings = $this->setScoreToSongVariants($endings, $user);
@@ -437,9 +437,10 @@ class PostController extends Controller
         ];
 
         $types = [
-            ['name' => 'Opening', 'value' => '1'],
-            ['name' => 'Ending', 'value' => '2'],
-            ['name' => 'Insert', 'value' => '3'],
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED'],
+            ['name' => 'Insert', 'value' => 'INS'],
+            ['name' => 'Other', 'value' => 'OTH'],
         ];
 
         $sortMethods = [

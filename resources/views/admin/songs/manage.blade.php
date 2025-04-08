@@ -57,12 +57,12 @@
                                     </td>
                                     <td>{{ count($song->songVariants) }}</td>
                                     <td>{{ $song->slug != null ? $song->slug : $song->type }}</td>
-                                    <td>
+                                    <td class="d-flex gap-1">
                                         @if (Auth::user()->isEditor() | Auth::user()->isAdmin())
                                             <a class="btn btn-sm btn-success"
                                                 href="{{ route('admin.songs.edit', $song->id) }}"><i
                                                     class="fa-solid fa-pencil"></i></a>
-                                            <form action="{{ route('admin.songs.destroy', $song->id) }}" method="post">
+                                            <form class="d-flex" action="{{ route('admin.songs.destroy', $song->id) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-sm btn-danger" type="submit"><i

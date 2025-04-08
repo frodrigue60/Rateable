@@ -59,9 +59,10 @@ class ArtistController extends Controller
         $seasons = Season::all();
 
         $types = [
-            ['name' => 'Opening', 'value' => '1'],
-            ['name' => 'Ending', 'value' => '2'],
-            ['name' => 'Insert', 'value' => '3']
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED'],
+            ['name' => 'Insert', 'value' => 'INS'],
+            ['name' => 'Other', 'value' => 'OTH']
         ];
 
         $sortMethods = [

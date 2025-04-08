@@ -55,16 +55,19 @@ class SongController extends Controller
         $artistsIds = [];
 
         foreach ($artistsNames as $name) {
-            $name = preg_replace('/\s+/', ' ', $name);
-            $artist = Artist::firstOrCreate(
-                [
-                    'slug' => Str::slug($name),
-                ],
-                [
-                    'name' =>  $name,
-                ]
-            );
-            $artistsIds[] = $artist->id;
+            $name = trim(preg_replace('/\s+/', ' ', $name));
+
+            if ($name != '') {
+                $artist = Artist::firstOrCreate(
+                    [
+                        'slug' => Str::slug($name),
+                    ],
+                    [
+                        'name' =>  $name,
+                    ]
+                );
+                $artistsIds[] = $artist->id;
+            }
         }
 
         $latestVersion = Song::where('post_id', $request->post_id)

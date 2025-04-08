@@ -32,7 +32,7 @@
                             @foreach ($users as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td><a href="{{ route('user.list', $item->id) }}">{{ $item->name }}</a></td>
+                                    <td><a href="{{ route('user.list', $item->slug) }}">{{ $item->name }}</a></td>
                                     <td>{{ $item->email }}</td>
                                     <td>{{ $item->type }}</td>
                                     <td class="d-flex gap-2">

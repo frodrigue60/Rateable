@@ -62,7 +62,7 @@
                             <label for="formFileBanner" class="form-label">Upload Banner Thumbnail</label>
                             <input class="form-control" type="file" id="formFileBanner" name="banner">
                         </div>
-                        <div class="col-md mb-3">
+                        {{-- <div class="col-md mb-3">
                             <label for="tags-select">Select season</label>
                             <select class="form-select" name="tags[]" id="tags-select" multiple>
                                 <option value="">Select tags</option>
@@ -76,7 +76,28 @@
                                     @endforeach
                                 @endisset
                             </select>
+                        </div> --}}
+
+                        <div class="mb-3">
+                            <label for="year" class="form-label">Year</label>
+                            <select class="form-select" name="year" id="year" required>
+                                <option selected>Select year</option>
+                                @foreach ($years as $year)
+                                    <option value="{{ $year->id }}" {{ old('year') == $year->id ? 'selected' :'' }}>{{$year->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="season" class="form-label">Season</label>
+                            <select class="form-select" name="season" id="season" required>
+                                <option selected>Select season</option>
+                                @foreach ($seasons as $season)
+                                    <option value="{{ $season->id }}" {{ old('season') == $season->id ? 'selected' :'' }}>{{$season->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
 
                         <div class="d-flex">
                             <button class="btn btn-primary w-100" type="submit">Submit</button>
@@ -89,9 +110,9 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
 
     <script>
         new MultiSelectTag('tags-select');
-    </script>
+    </script> --}}
 @endsection

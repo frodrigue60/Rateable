@@ -64,7 +64,7 @@
                             <label for="formFileBanner" class="form-label">Upload Banner Thumbnail</label>
                             <input class="form-control" type="file" id="formFileBanner" name="banner">
                         </div>
-                        <div class="col-md mb-3">
+                        {{--  <div class="col-md mb-3">
                             <label for="tags-select">Select tags</label>
                             <select class="form-select" name="tags[]" id="tags-select" multiple>
                                 <option value="">Select tags</option>
@@ -78,6 +78,29 @@
                                             {{ $tag->name }}</option>
                                     @endforeach
                                 @endisset
+                            </select>
+                        </div> --}}
+                        <div class="mb-3">
+                            <label for="year" class="form-label">Year</label>
+                            <select class="form-select" name="year" id="year">
+                                <option selected>Select one</option>
+                                @foreach ($years as $year)
+                                    <option value="{{ $year->id }}"
+                                        {{ old('year', $year->id) == $year->id ? 'selected' : '' }}>{{ $year->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="season" class="form-label">Season</label>
+                            <select class="form-select" name="season" id="season">
+                                <option selected>Select one</option>
+                                @foreach ($seasons as $season)
+                                    <option value="{{ $season->id }}"
+                                        {{ old('season', $season->id) == $season->id ? 'selected' : '' }}>
+                                        {{ $season->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                 </div>
@@ -93,9 +116,9 @@
 
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+    {{--  <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
 
     <script>
         new MultiSelectTag('tags-select');
-    </script>
+    </script> --}}
 @endsection

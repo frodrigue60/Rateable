@@ -51,12 +51,14 @@ class PostController extends Controller
 
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
+            ['name' => 'Ending', 'value' => 'ED'],
+            ['name' => 'Insert', 'value' => 'INS'],
+            ['name' => 'Other', 'value' => 'OTH'],
         ];
 
         $postStatus = [
-            ['name' => 'Stagged', 'value' => 'stagged'],
-            ['name' => 'Published', 'value' => 'published']
+            ['name' => 'Stagged', 'value' => false],
+            ['name' => 'Published', 'value' => true]
         ];
 
         $breadcrumb = Breadcrumb::generate([
@@ -92,6 +94,8 @@ class PostController extends Controller
             $post->title = $request->title;
             $post->slug = Str::slug($request->title);
             $post->description = $request->description;
+            $post->year_id = $request->year;
+            $post->season_id = $request->season;
 
             switch (Auth::user()->type) {
                 case 'creator':
@@ -112,7 +116,7 @@ class PostController extends Controller
             $this->storePostImages($post, $request);
 
             if ($post->save()) {
-                $post->retag($request->tags);
+                //$post->retag($request->tags);
 
                 $success = 'Post created successfully';
                 return redirect(route('admin.posts.index'))->with('success', $success);
@@ -177,12 +181,14 @@ class PostController extends Controller
 
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
-            ['name' => 'Ending', 'value' => 'ED']
+            ['name' => 'Ending', 'value' => 'ED'],
+            ['name' => 'Insert', 'value' => 'INS'],
+            ['name' => 'Other', 'value' => 'OTH'],
         ];
 
         $postStatus = [
-            ['name' => 'Stagged', 'value' => 'stagged'],
-            ['name' => 'Published', 'value' => 'published']
+            ['name' => 'Stagged', 'value' => false],
+            ['name' => 'Published', 'value' => true]
         ];
 
         $breadcrumb = Breadcrumb::generate([
@@ -196,7 +202,7 @@ class PostController extends Controller
             ],
         ]);
 
-        return view('admin.posts.edit', compact('post', 'types', 'artists', 'postStatus', 'breadcrumb'));
+        return view('admin.posts.edit', compact('post', 'types', 'artists', 'postStatus', 'breadcrumb', 'years', 'seasons'));
     }
 
     /**

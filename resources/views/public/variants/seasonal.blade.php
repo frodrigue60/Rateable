@@ -76,7 +76,7 @@
             const token = localStorage.getItem('api_token');
 
             // Estado inicial
-            let currentType = '1';
+            let currentType = 'OP';
             const contentContainer = document.getElementById('content-container');
             const sectionHeader = document.getElementById('section-header');
             const toggleBtn = document.getElementById('toggle-type-btn');
@@ -118,10 +118,10 @@
 
             // Función para actualizar el encabezado
             function updateHeader(type) {
-                sectionHeader.textContent = type === '1' ?
+                sectionHeader.textContent = type === 'OP' ?
                     'OPENINGS' :
                     'ENDINGS';
-                document.querySelector('#btn-toggle-text').textContent = type === '1' ?
+                document.querySelector('#btn-toggle-text').textContent = type === 'OP' ?
                     'Endings' :
                     'Openings';
             }
@@ -134,7 +134,7 @@
 
             // Manejador del botón
             toggleBtn.addEventListener('click', () => {
-                currentType = currentType === '1' ? '2' : '1';
+                currentType = currentType === 'OP' ? 'ED' : 'OP';
                 fetchData(currentType);
             });
         });

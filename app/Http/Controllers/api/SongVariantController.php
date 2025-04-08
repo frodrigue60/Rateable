@@ -189,7 +189,7 @@ class SongVariantController extends Controller
                 $openings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', '1');
+                        $query->where('type', 'OP');
                     })
                     ->whereHas('song.post', function ($query) use ($status) {
                         /* POST QUERY */
@@ -203,7 +203,7 @@ class SongVariantController extends Controller
                 $endings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', '2');
+                        $query->where('type', 'ED');
                     })
                     ->whereHas('song.post', function ($query) use ($status) {
                         /* POST QUERY */
@@ -222,7 +222,7 @@ class SongVariantController extends Controller
                 $openings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', '1');
+                        $query->where('type', 'OP');
                     })
                     ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear, $status) {
                         /* POST QUERY */
@@ -242,7 +242,7 @@ class SongVariantController extends Controller
                 $endings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', '2');
+                        $query->where('type', 'ED');
                     })
                     ->whereHas('song.post', function ($query) use ($currentSeason, $currentYear, $status) {
                         /* POST QUERY */
@@ -266,7 +266,7 @@ class SongVariantController extends Controller
                 $openings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', '1');
+                        $query->where('type', 'OP');
                     })
                     ->whereHas('song.post', function ($query) use ($status) {
                         /* POST QUERY */
@@ -280,7 +280,7 @@ class SongVariantController extends Controller
                 $endings = SongVariant::with(['song.post'])
                     /* SONG QUERY */
                     ->whereHas('song', function ($query) {
-                        $query->where('type', '2');
+                        $query->where('type', 'ED');
                     })
                     ->whereHas('song.post', function ($query) use ($status) {
                         /* POST QUERY */
