@@ -17,10 +17,9 @@ class Song extends Model
         'song_romaji',
         'song_jp',
         'song_en',
-        'spoiler',
         'theme_num',
         'type',
-        'slug',
+        'slug'
     ];
 
     protected static function boot()

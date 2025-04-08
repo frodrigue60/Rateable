@@ -55,6 +55,7 @@ class SongVariantController extends Controller
         $songVariant->slug = $slug;
         $songVariant->season_id = $song->season_id;
         $songVariant->year_id = $song->year_id;
+        $songVariant->spoiler = false;
 
         //dd($songVariant);
 
@@ -136,6 +137,7 @@ class SongVariantController extends Controller
         $songVariant->slug = $slug;
         $songVariant->season_id = $song->season_id;
         $songVariant->year_id = $song->year_id;
+        $songVariant->spoiler = false;
 
         if ($songVariant->update()) {
             return redirect(route('admin.songs.variants', $songVariant->song->id))->with('success', 'Song updated success');

@@ -86,7 +86,15 @@
                             </div>
                         </div> --}}
 
-
+                        <div class="mb-3">
+                            <label for="type" class="form-label">Type</label>
+                            <select class="form-select" name="type" id="type">
+                                @foreach ($types as $item)
+                                    <option {{ $item['value'] == $song->type ? 'selected' : '' }}
+                                        value="{{ $item['value'] }}">{{ $item['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label for="" class="form-label">Season</label>
                             <select class="form-select" name="season_id" id="">

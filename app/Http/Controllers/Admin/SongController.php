@@ -109,9 +109,10 @@ class SongController extends Controller
         $seasons = Season::all();
         $years = Year::all();
         $types = [
-            ['name' => 'Opening', 'value' => '1'],
-            ['name' => 'Ending', 'value' => '2'],
-            ['name' => 'Insert', 'value' => '3']
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED'],
+            ['name' => 'Insert', 'value' => 'INS'],
+            ['name' => 'Other', 'value' => 'OTH']
         ];
 
         return view('admin.songs.edit', compact('song', /* 'artists', */ 'types', 'seasons', 'years'));
@@ -161,7 +162,7 @@ class SongController extends Controller
             $song->theme_num = 1;
         }
 
-        $song->slug = $song->type . $request->theme_num;
+        $song->slug = $song->type . $song->theme_num;
 
         if ($song->update()) {
             $song->artists()->sync($artistsIds);

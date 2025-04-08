@@ -24,7 +24,8 @@ class SongVariant extends Model
         'id',
         'version',
         'song_id',
-        'views'
+        'views',
+        'spoiler',
     ];
 
     protected static function boot()
