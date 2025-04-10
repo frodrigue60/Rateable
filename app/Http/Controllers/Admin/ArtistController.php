@@ -57,18 +57,17 @@ class ArtistController extends Controller
                 ->withErrors($validator);
         }
 
-        $name = preg_replace('/\s+/', ' ', $request->name);
+        $name = trim(preg_replace('/\s+/', ' ', $request->name));
 
         if ($this->artistExists($name)) {
             return redirect(route('admin.artists.index'))->with('warning', 'Artist ' . $name . ' already exists!');
         }
 
         $artist = new Artist();
-        
         $artist->name = $name;
-
+        #dd($request->all());
         if ($request->name_jp) {
-            $artist->name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
+            $artist->name_jp = trim(preg_replace('/\s+/', ' ', $request->name_jp));
         }
 
         $artist->slug = $this->generateUniqueSlug($request->name);
@@ -83,8 +82,8 @@ class ArtistController extends Controller
     function artistExists($name)
     {
         return Artist::where('name', $name)
-        ->where('slug', Str::slug($name))
-        ->exists();
+            ->where('slug', Str::slug($name))
+            ->exists();
     }
 
     /**
@@ -132,16 +131,17 @@ class ArtistController extends Controller
                 ->withErrors($validator);
         }
 
-        $name = preg_replace('/\s+/', ' ', $request->name);
+        $name = trim(preg_replace('/\s+/', ' ', $request->name));
         $artist->name = $name;
-        
+
         $artist->slug = $this->generateUniqueSlug($request->name);
 
         if ($request->name_jp) {
-            $artist->name_jp = preg_replace('/\s+/', ' ', $request->name_jp);
-        } else {
-            $artist->name_jp = null;
+            $name_jp = trim(preg_replace('/\s+/', ' ', $request->name_jp));
+            $artist->name_jp = $name_jp;
         }
+
+        #dd($artist);
 
         if ($artist->save()) {
             return redirect(route('admin.artists.index'))->with('success', 'Data has been updated successfully');
@@ -168,7 +168,7 @@ class ArtistController extends Controller
     {
 
         $artists = DB::table('artists')
-            ->where('name', 'LIKE', '%'.$request->input('q').'%')
+            ->where('name', 'LIKE', '%' . $request->input('q') . '%')
             ->paginate(10);
         return view('admin.artists.index', compact('artists'));
     }

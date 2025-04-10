@@ -72,7 +72,7 @@ class SongVariantController extends Controller
             ->firstOrFail();
 
         //dd($song_variant);
-        $song_variant->score = 0;
+
         if ($song_variant == null) {
             return redirect(route('/'))->with('warning', 'Item no exist!');
         }
@@ -84,6 +84,10 @@ class SongVariantController extends Controller
         $comments = $song_variant->comments;
         //dd($comments[0]->user);
         $factor = 1;
+
+        $song_variant->score = round($song_variant->averageRating * $factor, 1);
+        $userRating = null;
+
         if ($user) {
 
             $userRating = $this->getUserRating($song_variant->id, $user->id);
@@ -118,9 +122,6 @@ class SongVariantController extends Controller
                         break;
                 }
             }
-        } else {
-            $song_variant->score = round($song_variant->averageRating * $factor, 1);
-            $userRating = null;
         }
 
         $song_variant = $this->setScoreOnlyOneVariant($song_variant, $user);

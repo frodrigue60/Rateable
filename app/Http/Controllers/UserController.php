@@ -174,6 +174,7 @@ class UserController extends Controller
             return redirect()->route('login');
         }
 
+        $status = true;
 
         $user = Auth::user();
         //$score_format = $user->score_format;
@@ -202,7 +203,7 @@ class UserController extends Controller
 
         $song_variants = [];
 
-        $song_variants = SongVariant::with(['song'])
+        $song_variants = SongVariant::with(['song.post'])
             #SONG QUERY
             ->whereHas('song', function ($query) use ($type) {
                 $query->when($type, function ($query, $type) {
@@ -210,8 +211,8 @@ class UserController extends Controller
                 });
             })
             #POST QUERY
-            ->whereHas('song.post', function ($query) use ($name, $season, $year) {
-                $query->where('status', 'published')
+            ->whereHas('song.post', function ($query) use ($name, $season, $year, $status) {
+                $query->where('status', $status)
                     ->when($name, function ($query, $name) {
                         $query->where('title', 'LIKE', '%' . $name . '%');
                     })
@@ -345,7 +346,7 @@ class UserController extends Controller
             $old_user_image = $user->image;
 
             $extension = $request->image->extension();
-            $file_name = $user->slug . '.' . $extension;
+            $file_name = $user->slug . '-' . time() . '.' . $extension;
             $path = 'profile/';
 
             $request->image->storeAs($path, $file_name, 'public');
@@ -381,7 +382,7 @@ class UserController extends Controller
 
 
             $extension = $request->banner->extension();
-            $file_name = $user->slug . '.' . $extension;
+            $file_name = $user->slug . '-' . time() . '.' . $extension;
             $path = 'banner/';
 
             $request->banner->storeAs($path, $file_name, 'public');

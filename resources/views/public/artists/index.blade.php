@@ -77,7 +77,7 @@
                     @if (!preg_match('/^[a-zA-Z]/', $artist->name))
                         <div class="artist-list-item">
                             <a class="no-deco"
-                                href="{{ $artist->url }}" target="_blank" rel="noopener">{{ $artist->name }}</a>
+                                href="{{ $artist->url }}" target="_blank" rel="noopener noreferrer">{{ $artist->name }} {{"(".count($artist->songs).")"}}</a>
                         </div>
                     @endif
                 @endforeach
@@ -87,15 +87,11 @@
                     <h3 id="{{ $char }}">{{ $char }}</h3>
                 </div>
                 <div class="artist-list py-2">
-
                     @foreach ($artists as $artist)
-                    @php
-                        $countThemes = count($artist->songs)
-                    @endphp
                         @if (Str::startsWith($artist->name, $char))
                             <div class="artist-list-item">
                                 <a class="no-deco"
-                                    href="{{ $artist->url }}" target="_blank" rel="noopener">{{ $artist->name }} {{"(".$countThemes.")"}}</a>
+                                    href="{{ $artist->url }}" target="_blank" rel="noopener noreferrer">{{ $artist->name }} {{"(".count($artist->songs).")"}}</a>
                             </div>
                         @endif
                     @endforeach

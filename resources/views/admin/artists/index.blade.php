@@ -24,7 +24,7 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Name JP</th>
-                                <th scope="col">Slug</th>
+                                <th scope="col">Themes</th>
                                 <th scope="col">Options</th>
                             </tr>
                         </thead>
@@ -32,18 +32,14 @@
                             @foreach ($artists as $artist)
                                 <tr>
                                     <td>{{ $artist->id }}</td>
-                                    <td><a href="{{ route('artists.show', [$artist->id, $artist->slug]) }}"
+                                    <td><a href="{{ $artist->url }}"
                                             class="no-deco">{{ $artist->name }}</a>
                                     </td>
                                     <td>
-                                        @if (isset($artist->name_jp))
-                                            {{ $artist->name_jp }}
-                                        @else
-                                            N/A
-                                        @endif
+                                        {{ $artist->name }}
                                     </td>
                                     <td>
-                                        {{ $artist->slug }}
+                                        {{ $artist->songs->count() }}
                                     </td>
                                     <td class="d-flex gap-2">
                                         @if (Auth::User()->isAdmin())

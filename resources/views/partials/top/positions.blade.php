@@ -42,7 +42,7 @@
                                 <span>N/A</span>
                             @endif
                         </span>
-                        <a class="no-deco text-light text-truncate" target="_blank"
+                        <a class="no-deco text-light text-truncate" target="_blank" rel="noopener noreferrer"
                             href="{{ $variant->song->post->url }}">{{ $variant->song->post->title }}</a>
                     @endisset
                 </div>

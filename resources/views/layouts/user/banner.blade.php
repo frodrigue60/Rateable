@@ -12,11 +12,11 @@
 
 @endphp
 <div class="header">
-    <div class="banner-user" style="background-image: url({{ $bannerUrl }})">
+    <div class="banner-user" style="background-image: url({{ $bannerUrl }})" id="banner-image">
         <div class="data-container">
             <div class="shadow-banner"></div>
             <div class="banner-content container">
-                <img class="avatar" src="{{ $profileUrl }}" alt="">
+                <img class="avatar" src="{{ $profileUrl }}" alt="" id="avatar-image">
                 <div class="name-wrapper">
                     <h1 class="name text-light">{{ $user->name }}</h1>
                 </div>

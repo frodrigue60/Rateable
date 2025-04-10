@@ -44,7 +44,7 @@
                 @endisset
                 {{-- ANIME TITLE --}}
                 <div class="item-post-info">
-                    <a class="no-deco text-light" target="_blank"
+                    <a class="no-deco text-light" target="_blank" rel="noopener noreferrer"
                         href="{{ $variant->song->post->url }}">{{ $variant->song->post->title }}</a>
                 </div>
             </div>

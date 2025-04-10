@@ -107,8 +107,7 @@
                                 <i class="fa-solid fa-pen"></i> Request</a>
 
                             <a class="dropdown-item" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"><i
+                                onclick="event.preventDefault();localStorage.removeItem('api_token');document.getElementById('logout-form').submit();"><i
                                     class="fa fa-sign-out" aria-hidden="true"></i>
                                 {{ __('Logout') }}
                             </a>
