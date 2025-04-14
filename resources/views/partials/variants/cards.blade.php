@@ -17,7 +17,7 @@
     @endphp
 
     <article class="tarjeta">
-        <a class="no-deco" href="{{ $variant->url }}" target="_blank" rel="noopener noreferrer">
+        <a class="no-deco" href="{{ $variant->url }}" rel="noopener noreferrer">
             <div class="textos">
                 <div class="tarjeta-header text-light">
                     <h3 class="text-shadow text-uppercase post-titles">{{ $title }}</h3>

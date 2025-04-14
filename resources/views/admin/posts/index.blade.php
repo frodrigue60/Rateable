@@ -69,7 +69,8 @@
                         </div>
                         <br>
                     @endif
-                    <form class="d-flex" action="{{ route('admin.posts.search') }}" method="GET">
+                    <form class="d-flex" action="{{ route('admin.posts.search') }}" method="POST">
+                        @csrf
                         <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
@@ -157,7 +158,7 @@
                                                 href="{{ route('admin.posts.show', $post->id) }}"><i
                                                     class="fa-solid fa-eye"></i></a>
                                             <a class="btn btn-sm btn-primary"
-                                                href="{{ route('posts.songs', $post->id) }}"><i
+                                                href="{{ route('admin.posts.songs', $post->id) }}"><i
                                                     class="fa-solid fa-list"></i></a>
                                         </td>
                                     @endif

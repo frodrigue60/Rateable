@@ -1,8 +1,5 @@
 @foreach ($posts as $post)
     @php
-
-        //$thumb_path = public_path('storage/thumbnails/'.$post->thumbnail);
-
         if (Storage::disk('public')->exists($post->thumbnail)) {
             $thumbnail_url = Storage::url($post->thumbnail);
         } else {
@@ -11,7 +8,7 @@
 
     @endphp
     <article class="tarjeta">
-        <a class="no-deco" href="{{ $post->url }}" target="_blank" rel="noopener noreferrer">
+        <a class="no-deco" href="{{ $post->url }}" rel="nofollow noopener noreferrer">
             <div class="textos">
                 <div class="tarjeta-header text-light">
                     <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>

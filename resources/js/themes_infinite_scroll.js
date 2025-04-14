@@ -1,14 +1,16 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     const dataDiv = document.querySelector("#data");
     const formFilter = document.querySelector('#form-filter');
-    let pageName = undefined;
     let page = 1;
     let lastPage = undefined;
-    let url = undefined;
-    const baseUrl = window.location.href;
     const nameInput = document.querySelector('#input-name');
+    const baseUrl = document.querySelector('meta[name="base-url"]').content;
+    let apiBaseUrl = baseUrl + '/api/themes';
+    let currentUrl = apiBaseUrl;
+    const loaderDiv = document.querySelector('#loader');
 
     firstFetch();
+   /*  console.log(apiBaseUrl); */
 
     function debounce(func, timeout = 300) {
         let timer;
@@ -23,108 +25,108 @@ document.addEventListener("DOMContentLoaded", (event) => {
         let year = document.querySelector('#select-year').value;
         let season = document.querySelector('#select-season').value;
         let sort = document.querySelector('#select-sort').value;
+        let name = nameInput.value;
 
-        filterFetch(type, year, season, sort, nameInput.value);
+        filterFetch(type, year, season, sort, name);
     });
 
     formFilter.addEventListener('change', handleFilterChange);
     nameInput.addEventListener('keyup', handleFilterChange);
 
-
-
     window.addEventListener("scroll", function () {
         if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
-            if (lastPage == undefined) {
+            if (page <= lastPage) {
                 page++;
                 loadMoreData(page);
-            } else {
-                if (page <= lastPage) {
-                    page++;
-                    loadMoreData(page);
-                }
             }
+
         }
     });
 
-    function fetchData(url) {
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
+    async function fetchData(url) {
+        try {
+            loaderDiv.style.removeProperty("display");
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                lastPage = 0;
+                console.log(`Error HTTP: ${response.status}`);
+                return;
             }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    lastPage = 0;
-                    //console.log(response.status);
-                    return;
-                } else {
-                    return response.json();
-                }
-            })
-            .then(data => {
-                if (data.html === "") {
-                    lastPage = 0;
-                    //console.log("No data from backend");
-                    return;
-                } else {
-                    //console.log(data);
-                    lastPage = data.lastPage;
-                    dataDiv.innerHTML += data.html;
 
-                    let titles = document.querySelectorAll('.post-titles');
+            /* const text = await response.text();
+            if (!text.trim()) {
+                throw new Error('Respuesta vacía del servidor');
+            } */
 
-                    function cutTitles() {
-                        titles.forEach(title => {
-                            if (title.textContent.length > 25) {
-                                title.textContent = title.textContent.substr(0, 25) + "...";
-                            }
-                        });
+            const data = await response.json();
+            console.log(data);
+            
+
+            if (!data.html || data.html === "") {
+                return;
+            }
+
+            lastPage = data.lastPage;
+            
+            dataDiv.innerHTML += data.html;
+
+            let titles = document.querySelectorAll('.post-titles');
+
+            function cutTitles() {
+                titles.forEach(title => {
+                    if (title.textContent.length > 25) {
+                        title.textContent = title.textContent.substr(0, 25) + "...";
                     }
-                    cutTitles();
-                }
-            })
-            .catch(error => console.error(error));
+                });
+            }
+            cutTitles();
+
+        } catch (error) {
+            console.error("Error in fetchData:", error);
+        } finally {
+            //console.log('completed cycle');
+            loaderDiv.style.setProperty("display", "none", "important");
+        }
     }
 
     function loadMoreData(page) {
-        let currentUrl = window.location.href;
-        let urlParams = new URLSearchParams(window.location.search);
+        let newUrl = new URL(currentUrl);
 
-        if (urlParams.has('filterBy') || urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') /* ||
-            urlParams.has('char') */) {
-            pageName = "&page=";
-        } else {
-            pageName = "?page=";
-        }
+        newUrl.searchParams.set('page', page)
+        currentUrl = newUrl.toString();
 
-        url = currentUrl + pageName + page;
-        //console.log("fetch loadMoreData(): " + url);
-        fetchData(url);
-    }
-
-    function firstFetch() {
-        fetchData(baseUrl);
+        fetchData(currentUrl);
     }
 
     function filterFetch(type, year, season, sort, name) {
-        let currentUrl = new URL(window.location.href);
+        let newUrl = new URL(apiBaseUrl);
         page = 1;
         clearDataDiv();
-        currentUrl.searchParams.set('type', type);
-        currentUrl.searchParams.set('year', year);
-        currentUrl.searchParams.set('season', season);
-        currentUrl.searchParams.set('sort', sort);
-        currentUrl.searchParams.set('name', name);
-        let newUrl = currentUrl.toString();
+        newUrl.searchParams.set('type', type);
+        newUrl.searchParams.set('year', year);
+        newUrl.searchParams.set('season', season);
+        newUrl.searchParams.set('sort', sort);
+        newUrl.searchParams.set('name', name);
 
-        history.replaceState(null, null, newUrl);
+        currentUrl = newUrl.toString();
 
-        fetchData(newUrl);
+        fetchData(currentUrl);
     }
+
     function clearDataDiv() {
         dataDiv.innerHTML = "";
+    }
+
+    function firstFetch() {
+        page = 1;
+        fetchData(apiBaseUrl);
     }
 });
 

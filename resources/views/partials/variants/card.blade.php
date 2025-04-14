@@ -23,7 +23,7 @@
 @endphp
 
 <article class="tarjeta">
-    <a class="no-deco" href="{{ $variant->url }}" target="_blank" rel="nofollow noopener noreferrer">
+    <a class="no-deco" href="{{ $variant->url }}" rel="nofollow noopener noreferrer">
         <div class="textos">
             <div class="tarjeta-header text-light">
                 <h3 class="text-shadow text-uppercase post-titles">{{ $title }}</h3>

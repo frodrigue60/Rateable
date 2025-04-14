@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function apiSearch() {
             try {
-                fetch(baseUrl + '/api/search', {
+                fetch(baseUrl + '/api/posts/search', {
                     headers: {
                         'X-Request-With': 'XMLHttpRequest',
                         'Content-Type': 'application/json',

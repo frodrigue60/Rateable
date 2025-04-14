@@ -117,12 +117,12 @@ class PostController extends Controller
 
             if ($post->save()) {
                 //$post->retag($request->tags);
-
-                $success = 'Post created successfully';
-                return redirect(route('admin.posts.index'))->with('success', $success);
+                $post = Post::where('slug', $post->slug);
+                $msg = 'Post created successfully';
+                return redirect(route('admin.posts.songs', $post->id))->with('success', $msg);
             } else {
-                $error = 'Somethis was wrong!';
-                return redirect(route('admin.posts.index'))->with('error', $error);
+                $msg = 'Somethis was wrong!';
+                return redirect(route('admin.posts.index'))->with('error', $msg);
             }
         } else {
             $error = 'User is not authorized!';
@@ -280,7 +280,7 @@ class PostController extends Controller
         $posts = Post::query()
             ->where('title', 'LIKE', '%'.$request->input('q').'%')
             ->paginate(10);
-
+        //dd($posts);
         return view('admin.posts.index', compact('posts'));
     }
     public function approve($id)
@@ -832,7 +832,7 @@ class PostController extends Controller
             ],
             [
                 'name' => $post->title,
-                'url' => route('posts.songs', $post->id),
+                'url' => route('admin.posts.songs', $post->id),
             ],
         ]);
 

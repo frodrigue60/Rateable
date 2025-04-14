@@ -160,7 +160,7 @@ class UserController extends Controller
         //dd($song_variants);
         //dd($songs);
         if ($request->ajax()) {
-            $view = view('layouts.variant.cards', compact('song_variants'))->render();
+            $view = view('partials.variants.cards', compact('song_variants'))->render();
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
         //dd($songs);
@@ -232,7 +232,7 @@ class UserController extends Controller
         $song_variants = $this->paginate($song_variants);
 
         if ($request->ajax()) {
-            $view = view('layouts.variant.cards', compact('song_variants'))->render();
+            $view = view('partials.variants.cards', compact('song_variants'))->render();
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
         //dd($songs);

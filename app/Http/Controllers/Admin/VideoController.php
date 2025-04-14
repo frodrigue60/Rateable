@@ -153,7 +153,7 @@ class VideoController extends Controller
                 ],
                 [
                     'name' => $post->title,
-                    'url' => route('posts.songs', $post->id),
+                    'url' => route('admin.posts.songs', $post->id),
                 ],
                 [
                     'name' => $song->slug,

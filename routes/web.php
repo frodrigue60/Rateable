@@ -44,8 +44,8 @@ Route::get('/',       [PostController::class, 'index'])->name('/');
     return 'Aqui habia ponido mi sitio web';
 })->name('/'); */
 
-Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
-Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
+#Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
+#Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/users/{slug}', [UserController::class, 'userList'])->name('user.list');
@@ -92,11 +92,11 @@ Route::group(['middleware' => 'staff'], function () {
 
         //POSTS
         Route::resource('posts', AdminPostController::class, ['as' => 'admin']);
-        Route::get('/posts/search', [AdminPostController::class, 'search'])->name('admin.posts.search');
+        Route::post('/posts/search', [AdminPostController::class, 'search'])->name('admin.posts.search');
         Route::post('/posts/{post}/approve', [AdminPostController::class, 'approve'])->name('admin.posts.approve');
         Route::post('/posts/{post}/unapprove', [AdminPostController::class, 'unapprove'])->name('admin.posts.unapprove');
         Route::get('/posts/{post}/songs/add', [AdminPostController::class, 'addSong'])->name('admin.posts.songs.add');
-        Route::get('/posts/{post}/songs', [AdminPostController::class, 'songs'])->name('posts.songs');
+        Route::get('/posts/{post}/songs', [AdminPostController::class, 'songs'])->name('admin.posts.songs');
         Route::post('/posts/search-animes', [AdminPostController::class, 'searchAnimes'])->name('admin.search.animes');
         Route::get('/posts/get-by-id/{id}', [AdminPostController::class, 'getById'])->name('get.by.id');
         Route::post('/posts/get-seasonal-animes', [AdminPostController::class, 'getSeasonalAnimes'])->name('get.seasonal.animes');

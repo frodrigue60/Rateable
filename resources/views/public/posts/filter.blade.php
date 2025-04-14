@@ -42,24 +42,23 @@
                             </div>
                             <div class="w-100 mb-1">
                                 <label class="text-light" for="select-year">Year:</label>
-                                <select class="form-select" aria-label="Default select example" name="year"
+                                <select class="form-select" aria-label="Default select example" name="year_id"
                                     id="select-year">
                                     <option selected value="">Select a year</option>
                                     @foreach ($years as $year)
-                                        <option value="{{ $year->name }}"
-                                            {{ $requested->year == $year->name ? 'selected' : '' }}>{{ $year->name }}
+                                        <option value="{{ $year->id }}">
+                                            {{ $year->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="w-100 mb-1">
                                 <label class="text-light" for="select-season">Season:</label>
-                                <select class="form-select" aria-label="Default select example" name="season"
+                                <select class="form-select" aria-label="Default select example" name="season_id"
                                     id="select-season">
                                     <option selected value="">Select a season</option>
                                     @foreach ($seasons as $season)
-                                        <option value="{{ $season->name }}"
-                                            {{ $requested->season == $season->name ? 'selected' : '' }}>
+                                        <option value="{{ $season->id }}">
                                             {{ $season->name }}
                                         </option>
                                     @endforeach
@@ -74,9 +73,14 @@
                 </div>
             </aside>
             {{-- POSTS --}}
-            <section class="text-light">
+            <section class="text-light mb-3">
                 <div class="contenedor-tarjetas-filtro" id="data">
                     {{-- @include('layouts.post.cards') --}}
+                </div>
+                <div class="d-flex m-5 justify-content-center" id="loader">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
             </section>
         </div>

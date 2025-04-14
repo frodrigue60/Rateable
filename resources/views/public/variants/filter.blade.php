@@ -18,7 +18,7 @@
 
 @section('content')
     @if (Request::routeIs('user.list') || Request::routeIs('favorites'))
-        @include('layouts.user.banner')
+        @include('partials.user.banner')
     @endif
     <div class="container text-light">
         @if (Request::routeIs('themes'))
@@ -33,7 +33,7 @@
         @endif
         @if (Request::routeIs('user.list') && isset($user))
             <div class="top-header color1 mb-1 mt-1">
-                <h2 class="text-light"><strong>{{$user->name}}</strong> favorites</h2>
+                <h2 class="text-light"><strong>{{ $user->name }}</strong> favorites</h2>
             </div>
         @endif
         @if (Request::routeIs('artists.show'))
@@ -59,6 +59,7 @@
                     @if (Request::routeIs('artists.show'))
                         <form id="form-filter" action="{{ route('artists.show', [$artist->id, $artist->slug]) }}"
                             method="get">
+                        <input type="hidden" name="artist_id" id="artist_id" value="{{ $artist->id }}">
                     @endif
                     {{-- TYPE --}}
                     <section class="searchItem">
@@ -73,8 +74,7 @@
                             <select class="form-select" aria-label="Default select example" id="select-type" name="type">
                                 <option value="">Select a theme type</option>
                                 @foreach ($types as $item)
-                                    <option value="{{ $item['value'] }}"
-                                        {{ $requested->type == $item['value'] ? 'selected' : '' }}>
+                                    <option value="{{ $item['value'] }}">
                                         {{ $item['name'] }}
                                     </option>
                                 @endforeach
@@ -86,23 +86,21 @@
                     <section class="searchItem">
                         <div class="w-100 mb-1">
                             <label class="text-light" for="select-year">Year:</label>
-                            <select class="form-select" aria-label="Default select example" name="year" id="select-year">
+                            <select class="form-select" aria-label="Default select example" name="year_id" id="select-year">
                                 <option selected value="">Select a year</option>
                                 @foreach ($years as $year)
-                                    <option value="{{ $year->name }}"
-                                        {{ $requested->year == $year->name ? 'selected' : '' }}>{{ $year->name }}
+                                    <option value="{{ $year->id }}">{{ $year->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="w-100 mb-1">
                             <label class="text-light" for="select-season">Season:</label>
-                            <select class="form-select" aria-label="Default select example" name="season"
+                            <select class="form-select" aria-label="Default select example" name="season_id"
                                 id="select-season">
                                 <option selected value="">Select a season</option>
                                 @foreach ($seasons as $season)
-                                    <option value="{{ $season->name }}"
-                                        {{ $requested->season == $season->name ? 'selected' : '' }}>{{ $season->name }}
+                                    <option value="{{ $season->id }}">{{ $season->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -115,8 +113,7 @@
                             <select class="form-select" aria-label="Default select example" id="select-sort" name="sort">
                                 <option value="">Select a sort method</option>
                                 @foreach ($sortMethods as $item)
-                                    <option value="{{ $item['value'] }}"
-                                        {{ $requested->sort == $item['value'] ? 'selected' : '' }}>
+                                    <option value="{{ $item['value'] }}">
                                         {{ $item['name'] }}
                                     </option>
                                 @endforeach
@@ -130,15 +127,18 @@
                 </section>
             </aside>
             {{-- POSTS --}}
-            <section class="text-light">
+            <section class="text-light mb-3">
                 <div class="contenedor-tarjetas-filtro" id="data">
-                   {{--  @include('layouts.variant.cards') --}}
+                    {{--  @include('layouts.variant.cards') --}}
+                </div>
+                <div class="d-flex m-5 justify-content-center" id="loader">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
             </section>
         </div>
     </div>
-
-
 @endsection
 @section('script')
     @if (Request::routeIs('favorites'))

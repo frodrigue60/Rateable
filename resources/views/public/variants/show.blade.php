@@ -67,7 +67,7 @@
                         }
                     @endphp
                     <div class="" id="video_container">
-                        <video id="player"class="ratio-16x9" controls>
+                        <video id="player"class="ratio-16x9" controls autoplay>
                             <source src="{{ $video_url }}" type="video/webm" />
                         </video>
                     </div>

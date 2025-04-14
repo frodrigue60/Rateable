@@ -37,24 +37,8 @@ class ArtistController extends Controller
      * @param  mixed  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $slug)
+    public function show($slug)
     {
-        $user = Auth::check() ? Auth::user() : null;
-        $status = true;
-        //$tags = Tag::all();
-        $type = $request->type;
-        $sort = $request->sort;
-        $name = $request->name;
-        $year = Year::where('name', $request->year)->first();
-        $season = Season::where('name', $request->season)->first();
-
-        $requested = new stdClass;
-        $requested->type = $type;
-        $requested->sort = $sort;
-        $requested->name = $name;
-        $requested->year = $request->year;
-        $requested->season = $request->season;
-
         $years = Year::all();
         $seasons = Season::all();
 
@@ -75,46 +59,7 @@ class ArtistController extends Controller
 
         $artist = Artist::where('slug', $slug)->first();
 
-        $song_variants = Song::whereHas('artists', function ($query) use ($artist) {
-            $query->where('artists.id', $artist->id);
-        })
-            ->when($year, function ($query) use ($year) {
-                $query->where('year_id', $year->id);
-            })
-            ->when($season, function ($query) use ($season) {
-                $query->where('season_id', $season->id);
-            })
-            ->whereHas('post', function ($query) use ($name, $status) {
-                $query->where('status', $status)
-                    ->when($name, function ($query) use ($name) {
-                        $query->where('title', 'like', '%'.$name.'%');
-                    });
-            })
-            ->when($type, function ($query) use ($type) {
-                $query->where('type', $type);
-            })
-            ->get()
-            ->flatMap(function ($song) {
-                return $song->songVariants;
-            });
-
-        //dd($query);
-
-        //$songs = $this->setScore($query, $score_format);
-        //$songs = $this->sort($sort, $songs);
-
-        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
-        $song_variants = $this->sort_variants($sort, $song_variants);
-        $song_variants = $this->paginate($song_variants, 24)->withQueryString();
-
-        //dd($song_variants);
-        if ($request->ajax()) {
-
-            $view = view('layouts.variant.cards', compact('song_variants'))->render();
-            return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
-        }
-
-        return view('public.variants.filter', compact('artist', 'seasons', 'years', 'requested', 'sortMethods', 'types'));
+        return view('public.variants.filter', compact('artist', 'seasons', 'years', 'sortMethods', 'types'));
     }
 
     public function setScore($songs, $score_format)

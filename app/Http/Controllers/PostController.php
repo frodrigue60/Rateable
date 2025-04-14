@@ -92,44 +92,15 @@ class PostController extends Controller
 
     public function animes(Request $request)
     {
-        $name = $request->name;
-        $season = Season::where('name', $request->season)->first();
-        $year = Year::where('name', $request->year)->first();
-
-        $requested = new stdClass;
-        $requested->name = $name;
-        $requested->year = $request->year;
-        $requested->season = $request->season;
+        #$requested = new stdClass;
+        #$requested->name = $name;
+        #$requested->year = $request->year;
+        #$requested->season = $request->season;
 
         $seasons = Season::all();
         $years = Year::all();
-        $status = true;
-
-        $posts = Post::where('status', $status)
-            ->when($season, function ($query, $season) {
-                $query->where('season_id', $season->id);
-            })
-            ->when($year, function ($query, $year) {
-                $query->where('year_id', $year->id);
-            })
-            ->when($name, function ($query, $name) {
-                $query->where('title', 'LIKE', '%'.$name.'%');
-            })
-            ->get();
-
-        $posts = $posts->sortBy(function ($post) {
-            return $post->title;
-        });
-
-        $posts = $this->paginate($posts, 24)->withQueryString();
-
-        if ($request->ajax()) {
-            //error_log('new ajax request');
-            $view = view('layouts.post.cards', compact('posts'))->render();
-            return response()->json(['html' => $view, "lastPage" => $posts->lastPage()]);
-        }
-
-        return view('public.posts.filter', compact('requested', 'seasons', 'years'));
+        
+        return view('public.posts.filter', compact(/* 'requested', */ 'seasons', 'years'));
     }
 
 
@@ -172,7 +143,6 @@ class PostController extends Controller
      */
     public function destroy($id) {}
 
-    //public seasrch posts
     public function themes(Request $request)
     {
         $user = Auth::check() ? Auth::user() : null;

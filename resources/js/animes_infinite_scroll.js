@@ -5,10 +5,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let page = 1;
     let lastPage = undefined;
     let url = undefined;
-    const baseUrl = window.location.href;
+    //const baseUrl = window.location.href;
     const nameInput = document.querySelector('#input-name');
+    const baseUrl = document.querySelector('meta[name="base-url"]').content;
+    let apiBaseUrl = baseUrl + '/api/animes';
+    const inputName = document.querySelector('#input-name');
+    const selectYear = document.querySelector('#select-year');
+    const selectSeason = document.querySelector('#select-season');
+    const loaderDiv = document.querySelector('#loader');
 
-    firstFetch();
+
+    fetchData(apiBaseUrl);
+    let currentUrl = apiBaseUrl;
+    console.log('first fetch: ' + apiBaseUrl);
+
 
     // Debounce para limitar las llamadas a filterFetch
     function debounce(func, timeout = 300) {
@@ -45,52 +55,64 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     });
 
+    async function fetchData(url) {
+        loaderDiv.style.removeProperty("display");
+        inputName.disabled = true;
+        selectYear.disabled = true;
+        selectSeason.disabled = true;
+        try {
+            // Realizar la petición GET
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            });
 
-    function fetchData(url) {
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
+            if (!response.ok) {
+                lastPage = 0;
+                console.log(`Error HTTP: ${response.status}`);
+                return;
             }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    lastPage = 0;
-                    //console.log(response.status);
-                    return;
-                } else {
-                    return response.json();
-                }
-            })
-            .then(data => {
-                if (data.html === "") {
-                    lastPage = 0;
-                    //console.log("No data from backend");
-                    return;
-                } else {
-                    //console.log(data);
-                    lastPage = data.lastPage;
-                    dataDiv.innerHTML = data.html;
 
-                    let titles = document.querySelectorAll('.post-titles');
+            /* const text = await response.text();
+            if (!text.trim()) {
+                throw new Error('Respuesta vacía del servidor');
+            } */
 
-                    function cutTitles() {
-                        titles.forEach(title => {
-                            if (title.textContent.length > 25) {
-                                title.textContent = title.textContent.substr(0, 25) + "...";
-                            }
-                        });
-                    }
-                    cutTitles();
+            const data = await response.json();
+            console.log(data);
+
+            if (!data.html || data.html === "") {
+                lastPage = 0;
+                console.log("No data received from backend");
+                return;
+            }
+
+            lastPage = data.lastPage;
+            dataDiv.innerHTML += data.html;
+
+            const titles = document.querySelectorAll('.post-titles');
+            titles.forEach(title => {
+                if (title.textContent.length > 25) {
+                    title.textContent = title.textContent.substr(0, 25) + "...";
                 }
-            })
-            .catch(error => console.error(error));
+            });
+
+        } catch (error) {
+            console.error("Error in fetchData:", error);
+            lastPage = 0;
+        } finally {
+            inputName.disabled = false;
+            selectYear.disabled = false;
+            selectSeason.disabled = false;
+            loaderDiv.style.setProperty("display", "none", "important");
+        }
     }
 
     function loadMoreData(page) {
-        let currentUrl = window.location.href;
-        let urlParams = new URLSearchParams(window.location.search);
+        let urlParams = new URLSearchParams(currentUrl);
 
         if (urlParams.has('type') || urlParams.has('sort') ||
             urlParams.has('name')) {
@@ -100,25 +122,19 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
 
         url = currentUrl + pageName + page;
-        //console.log("fetch loadMoreData(): " + url);
+        /* console.log("fetch loadMoreData(): " + url); */
         fetchData(url);
-    }
-
-    function firstFetch() {
-        fetchData(baseUrl);
     }
 
     function filterFetch(year, season, name) {
-        //console.log(year, season, name);
-
         page = 1;
         clearDataDiv();
         let queryUrl = "?" + "year=" + year + "&season=" + season + "&name=" + name;
-        url = baseUrl + queryUrl;
-        history.replaceState(null, '', url)
+        url = apiBaseUrl + queryUrl;
         fetchData(url);
+        /* console.log('filterFetch(): '+url); */
     }
-    
+
     function clearDataDiv() {
         dataDiv.innerHTML = "";
     }

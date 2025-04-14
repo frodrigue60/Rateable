@@ -497,6 +497,8 @@ footer {
 	aspect-ratio: 15/22;
 	cursor: pointer;
 	background-color: #0b2538;
+	max-width: 200px;
+	height: auto;
 }
 
 .tarjeta .textos {

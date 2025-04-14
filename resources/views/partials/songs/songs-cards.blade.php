@@ -1,6 +1,6 @@
 @foreach ($songs as $song)
     @php
-        $url = route('song.show', [$song->id, $song->post->slug, $song->slug != null ? $song->slug : $song->type]);
+        $url = '';
         /* $thumb_url = file_exists(asset('/storage/thumbnails/' . $song->post->thumbnail)) ? asset('/storage/thumbnails/' . $song->post->thumbnail) : $song->post->thumbnail_src; */
         $thumb_path = public_path('storage/thumbnails/' . $song->post->thumbnail);
 

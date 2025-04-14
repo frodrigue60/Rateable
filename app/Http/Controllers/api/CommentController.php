@@ -9,7 +9,7 @@ use App\Models\SongVariant;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Storage;
 
-class CommentControlle extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.

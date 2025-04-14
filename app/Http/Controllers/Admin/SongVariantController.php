@@ -62,7 +62,7 @@ class SongVariantController extends Controller
         if ($songVariant->save()) {
             return redirect(route('admin.songs.variants', $song->id))->with('success', 'song variant added successfully');
         } else {
-            return redirect(route('posts.songs', $song->post->id))->with('error', 'error');
+            return redirect(route('admin.posts.songs', $song->post->id))->with('error', 'error');
         }
     }
 
@@ -98,7 +98,7 @@ class SongVariantController extends Controller
             ],
             [
                 'name' => $post->title,
-                'url' => route('posts.songs', $post->id),
+                'url' => route('admin.posts.songs', $post->id),
             ],
             [
                 'name' => $song->slug,
@@ -178,7 +178,7 @@ class SongVariantController extends Controller
             ],
             [
                 'name' => $post->title,
-                'url' => route('posts.songs', $post->id),
+                'url' => route('admin.posts.songs', $post->id),
             ],
             [
                 'name' => $song->slug,
@@ -207,7 +207,7 @@ class SongVariantController extends Controller
             ],
             [
                 'name' => $post->title,
-                'url' => route('posts.songs', $post->id),
+                'url' => route('admin.posts.songs', $post->id),
             ],
             [
                 'name' => $song->slug,

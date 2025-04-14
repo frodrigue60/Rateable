@@ -162,7 +162,7 @@ class SongVariantController extends Controller
             ->get();
 
         $song_variants = $this->setScoreOnlyVariants($themes, $user);
-        $themes = view('layouts.variant.cards', compact('song_variants'))->render();
+        $themes = view('partials.variants.cards', compact('song_variants'))->render();
 
         //$data = ['openings' => $openings, 'endings' => $endings];
         $data = ['themes' => $themes];
@@ -303,8 +303,8 @@ class SongVariantController extends Controller
         //$endings = view('partials.top.positions', ['items' => $endings])->render();
 
         $data = [
-            'openings' => view('partials.top.positions', ['items' => $openings])->render(),
-            'endings' => view('partials.top.positions', ['items' => $endings])->render(),
+            'openings' => view('partials.top.positions-ranking', ['items' => $openings])->render(),
+            'endings' => view('partials.top.positions-ranking', ['items' => $endings])->render(),
             'currentSeason' => $currentSeason,
             'currentYear' => $currentYear
         ];
@@ -412,13 +412,57 @@ class SongVariantController extends Controller
         ], 200);
     }
 
-    public function getUserRating(int $song_variant_id, int $user_id)
+    public function comments(SongVariant $variant)
     {
-        return DB::table('ratings')
-            ->where('rateable_type', SongVariant::class)
-            ->where('rateable_id', $song_variant_id)
-            ->where('user_id', $user_id)
-            ->first(['rating']);
+        $comments = $variant->comments;
+        return response()->json([
+            'success' => true,
+            'message' => 'Comments',
+            'comments' => $comments,
+        ], 200);
+    }
+
+    public function filter(Request $request)
+    {
+        $user = Auth::check() ? Auth::user() : null;
+        $type = $request->type;
+        $sort = $request->sort;
+        $name = $request->name;
+        $season = $request->season;
+        $year = $request->year;
+
+        $song_variants = null;
+        $status = true;
+
+        $song_variants = SongVariant::with(['song.post'])
+            #SONG QUERY
+            ->whereHas('song', function ($query) use ($type) {
+                $query->when($type, function ($query, $type) {
+                    $query->where('type', $type);
+                });
+            })
+            #POST QUERY
+            ->whereHas('song.post', function ($query) use ($name, $season, $year, $status) {
+                $query->where('status', $status)
+                    ->when($name, function ($query, $name) {
+                        $query->where('title', 'LIKE', '%' . $name . '%');
+                    })
+                    ->when($season, function ($query, $season) {
+                        $query->where('season_id', $season);
+                    })
+                    ->when($year, function ($query, $year) {
+                        $query->where('year_id', $year);
+                    });
+            })
+            #SONG VARIANT QUERY
+            ->get();
+        
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
+        $song_variants = $this->sort_variants($sort, $song_variants);
+        $song_variants = $this->paginate($song_variants);
+
+        $view = view('partials.variants.cards', compact('song_variants'))->render();
+        return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
     }
 
     public function setScoreOnlyVariants($variants, $user = null)
@@ -472,6 +516,56 @@ class SongVariantController extends Controller
 
         return $variants;
     }
+
+    public function sort_variants($sort, $song_variants)
+    {
+        //dd($song_variants);
+        switch ($sort) {
+            case 'title':
+                $song_variants = $song_variants->sortBy(function ($song_variant) {
+                    return $song_variant->song->post->title;
+                });
+                return $song_variants;
+                break;
+
+            case 'averageRating':
+                $song_variants = $song_variants->sortByDesc('averageRating');
+                return $song_variants;
+                break;
+
+            case 'view_count':
+                $song_variants = $song_variants->sortByDesc('views');
+                return $song_variants;
+                break;
+
+            case 'likeCount':
+                $song_variants = $song_variants->sortByDesc('likeCount');
+                return $song_variants;
+                break;
+
+            case 'recent':
+                $song_variants = $song_variants->sortByDesc('created_at');
+                return $song_variants;
+                break;
+
+            default:
+                $song_variants = $song_variants->sortBy(function ($song_variant) {
+                    return $song_variant->song->post->title;
+                });
+                return $song_variants;
+                break;
+        }
+    }
+
+    public function paginate($collection, $perPage = 18, $page = null, $options = [])
+    {
+        $page = Paginator::resolveCurrentPage();
+        $options = ['path' => Paginator::resolveCurrentPath()];
+        $items = $collection instanceof Collection ? $collection : Collection::make($collection);
+        $collection = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return $collection;
+    }
+
     protected function formatScoreString($score, $format, $denominator)
     {
         switch ($format) {
@@ -488,22 +582,12 @@ class SongVariantController extends Controller
         }
     }
 
-    public function paginate($collection, $perPage = 18, $page = null, $options = [])
+    public function getUserRating(int $song_variant_id, int $user_id)
     {
-        $page = Paginator::resolveCurrentPage();
-        $options = ['path' => Paginator::resolveCurrentPath()];
-        $items = $collection instanceof Collection ? $collection : Collection::make($collection);
-        $collection = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-        return $collection;
-    }
-
-    public function comments(SongVariant $variant)
-    {
-        $comments = $variant->comments;
-        return response()->json([
-            'success' => true,
-            'message' => 'Comments',
-            'comments' => $comments,
-        ], 200);
+        return DB::table('ratings')
+            ->where('rateable_type', SongVariant::class)
+            ->where('rateable_id', $song_variant_id)
+            ->where('user_id', $user_id)
+            ->first(['rating']);
     }
 }

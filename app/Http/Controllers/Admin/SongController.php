@@ -82,7 +82,7 @@ class SongController extends Controller
 
         if ($song->save()) {
             $song->artists()->sync($artistsIds);
-            return redirect(route('posts.songs', $request->post_id))->with('success', 'song added successfully');
+            return redirect(route('admin.posts.songs', $request->post_id))->with('success', 'song added successfully');
         } else {
             return redirect(route('admin.posts.index'))->with('error', 'error');
         }
@@ -169,7 +169,7 @@ class SongController extends Controller
 
         if ($song->update()) {
             $song->artists()->sync($artistsIds);
-            return redirect(route('posts.songs', $song->post_id))->with('success', 'Song updated success');
+            return redirect(route('admin.posts.songs', $song->post_id))->with('success', 'Song updated success');
         } else {
             return redirect(route('admin.posts.index'))->with('error', 'error, something has been wrong');
         }
@@ -270,7 +270,7 @@ class SongController extends Controller
             ],
             [
                 'name' => $post->title,
-                'url' => route('posts.songs', $post->id),
+                'url' => route('admin.posts.songs', $post->id),
             ],
             [
                 'name' => $song->slug,
