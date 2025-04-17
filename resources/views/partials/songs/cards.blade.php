@@ -1,13 +1,12 @@
 @foreach ($songs as $song)
     @php
-        $url = '';
         /* $thumb_url = file_exists(asset('/storage/thumbnails/' . $song->post->thumbnail)) ? asset('/storage/thumbnails/' . $song->post->thumbnail) : $song->post->thumbnail_src; */
-        $thumb_path = public_path('storage/thumbnails/' . $song->post->thumbnail);
+        $thumbnailUrl = '';
 
-        if (file_exists($thumb_path)) {
-            $thumb_url = asset('storage/thumbnails/' . $song->post->thumbnail);
+        if (Storage::disk('public')->exists($song->post->thumbnail)) {
+            $thumbnailUrl = Storage::url($song->post->thumbnail);
         } else {
-            $thumb_url = $song->post->thumbnail_src;
+            $thumbnailUrl = $song->post->thumbnail_src;
         }
     @endphp
     <article class="tarjeta">
@@ -15,11 +14,14 @@
             <div class="tarjeta-header text-light">
                 <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
             </div>
-            <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
-                <span class="tag-content ">{{ $song->slug != null ? $song->slug : $song->type }}</span>
-            </div>
-            <a class="no-deco" target="blank_" href="{{ $url }}">
-                <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $song->post->title }}"
+            @if ($song->theme_num > 1)
+                <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
+                    <span class="tag-content ">{{ $song->theme_num > 1 ? $song->slug : $song->type }}</span>
+                </div>
+            @endif
+
+            <a class="no-deco" href="{{ $song->urlFirstVariant }}" rel="nofollow noopener noreferrer">
+                <img class="thumb" loading="lazy" src="{{ $thumbnailUrl }}" alt="{{ $song->post->title }}"
                     title="{{ $song->post->title }}">
             </a>
             <div class="tarjeta-footer text-light">

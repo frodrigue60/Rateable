@@ -78,4 +78,7 @@ class Post extends Model
         return $this->belongsTo(Season::class);
     }
 
+    public function getOpeningsAttribute(){
+        return Song::with('songVariants')->where('type', 'OP')->where('post_id', $this->id)->get();
+    }
 }

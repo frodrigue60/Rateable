@@ -56,17 +56,17 @@ class SongVariantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($anime_slug, $song_suffix, $variant_version_number)
+    public function show($anime_slug, $song_slug, $variant_slug)
     {
         $user = Auth::check() ? Auth::User() : null;
 
         $post = Post::where('slug', $anime_slug)->firstOrFail();
 
-        $song = Song::where('slug', $song_suffix)
+        $song = Song::where('slug', $song_slug)
             ->where('post_id', $post->id)
             ->firstOrFail();
 
-        $song_variant = SongVariant::where('version_number', $variant_version_number)
+        $song_variant = SongVariant::where('slug', $variant_slug)
             ->where('song_id', $song->id)
             ->with('reactionsCounter')
             ->firstOrFail();

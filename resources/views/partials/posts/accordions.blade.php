@@ -23,29 +23,45 @@
             </div>
         </a>
     </article> --}}
-    <div class="d-flex flex-column" style="border: solid 1px red;">
-        <div class="d-flex gap-3">
-            <img src="{{ $thumbnailUrl }}" alt="" style="max-width: 120px;height:auto;">
-            <div class="row">
-                <div class="col text-truncate">
-                    <span>{{ $post->title }}</span>
+    <div class="d-flex flex-column p-2 color1 rounded-1" {{-- style="border: solid 1px red;" --}}>
+        <a class="d-flex gap-3 no-deco text-light" data-bs-toggle="collapse" href="#collapseExample{{ $post->id }}"
+            role="button" aria-expanded="false" aria-controls="collapseExample{{ $post->id }}">
+            <div class="d-flex">
+                <img class="rounded-1" src="{{ $thumbnailUrl }}" alt="" style="max-width: 80px;height:auto;">
+            </div>
+            <div>
+                <div>
+                    <p class="d-inline-block text-truncate">{{ $post->title }}</p>
+                    <p> {{ $post->season->name }} {{ $post->year->name }}</p>
                 </div>
             </div>
-        </div>
-        <div class="d-flex gap-1 justify-content-center">
-            <a class="btn btn-sm text-light" data-bs-toggle="collapse" href="#collapseExample{{ $post->id }}" role="button" aria-expanded="false" aria-controls="collapseExample{{ $post->id }}">
-                Show themes
-              </a>
-        </div>
-        <div class="collapse" id="collapseExample{{ $post->id }}">
+        </a>
+        <div class="collapse mt-2" id="collapseExample{{ $post->id }}">
             <div class="">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item bg-dark text-light">An item</li>
-                    <li class="list-group-item">A second item</li>
-                    <li class="list-group-item">A third item</li>
-                    <li class="list-group-item">A fourth item</li>
-                    <li class="list-group-item">And a fifth one</li>
-                </ul>
+                <table class="table table-sm table-dark mb-0">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Name</th>
+                            <th>Flag</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($post->songs as $song)
+                            @foreach ($song->songVariants as $variant)
+                                <tr>
+                                    <td>{{$variant->song->slug}} {{$variant->slug}}</td>
+                                    <td>
+                                        <a href="{{ $variant->url }}" target="_blank" rel="noopener noreferrer">
+                                            {{ $variant->song->name }} {{ $variant->slug }}
+                                        </a>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

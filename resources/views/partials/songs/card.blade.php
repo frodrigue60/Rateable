@@ -18,7 +18,7 @@
         <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
             <span class="tag-content ">{{ $song->slug != null ? $song->slug : $song->type }}</span>
         </div>
-        <a class="no-deco" href="{{ $url }}">
+        <a class="no-deco" href="{{ $url }}" rel="nofollow noopener noreferrer">
             <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $song->post->title }}"
                 title="{{ $song->post->title }}">
         </a>

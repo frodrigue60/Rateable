@@ -59,7 +59,7 @@ class ArtistController extends Controller
 
         $artist = Artist::where('slug', $slug)->first();
 
-        return view('public.variants.filter', compact('artist', 'seasons', 'years', 'sortMethods', 'types'));
+        return view('public.filter', compact('artist', 'seasons', 'years', 'sortMethods', 'types'));
     }
 
     public function setScore($songs, $score_format)

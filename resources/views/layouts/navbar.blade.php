@@ -10,8 +10,8 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Left Side Of Navbar -->
-            <ul class="navbar-nav me-auto">
+            {{-- LINKS NAVBAR --}}
+            <ul class="navbar-nav mx-auto gap-2">
                 {{--  <li><a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
                         href="{{ route('openings') }}">Openings</a></li>
                 <li><a class="nav-link {{ Request::is('endings') ? 'active' : '' }}"
@@ -20,8 +20,8 @@
                 <li><a class="nav-link {{ Request::is('seasonal') ? 'active' : '' }}"
                         href="{{ route('seasonal') }}">Seasonal</a></li>
 
-                <li><a class="nav-link {{ Request::is('global-ranking') ? 'active' : '' }}"
-                        href="{{ route('ranking') }}">Ranking</a></li>
+                <li><a class="nav-link {{ Request::is('ranking') ? 'active' : '' }}"
+                        href="{{ route('ranking') }}">Top</a></li>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button"
@@ -60,9 +60,14 @@
                 @endif
             </ul>
             <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav ms-auto">
-                <li><input id="searchInput" type="text" name="search" class="form-control" aria-label="search"
-                        placeholder="Search..." data-bs-toggle="modal" data-bs-target="#exampleModal"></li>
+            <ul class="navbar-nav ms-auto gap-2">
+                <li class="d-flex">
+                    {{-- <input id="searchInput" type="text" name="search" class="form-control" placeholder="Search..."> --}}
+                    <button type="button" class="btn btn-secondary color4 rounded-pill m-auto border-0 fs-5" aria-label="search" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </li>
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item dropdown">
@@ -84,13 +89,13 @@
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            @if (/* Auth::user()->image */ Storage::disk('public')->exists('/storage/profile/' . Auth::user()->image))
-                                <img src="{{ asset('/storage/profile/' . Auth::user()->image) }}" alt="profile pic"
-                                    width="25" height="25" title="profile pic">
+                            @if (Storage::disk('public')->exists(Auth::user()->image))
+                                <img src="{{ Storage::url(Auth::user()->image) }}" alt="profile pic"
+                                    height="40px" title="profile pic" class="rounded-circle">
                             @else
                                 <i class="fa-solid fa-user"></i>
                             @endif
-                            {{ Auth::user()->name }}
+                            {{-- {{ Auth::user()->name }} --}}
                         </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('profile') }}">

@@ -98,73 +98,15 @@ class UserController extends Controller
         $user = User::where('slug', $slug)->select('id', 'score_format', 'image', 'banner', 'name')->first();
 
         if (!$user) {
-            return redirect('/')->with('warning', 'User does not exist');
+            return redirect('/')->with('warning', 'Invalid user');
         }
 
         $years = Year::all();
         $seasons = Season::all();
-
-        $status = true;
-
-        $filterBy = $request->filterBy;
-        $type = $request->type;
-        $sort = $request->sort;
-        $name = $request->name;
-        $season = Season::where('name', $request->season)->first();
-        $year = Year::where('name', $request->year)->first();
-
-        $requested = new stdClass;
-        $requested->filterBy = $filterBy;
-        $requested->type = $type;
-        $requested->sort = $sort;
-        $requested->name = $name;
-        $requested->season = $season;
-        $requested->year = $year;
-
-        $requested->year = $request->year;
-        $requested->season = $request->season;
-
         $types = $this->filterTypesSortChar()['types'];
         $sortMethods = $this->filterTypesSortChar()['sortMethods'];
-
-        $song_variants = null;
-
-        $song_variants = SongVariant::with(['song'])
-            #SONG QUERY
-            ->whereHas('song', function ($query) use ($type) {
-                $query->when($type, function ($query, $type) {
-                    $query->where('type', $type);
-                });
-            })
-            #POST QUERY
-            ->whereHas('song.post', function ($query) use ($name, $season, $year, $status) {
-                $query->where('status', $status)
-                    ->when($season, function ($query, $season) {
-                        $query->where('season_id', $season->id);
-                    })
-                    ->when($year, function ($query, $year) {
-                        $query->where('year_id', $year->id);
-                    })
-                    ->when($name, function ($query, $name) {
-                        $query->where('title', 'LIKE', '%' . $name . '%');
-                    });
-            })
-            #SONG VARIANT QUERY
-            ->whereLikedBy($user->id)
-            ->get();
-
-        $song_variants = $this->setScoreOnlyVariants($song_variants);
-        $song_variants = $this->sort_variants($sort, $song_variants);
-        $song_variants = $this->paginate($song_variants);
-
-        //dd($song_variants);
         //dd($songs);
-        if ($request->ajax()) {
-            $view = view('partials.variants.cards', compact('song_variants'))->render();
-            return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
-        }
-        //dd($songs);
-        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'user'));
+        return view('public.filter', compact('seasons', 'years', 'sortMethods', 'types', 'user'));
     }
 
 
@@ -184,16 +126,6 @@ class UserController extends Controller
         $type = $request->type;
         $sort = $request->sort;
         $name = $request->name;
-
-        $requested = new stdClass;
-        $requested->type = $type;
-        $requested->season = $season;
-        $requested->year = $year;
-        $requested->sort = $sort;
-        $requested->name = $name;
-
-        $requested->year = $request->year;
-        $requested->season = $request->season;
 
         $years = Year::all();
         $seasons = Season::all();
@@ -236,7 +168,7 @@ class UserController extends Controller
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
         //dd($songs);
-        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types', 'user'));
+        return view('public.filter', compact('seasons', 'years', 'sortMethods', 'types', 'user'));
     }
 
     public function paginate($songs, $perPage = 18, $page = null, $options = [])

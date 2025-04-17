@@ -38,8 +38,6 @@ class Artist extends Model
 
     public function getUrlAttribute()
     {
-        return route('artists.show', [
-            'slug' => $this->slug,
-        ]);
+        return route('artists.show', ['slug' => $this->slug]);
     }
 }

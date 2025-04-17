@@ -74,12 +74,16 @@ class SongController extends Controller
             ->where('type', $request->type)
             ->max('theme_num');
 
-        $newVersion = $latestVersion !== null ? $latestVersion + 1 : 1;
+        if (($request->theme_num != null) && ($request->theme_num > $latestVersion)) {
+            $song->theme_num = $request->theme_num;
+        } else {
+            $newVersion = $latestVersion !== null ? $latestVersion + 1 : 1;
 
-        $song->theme_num = $newVersion;
+            $song->theme_num = $newVersion;
+        }
 
         $song->slug = $song->type . $song->theme_num;
-
+        //dd($song);
         if ($song->save()) {
             $song->artists()->sync($artistsIds);
             return redirect(route('admin.posts.songs', $request->post_id))->with('success', 'song added successfully');
@@ -131,7 +135,7 @@ class SongController extends Controller
     public function update(Request $request, $song_id)
     {
         //dd($request->all());
-        $song = Song::find($song_id);
+        $song = Song::with('post')->findOrFail($song_id);
 
         $song->song_romaji = Str::of($request->song_romaji)->trim();
         $song->song_jp = Str::of($request->song_jp)->trim();
@@ -140,7 +144,6 @@ class SongController extends Controller
         $song->season_id = $request->season_id;
         $song->year_id = $request->year_id;
         $song->type = $request->type;
-        $song->theme_num = $request->theme_num;
 
         $artistsNames = (explode(',', $request->artists));
 
@@ -159,14 +162,20 @@ class SongController extends Controller
             $artistsIds[] = $artist->id;
         }
 
-        if ($request->theme_num != null) {
-            $song->theme_num = $request->theme_num;
+        $latestVersion = Song::where('post_id', $song->post_id)
+                ->where('type', $request->type)
+                ->where('id', '!=', $song->id)
+                ->max('theme_num');
+
+        if (($request->theme_num != null) && ($request->theme_num > $latestVersion)) {
+                $song->theme_num = $request->theme_num;
         } else {
-            $song->theme_num = 1;
+            $newVersion = $latestVersion !== null ? $latestVersion + 1 : 1;
+            $song->theme_num = $newVersion;
         }
 
         $song->slug = $song->type . $song->theme_num;
-
+        //dd($song);
         if ($song->update()) {
             $song->artists()->sync($artistsIds);
             return redirect(route('admin.posts.songs', $song->post_id))->with('success', 'Song updated success');
@@ -191,32 +200,6 @@ class SongController extends Controller
         } else {
             return redirect()->back()->with('error', 'A error has been ocurred');
         }
-    }
-
-    public function SeasonsYears($tags)
-    {
-        $tagNames = [];
-        $tagYears = [];
-
-        for ($i = 0; $i < count($tags); $i++) {
-            [$name, $year] = explode(' ', $tags[$i]->name);
-
-            if (!in_array($year, $tagNames)) {
-                $years[] = ['name' => $year, 'value' => $year];
-                $tagNames[] = $year; // Agregamos el año al array de nombres para evitar duplicados
-            }
-
-            if (!in_array($name, $tagYears)) {
-                $seasons[] = ['name' => $name, 'value' => $name];
-                $tagYears[] = $name; // Agregamos el año al array de nombres para evitar duplicados
-            }
-        }
-
-        $data = [
-            'years' => $years,
-            'seasons' => $seasons
-        ];
-        return $data;
     }
 
     public function decodeUnicodeIfNeeded($string)

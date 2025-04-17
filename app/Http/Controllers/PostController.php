@@ -11,8 +11,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
 use stdClass;
 use App\Models\SongVariant;
 use App\Models\Year;
@@ -68,7 +66,7 @@ class PostController extends Controller
             })
             ->get()
             ->sortByDesc('averageRating')
-            ->take(5);
+            ->take(3);
 
         $openings = $this->setScoreOnlyVariants($openings, $user);
 
@@ -81,7 +79,7 @@ class PostController extends Controller
             })
             ->get()
             ->sortByDesc('averageRating')
-            ->take(5);
+            ->take(3);
 
         $endings = $this->setScoreOnlyVariants($endings, $user);
 
@@ -99,8 +97,9 @@ class PostController extends Controller
 
         $seasons = Season::all();
         $years = Year::all();
+        $types = $this->filterTypesSortChar()['types'];
         
-        return view('public.posts.filter', compact(/* 'requested', */ 'seasons', 'years'));
+        return view('public.filter', compact('types','seasons', 'years'));
     }
 
 
@@ -206,7 +205,7 @@ class PostController extends Controller
             return response()->json(['html' => $view, "lastPage" => $song_variants->lastPage()]);
         }
 
-        return view('public.variants.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types'));
+        return view('public.filter', compact('seasons', 'years', 'requested', 'sortMethods', 'types'));
     }
 
     public function setScoreOnlyVariants($variants, $user = null)

@@ -57,7 +57,7 @@
                 <button><i class="fa-brands fa-x-twitter"></i></button>
             </div>
         </div> --}}
-        <div class="row mb-3">
+        <div class="d-flex gap-3 mb-3">
             @if ($song_variant->video)
                 @if ($song_variant->video->type == 'file')
                     @php
@@ -67,7 +67,7 @@
                         }
                     @endphp
                     <div class="" id="video_container">
-                        <video id="player"class="ratio-16x9" controls autoplay>
+                        <video id="player"class="ratio-16x9" controls {{-- autoplay --}}>
                             <source src="{{ $video_url }}" type="video/webm" />
                         </video>
                     </div>
@@ -79,14 +79,30 @@
             @else
                 <h3 class="text-light d-flex align-items-center justify-content-center">Videos not found</h3>
             @endif
+
+            @if ($song->songVariants->count() > 1)
+                <div class="list-group">
+                    {{-- <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                    The current link item
+                </a> --}}
+                    @foreach ($song->songVariants as $variant)
+                        <a href="{{ $variant->url }}"
+                            class="list-group-item list-group-item-action {{ $song_variant->id == $variant->id ? 'active' : '' }} d-inline-block">
+                            {{ $variant->song->slug }} {{ $variant->slug }}
+                        </a>
+                    @endforeach
+
+                </div>
+            @endif
+
         </div>
 
         <div class="text-light">
             <div class="mb-3">
-                <h2>
+                <h3>
                     <a href="{{ $post->url }}" class="text-decoration-none text-light">{{ $post->title }}
                         {{ $song->slug }} {{ $song_variant->slug }}</a>
-                </h2>
+                </h3>
                 <div class="my-2">
                     <span class="text-light">{{ $song->name }}</span> -
                     @foreach ($song_variant->song->artists as $index => $artist)
@@ -551,9 +567,9 @@
         @endif --}}
 
         @if (isset($comments))
-        <div>
-            <h4 class="text-light my-2">Recents comments</h4>
-        </div>
+            <div>
+                <h4 class="text-light my-2">Recents comments</h4>
+            </div>
             <div class="my-2" id="comments-container">
                 {{-- PARTIAL COMMENTS --}}
                 @include('partials.comments.comments')

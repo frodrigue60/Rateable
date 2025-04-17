@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
 use App\Models\User;
-use Conner\Tagging\Model\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Expr\FuncCall;
-use stdClass;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Models\Season;
+use App\Models\Year;
+use App\Models\SongVariant;
 
 class UserController extends Controller
 {
@@ -196,5 +193,276 @@ class UserController extends Controller
         $status = 200;
 
         return response()->json($data, $status);
+    }
+
+    public function userList(Request $request, $id)
+    {
+        $user = User::where('id', $id)->select('id', 'score_format', 'image', 'banner', 'name')->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Invalid user',
+            ]);
+        }
+
+        $status = true;
+
+        $filterBy = $request->filterBy;
+        $type = $request->type;
+        $sort = $request->sort;
+        $name = $request->name;
+
+        $season_id = $request->season_id;
+        $year_id = $request->year_id;
+
+        $types = $this->filterTypesSortChar()['types'];
+        $sortMethods = $this->filterTypesSortChar()['sortMethods'];
+
+        $song_variants = null;
+
+        $song_variants = SongVariant::with(['song.post'])
+            #SONG QUERY
+            ->whereHas('song', function ($query) use ($type) {
+                $query->when($type, function ($query, $type) {
+                    $query->where('type', $type);
+                });
+            })
+            #POST QUERY
+            ->whereHas('song.post', function ($query) use ($name, $season_id, $year_id, $status) {
+                $query->where('status', $status)
+                    ->when($season_id, function ($query, $season_id) {
+                        $query->where('season_id', $season_id);
+                    })
+                    ->when($year_id, function ($query, $year_id) {
+                        $query->where('year_id', $year_id);
+                    })
+                    ->when($name, function ($query, $name) {
+                        $query->where('title', 'LIKE', '%' . $name . '%');
+                    });
+            })
+            #SONG VARIANT QUERY
+            ->whereLikedBy($user->id)
+            ->get();
+
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
+        $song_variants = $this->sort_variants($sort, $song_variants);
+        $song_variants = $this->paginate($song_variants);
+
+        return response()->json([
+            'html' => view('partials.variants.cards', compact('song_variants'))->render(),
+            "lastPage" => $song_variants->lastPage(),
+            'request' => $request->all()
+        ]);
+    }
+
+    public function favorites(Request $request)
+    {
+        $user = Auth::check() ? Auth::user() : null;
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Please login or Re-login'
+            ]);
+        }
+
+        $status = true;
+
+        $season = Season::where('id', $request->season_id)->first();
+        $year = Year::where('id', $request->year_id)->first();
+        $type = $request->type;
+        $sort = $request->sort;
+        $name = $request->name;
+
+        $song_variants = SongVariant::with(['song.post'])
+            #SONG QUERY
+            ->whereHas('song', function ($query) use ($type) {
+                $query->when($type, function ($query, $type) {
+                    $query->where('type', $type);
+                });
+            })
+            #POST QUERY
+            ->whereHas('song.post', function ($query) use ($name, $season, $year, $status) {
+                $query->where('status', $status)
+                    ->when($name, function ($query, $name) {
+                        $query->where('title', 'LIKE', '%' . $name . '%');
+                    })
+                    ->when($season, function ($query, $season) {
+                        $query->where('season_id', $season->id);
+                    })
+                    ->when($year, function ($query, $year) {
+                        $query->where('year_id', $year->id);
+                    });
+            })
+            #SONG VARIANT QUERY
+            ->whereLikedBy($user->id)
+            ->get();
+
+        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
+        $song_variants = $this->sort_variants($sort, $song_variants);
+        $song_variants = $this->paginate($song_variants);
+
+        return response()->json([
+            'html' => view('partials.variants.cards', compact('song_variants'))->render(),
+            "lastPage" => $song_variants->lastPage()
+        ]);
+    }
+
+    public function filterTypesSortChar()
+    {
+        $filters = [
+            ['name' => 'All', 'value' => 'all'],
+            ['name' => 'Only Rated', 'value' => 'rated']
+        ];
+
+        $types = [
+            ['name' => 'Opening', 'value' => 'OP'],
+            ['name' => 'Ending', 'value' => 'ED'],
+            ['name' => 'Insert', 'value' => 'INS'],
+            ['name' => 'Other', 'value' => 'OTH']
+        ];
+
+        $sortMethods = [
+            ['name' => 'Recent', 'value' => 'recent'],
+            ['name' => 'Title', 'value' => 'title'],
+            ['name' => 'Score', 'value' => 'averageRating'],
+            ['name' => 'Views', 'value' => 'view_count'],
+            ['name' => 'Popular', 'value' => 'likeCount']
+        ];
+
+        $characters = range('A', 'Z');
+
+        $data = [
+            'filters' => $filters,
+            'types' => $types,
+            'sortMethods' => $sortMethods,
+            'characters' => $characters
+        ];
+        return $data;
+    }
+
+    public function setScoreOnlyVariants($variants, $user = null)
+    {
+        $variants->each(function ($variant) use ($user) {
+            $variant->userScore = null;
+            $factor = 1;
+            $isDecimalFormat = false;
+            $denominator = 100; // Por defecto para POINT_100
+
+            if ($user) {
+                switch ($user->score_format) {
+                    case 'POINT_100':
+                        $factor = 1;
+                        $denominator = 100;
+                        break;
+                    case 'POINT_10_DECIMAL':
+                        $factor = 0.1;
+                        $denominator = 10;
+                        $isDecimalFormat = true;
+                        break;
+                    case 'POINT_10':
+                        $factor = 1 / 10;
+                        $denominator = 10;
+                        break;
+                    case 'POINT_5':
+                        $factor = 1 / 20;
+                        $denominator = 5;
+                        $isDecimalFormat = true;
+                        break;
+                }
+
+                if ($userRating = $this->getUserRating($variant->id, $user->id)) {
+                    $variant->userScore = $isDecimalFormat
+                        ? round($userRating->rating * $factor, 1)
+                        : (int) round($userRating->rating * $factor);
+                }
+            }
+
+            $variant->score = $isDecimalFormat
+                ? round($variant->averageRating * $factor, 1)
+                : (int) round($variant->averageRating * $factor);
+
+            // Agregar la propiedad scoreString formateada
+            $variant->scoreString = $this->formatScoreString(
+                $variant->score,
+                $user->score_format ?? 'POINT_100',
+                $denominator
+            );
+        });
+
+        return $variants;
+    }
+
+    public function sort_variants($sort, $song_variants)
+    {
+        //dd($song_variants);
+        switch ($sort) {
+            case 'title':
+                $song_variants = $song_variants->sortBy(function ($song_variant) {
+                    return $song_variant->song->post->title;
+                });
+                return $song_variants;
+                break;
+
+            case 'averageRating':
+                $song_variants = $song_variants->sortByDesc('averageRating');
+                return $song_variants;
+                break;
+
+            case 'view_count':
+                $song_variants = $song_variants->sortByDesc('views');
+                return $song_variants;
+                break;
+
+            case 'likeCount':
+                $song_variants = $song_variants->sortByDesc('likeCount');
+                return $song_variants;
+                break;
+
+            case 'recent':
+                $song_variants = $song_variants->sortByDesc('created_at');
+                return $song_variants;
+                break;
+
+            default:
+                $song_variants = $song_variants->sortBy(function ($song_variant) {
+                    return $song_variant->song->post->title;
+                });
+                return $song_variants;
+                break;
+        }
+    }
+
+    public function paginate($collection, $perPage = 18, $page = null, $options = [])
+    {
+        $page = Paginator::resolveCurrentPage();
+        $options = ['path' => Paginator::resolveCurrentPath()];
+        $items = $collection instanceof Collection ? $collection : Collection::make($collection);
+        $collection = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return $collection;
+    }
+
+    protected function formatScoreString($score, $format, $denominator)
+    {
+        switch ($format) {
+            case 'POINT_100':
+                return $score . '/' . $denominator;
+            case 'POINT_10_DECIMAL':
+                return number_format($score, 1) . '/' . $denominator;
+            case 'POINT_10':
+                return $score . '/' . $denominator;
+            case 'POINT_5':
+                return number_format($score, 1) . '/' . $denominator;
+            default:
+                return $score . '/' . $denominator;
+        }
+    }
+
+    public function getUserRating(int $song_variant_id, int $user_id)
+    {
+        return DB::table('ratings')
+            ->where('rateable_type', SongVariant::class)
+            ->where('rateable_id', $song_variant_id)
+            ->where('user_id', $user_id)
+            ->first(['rating']);
     }
 }

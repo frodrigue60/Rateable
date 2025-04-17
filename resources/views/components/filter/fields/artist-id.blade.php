@@ -1,0 +1,1 @@
+<input type="hidden" name="artist_id" id="artist_id" value="{{ $artist->id }}">

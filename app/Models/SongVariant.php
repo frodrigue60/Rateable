@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Favorite;
 use App\Models\Rateable;
-use PhpParser\Node\Stmt\Return_;
 
 class SongVariant extends Model
 {
@@ -129,7 +128,7 @@ class SongVariant extends Model
         return route('variants.show', [
             'anime_slug' => $this->song->post->slug,
             'song_slug' => $this->song->slug,
-            'variant_version_number' => $this->version_number,
+            'variant_slug' => $this->slug,
         ]);
     }
 
@@ -198,49 +197,6 @@ class SongVariant extends Model
     {
         return $this->belongsTo(Season::class);
     }
-
-    // Accesor para manejar el formato de puntuación
-    /* public function getFormattedScoresAttribute()
-    {
-        $user = auth()->user();
-        $variant = $this;
-
-        $factor = 1; // Valor por defecto (POINT_100)
-        $isIntegerFormat = true; // Por defecto, asumimos formatos enteros
-
-        if ($user) {
-            switch ($user->score_format) {
-                case 'POINT_100':
-                    $factor = 1;
-                    break;
-                case 'POINT_10_DECIMAL':
-                    $factor = 0.1;
-                    $isIntegerFormat = false; // Permitir decimales
-                    break;
-                case 'POINT_10':
-                    $factor = 1 / 10;
-                    break;
-                case 'POINT_5':
-                    $factor = 1 / 20;
-                    $isIntegerFormat = false; // Permitir decimales (ej: 4.5 estrellas)
-                    break;
-            }
-
-            // Asignar user_score (siempre como float cuando hay decimales)
-            if ($userRating = $this->getUserRating($variant->id, $user->id)) {
-                $variant->user_score = $userRating->rating * $factor;
-            } else {
-                $variant->user_score = null;
-            }
-        }
-
-        // Calcular score promedio (decimal o entero según el formato)
-        $variant->score = $isIntegerFormat
-            ? (int) round($variant->averageRating * $factor)  // Formato entero
-            : round($variant->averageRating * $factor, 1);    // Formato decimal (1 dígito)
-
-        return $variant;
-    } */
 
     public function getUserRating($song_variant_id, $user_id)
     {

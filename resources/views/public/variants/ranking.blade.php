@@ -136,7 +136,7 @@
                 toggleBtn.disabled = true;
 
                 try {
-                    const response = await fetch(baseUrl + '/api/ranking', {
+                    const response = await fetch(baseUrl + '/api/variants/ranking', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

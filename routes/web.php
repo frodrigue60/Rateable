@@ -5,11 +5,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\PostController as PostController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
-use App\Http\Controllers\TagController as TagController;
-use App\Http\Controllers\Admin\TagController as AdminTagController;
 use App\Http\Controllers\ArtistController as ArtistController;
 use App\Http\Controllers\Admin\ArtistController as AdminArtistController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController as UserController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\ReportController as ReportController;
@@ -19,13 +16,13 @@ use App\Http\Controllers\Admin\SongController as AdminSongController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Admin\SongVariantController as AdminSongVariantController;
 use App\Http\Controllers\SongVariantController as SongVariantController;
-use App\Http\Controllers\FavoriteController as FavoriteController;
 use App\Http\Controllers\Admin\YearController as AdminYearController;
 use App\Http\Controllers\Admin\SeasonController as AdminSeasonController;
 use App\Http\Controllers\CommentController as CommentController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\YearController;
 use App\Http\Controllers\Admin\CommentControlle as AdminCommentController;
+use App\Http\Controllers\SongController as SongController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,34 +37,38 @@ use App\Http\Controllers\Admin\CommentControlle as AdminCommentController;
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'index'])->name('/');
 
-/* Route::get('/', function () {
-    return 'Aqui habia ponido mi sitio web';
-})->name('/'); */
-
-#Route::get('/openings',       [PostController::class, 'openings'])->name('openings');
-#Route::get('/endings',       [PostController::class, 'endings'])->name('endings');
 Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/users/{slug}', [UserController::class, 'userList'])->name('user.list');
 
 Route::get('/animes',   [PostController::class, 'animes'])->name('animes');
 Route::get('/anime/{slug}',   [PostController::class, 'show'])->name('post.show');
-Route::get('/anime/{anime_slug}/{song_slug}/v{variant_version_number}', [SongVariantController::class, 'show'])->name('variants.show');
 
-Route::get('/seasonal',   [SongVariantController::class, 'seasonal'])->name('seasonal');
-Route::get('/ranking',   [SongVariantController::class, 'ranking'])->name('ranking');
 
 Route::get('/offline', function () {
     return view('offline');
 });
 
-//ARTIST PUBLIC
+//VARIANTS PUBLIC
+//Route::get('/seasonal',   [SongVariantController::class, 'seasonal'])->name('seasonal');
+Route::get('/anime/{anime_slug}/{song_slug}/{variant_slug}', [SongVariantController::class, 'show'])->name('variants.show');
+Route::get('/ranking',   [SongVariantController::class, 'ranking'])->name('ranking');
+
+//SONGS PUBLIC
+Route::get('/anime/{anime_slug}/{song_slug}', [SongController::class, 'show'])->name('songs.show');
+Route::get('/seasonal',   [SongController::class, 'seasonal'])->name('seasonal');
+
+//ARTISTS PUBLIC
 Route::get('/artists/{slug}',    [ArtistController::class, 'show'])->name('artists.show');
 Route::get('/artists',    [ArtistController::class, 'index'])->name('artist.index');
 
+//YEARS PUBLIC
 Route::resource('years', YearController::class);
+
+//SEASONS PUBLIC
 Route::resource('seasons', SeasonController::class);
 
+//ADMIN ROUTES
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {
         //SONGS

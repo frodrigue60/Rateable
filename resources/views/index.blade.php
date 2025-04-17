@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-column gap-2 w-100">
-                    @include('partials.top.positions-index', ['items' => $openings])
+                    @include('partials.top.cards', ['items' => $openings])
                 </div>
 
             </section>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-column gap-2 w-100">
-                    @include('partials.top.positions-index', ['items' => $endings])
+                    @include('partials.top.cards', ['items' => $endings])
                 </div>
             </section>
         </div>

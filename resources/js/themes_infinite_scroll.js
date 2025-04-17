@@ -4,12 +4,11 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let page = 1;
     let lastPage = undefined;
     const nameInput = document.querySelector('#input-name');
-    const baseUrl = document.querySelector('meta[name="base-url"]').content;
-    let apiBaseUrl = baseUrl + '/api/themes';
-    let currentUrl = apiBaseUrl;
+    const apiBaseUrl = formFilter.dataset.apiUrl;
     const loaderDiv = document.querySelector('#loader');
 
-    firstFetch();
+    fetchData(apiBaseUrl);
+    let currentUrl = apiBaseUrl;
    /*  console.log(apiBaseUrl); */
 
     function debounce(func, timeout = 300) {
@@ -22,12 +21,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     const handleFilterChange = debounce(() => {
         let type = document.querySelector('#select-type').value;
-        let year = document.querySelector('#select-year').value;
-        let season = document.querySelector('#select-season').value;
+        let year_id = document.querySelector('#select-year').value;
+        let season_id = document.querySelector('#select-season').value;
         let sort = document.querySelector('#select-sort').value;
         let name = nameInput.value;
 
-        filterFetch(type, year, season, sort, name);
+        filterFetch(type, year_id, season_id, sort, name);
     });
 
     formFilter.addEventListener('change', handleFilterChange);
@@ -35,11 +34,15 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     window.addEventListener("scroll", function () {
         if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
-            if (page <= lastPage) {
+            if (lastPage == undefined) {
                 page++;
                 loadMoreData(page);
+            } else {
+                if (page <= lastPage) {
+                    page++;
+                    loadMoreData(page);
+                }
             }
-
         }
     });
 
@@ -47,7 +50,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         try {
             loaderDiv.style.removeProperty("display");
             const response = await fetch(url, {
-                method: "GET",
+                method: formFilter.method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
@@ -98,20 +101,18 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     function loadMoreData(page) {
         let newUrl = new URL(currentUrl);
-
         newUrl.searchParams.set('page', page)
         currentUrl = newUrl.toString();
-
         fetchData(currentUrl);
     }
 
-    function filterFetch(type, year, season, sort, name) {
+    function filterFetch(type, year_id, season_id, sort, name) {
+        clearDataDiv();
         let newUrl = new URL(apiBaseUrl);
         page = 1;
-        clearDataDiv();
         newUrl.searchParams.set('type', type);
-        newUrl.searchParams.set('year', year);
-        newUrl.searchParams.set('season', season);
+        newUrl.searchParams.set('year_id', year_id);
+        newUrl.searchParams.set('season_id', season_id);
         newUrl.searchParams.set('sort', sort);
         newUrl.searchParams.set('name', name);
 
@@ -122,11 +123,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     function clearDataDiv() {
         dataDiv.innerHTML = "";
-    }
-
-    function firstFetch() {
-        page = 1;
-        fetchData(apiBaseUrl);
     }
 });
 

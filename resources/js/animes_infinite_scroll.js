@@ -1,14 +1,10 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     const dataDiv = document.querySelector("#data");
     const formFilter = document.querySelector('#form-filter');
-    let pageName = undefined;
     let page = 1;
     let lastPage = undefined;
-    let url = undefined;
-    //const baseUrl = window.location.href;
     const nameInput = document.querySelector('#input-name');
-    const baseUrl = document.querySelector('meta[name="base-url"]').content;
-    let apiBaseUrl = baseUrl + '/api/animes';
+    const apiBaseUrl = formFilter.dataset.apiUrl;
     const inputName = document.querySelector('#input-name');
     const selectYear = document.querySelector('#select-year');
     const selectSeason = document.querySelector('#select-season');
@@ -17,7 +13,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     fetchData(apiBaseUrl);
     let currentUrl = apiBaseUrl;
-    console.log('first fetch: ' + apiBaseUrl);
+    //console.log('first fetch: ' + apiBaseUrl);
 
 
     // Debounce para limitar las llamadas a filterFetch
@@ -31,10 +27,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     // Función para manejar cambios en los filtros
     const handleFilterChange = debounce(() => {
-        let year = document.querySelector('#select-year').value;
-        let season = document.querySelector('#select-season').value;
-
-        filterFetch(year, season, nameInput.value);
+        let year_id = document.querySelector('#select-year').value;
+        let season_id = document.querySelector('#select-season').value;
+        let name = nameInput.value;
+        filterFetch(year_id, season_id, name);
     });
 
     // Escucha cambios en el formulario y en el input de nombre
@@ -57,13 +53,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     async function fetchData(url) {
         loaderDiv.style.removeProperty("display");
-        inputName.disabled = true;
+        /* inputName.disabled = true; */
         selectYear.disabled = true;
         selectSeason.disabled = true;
         try {
             // Realizar la petición GET
             const response = await fetch(url, {
-                method: "GET",
+                method: formFilter.method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
@@ -72,21 +68,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
             if (!response.ok) {
                 lastPage = 0;
-                console.log(`Error HTTP: ${response.status}`);
+                //console.log(`Error HTTP: ${response.status}`);
                 return;
             }
 
-            /* const text = await response.text();
-            if (!text.trim()) {
+            if (response.status === 204 /* No Content */ || !response.body) {
                 throw new Error('Respuesta vacía del servidor');
-            } */
+            }
 
-            const data = await response.json();
-            console.log(data);
+            const data = await response.json(); // Directamente
+            //console.log(data);
 
             if (!data.html || data.html === "") {
                 lastPage = 0;
-                console.log("No data received from backend");
+                //console.log("No data received from backend");
                 return;
             }
 
@@ -112,27 +107,26 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     function loadMoreData(page) {
-        let urlParams = new URLSearchParams(currentUrl);
+        let newUrl = new URL(currentUrl);
+        newUrl.searchParams.set('page', page)
+        currentUrl = newUrl.toString();
+        fetchData(currentUrl);
 
-        if (urlParams.has('type') || urlParams.has('sort') ||
-            urlParams.has('name')) {
-            pageName = "&page=";
-        } else {
-            pageName = "?page=";
-        }
-
-        url = currentUrl + pageName + page;
-        /* console.log("fetch loadMoreData(): " + url); */
-        fetchData(url);
     }
 
-    function filterFetch(year, season, name) {
-        page = 1;
+    function filterFetch(year_id, season_id, name) {
         clearDataDiv();
-        let queryUrl = "?" + "year=" + year + "&season=" + season + "&name=" + name;
-        url = apiBaseUrl + queryUrl;
-        fetchData(url);
-        /* console.log('filterFetch(): '+url); */
+        let newUrl = new URL(apiBaseUrl);
+        page = 1;
+        newUrl.searchParams.set('year_id', year_id);
+        newUrl.searchParams.set('season_id', season_id);
+        newUrl.searchParams.set('name', name);
+
+        currentUrl = newUrl.toString();
+
+        fetchData(currentUrl);
+
+        console.log('filterFetch(): ' + currentUrl);
     }
 
     function clearDataDiv() {

@@ -303,8 +303,8 @@ class SongVariantController extends Controller
         //$endings = view('partials.top.positions', ['items' => $endings])->render();
 
         $data = [
-            'openings' => view('partials.top.positions-ranking', ['items' => $openings])->render(),
-            'endings' => view('partials.top.positions-ranking', ['items' => $endings])->render(),
+            'openings' => view('partials.top.cards', ['items' => $openings])->render(),
+            'endings' => view('partials.top.cards', ['items' => $endings])->render(),
             'currentSeason' => $currentSeason,
             'currentYear' => $currentYear
         ];
@@ -428,8 +428,8 @@ class SongVariantController extends Controller
         $type = $request->type;
         $sort = $request->sort;
         $name = $request->name;
-        $season = $request->season;
-        $year = $request->year;
+        $season_id = $request->season_id;
+        $year_id = $request->year_id;
 
         $song_variants = null;
         $status = true;
@@ -442,16 +442,16 @@ class SongVariantController extends Controller
                 });
             })
             #POST QUERY
-            ->whereHas('song.post', function ($query) use ($name, $season, $year, $status) {
+            ->whereHas('song.post', function ($query) use ($name, $season_id, $year_id, $status) {
                 $query->where('status', $status)
                     ->when($name, function ($query, $name) {
                         $query->where('title', 'LIKE', '%' . $name . '%');
                     })
-                    ->when($season, function ($query, $season) {
-                        $query->where('season_id', $season);
+                    ->when($season_id, function ($query, $season_id) {
+                        $query->where('season_id', $season_id);
                     })
-                    ->when($year, function ($query, $year) {
-                        $query->where('year_id', $year);
+                    ->when($year_id, function ($query, $year_id) {
+                        $query->where('year_id', $year_id);
                     });
             })
             #SONG VARIANT QUERY

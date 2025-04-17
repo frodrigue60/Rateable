@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Song;
-use App\Models\Artist;
-use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Year;
+use App\Models\Season;
+use App\Models\Post;
 
 class SongController extends Controller
 {
@@ -50,47 +48,18 @@ class SongController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $slug = null, $suffix = null)
+    public function show($anime_slug, $song_slug)
     {
+        $post = Post::with(['songs'])->where('slug', $anime_slug)->first();
 
-        $song = Song::with(['post', 'artists','videos'])->find($id);
+        $song = Song::with(['songVariants.video'])
+            ->where('slug', $song_slug)
+            ->where('post_id', $post->id)
+            ->first();
 
+        //dd([$post, $song]);
 
-        if (Auth::check() == true && $song->averageRating == true) {
-
-            switch (Auth::user()->score_format) {
-                case 'POINT_100':
-                    $score = round($song->averageRating);
-                    break;
-
-                case 'POINT_10_DECIMAL':
-                    $score = round($song->averageRating / 10, 1);
-                    break;
-
-                case 'POINT_10':
-                    $score = round($song->averageRating / 10);
-                    break;
-
-                case 'POINT_5':
-                    $score = round($song->averageRating / 20);
-                    break;
-
-                default:
-                    $score = round($song->averageRating / 10);
-                    break;
-            }
-        } else {
-            $score = null;
-        }
-        /* if (isset($song->artist->id)) {
-            $artist = Artist::find($song->artist->id);
-        } else {
-            $artist = null;
-        } */
-
-        /* $this->count_views($song); */
-
-        return view('public.songs.show', compact('song', 'score', 'comments'));
+        return view('public.songs.show', compact('song','post'));
     }
 
     /**
@@ -125,5 +94,13 @@ class SongController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function seasonal()
+    {
+        $currentSeason = Season::where('current', true)->first();
+        $currentYear = Year::where('current', true)->first();
+
+        return view('public.songs.seasonal', compact('currentSeason', 'currentYear'/* , 'openings', 'endings' */));
     }
 }

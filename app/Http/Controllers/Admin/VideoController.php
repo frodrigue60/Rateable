@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Breadcrumb;
+use Illuminate\Support\Str;
 
 class VideoController extends Controller
 {
@@ -47,8 +48,12 @@ class VideoController extends Controller
     public function store(Request $request)
     {
         $variant_id = $request->song_variant_id;
-        $song_variant = SongVariant::find($variant_id);
+        $song_variant = SongVariant::with('song.post')->find($variant_id);
         $song = $song_variant->song;
+        $post = $song_variant->song->post;
+
+        $path = null;
+        $file_name = null;
 
         try {
             $video = new Video();
@@ -87,10 +92,12 @@ class VideoController extends Controller
                 $mimeType = $request->video->getMimeType();
                 $extension = $this->getExtensionFromMimeType($mimeType);
 
-                $file_name = $song->post->slug . '-' . strtolower($song->slug) . '-' . time() . '.' . $extension;
+                $file_name = $post->slug . '-' . $song->slug . ($song_variant->version_number > 1 ? '-' . $song_variant->slug : '') . '.' . $extension;
                 $video->video_src = $path . $file_name;
 
                 $video->type = 'file';
+
+                //dd($video);
             } else {
                 $validator = Validator::make($request->all(), [
                     'embed' => 'required'
@@ -105,13 +112,14 @@ class VideoController extends Controller
                 $video->type = 'embed';
             }
 
-            if ($video->save()) {
-                if ($video->type === "file") {
-                    //Storage::disk('public')->put($path,$file_name.$request->video);
-                    $request->video->storeAs($path, $file_name, 'public');
-                }
-                return redirect(route('admin.songs.variants', $song->id))->with('success', 'saved successfully');
+            $video->save();
+
+            if ($video->type === "file") {
+                //Storage::disk('public')->put($path,$file_name.$request->video);
+                $request->video->storeAs($path, $file_name, 'public');
             }
+
+            return redirect(route('admin.songs.variants', $song->id))->with('success', 'saved successfully');
         } catch (ModelNotFoundException $e) {
             return redirect(route('admin.songs.variants', $song->id))->with('error', $e);
         }
@@ -181,9 +189,13 @@ class VideoController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $video = Video::findOrFail($id);
+            $video = Video::with('songVariant.song.post')->findOrFail($id);
             $song_variant = $video->songVariant;
-            $song = $song_variant->song;
+            $song = $video->songVariant->song;
+            $post = $video->songVariant->song->post;
+
+            $path = null;
+            $file_name = null;
             //dd($request->all(),$video->song);
             if ($request->hasFile('video')) {
                 $validator = Validator::make($request->all(), [
@@ -196,7 +208,7 @@ class VideoController extends Controller
                     return Redirect::back()->with('error', $errors);
                 }
 
-                switch ($video->song->type) {
+                switch ($video->songVariant->song->type) {
                     case 'OP':
                         $path = "videos/openings/";
                         break;
@@ -215,10 +227,11 @@ class VideoController extends Controller
                 $mimeType = $request->video->getMimeType();
                 $extension = $this->getExtensionFromMimeType($mimeType);
 
-                $file_name = $video->song->post->slug . '-' . strtolower($video->song->slug) . '-' . time() . '.' . $extension;
+                #
+                $file_name = $post->slug . '-' . $song->slug . ($song_variant->version_number > 1 ? '-' . $song_variant->slug : '') . '.' . $extension;
                 $video->video_src = $path . $file_name;
 
-
+                //dd($video);
                 $video->type = 'file';
             } else {
                 $validator = Validator::make($request->all(), [

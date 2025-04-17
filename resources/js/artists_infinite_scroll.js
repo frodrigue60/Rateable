@@ -1,16 +1,16 @@
 document.addEventListener("DOMContentLoaded", (event) => {
     const dataDiv = document.querySelector("#data");
     const formFilter = document.querySelector('#form-filter');
+    const apiBaseUrl = formFilter.dataset.apiUrl;
     let page = 1;
     let lastPage = undefined;
     const nameInput = document.querySelector('#input-name');
     let loaderDiv = document.querySelector('#loader');
-    const artistId = document.querySelector('#artist_id').value;
-    const baseUrl = document.querySelector('meta[name="base-url"]').content;
-    let apiBaseUrl = baseUrl + '/api/artists/' + artistId + '/themes';
-    let currentUrl = apiBaseUrl;
+    //let apiBaseUrl = baseUrl + '/api/artists/' + artistId + '/themes';
+    
 
-    firstFetch();
+    fetchData(apiBaseUrl);
+    let currentUrl = apiBaseUrl;
 
     function debounce(func, timeout = 300) {
         let timer;
@@ -99,10 +99,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
         currentUrl = newUrl.toString();
 
         fetchData(currentUrl);
-    }
-
-    function firstFetch() {
-        fetchData(apiBaseUrl);
     }
 
     function filterFetch(type, year, season, sort, name) {

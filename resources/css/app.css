@@ -477,6 +477,7 @@ footer {
 .thumb {
 	position: absolute;
 	height: 100%;
+	width: auto;
 	background-position: center center;
 	transform: scale(1);
 	transition: .2s ease-in-out;
@@ -493,12 +494,10 @@ footer {
 	position: relative;
 	overflow: hidden;
 	height: 100%;
-
 	aspect-ratio: 15/22;
 	cursor: pointer;
 	background-color: #0b2538;
 	max-width: 200px;
-	height: auto;
 }
 
 .tarjeta .textos {
@@ -860,7 +859,7 @@ img.card-2-bg {
 
 	.contenedor-tarjetas-filtro {
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
+		grid-template-columns: repeat(6, 1fr);
 		grid-template-rows: repeat(1, auto);
 	}
 

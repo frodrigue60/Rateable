@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -79,7 +79,8 @@ class PostController extends Controller
     }
 
     public function animes(Request $request)
-    {
+    {   
+        //return response()->json(['request' => $request->all()]);
         $season = $request->season_id;
         $year = $request->year_id;
         $name = $request->name;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -93,7 +93,7 @@ class ArtistController extends Controller
         //
     }
 
-    public function themes(Request $request, $id)
+    public function filter(Request $request, $id)
     {
 
         $artist = Artist::where('id', $id)->first();
@@ -133,7 +133,7 @@ class ArtistController extends Controller
         $song_variants = $this->sort_variants($sort, $song_variants);
         $song_variants = $this->paginate($song_variants, 24)->withQueryString();
 
-        $view = view('layouts.variant.cards', compact('song_variants'))->render();
+        $view = view('partials.variants.cards', compact('song_variants'))->render();
 
         return response()->json([
             'html' => $view, 

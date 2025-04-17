@@ -1,15 +1,17 @@
 document.addEventListener("DOMContentLoaded", (event) => {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const apiToken = localStorage.getItem('api_token');
     const dataDiv = document.querySelector("#data");
     const formFilter = document.querySelector('#form-filter');
-    let pageName = undefined;
     let page = 1;
     let lastPage = undefined;
-    let url = undefined;
-    const baseUrl = window.location.href;
+    const apiBaseUrl = formFilter.dataset.apiUrl;
     const nameInput = document.querySelector('#input-name');
+    const loaderDiv = document.querySelector('#loader');
 
-
-    firstFetch();
+    fetchData(apiBaseUrl);
+    console.log(apiBaseUrl);
+    let currentUrl = apiBaseUrl;
 
     function debounce(func, timeout = 300) {
         let timer;
@@ -20,12 +22,13 @@ document.addEventListener("DOMContentLoaded", (event) => {
     }
 
     const handleFilterChange = debounce(() => {
+        let name = nameInput.value;
         let type = document.querySelector('#select-type').value;
-        let year = document.querySelector('#select-year').value;
-        let season = document.querySelector('#select-season').value;
+        let year_id = document.querySelector('#select-year').value;
+        let season_id = document.querySelector('#select-season').value;
         let sort = document.querySelector('#select-sort').value;
 
-        filterFetch(type, year, season, sort, nameInput.value);
+        filterFetch(type, year_id, season_id, sort, name);
     });
 
     formFilter.addEventListener('change', handleFilterChange);
@@ -45,75 +48,77 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     });
 
-    function fetchData(url) {
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "X-Requested-With": "XMLHttpRequest"
+    async function fetchData(url) {
+        try {
+            loaderDiv.style.removeProperty("display");
+            const response = await fetch(url, {
+                method: formFilter.method,
+                headers: {
+                    "Content-Type": "application/json",
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Authorization': 'Bearer ' + apiToken,
+                }
+            });
+
+            if (!response.ok) {
+                lastPage = 0;
+                //console.log(`Error HTTP: ${response.status}`);
+                return;
             }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    lastPage = 0;
-                    //console.log(response.status);
-                    return;
-                } else {
-                    return response.json();
-                }
-            })
-            .then(data => {
-                if (data.html === "") {
-                    lastPage = 0;
-                    //console.log("No data from backend");
-                    return;
-                } else {
-                    //console.log(data);
-                    lastPage = data.lastPage;
-                    dataDiv.innerHTML += data.html;
 
-                    let titles = document.querySelectorAll('.post-titles');
+            const data = await response.json();
 
-                    function cutTitles() {
-                        titles.forEach(title => {
-                            if (title.textContent.length > 25) {
-                                title.textContent = title.textContent.substr(0, 25) + "...";
-                            }
-                        });
+            if (!data.html || data.html === "") {
+                return;
+            }
+
+            console.log(data);
+
+            lastPage = data.lastPage;
+            dataDiv.innerHTML += data.html;
+
+            let titles = document.querySelectorAll('.post-titles');
+
+            function cutTitles() {
+                titles.forEach(title => {
+                    if (title.textContent.length > 25) {
+                        title.textContent = title.textContent.substr(0, 25) + "...";
                     }
-                    cutTitles();
-                }
-            })
-            .catch(error => console.error(error));
+                });
+            }
+            cutTitles();
+
+        } catch (error) {
+            //console.error("Error in fetchData:", error);
+        } finally {
+            loaderDiv.style.setProperty("display", "none", "important");
+        }
     }
 
     function loadMoreData(page) {
-        let currentUrl = window.location.href;
-        let urlParams = new URLSearchParams(window.location.search);
+        let newUrl = new URL(currentUrl);
+        newUrl.searchParams.set('page', page)
+        currentUrl = newUrl.toString();
+        fetchData(currentUrl);
+        console.log(currentUrl);
 
-        if (urlParams.has('type') || urlParams.has('tag') || urlParams.has('sort') ||
-            urlParams.has('name')) {
-            pageName = "&page=";
-        } else {
-            pageName = "?page=";
-        }
-
-        url = currentUrl + pageName + page;
-        //console.log("fetch loadMoreData(): " + url);
-        fetchData(url);
     }
 
-    function firstFetch() {
-        fetchData(baseUrl);
-    }
-
-    function filterFetch(type, year, season, sort, name) {
-        page = 1;
+    function filterFetch(type, year_id, season_id, sort, name) {
         clearDataDiv();
-        let queryUrl = "?" + "type=" + type + "&year=" + year + "&season=" + season + "&sort=" + sort+ "&name=" + name;
-        url = baseUrl + queryUrl;
-        history.replaceState(null, null, url);
-        fetchData(url);
+        let newUrl = new URL(apiBaseUrl);
+        page = 1;
+        newUrl.searchParams.set('type', type);
+        newUrl.searchParams.set('year_id', year_id);
+        newUrl.searchParams.set('season_id', season_id);
+        newUrl.searchParams.set('sort', sort);
+        newUrl.searchParams.set('name', name);
+
+        currentUrl = newUrl.toString();
+
+        fetchData(currentUrl);
+        //console.log(currentUrl);
     }
     function clearDataDiv() {
         dataDiv.innerHTML = "";

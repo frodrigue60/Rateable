@@ -27,21 +27,21 @@
     <div class="container">
         @if (Request::routeIs('animes'))
             <div class="top-header color1 mb-1 mt-1">
-                <h2 class="text-light">Filter Animes</h2>
+                <h2 class="text-light p-0 m-0">Search Animes</h2>
             </div>
         @endif
-        <div class="contenedor-filtro mt-2">
+        <div class="{{-- contenedor-filtro --}} d-flex flex-column mt-2">
             {{-- SEARCH PANEL --}}
-            <aside>
+            <section class="mb-3">
                 <div class="searchPanel">
                     <form action="{{ route('animes') }}" method="get" id="form-filter">
-                        <section class="searchItem">
-                            <div class="w-100 mb-1">
-                                <label for="input-name" class="text-light">Name:</label>
+                        <section class="d-flex gap-3">
+                            <div class="">
+                                <label for="input-name" class="text-light">Name</label>
                                 <input type="text" class="form-control" name="char" id="input-name">
                             </div>
-                            <div class="w-100 mb-1">
-                                <label class="text-light" for="select-year">Year:</label>
+                            <div class="">
+                                <label class="text-light" for="select-year">Year</label>
                                 <select class="form-select" aria-label="Default select example" name="year_id"
                                     id="select-year">
                                     <option selected value="">Select a year</option>
@@ -52,8 +52,8 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="w-100 mb-1">
-                                <label class="text-light" for="select-season">Season:</label>
+                            <div class="">
+                                <label class="text-light" for="select-season">Season</label>
                                 <select class="form-select" aria-label="Default select example" name="season_id"
                                     id="select-season">
                                     <option selected value="">Select a season</option>
@@ -71,7 +71,7 @@
                         </div> --}}
                     </form>
                 </div>
-            </aside>
+            </section>
             {{-- POSTS --}}
             <section class="text-light mb-3">
                 <div class="contenedor-tarjetas-filtro" id="data">
