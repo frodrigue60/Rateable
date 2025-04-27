@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card bg-dark text-light">
+            <div class="card  ">
                 <div class="card-header">
                     @php
                         if (isset($artist)) {
@@ -29,7 +29,7 @@
                             <input type="text" id="nameArtistJp" name="name_jp" class="form-control"
                                 value="{{ $artist->name_jp }}">
                         </div>
-                        
+
                         <div class="d-flex">
                             <button type="submit" class="btn btn-primary w-100">Submit</button>
                         </div>

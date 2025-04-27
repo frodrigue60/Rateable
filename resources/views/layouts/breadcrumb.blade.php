@@ -1,5 +1,5 @@
 <div class="container">
-    <nav aria-label="breadcrumb" class="text-light">
+    <nav aria-label="breadcrumb" class="">
         <ol class="breadcrumb">
             @isset($breadcrumb)
                 @foreach ($breadcrumb as $item)
@@ -8,7 +8,7 @@
                             <a href="{{ $item['url'] }}" class="">{{ $item['name'] }}</a>
                         </li>
                     @else
-                        <li class="breadcrumb-item active text-light" aria-current="page">
+                        <li class="breadcrumb-item active " aria-current="page">
                             {{ $item['name'] }}
                         </li>
                     @endif

@@ -6,7 +6,7 @@
     @endif
 @endsection
 @section('content')
-    <div class="container text-light">
+    <div class="container ">
         <section>
             <article>
                 <div class="text-center">

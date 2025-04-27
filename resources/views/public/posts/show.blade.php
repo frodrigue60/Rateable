@@ -63,8 +63,7 @@
     <meta property="article:section" content="{{ $post->type == 'OP' ? 'Opening' : 'Ending' }}">
     {{-- <meta property="og:updated_time" content="2022-09-04T20:03:37-05:00"> --}}
     <meta property="og:image" content="{{ $thumbnail_url }}" alt="{{ $post->title }}">
-    <meta property="og:image:secure_url" content="{{ $thumbnail_url }}"
-        alt="{{ $post->title }}">
+    <meta property="og:image:secure_url" content="{{ $thumbnail_url }}" alt="{{ $post->title }}">
     <meta property="og:image:width" content="460">
     <meta property="og:image:height" content="650">
     <meta property="og:image:alt" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
@@ -82,8 +81,8 @@
     <meta name="twitter:data2" content="2 minutos"> --}}
 @endsection
 @section('content')
-    <div class="container text-light">
-        <div class="banner-anime" style="background-image: url({{ $banner_url }});">
+    <div class="container ">
+        {{-- <div class="banner-anime" style="background-image: url({{ $banner_url }});">
             <div class="gradient"></div>
             <div class="post-info">
                 <img class="thumbnail-post" src="{{ $thumbnail_url }}" alt="">
@@ -96,157 +95,118 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div>
+            <h1 class="section-header">{{ $post->title }}</h1>
         </div>
-
-        <div class="container text-light mt-2 container-songs gap-4">
-            <div class="themes">
-                <div>
-                    <h3>Openings</h3>
+        <div class="row mx-auto">
+            <!-- ANIME INFO -->
+            <div class="col-sm-12 col-md-4 col-lg-3  p-2 text-center">
+                <div class="mb-3">
+                    <img class="rounded-1 w-100" src="{{ $thumbnail_url }}" alt="" style="max-width: 300px">
                 </div>
                 <div>
-                    @isset($openings)
-                        @if ($openings->count() != null)
-                            @foreach ($openings->sortBy('theme_num') as $song)
-                                <div class="bg-dark p-2 d-flex flex-column gap-1 my-2 rounded-2">
-                                    <div class="d-flex justify-content-between">
-                                        <h4 class="p-0 m-0">{{ $song->slug }}</h4>
-                                        {{-- <h4 class="p-0 m-0">{{ $songScore }} <i class="fa-solid fa-star"></i></h4> --}}
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <span class="text-light text-decoration-none"><span class="pe-1"><i
-                                                    class="fa-solid fa-music"></i></span> {{ $song->name }}</span>
-                                        @isset($song->artists)
-                                            <div>
-                                                <span class="pe-2"><i class="fa-solid fa-user"></i></span>
-                                                @foreach ($song->artists as $index => $item)
-                                                    <a class="text-light text-decoration-none"
-                                                        href="{{ $item->url }}">{{ $item->name }}</a>
-                                                    @if ($index < count($song->artists) - 1)
-                                                        ,
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                        @endisset
-                                    </div>
-                                    <hr class="p-0 m-0">
-                                    @isset($song->songVariants)
-                                        @if ($song->songVariants->count() != 0)
-                                            <div class="d-flex flex-column gap-2 mx-2 py-2">
-                                                @foreach ($song->songVariants->sortBy('version') as $variant)
-                                                   
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <a class="text-decoration-none text-light"
-                                                            href="{{ $variant->url }}"><span>Version
-                                                                {{ $variant->version_number }}</span></a>
-                                                        <div class="d-flex flex-row align-items-center gap-4">
-                                                            <div>
-                                                                @if (isset($variant->score))
-                                                                    <span>{{ $variant->scoreString }} <i
-                                                                            class="fa-solid fa-star"></i></span>
-                                                                @else
-                                                                    <span>N/A <i class="fa-solid fa-star"></i></span>
-                                                                @endif
-                                                            </div>
-                                                            <div>
-                                                                <a class="btn btn-sm btn-primary rounded-4"
-                                                                    href="{{ $variant->url }}">{{ 'Show' }}
-                                                                    <i class="fa-solid fa-play"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <h4 class="text-center">No videos</h4>
-                                        @endif
-                                    @endisset
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="d-flex flex-column align-items-center text-center">
-                                <figure class="mb-0">
-                                    <img style="max-width:200px" src="{{ asset('resources/images/sad-cat-5.png') }}"
-                                        alt="">
-                                </figure>
-                                <h4 class="">Nothing here</h4>
-                            </div>
-                        @endif
-                    @endisset
+                    <h5 class="fw-bold">Title</h5>
+                    {{ $post->title }}
+                </div>
+                <div>
+                    <h5 class="fw-bold">Release</h5>
+                    <span>{{ $post->season->name }}</span> <span>{{ $post->year->name }}</span>
+                </div>
+                <div>
+                    <h5 class="fw-bold">Format</h5>
+                    <span>{{ 'format' }}</span>
+                </div>
+                <div>
+                    <h5 class="fw-bold">Studios</h5>
+                    <span>{{ 'studios' }}</span>
+                </div>
+                <div>
+                    <h5 class="fw-bold">External Links</h5>
+                    <ul class="list-unstyled">
+                        @for ($i = 0; $i < 8; $i++)
+                            <li>Link {{ $i }}</li>
+                        @endfor
+                    </ul>
                 </div>
             </div>
-            <div class="themes">
-                <div>
-                    <h3>Endings</h3>
+            <div class="col-sm-12 col-md-8 col-lg-9 p-2">
+                <!-- DESCRIPTION -->
+                <h2 class="fs-4">Synopsis</h2>
+                <div class=" rounded-1 position-relative cursor-pointer mb-3">
+                    <div class="p-2 overflow-hidden description-container">
+                        <div class="description">
+                            {!! $post->description !!}
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    @isset($endings)
-                        @if ($endings->count() != null)
-                            @foreach ($endings->sortBy('theme_num') as $song)
-                                <div class="bg-dark p-2 d-flex flex-column gap-1 my-2 rounded-2">
-                                    <div class="d-flex justify-content-between">
-                                        <h4 class="p-0 m-0">{{ $song->slug }}</h4>
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <span class="text-light text-decoration-none"><span class="pe-1"><i
-                                                    class="fa-solid fa-music"></i></span> {{ $song->name }}</span>
-                                        @isset($song->artists)
-                                            <div class="d-flex align-items-center">
-                                                <span class="pe-2"><i class="fa-solid fa-user"></i></span>
-                                                @foreach ($song->artists as $index => $item)
-                                                    <a class="text-light text-decoration-none"
-                                                        href="{{ $item->url }}">{{ $item->name }}</a>
-                                                    @if ($index < count($song->artists) - 1)
-                                                        ,
-                                                    @endif
-                                                @endforeach
-                                            </div>
-                                        @endisset
-                                    </div>
-                                    <hr class="p-0 m-0">
-                                    @isset($song->songVariants)
-                                        @if ($song->songVariants->count() != 0)
-                                            <div class="d-flex flex-column gap-3 mx-2 py-2">
-                                                @foreach ($song->songVariants->sortBy('version') as $variant)
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <a class="text-decoration-none text-light"
-                                                            href="{{ $variant->url }}"><span>Version
-                                                                {{ $variant->version_number }}</span></a>
-                                                        <div class="d-flex flex-row align-items-center gap-4">
-                                                            <div>
-                                                                @if (isset($variant->score))
-                                                                    <span>{{ $variant->scoreString }} <i
-                                                                            class="fa-solid fa-star"></i></span>
-                                                                @else
-                                                                    <span>N/A <i class="fa-solid fa-star"></i></span>
-                                                                @endif
-                                                            </div>
-                                                            <div>
-                                                                <a class="btn btn-sm btn-primary rounded-4"
-                                                                    href="{{ $variant->url }}">{{ 'Show' }}
-                                                                    <i class="fa-solid fa-play"></i></a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @else
-                                            <h4 class="text-center">No videos</h4>
-                                        @endif
-                                    @endisset
+                <!--OPENINGS-->
+                <div class="col mb-2">
+                    <div>
+                        <h3 class="fs-4">Openings</h3>
+                    </div>
+                    <div>
+                        @isset($openings)
+                            @if ($openings->count() != null)
+                                @foreach ($openings->sortBy('theme_num') as $song)
+                                    <!--CARD SONG V1-->
+                                    {{-- @include('partials.posts.show.song-card-v1') --}}
+                                    <!--CARD SONG V2-->
+                                    @include('partials.posts.show.song-card-v2')
+                                @endforeach
+                            @else
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <figure class="mb-0">
+                                        <img style="max-width:200px" src="{{ asset('resources/images/sad-cat-5.png') }}"
+                                            alt="">
+                                    </figure>
+                                    <h4 class="">Nothing here</h4>
                                 </div>
-                            @endforeach
-                        @else
-                            <div class="d-flex flex-column align-items-center text-center">
-                                <figure class="mb-0">
-                                    <img style="max-width:200px" src="{{ asset('resources/images/sad-cat-5.png') }}"
-                                        alt="">
-                                </figure>
-                                <h4 class="">Nothing here</h4>
-                            </div>
-                        @endif
-                    @endisset
+                            @endif
+                        @endisset
+                    </div>
                 </div>
-            </div>
+                <!--ENDINGS-->
+                <div class="col mb-2">
+                    <div>
+                        <h3 class="fs-4">Endings</h3>
+                    </div>
+                    <div>
+                        @isset($endings)
+                            @if ($endings->count() != null)
+                                @foreach ($endings->sortBy('theme_num') as $song)
+                                    <!--CARD SONG V1-->
+                                    {{-- @include('partials.posts.show.song-card-v1') --}}
+                                    <!--CARD SONG V2-->
+                                    @include('partials.posts.show.song-card-v2')
+                                @endforeach
+                            @else
+                                <div class="d-flex flex-column align-items-center text-center">
+                                    <figure class="mb-0">
+                                        <img style="max-width:200px" src="{{ asset('resources/images/sad-cat-5.png') }}"
+                                            alt="">
+                                    </figure>
+                                    <h4 class="">Nothing here</h4>
+                                </div>
+                            @endif
+                        @endisset
+                    </div>
+                </div>
 
+            </div>
         </div>
-    @endsection
+    </div>
+@endsection
+
+
+@section('script')
+    <script>
+        const descriptionDiv = document.querySelector('.description');
+        console.log(descriptionDiv);
+
+        descriptionDiv.addEventListener('click', function() {
+            descriptionDiv.classList.toggle('description-open')
+            console.log('clicked ', descriptionDiv.classList);
+        });
+    </script>
+@endsection

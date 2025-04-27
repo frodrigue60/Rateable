@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\SongVariant;
 use App\Models\Comment;
-use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class CommentController extends Controller
 {
@@ -39,26 +38,7 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all());
-        $user = Auth::User();
-
-        $validatedData = $request->validate([
-            'content' => 'required',
-        ]);
-
-        $songVariant = SongVariant::findOrFail($request->song_variant_id);
-
-        $comment = new Comment($validatedData);
-        $comment->user_id = $user->id;
-        $songVariant->comments()->save($comment);
-
-        $comment::with('user');
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Commented sucessfully',
-            'comment' => view('partials.comments.comment',['comment' => $comment])->render(),
-        ], 200);
+        //
     }
 
     /**
@@ -103,6 +83,28 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        try {
+            $user = Auth::check() ? Auth::user() : null;
+
+            if (($comment->user_id == $user->id)||$user->isAdmin()) {
+                $comment->delete();
+            }
+
+            return response()->json([
+                'message' => 'Comment deleted successfully',
+                'success' => true,
+                /* 'comment' => $comment, */
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => 'Ah error has been occurred',
+                'success' => false,
+                /* 'comment' => $comment, */
+                'th' => $th
+            ]);
+        }
+
+
     }
 }

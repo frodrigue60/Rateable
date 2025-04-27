@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Season;
 use App\Models\Year;
 use App\Models\SongVariant;
+use App\Models\Song;
 
 class UserController extends Controller
 {
@@ -24,7 +25,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all(['id', 'name']);
+        $users = $this->paginate($users, 5);
+        return response()->json([
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -46,7 +51,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::where('id', $id)->first(['id', 'name']);
+
+        return response()->json([
+            'users' => $user,
+        ]);
     }
 
     /**
@@ -257,6 +266,7 @@ class UserController extends Controller
 
     public function favorites(Request $request)
     {
+        //return response()->json([$request->all()]);
         $user = Auth::check() ? Auth::user() : null;
 
         if (!$user) {
@@ -273,15 +283,13 @@ class UserController extends Controller
         $sort = $request->sort;
         $name = $request->name;
 
-        $song_variants = SongVariant::with(['song.post'])
+        $songs = Song::with(['post'])
             #SONG QUERY
-            ->whereHas('song', function ($query) use ($type) {
-                $query->when($type, function ($query, $type) {
-                    $query->where('type', $type);
-                });
+            ->when($type, function ($query, $type) {
+                $query->where('type', $type);
             })
             #POST QUERY
-            ->whereHas('song.post', function ($query) use ($name, $season, $year, $status) {
+            ->whereHas('post', function ($query) use ($name, $season, $year, $status) {
                 $query->where('status', $status)
                     ->when($name, function ($query, $name) {
                         $query->where('title', 'LIKE', '%' . $name . '%');
@@ -297,13 +305,13 @@ class UserController extends Controller
             ->whereLikedBy($user->id)
             ->get();
 
-        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
-        $song_variants = $this->sort_variants($sort, $song_variants);
-        $song_variants = $this->paginate($song_variants);
+        //$song_variants = $this->setScoreOnlyVariants($song_variants, $user);
+        //$song_variants = $this->sort_variants($sort, $song_variants);
+        $songs = $this->paginate($songs, 15);
 
         return response()->json([
-            'html' => view('partials.variants.cards', compact('song_variants'))->render(),
-            "lastPage" => $song_variants->lastPage()
+            'html' => view('partials.songs.cards-v2', compact('songs'))->render(),
+            'songs' => $songs,
         ]);
     }
 

@@ -12,7 +12,7 @@
 
 <article class="tarjeta">
     <div class="textos">
-        <div class="tarjeta-header text-light">
+        <div class="tarjeta-header ">
             <h3 class="text-shadow text-uppercase post-titles">{{ $song->post->title }}</h3>
         </div>
         <div class="{{ $song->type == 'OP' ? 'tag' : 'tag2' }}">
@@ -22,7 +22,7 @@
             <img class="thumb" loading="lazy" src="{{ $thumb_url }}" alt="{{ $song->post->title }}"
                 title="{{ $song->post->title }}">
         </a>
-        <div class="tarjeta-footer text-light">
+        <div class="tarjeta-footer ">
             <span>{{ $song->likeCount }} <i class="fa fa-heart"></i></span>
             <span>{{ $song->view_count }} <i class="fa fa-eye"></i></span>
             @if (isset($song->rating))

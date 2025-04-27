@@ -11,7 +11,7 @@
  @endsection
  @section('content')
      <div class="container">
-         <div class="container text-center text-light">
+         <div class="container text-center ">
              @isset($tagName)
                  <h1>{{ $tagName->name }}</h1>
              @endisset
@@ -25,7 +25,7 @@
          </div>
          <section>
              <div class="color1">
-                 <h2 class="text-light">OPENINGS</h2>
+                 <h2 class="">OPENINGS</h2>
              </div>
              <section class="contenedor-favoritos">
                  @isset($openings)
@@ -38,7 +38,7 @@
          <br>
          <section>
              <div class="color1">
-                 <h2 class="text-light">ENDINGS</h2>
+                 <h2 class="">ENDINGS</h2>
              </div>
              <section class="contenedor-favoritos">
                  @isset($endings)

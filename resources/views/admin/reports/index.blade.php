@@ -4,9 +4,9 @@
     <div class="container">
         <div class="row justify-content-center">
 
-            <div class="card bg-dark">
+            <div class="card ">
                 {{-- CARD HEADER --}}
-                <div class="card-header text-light">
+                <div class="card-header ">
                     <h5 class="card-title">Reports Panel</h5>
                 </div>
                 {{-- CARD BODY --}}

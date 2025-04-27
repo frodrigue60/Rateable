@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container text-light">
+    <div class="container ">
         <form action="{{ route('admin.years.store') }}" method="post">
             @csrf
             <div class="mb-3">

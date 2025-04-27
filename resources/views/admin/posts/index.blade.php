@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
 
-            <div class="card bg-dark">
+            <div class="card ">
                 {{-- CARD HEADER --}}
                 <div class="card-header">
                     <a class="btn btn-sm btn-primary" href="{{ route('admin.posts.create') }}">CREATE POST</a>
@@ -24,7 +24,7 @@
                                 </h2>
                                 <div id="collapseOne" class="accordion-collapse collapse"
                                     data-bs-parent="#accordionExample">
-                                    <div class="accordion-body bg-dark">
+                                    <div class="accordion-body ">
                                         <form class="d-flex gap-1" action="{{ route('admin.search.animes') }}"
                                             method="POST">
                                             @csrf
@@ -96,12 +96,10 @@
                                     </td>
                                     <td>
                                         @isset($post->season->id)
-                                            <a href="{{ route('seasons.show', $post->season->id) }}" target="_blank"
-                                                rel="noopener noreferrer">{{ $post->season->name }}</a>
+                                            <a href="{{ route('seasons.show', $post->season->id) }}">{{ $post->season->name }}</a>
                                         @endisset
                                         @isset($post->year->id)
-                                            <a href="{{ route('years.show', $post->year->id) }}" target="_blank"
-                                                rel="noopener noreferrer">{{ $post->year->name }}</a>
+                                            <a href="{{ route('years.show', $post->year->id) }}">{{ $post->year->name }}</a>
                                         @endisset
 
                                     </td>

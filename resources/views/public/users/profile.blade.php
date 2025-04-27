@@ -12,7 +12,7 @@
     @endif
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card bg-dark text-light">
+            <div class="card  ">
                 <div class="card-header"><strong>{{ $user->name }}</strong>'s Dashboard</div>
                 <div class="card-body">
                     {{-- PROFILE PICTURE --}}

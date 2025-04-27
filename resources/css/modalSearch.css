@@ -1,83 +1,60 @@
-.res {
-    gap: 10px;
-    background-color: #0e3d5f;
-    padding-bottom: 5px;
-    color: #a9dbff;
-    padding: 2px;
-    border-radius: 3px;
-}
+.res {}
+
 .displayNone {
     display: none;
 }
-.modal-header{
+
+.modal-header {
     border-bottom: none;
 }
-.modal-footer{
-border-top: none ;
+
+.modal-footer {
+    border-top: none;
 }
 
 .catTitle {
-    margin-left: 5px;
+    color: #3a78e2;
 }
 
 .result {
-    background-color: #a9dbff;
-    padding: 5px;
     border-radius: 3px;
-    margin: 2px;
     transform: scale(1);
     transition: all .25s ease-out;
-    color: #0C2638;
-}
-.result>a {
-    text-decoration: none;
-    color: #0C2638;
 }
 
-.result:hover {
-    background-color: #8bb5d3;
+.result a {
+    text-decoration: none;
+    color: #a7c7ff;
+}
+
+.result a:hover {
+
     transform: scale(1.01);
     transition: .1s ease-in;
 }
 
-.customModal {
-    background-color: #0e3d5f;
-
-}
-@media screen and (max-width: 1920px) {
-    
-}
-
-@media screen and (max-width: 1440px) {
-    
+#searchInputModal {
+    background-color: #0c2638;
+    border: none;
+    color: #a9dbff;
+    border-radius: 20px 20px;
 }
 
-@media screen and (max-width: 1280px) {
-    
-}
-@media screen and (max-width: 992px) {
-    
-}
+@media screen and (max-width: 1920px) {}
+
+@media screen and (max-width: 1440px) {}
+
+@media screen and (max-width: 1280px) {}
+
+@media screen and (max-width: 992px) {}
 
 /* RESPONSIVE CAROUSEL */
-@media screen and (max-width: 960px) {
-    
-    
-}
+@media screen and (max-width: 960px) {}
 
-@media screen and (max-width: 800px) {
-    
-}
+@media screen and (max-width: 800px) {}
 
-@media screen and (max-width: 768px) {
-    
-}
+@media screen and (max-width: 768px) {}
 
-@media screen and (max-width: 600px) {
-    
-    
-}
-@media screen and (max-width: 400px) {
-    
-    
-}
+@media screen and (max-width: 600px) {}
+
+@media screen and (max-width: 400px) {}

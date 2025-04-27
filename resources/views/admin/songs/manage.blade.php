@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card bg-dark">
+            <div class="card ">
                 {{-- CARD HEADER --}}
                 <div class="card-header">
                     <a class="btn btn-primary btn-sm" href="{{ route('admin.posts.songs.add', $post->id) }}" role="button">ADD
@@ -41,11 +41,11 @@
                                 <tr>
                                     <td>{{ $song->id }}</td>
                                     <td>
-                                        <a class="text-light" href="{{ $song->post->url }}">{{ $song_name }}</a>
+                                        <a class="" href="{{ $song->post->url }}">{{ $song_name }}</a>
                                     </td>
                                     <td>
                                         {{-- @isset($song->artist)
-                                            <a class="text-light"
+                                            <a class=""
                                                 href="{{ $artist->url }}">{{ $song->artist->name }}</a>
                                         @endisset --}}
                                         @isset($song->artists)

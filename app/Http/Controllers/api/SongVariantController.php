@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
 
 class SongVariantController extends Controller
 {
@@ -589,5 +590,17 @@ class SongVariantController extends Controller
             ->where('rateable_id', $song_variant_id)
             ->where('user_id', $user_id)
             ->first(['rating']);
+    }
+
+    public function getVideos(SongVariant $variant){
+
+        $video = $variant->video;
+        $video->publicUrl = asset('storage/'.$video->video_src);
+        
+        //$variants = $song->songVariants;
+
+        return response()->json([
+            'video' => $video
+        ]);
     }
 }

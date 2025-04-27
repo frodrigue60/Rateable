@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container text-light">
+    <div class="container ">
         <form action="{{ route('admin.years.update', $year->id) }}" method="post">
             @csrf
             @method('PUT')

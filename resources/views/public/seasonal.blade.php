@@ -48,7 +48,7 @@
     @endif
 @endsection
 @section('content')
-    <div class="container mb-3 text-light">
+    <div class="container mb-3 ">
         <div class="d-flex justify-content-center align-items-center">
             <h2 class="p-0 m-0">{{ $currentSeason->name }} {{ $currentYear->name }}</h2>
         </div>
@@ -60,94 +60,16 @@
                 </button>
 
             </div>
-            <div class="contenedor-tarjetas mb-3" id="content-container">
-                {{-- DATA --}}
+            {{--  <div class="contenedor-tarjetas mb-3" id="data">
+                <!-- DATA --->
+            </div> --}}
+            <div class="results mb-3" id="data">
+                <!-- DATA --->
             </div>
         </div>
     </div>
 @endsection
 
 @section('script')
-    <script>
-        document.addEventListener("DOMContentLoaded", (event) => {
-            //console.log('DOM LOADED');
-            const baseUrl = document.querySelector('meta[name="base-url"]').content;
-            const csrf_token = document.querySelector('meta[name="csrf-token"]').content;
-            const token = localStorage.getItem('api_token');
-
-            // Estado inicial
-            let currentType = 'OP';
-            const contentContainer = document.getElementById('content-container');
-            const sectionHeader = document.getElementById('section-header');
-            const toggleBtn = document.getElementById('toggle-type-btn');
-
-            fetchData(currentType);
-
-            // Función para hacer el fetch
-            async function fetchData(type) {
-                toggleBtn.disabled = true;
-
-                try {
-                    const response = await fetch(baseUrl + '/api/songs/seasonal', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                            'X-CSRF-TOKEN': csrf_token,
-                            /* 'Authorization': 'Bearer ' + token, */
-                        },
-                        body: JSON.stringify({
-                            type: type
-                        })
-                    });
-
-                    if (!response.ok) throw new Error('Network response was not ok');
-
-                    const data = await response.json();
-
-                    console.log(data);
-
-                    renderData(data);
-
-                    const titles = document.querySelectorAll('.post-titles');
-                    titles.forEach(title => {
-                        if (title.textContent.length > 25) {
-                            title.textContent = title.textContent.substr(0, 25) + "...";
-                        }
-                    });
-
-                    updateHeader(type);
-
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    // Mostrar mensaje de error al usuario
-                    contentContainer.innerHTML = `<p class="error">Error loading ${type} data</p>`;
-                } finally {
-                    toggleBtn.disabled = false;
-                }
-            }
-
-            // Función para actualizar el encabezado
-            function updateHeader(type) {
-                sectionHeader.textContent = type === 'OP' ?
-                    'OPENINGS' :
-                    'ENDINGS';
-                document.querySelector('#btn-toggle-text').textContent = type === 'OP' ?
-                    'Endings' :
-                    'Openings';
-            }
-
-            // Función para renderizar datos (ejemplo básico)
-            function renderData(data) {
-                contentContainer.innerHTML = data.songsRender;
-            }
-
-            // Manejador del botón
-            toggleBtn.addEventListener('click', () => {
-                currentType = currentType === 'OP' ? 'ED' : 'OP';
-                fetchData(currentType);
-            });
-        });
-    </script>
+     @vite(['resources/js/seasonal.js'])
 @endsection

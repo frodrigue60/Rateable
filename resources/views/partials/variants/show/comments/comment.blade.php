@@ -18,7 +18,7 @@
             <div class="d-flex flex-row justify-content-between">
                 <div>
                     <div class="user-name">
-                        <a class="no-deco text-light"
+                        <a class="no-deco "
                             href="{{ route('user.list', $comment->user->slug) }}">{{ $comment->user->name }}
                         </a>
                     </div>
@@ -26,13 +26,13 @@
                 <div class="d-flex flex-row gap-2">
                     <form action="{{ route('comments.like', $comment->id) }}" method="post">
                         @csrf
-                        <button class="text-light"
+                        <button class=""
                             style="background-color: transparent;border:none;">{{ $comment->likesCount }}
                             <i class="fa-regular fa-thumbs-up"></i></button>
                     </form>
                     <form action="{{ route('comments.dislike', $comment->id) }}" method="post">
                         @csrf
-                        <button class="text-light"
+                        <button class=""
                             style="background-color: transparent;border:none;">{{ $comment->dislikesCount }}
                             <i class="fa-regular fa-thumbs-down"></i></button>
                     </form>

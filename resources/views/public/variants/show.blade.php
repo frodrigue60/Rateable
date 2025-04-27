@@ -46,7 +46,7 @@
 @endsection
 @section('content')
     <div class="container">
-        {{-- <div class="social-share-panel text-light">
+        {{-- <div class="social-share-panel ">
             <div class="share-fb">
                 <button><i class="fa-brands fa-facebook"></i></button>
             </div>
@@ -67,7 +67,7 @@
                         }
                     @endphp
                     <div class="" id="video_container">
-                        <video id="player"class="ratio-16x9" controls {{-- autoplay --}}>
+                        <video id="player"class="ratio-16x9 w-100" controls autoplay>
                             <source src="{{ $video_url }}" type="video/webm" />
                         </video>
                     </div>
@@ -77,34 +77,29 @@
                     </div>
                 @endif
             @else
-                <h3 class="text-light d-flex align-items-center justify-content-center">Videos not found</h3>
+                <h3 class=" d-flex align-items-center justify-content-center">Videos not found</h3>
             @endif
-
-            @if ($song->songVariants->count() > 1)
-                <div class="list-group">
-                    {{-- <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                    The current link item
-                </a> --}}
-                    @foreach ($song->songVariants as $variant)
-                        <a href="{{ $variant->url }}"
-                            class="list-group-item list-group-item-action {{ $song_variant->id == $variant->id ? 'active' : '' }} d-inline-block">
-                            {{ $variant->song->slug }} {{ $variant->slug }}
-                        </a>
-                    @endforeach
-
-                </div>
-            @endif
-
         </div>
+        @if ($song->songVariants->count() > 1)
+            <div class="d-flex gap-2">
+                @foreach ($song->songVariants as $variant)
+                    <a href="{{ $variant->url }}"
+                        class="btn btn-sm btn-primary {{ $song_variant->id == $variant->id ? 'active' : '' }} d-inline-block">
+                        Version {{ $variant->version_number }}
+                    </a>
+                @endforeach
 
-        <div class="text-light">
+            </div>
+        @endif
+
+        <div class="">
             <div class="mb-3">
                 <h3>
-                    <a href="{{ $post->url }}" class="text-decoration-none text-light">{{ $post->title }}
+                    <a href="{{ $post->url }}" class="text-decoration-none ">{{ $post->title }}
                         {{ $song->slug }} {{ $song_variant->slug }}</a>
                 </h3>
                 <div class="my-2">
-                    <span class="text-light">{{ $song->name }}</span> -
+                    <span class="">{{ $song->name }}</span> -
                     @foreach ($song_variant->song->artists as $index => $artist)
                         @php
                             if ($artist->name_jp != null) {
@@ -113,7 +108,7 @@
                                 $artistNameJp = '';
                             }
                         @endphp
-                        <a class="text-decoration-none text-light" href="{{ $artist->url }}">{{ $artist->name }}
+                        <a class="text-decoration-none " href="{{ $artist->url }}">{{ $artist->name }}
                             {{ $artistNameJp }}</a>
                         @if ($index < count($song_variant->song->artists) - 1)
                             ,
@@ -121,13 +116,15 @@
                     @endforeach
 
                 </div>
-                <div class="d-flex mb-2">
-                    <span>Views {{ $song_variant->viewsString }}</span>
-                </div>
             </div>
             {{-- Actions buttons --}}
             <div class="d-flex justify-content-between">
                 <div class="d-flex gap-3">
+                    <div>
+                        <button class="btn btn-primary rounded-pill"> <i class="fa-regular fa-eye"></i>
+                            <span>{{ $song_variant->viewsString }}</span>
+                        </button>
+                    </div>
                     @guest
                         {{-- LIKES --}}
                         <div>
@@ -198,7 +195,7 @@
         {{-- Report Modal --}}
         <div class="modal fade" tabindex="-1" id="report-modal">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-light">
+                <div class="modal-content  ">
                     @if (Auth::check())
                         <form action="{{ route('reports.store') }}" method="post">
                             @csrf
@@ -227,9 +224,9 @@
                             </div>
                         </form>
                     @else
-                        <div class="d-flex justify-content-center comment-form text-light">
-                            <h3>Please <a class="text-light" href="{{ route('login') }}">login</a> or <a
-                                    class="text-light" href="{{ route('register') }}">register</a> for report</h3>
+                        <div class="d-flex justify-content-center comment-form ">
+                            <h3>Please <a class="" href="{{ route('login') }}">login</a> or <a
+                                    class="" href="{{ route('register') }}">register</a> for report</h3>
                         </div>
                     @endif
                 </div>
@@ -239,7 +236,7 @@
         {{-- Rate Modal --}}
         <div class="modal fade" tabindex="-1" id="rating-modal">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content bg-dark text-light">
+                <div class="modal-content  ">
                     @if (Auth::check())
                         @csrf
                         @php
@@ -249,7 +246,7 @@
                                 $user_score = 0;
                             }
                         @endphp
-                        <div class="text-light d-flex flex-column align-items-center">
+                        <div class=" d-flex flex-column align-items-center">
                             @php
                                 $format_rating = '';
                                 if (isset($userRating->format_rating)) {
@@ -416,12 +413,12 @@
                             @endswitch
                         </div>
                     @else
-                        <div class="d-flex justify-content-center comment-form text-light text-center">
-                            <h3>Please <a class="text-light" href="{{ route('login') }}">login</a>
+                        <div class="d-flex justify-content-center comment-form  text-center">
+                            <h3>Please <a class="" href="{{ route('login') }}">login</a>
                                 <br>
                                 or
                                 <br>
-                                <a class="text-light" href="{{ route('register') }}">register</a> for rate
+                                <a class="" href="{{ route('register') }}">register</a> for rate
                             </h3>
                         </div>
                     @endif
@@ -431,13 +428,13 @@
 
 
         {{-- Make Comment Section --}}
-        <hr class="text-light">
+        <hr class="">
         <div>
-            <h3 class="text-light">Comments</h3>
+            <h3 class="">Comments</h3>
         </div>
         @guest
-            <div class="d-flex justify-content-center comment-form text-light">
-                <h3>Please <a class="text-light" href="{{ route('login') }}">login</a> or <a class="text-light"
+            <div class="d-flex justify-content-center comment-form ">
+                <h3>Please <a class="" href="{{ route('login') }}">login</a> or <a class=""
                         href="{{ route('register') }}">register</a> for comment</h3>
             </div>
         @endguest
@@ -459,7 +456,7 @@
         {{-- All Coments Section --}}
         {{-- @if ($comments_featured != null && count($comments_featured) > 0)
             <div class="my-2">
-                <h4 class="text-light my-2">Featured comments</h4>
+                <h4 class=" my-2">Featured comments</h4>
                 @foreach ($comments_featured as $comment)
                     @php
                         $user_pp_url = '';
@@ -481,7 +478,7 @@
                                     <div class="user-details">
                                         <div style="display: flex; gap: 10px;">
                                             <div class="user-name">
-                                                <a class="no-deco text-light"
+                                                <a class="no-deco "
                                                     href="{{ route('user.list', $comment->user->id) }}">{{ $comment->user->name }}</a>
                                             </div>
                                             <div class="user-score">
@@ -536,14 +533,14 @@
                                                 <form action="{{ route('comment.unlike', $comment->id) }}"
                                                     method="post">
                                                     @csrf
-                                                    <button class="no-deco text-light"
+                                                    <button class="no-deco "
                                                         style="background-color: transparent;border:none;">{{ $comment->likeCount }}
                                                         <i class="fa-solid fa-thumbs-up"></i></button>
                                                 </form>
                                             @else
                                                 <form action="{{ route('comment.like', $comment->id) }}" method="post">
                                                     @csrf
-                                                    <button class="no-deco text-light"
+                                                    <button class="no-deco "
                                                         style="background-color: transparent;border:none;">{{ $comment->likeCount }}
                                                         <i class="fa-regular fa-thumbs-up"></i></button>
                                                 </form>
@@ -568,11 +565,11 @@
 
         @if (isset($comments))
             <div>
-                <h4 class="text-light my-2">Recents comments</h4>
+                <h4 class=" my-2">Recents comments</h4>
             </div>
             <div class="my-2" id="comments-container">
                 {{-- PARTIAL COMMENTS --}}
-                @include('partials.comments.comments')
+                @include('partials.variants.show.comments.comments')
             </div>
         @endif
     </div>

@@ -20,25 +20,25 @@
     @if (Request::routeIs('user.list') || Request::routeIs('favorites'))
         @include('partials.user.banner')
     @endif
-    <div class="container d-flex flex-column text-light">
+    <div class="container d-flex flex-column ">
         @if (Request::routeIs('themes'))
             <div class="top-header color1 py-1">
-                <h2 class="text-light m-0">Search Themes</h2>
+                <h2 class=" m-0">Search Themes</h2>
             </div>
         @endif
         @if (Request::routeIs('favorites'))
             <div class="top-header color1 py-1">
-                <h2 class="text-light m-0">My Favorites</h2>
+                <h2 class=" m-0">My Favorites</h2>
             </div>
         @endif
         @if (Request::routeIs('user.list') && isset($user))
             <div class="top-header color1 py-1">
-                <h2 class="text-light m-0"><strong>{{ $user->name }}</strong> favorites</h2>
+                <h2 class=" m-0"><strong>{{ $user->name }}</strong> favorites</h2>
             </div>
         @endif
         @if (Request::routeIs('artists.show'))
             <div class="top-header color1 py-1">
-                <h2 class="text-light m-0">{{ $artist->name }}</h2>
+                <h2 class=" m-0">{{ $artist->name }}</h2>
             </div>
         @endif
         {{-- SEARCH PANEL --}}
@@ -61,12 +61,12 @@
             @endif
             {{-- NAME --}}
             <div class="">
-                <label for="input-name" class="text-light">Name</label>
+                <label for="input-name" class="">Name</label>
                 <input type="text" class="form-control" name="name" id="input-name">
             </div>
             {{-- TYPE --}}
             <div class="">
-                <label for="select-type" class="text-light">Type</label>
+                <label for="select-type" class="">Type</label>
                 <select class="form-select" aria-label="Default select example" id="select-type" name="type">
                     <option value="" selected>Any</option>
                     @foreach ($types as $item)
@@ -79,7 +79,7 @@
 
             {{-- YEAR --}}
             <div class="">
-                <label class="text-light" for="select-year">Year</label>
+                <label class="" for="select-year">Year</label>
                 <select class="form-select" aria-label="Default select example" name="year_id" id="select-year">
                     <option selected value="">Any</option>
                     @foreach ($years as $year)
@@ -90,7 +90,7 @@
             </div>
             {{-- SEASON --}}
             <div class="">
-                <label class="text-light" for="select-season">Season</label>
+                <label class="" for="select-season">Season</label>
                 <select class="form-select" aria-label="Default select example" name="season_id" id="select-season">
                     <option selected value="">Season</option>
                     @foreach ($seasons as $season)
@@ -102,7 +102,7 @@
 
             {{-- SORT --}}
             <div class="">
-                <label for="select-sort" class="text-light">Sort</label>
+                <label for="select-sort" class="">Sort</label>
                 <select class="form-select" aria-label="Default select example" id="select-sort" name="sort">
                     <option value="">Any</option>
                     @foreach ($sortMethods as $item)
@@ -120,7 +120,7 @@
         </section>
 
         {{-- POSTS --}}
-        <section class="text-light mb-3">
+        <section class=" mb-3">
             <div class="contenedor-tarjetas-filtro" id="data">
                 {{--  @include('layouts.variant.cards') --}}
             </div>

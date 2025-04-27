@@ -14,7 +14,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card bg-dark text-light">
+            <div class="card  ">
                 <div class="card-header">Create Post</div>
                 <div class="card-body">
                     <form method="post" action="{{ route('admin.posts.update', $post->id) }}" enctype="multipart/form-data">

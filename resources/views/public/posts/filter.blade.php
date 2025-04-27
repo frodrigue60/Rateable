@@ -27,7 +27,7 @@
     <div class="container">
         @if (Request::routeIs('animes'))
             <div class="top-header color1 mb-1 mt-1">
-                <h2 class="text-light p-0 m-0">Search Animes</h2>
+                <h2 class=" p-0 m-0">Search Animes</h2>
             </div>
         @endif
         <div class="{{-- contenedor-filtro --}} d-flex flex-column mt-2">
@@ -37,11 +37,11 @@
                     <form action="{{ route('animes') }}" method="get" id="form-filter">
                         <section class="d-flex gap-3">
                             <div class="">
-                                <label for="input-name" class="text-light">Name</label>
+                                <label for="input-name" class="">Name</label>
                                 <input type="text" class="form-control" name="char" id="input-name">
                             </div>
                             <div class="">
-                                <label class="text-light" for="select-year">Year</label>
+                                <label class="" for="select-year">Year</label>
                                 <select class="form-select" aria-label="Default select example" name="year_id"
                                     id="select-year">
                                     <option selected value="">Select a year</option>
@@ -53,7 +53,7 @@
                                 </select>
                             </div>
                             <div class="">
-                                <label class="text-light" for="select-season">Season</label>
+                                <label class="" for="select-season">Season</label>
                                 <select class="form-select" aria-label="Default select example" name="season_id"
                                     id="select-season">
                                     <option selected value="">Select a season</option>
@@ -73,7 +73,7 @@
                 </div>
             </section>
             {{-- POSTS --}}
-            <section class="text-light mb-3">
+            <section class=" mb-3">
                 <div class="contenedor-tarjetas-filtro" id="data">
                     {{-- @include('layouts.post.cards') --}}
                 </div>

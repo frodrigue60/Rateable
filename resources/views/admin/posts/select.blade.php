@@ -11,7 +11,7 @@
             @foreach ($posts as $post)
                 <article class="tarjeta">
                     <div class="textos">
-                        <div class="tarjeta-header text-light">
+                        <div class="tarjeta-header ">
                             <h3 class="text-shadow text-uppercase post-titles">{{ $post->title->romaji }}</h3>
                         </div>
                         @php

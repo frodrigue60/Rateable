@@ -79,7 +79,7 @@ class PostController extends Controller
     }
 
     public function animes(Request $request)
-    {   
+    {
         //return response()->json(['request' => $request->all()]);
         $season = $request->season_id;
         $year = $request->year_id;
@@ -103,10 +103,14 @@ class PostController extends Controller
             return $post->title;
         });
 
-        $posts = $this->paginate($posts, 24, $request->page)->withQueryString();
-        $view = view('partials.posts.cards', compact('posts'))->render();
+        $posts = $this->paginate($posts, 15);
+        $posts = $this->setShowUrl($posts);
 
-        return response()->json(['html' => $view, "lastPage" => $posts->lastPage()]);
+        return response()->json([
+            'html' => view('partials.posts.cards-v2', compact('posts'))->render(),
+            'posts' => $posts,
+            "lastPage" => $posts->lastPage()
+        ]);
     }
 
     public function paginate($collection, $perPage = 18, $page = null, $options = [])
@@ -118,7 +122,16 @@ class PostController extends Controller
         return $collection;
     }
 
-    public function test(){
+    public function setShowUrl($posts)
+    {
+        $posts->each(function ($post) {
+            $post->url = route('post.show', [$post->slug]);
+        });
+        return $posts;
+    }
+
+    public function test()
+    {
         return response()->json(['test' => true]);
     }
 }

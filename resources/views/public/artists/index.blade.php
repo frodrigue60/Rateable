@@ -46,7 +46,7 @@
     @endif
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="article:section" content="{{ $post->type == 'OP' ? 'Opening' : 'Ending' }}">
-    
+
     <meta property="og:image" content="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}" alt="{{ $post->title }}">
     <meta property="og:image:secure_url" content="{{ asset('/storage/thumbnails/' . $post->thumbnail) }}"
         alt="{{ $post->title }}">
@@ -54,10 +54,10 @@
     <meta property="og:image:height" content="650">
     <meta property="og:image:alt" content="{{ $post->title }} {{ $post->slug != null ? $post->slug : $post->type }}">
     <meta property="og:image:type" content="image/webp">
-    
+
 @endsection --}}
 @section('content')
-    <div class="container text-light">
+    <div class="container ">
         <div class="artist-menu py-4">
                 <div class="artist-item">
                     <a class="artist-link" href="#special">[0-9]</a>
@@ -77,7 +77,7 @@
                     @if (!preg_match('/^[a-zA-Z]/', $artist->name))
                         <div class="artist-list-item">
                             <a class="no-deco"
-                                href="{{ $artist->url }}" target="_blank" rel="noopener noreferrer">{{ $artist->name }} {{"(".count($artist->songs).")"}}</a>
+                                href="{{ $artist->url }}">{{ $artist->name }} {{"(".count($artist->songs).")"}}</a>
                         </div>
                     @endif
                 @endforeach
@@ -91,7 +91,7 @@
                         @if (Str::startsWith($artist->name, $char))
                             <div class="artist-list-item">
                                 <a class="no-deco"
-                                    href="{{ $artist->url }}" target="_blank" rel="noopener noreferrer">{{ $artist->name }} {{"(".count($artist->songs).")"}}</a>
+                                    href="{{ $artist->url }}">{{ $artist->name }} {{"(".count($artist->songs).")"}}</a>
                             </div>
                         @endif
                     @endforeach

@@ -1,0 +1,82 @@
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import path from 'path';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: [
+                'resources/js/app.js',
+                'resources/js/api/config.js',
+                'resources/js/api/endpoints.js',
+                'resources/js/api/index.js',
+                'resources/js/ajaxSearch.js',
+                'resources/js/api_get_video.js',
+                'resources/js/filter_animes.js',
+                'resources/js/filter_favorites.js',
+                'resources/js/filter_themes.js',
+                'resources/js/filter_artist_themes.js',
+                'resources/js/filter_artists.js',
+                'resources/js/ranking_songs.js',
+                'resources/js/seasonal.js',
+                'resources/js/api_get_video.js',
+                'resources/js/modules/comments/deleteComment.js',
+                /* 'resources/js/sw-dev.js', */
+                'resources/css/app.css',
+                'resources/sass/app.scss',
+                'resources/css/modalSearch.css',
+                'resources/css/userProfile.css',
+                'resources/css/post.css',
+                'resources/css/ranking.css',
+                'resources/css/fivestars.css',
+            ],
+            refresh: true,
+        })
+    ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './resources/js'),
+            '@api': path.resolve(__dirname, './resources/js/api'),
+            '~': path.resolve(__dirname, './resources'),
+            '@modules': path.resolve(__dirname, './resources/js/modules'),
+        }
+    },
+    /* server: {
+        hmr: {
+            protocol: 'ws',
+            host: 'localhost',
+            port: 3000,
+        }
+    }, */
+    build: {
+        /*  manifest: true, */
+        emptyOutDir: true,
+        rollupOptions: {
+            output: {
+                /*  format: 'es', */
+                /*  entryFileNames: '[name].js',
+                 chunkFileNames: '[name].js',
+                 assetFileNames: '[name].[ext]', */
+                entryFileNames: `js/[name]-[hash].js`,
+                chunkFileNames: `js/[name]-[hash].js`,
+                assetFileNames: (assetInfo) => {
+                    const extType = assetInfo.name.split('.').at(1);
+                    if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+                        return `images/[name]-[hash][extname]`;
+                    }
+                    if (/css/i.test(extType)) {
+                        return `css/[name]-[hash][extname]`;
+                    }
+                    if (/woff|woff2|eot|ttf|otf/i.test(extType)) {
+                        return `fonts/[name]-[hash][extname]`;
+                    }
+                    return `assets/[name]-[hash][extname]`;
+                },
+            },
+        },
+        outDir: 'public/build',
+        assetsDir: '',
+        manifest: 'manifest.json',
+    },
+});
+

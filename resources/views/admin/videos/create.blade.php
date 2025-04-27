@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card bg-dark text-light">
+            <div class="card  ">
                 <div class="card-header">
                     <h5 class="card-title">{{$song_variant->song->post->title}} {{$song_variant->song->slug}} {{$song_variant->slug}} - Video</h5>
                 </div>

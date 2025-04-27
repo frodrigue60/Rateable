@@ -10,13 +10,13 @@
     {{-- <article class="tarjeta">
         <a class="no-deco" href="{{ $post->url }}" rel="nofollow noopener noreferrer">
             <div class="textos">
-                <div class="tarjeta-header text-light">
+                <div class="tarjeta-header ">
                     <h3 class="text-shadow text-uppercase post-titles">{{ $post->title }}</h3>
                 </div>
                 <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $post->title }}"
                     title="{{ $post->title }}">
                 <div class="tarjeta-footer justify-content-center">
-                    <span class="text-light">
+                    <span class="">
                         {{ $post->songs->count() }} <i class="fa-solid fa-music"></i>
                     </span>
                 </div>
@@ -24,7 +24,7 @@
         </a>
     </article> --}}
     <div class="d-flex flex-column p-2 color1 rounded-1" {{-- style="border: solid 1px red;" --}}>
-        <a class="d-flex gap-3 no-deco text-light" data-bs-toggle="collapse" href="#collapseExample{{ $post->id }}"
+        <a class="d-flex gap-3 no-deco " data-bs-toggle="collapse" href="#collapseExample{{ $post->id }}"
             role="button" aria-expanded="false" aria-controls="collapseExample{{ $post->id }}">
             <div class="d-flex">
                 <img class="rounded-1" src="{{ $thumbnailUrl }}" alt="" style="max-width: 80px;height:auto;">
@@ -52,7 +52,7 @@
                                 <tr>
                                     <td>{{$variant->song->slug}} {{$variant->slug}}</td>
                                     <td>
-                                        <a href="{{ $variant->url }}" target="_blank" rel="noopener noreferrer">
+                                        <a href="{{ $variant->url }}">
                                             {{ $variant->song->name }} {{ $variant->slug }}
                                         </a>
                                     </td>

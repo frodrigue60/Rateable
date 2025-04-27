@@ -28,136 +28,64 @@
     @endif
 @endsection
 @section('content')
-    <section class="container">
-        {{-- TOP SECTION --}}
-        <div class="container-top">
-            <section class="container-items limit-items-index">
-                @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
-                    <h2 hidden class="text-light">Best Anime Openings of All Time</h2>
-                @endif
-                <div class="top-header-ranking">
-                    <div>
-                        <span>Top Openings</span>
-                    </div>
-                    <div>
-                        @if (Request::routeIs('/'))
-                            <a href="{{ route('ranking') }}" class="btn btn-sm color4">Ranking</a>
-                        @endif
-                    </div>
+    <div class="container">
+        <!-- TOP -->
+        <div class="d-flex flex-column flex-md-row gap-2 ">
+            <section class="col col-md-6">
+                <div class="d-flex">
+                    <h5 class="section-header  me-auto">Top Openings</h5>
                 </div>
+
                 <div class="d-flex flex-column gap-2 w-100">
-                    @include('partials.top.cards', ['items' => $openings])
+                    @include('partials.top.cards-v2', ['items' => $openings])
                 </div>
 
             </section>
 
-            <section class="container-items limit-items-index">
-                @if (Request::routeIs('/') || Request::routeIs('global.ranking'))
-                    <h2 hidden class="text-light">Best Anime Endings of All Time</h2>
-                @endif
-                <div class="top-header-ranking">
-                    <div>
-                        <span>Top Endings</span>
-                    </div>
-                    <div>
-                        @if (Request::routeIs('/'))
-                            <a href="{{ route('ranking') }}" class="btn btn-sm color4">Ranking</a>
-                        @endif
-                    </div>
+            <section class="col col-md-6">
+                <div class="d-flex">
+                    <h5 class="section-header  ms-auto">Top Endings</h5>
                 </div>
+
                 <div class="d-flex flex-column gap-2 w-100">
-                    @include('partials.top.cards', ['items' => $endings])
+                    @include('partials.top.cards-v2', ['items' => $endings])
                 </div>
             </section>
         </div>
-        {{-- POSTS SECTION --}}
-        <section class="contenedor-main">
-            {{-- RECENTS --}}
-            <section class="carouselContainermain">
-                <div class="top-header">
-                    <div>
-                        <h2 class="text-light mb-0">Recently added</h2>
-                    </div>
-                    <div>
-                        <a href="{{ route('themes', 'sort=recent') }}" class="btn btn-sm color4">All Recently Posts</a>
-                    </div>
-                </div>
-                <div class="owl-carousel carousel-recents-main">
-                    @foreach ($recently as $variant)
-                        @php
-                            $version = $variant->version_number;
-                            $forward_text =
-                                ($variant->song->slug ? $variant->song->slug : $variant->song->type) .
-                                'v' .
-                                $variant->version_number;
-
-                            $post = $variant->song->post;
-                            $title = $post->title;
-
-                            if (Storage::disk('public')->exists($post->thumbnail)) {
-                                $thumbnail_url = Storage::url($post->thumbnail);
-                            } else {
-                                $thumbnail_url = $post->thumbnail_src;
-                            }
-                        @endphp
-
-                        <article class="tarjeta">
-                            <a class="no-deco" href="{{ $variant->url }}" target="_blank"
-                                rel="nofollow noopener noreferrer">
-                                <div class="textos">
-                                    <div class="tarjeta-header text-light">
-                                        <h3 class="text-shadow text-uppercase post-titles">{{ $title }}</h3>
-                                    </div>
-                                    <div class="{{ $variant->song->type == '1' ? 'tag' : 'tag2' }}">
-                                        <span class="tag-content ">{{ $forward_text }}</span>
-                                    </div>
-                                    <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}"
-                                        alt="{{ $title }}" title="{{ $title }}">
-                                    {{-- <div class="tarjeta-footer text-light">
-                                        <span></span>
-                                    </div> --}}
-                                </div>
-                            </a>
-                        </article>
-                    @endforeach
+        <hr class="">
+        <!-- RECENTS ADDED SONGS -->
+        <section class="mb-3">
+            <section class="">
+                <h2 class=" section-header">Recently added</h2>
+                <div class="owl-carousel gap-3">
+                    @include('partials.songs.cards-v2', ['songs' => $recently])
                 </div>
             </section>
         </section>
+        <hr class="">
 
-        <section class="contenedor-main">
-            <div class="top-header mb-2 mt-2">
-                <div>
-                    <h2 class="text-light mb-0">Most Pupular</h2>
-                </div>
-                <div>
-                    <a href="{{ route('themes', 'sort=likeCount') }}" class="btn btn-sm color4">Most Popular</a>
-                </div>
+        <!-- MOST POPULAR SONGS -->
+        <section class="mb-3">
+
+            <h2 class=" section-header">Most Pupular</h2>
+
+            <div class="owl-carousel gap-3">
+                @include('partials.songs.cards-v2', ['songs' => $popular])
             </div>
-            {{-- POPULAR POSTS --}}
-            <section class="contenedor-tarjetas-main">
-                @foreach ($popular->take(14) as $variant)
-                    @isset($variant->song->post)
-                        @include('partials.variants.card')
-                    @endisset
-                @endforeach
-            </section>
-            <div class="top-header mb-2 mt-2">
-                <div>
-                    <h2 class="text-light mb-0">Most Viewed</h2>
-                </div>
-                <div>
-                    <a href="{{ route('themes', 'sort=view_count') }}" class="btn btn-sm color4">Most Viewed</a>
-                </div>
-            </div>
-            {{-- MOST VIEWED --}}
-            <section class="contenedor-tarjetas-main">
-                @foreach ($viewed->take(14) as $variant)
-                    @isset($variant->song->post)
-                        @include('partials.variants.card')
-                    @endisset
-                @endforeach
-            </section>
         </section>
+        <hr class="">
+        <!-- MOST VIEWED SONGS -->
+        <secttion class="mb-3">
 
-    </section>
+            <h2 class=" section-header">Most Viewed</h2>
+
+            <div class="owl-carousel gap-3">
+                @include('partials.songs.cards-v2', ['songs' => $viewed])
+            </div>
+        </secttion>
+    </div>
+@endsection
+
+@section('script')
+
 @endsection

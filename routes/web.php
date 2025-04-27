@@ -36,7 +36,6 @@ use App\Http\Controllers\SongController as SongController;
 */
 //POST PUBLIC
 Route::get('/',       [PostController::class, 'index'])->name('/');
-
 Route::get('/themes', [PostController::class, 'themes'])->name('themes');
 Route::get('/welcome',       [UserController::class, 'welcome'])->name('welcome');
 Route::get('/users/{slug}', [UserController::class, 'userList'])->name('user.list');
@@ -50,17 +49,16 @@ Route::get('/offline', function () {
 });
 
 //VARIANTS PUBLIC
-//Route::get('/seasonal',   [SongVariantController::class, 'seasonal'])->name('seasonal');
 Route::get('/anime/{anime_slug}/{song_slug}/{variant_slug}', [SongVariantController::class, 'show'])->name('variants.show');
-Route::get('/ranking',   [SongVariantController::class, 'ranking'])->name('ranking');
 
 //SONGS PUBLIC
 Route::get('/anime/{anime_slug}/{song_slug}', [SongController::class, 'show'])->name('songs.show');
 Route::get('/seasonal',   [SongController::class, 'seasonal'])->name('seasonal');
+Route::get('/ranking',   [SongController::class, 'ranking'])->name('ranking');
 
 //ARTISTS PUBLIC
 Route::get('/artists/{slug}',    [ArtistController::class, 'show'])->name('artists.show');
-Route::get('/artists',    [ArtistController::class, 'index'])->name('artist.index');
+Route::get('/artists',    [ArtistController::class, 'index'])->name('artists.index');
 
 //YEARS PUBLIC
 Route::resource('years', YearController::class);
@@ -71,6 +69,8 @@ Route::resource('seasons', SeasonController::class);
 //ADMIN ROUTES
 Route::group(['middleware' => 'staff'], function () {
     Route::prefix('admin')->group(function () {
+        //DASHBOARD
+        Route::get('/dashboard', [AdminPostController::class, 'dashboard'])->name('admin.dashboard');
         //SONGS
         Route::resource('songs', AdminSongController::class, ['as' => 'admin']);
         Route::get('songs/{song}/variants/add', [AdminSongController::class, 'addVariant'])->name('admin.songs.variants.add');

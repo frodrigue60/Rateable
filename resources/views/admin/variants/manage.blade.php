@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <div class="card text-light m-0 bg-dark">
+        <div class="card  m-0 ">
             <div class="card-header">
                 <a href="{{ route('admin.songs.variants.add', $song->id) }}" class="btn btn-sm btn-primary">Create Variant</a>
             </div>

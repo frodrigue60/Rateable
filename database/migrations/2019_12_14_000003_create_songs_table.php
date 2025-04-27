@@ -25,6 +25,7 @@ return new class extends Migration
             $table->foreignId('season_id')->references('id')->on('seasons')->onDelete('cascade');
             $table->foreignId('year_id')->references('id')->on('years')->onDelete('cascade');
             $table->timestamps();
+            $table->unsignedBigInteger('views')->default(0);
         });
     }
 

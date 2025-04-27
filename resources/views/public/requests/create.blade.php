@@ -3,8 +3,8 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card bg-dark">
-                <div class="card-header text-light">
+            <div class="card ">
+                <div class="card-header ">
                     Create request
                 </div>
                 <div class="card-body">

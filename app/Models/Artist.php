@@ -13,6 +13,8 @@ class Artist extends Model
         'name',
         'name_jp',
         'slug',
+        'thumbnail',
+        'thumbnail_src'
     ];
 
     /* public function posts()

@@ -21,34 +21,39 @@ use App\Http\Controllers\api\SongController as apiSongController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+}); */
 
-    #POSTS
-    //Route::resource('posts', apiPostController::class);
-    Route::post('/posts/search', [apiPostController::class, 'search'])->name('api.posts.search');
-    Route::get('/animes', [apiPostController::class, 'animes'])->name('api.posts.animes');
+#POSTS
+//Route::resource('posts', apiPostController::class);
+Route::post('posts/search', [apiPostController::class, 'search'])->name('api.posts.search');
+Route::get('animes', [apiPostController::class, 'animes'])->name('api.posts.animes');
 
-    #SONGS
-    //Route::resource('songs', apiSongController::class);
-    Route::post('/songs/seasonal', [apiSongController::class, 'seasonal'])->name('api.songs.seasonal');
-    Route::post('/songs/ranking', [apiSongController::class, 'ranking'])->name('api.songs.ranking');
+#SONGS
+//Route::resource('songs', apiSongController::class);
+Route::get('songs/seasonal', [apiSongController::class, 'seasonal'])->name('api.songs.seasonal');
+Route::get('songs/ranking', [apiSongController::class, 'ranking'])->name('api.songs.ranking');
+Route::get('songs/filter', [apiSongController::class, 'filter'])->name('api.songs.filter');
 
 
-    #SONG VARIANTS
-    //Route::resource('variants', apiSongVariantController::class);
-    Route::post('seasonal', [apiSongVariantController::class, 'seasonal'])->name('api.variants.seasonal');
-    Route::post('variants/ranking', [apiSongVariantController::class, 'ranking'])->name('api.variants.ranking');
-    Route::get('themes', [apiSongVariantController::class, 'filter'])->name('api.variants.filter');
-    Route::get('variants/{variant}/comments', [apiSongVariantController::class, 'comments'])->name('api.variants.comments');
+#SONG VARIANTS
+//Route::resource('variants', apiSongVariantController::class);
+Route::post('variants/seasonal', [apiSongVariantController::class, 'seasonal'])->name('api.variants.seasonal');
+/* Route::post('variants/ranking', [apiSongVariantController::class, 'ranking'])->name('api.variants.ranking'); */
+//Route::get('variants/filter', [apiSongVariantController::class, 'filter'])->name('api.variants.filter');
+Route::get('variants/{variant}/comments', [apiSongVariantController::class, 'comments'])->name('api.variants.comments');
+Route::get('variants/{variant}/get-videos', [apiSongVariantController::class, 'getVideos'])->name('api.variants.get-video');
 
-    #ARTISTS
-    //Route::resource('artists', apiArtistController::class);
-    Route::get('artists/{artist}/filter', [apiArtistController::class, 'filter'])->name('api.artists.filter');
+#ARTISTS
+//Route::resource('artists', apiArtistController::class);
+Route::get('artists/{artist}/filter', [apiArtistController::class, 'songsFilter'])->name('api.artists.songs.filter');
+Route::get('artists/filter', [apiArtistController::class, 'artistsFilter'])->name('api.artists.filter');
 
-    #USERS
-    Route::get('users/{id}/list', [apiUserController::class, 'userList'])->name('api.users.list');
+#USERS
+Route::get('users', [apiUserController::class, 'index'])->name('api.users');
+Route::get('users/{id}/list', [apiUserController::class, 'userList'])->name('api.users.list');
+Route::get('users/{id}', [apiUserController::class, 'show'])->name('api.users');
 
 #AUTH ROUTES
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -63,6 +68,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('songs/{song}/dislike', [apiSongController::class, 'dislike'])->name('api.songs.dislike');
     Route::post('songs/{song}/favorite', [apiSongController::class, 'toggleFavorite'])->name('api.songs.toggle.favorite');
     Route::post('songs/{song}/rate', [apiSongController::class, 'rate'])->name('api.songs.rate');
+    Route::post('songs/comments', [apiSongController::class, 'storeComment'])->name('api.songs.store.comment');
 
     #COMMENTS
     Route::resource('comments', apiCommentController::class, ['as' => 'api']);

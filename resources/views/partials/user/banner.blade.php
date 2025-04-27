@@ -18,7 +18,7 @@
             <div class="banner-content container">
                 <img class="avatar" src="{{ $profileUrl }}" alt="" id="avatar-image">
                 <div class="name-wrapper">
-                    <h1 class="name text-light">{{ $user->name }}</h1>
+                    <h1 class="name ">{{ $user->name }}</h1>
                 </div>
             </div>
         </div>

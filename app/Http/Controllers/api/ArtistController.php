@@ -93,7 +93,7 @@ class ArtistController extends Controller
         //
     }
 
-    public function filter(Request $request, $id)
+    public function songsFilter(Request $request, $id)
     {
 
         $artist = Artist::where('id', $id)->first();
@@ -103,10 +103,10 @@ class ArtistController extends Controller
         $type = $request->type;
         $sort = $request->sort;
         $name = $request->name;
-        $year = $request->year;//this receive an ID, not a name
-        $season = $request->season;//this receive an ID, not a name
+        $year = $request->year; //this receive an ID, not a name
+        $season = $request->season; //this receive an ID, not a name
 
-        $song_variants = Song::whereHas('artists', function ($query) use ($artist) {
+        $songs = Song::whereHas('artists', function ($query) use ($artist) {
             $query->where('artists.id', $artist->id);
         })
             ->when($year, function ($query) use ($year) {
@@ -124,21 +124,36 @@ class ArtistController extends Controller
             ->when($type, function ($query) use ($type) {
                 $query->where('type', $type);
             })
-            ->get()
-            ->flatMap(function ($song) {
-                return $song->songVariants;
-            });
+            ->get();
 
-        $song_variants = $this->setScoreOnlyVariants($song_variants, $user);
-        $song_variants = $this->sort_variants($sort, $song_variants);
-        $song_variants = $this->paginate($song_variants, 24)->withQueryString();
-
-        $view = view('partials.variants.cards', compact('song_variants'))->render();
+        //$song_variants = $this->setScoreOnlyVariants($song_variants, $user);
+        //$song_variants = $this->sort_variants($sort, $song_variants);
+        $songs = $this->paginate($songs, 15);
 
         return response()->json([
-            'html' => $view, 
-            "lastPage" => $song_variants->lastPage(),/* "artist" => $artist */  
-             
+            'html' => view('partials.songs.cards-v2', compact('songs'))->render(),
+            'songs' => $songs
+        ]);
+    }
+
+    public function artistsFilter(Request $request)
+    {
+        $name = $request->name;
+        $artists = Artist::when($name, function ($query, $name) {
+            $query->where('name', 'LIKE', '%' . $name . '%');
+        })
+            ->get();
+
+        $artists = $artists->sortBy(function ($artist) {
+            return $artist->name;
+        });
+
+        $artists = $this->paginate($artists, 15);
+
+        return response()->json([
+            'artists' => $artists,
+            'html' => view('partials.artists.cards-v2', compact('artists'))->render(),
+
         ]);
     }
 

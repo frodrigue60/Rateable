@@ -839,4 +839,8 @@ class PostController extends Controller
 
         return view('admin.songs.manage', compact('post', 'breadcrumb'));
     }
+
+    public function dashboard(){
+        return view('admin.dashboard');
+    }
 }

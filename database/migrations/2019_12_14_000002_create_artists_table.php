@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('name_jp')->nullable();
             $table->string('slug')->unique();
+            $table->string('thumbnail')->nullable();
+            $table->string('thumbnail_src')->nullable();
             $table->timestamps();
         });
     }

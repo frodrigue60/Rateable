@@ -3,7 +3,7 @@
 @section('title', 'Posts Index')
 
 @section('content')
-    <div class="container text-light">
+    <div class="container ">
         <form action="{{ route('admin.seasons.update', $season->id)}}" method="post">
             @csrf
             @method('PUT')
@@ -23,7 +23,7 @@
             <div>
                 <button class="btn btn-sm btn-primary" type="submit">Submit</button>
             </div>
-            
+
         </form>
     </div>
 @endsection

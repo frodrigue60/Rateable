@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Rateable;
-
+use Illuminate\Support\Facades\Session;
 
 class Song extends Model
 {
@@ -84,6 +84,19 @@ class Song extends Model
         return $this->morphMany(Comment::class, 'commentable');
     }
 
+    public function incrementViews()
+    {
+        $key = 'song_' . $this->id;
+
+        if (!Session::has($key)) {
+            DB::table('songs')
+                ->where('id', $this->id)
+                ->increment('views');
+
+            Session::put($key, true);
+        }
+    }
+
     public function getNameAttribute()
     {
         if ($this->song_romaji != null) {
@@ -112,7 +125,7 @@ class Song extends Model
     {
         // Cargar relaciones necesarias si no están ya cargadas
         if (!$this->relationLoaded('post') || !$this->post->relationLoaded('songs')) {
-            $this->load(['post.songs.songVariants']);
+            $this->load(['post','songVariants']);
         }
 
         $smallestVariant = $this->post->songs->flatMap(function ($song) {

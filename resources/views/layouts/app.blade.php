@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 
 <head>
     <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
@@ -34,50 +34,60 @@
     <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('resources/owlcarousel/assets/owl.theme.default.min.css') }}">
 
+    <script>
+        // Función auto-ejecutable para prevenir flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
+
+    @vite([
+        'resources/js/app.js',
+        'resources/js/ajaxSearch.js',
+        /* 'resources/js/sw-dev.js', */
+        'resources/css/app.css',
+        'resources/css/modalSearch.css',
+        'resources/css/userProfile.css',
+        'resources/css/post.css',
+        'resources/css/ranking.css',
+        'resources/css/fivestars.css',
+        'resources/sass/app.scss',
+    ])
+
+    {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
+
     @if (config('app.env') === 'local')
         <!-- DEV ASSETS -->
-        <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}">
+        {{-- <link rel="stylesheet" href="{{ asset('resources/bootstrap-5.2.3-dist/css/bootstrap.min.css') }}"> --}}
         <link rel="stylesheet" href="{{ asset('resources/font-awesome-6.4.2/css/all.min.css') }}">
-        @vite([
-            /* 'resources/sass/app.scss',
-             'resources/js/app.js', */
-            'resources/js/ajaxSearch.js',
-            'resources/css/app.css',
-            'resources/css/modalSearch.css',
-            'resources/css/userProfile.css',
-            'resources/css/post.css',
-            'resources/css/ranking.css',
-            'resources/css/fivestars.css',
-        ])
     @else
         <!-- PROD ASSETS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"> --}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
             integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
-        {{-- BUILD --}}
-        <link rel="stylesheet" href="{{ asset('build/userProfile.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/post.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/ranking.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/fivestars.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/modalSearch.css') }}">
-        <link rel="stylesheet" href="{{ asset('build/app.css') }}">
     @endif
 </head>
 
-<body id="body" class="color2" hidden>
+<body class="">
     <div id="app">
-        <div class="loader-container">
+        {{-- <div class="loader-container">
             <div class="my-spinner"></div>
-        </div>
+        </div> --}}
         @include('layouts.navbar')
 
-        <main class="">
-            @include('layouts.breadcrumb')
+        <main class="my-3">
+            @isset($breadcrumb)
+                @include('layouts.breadcrumb')
+            @endisset
+
             @include('layouts.alerts')
+
             @yield('content')
-            {{-- Modal Search --}}
+            <!-- Modal Search -->
             @include('layouts.modal-search')
         </main>
 
@@ -94,36 +104,72 @@
 
             <script src="{{ asset('resources/js/popper.min.js') }}"></script>
             <script src="{{ asset('resources/font-awesome-6.4.2/js/all.min.js') }}"></script>
-            <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script>
+            {{-- <script src="{{ asset('resources/bootstrap-5.2.3-dist/js/bootstrap.bundle.min.js') }}"></script> --}}
         @else
             @if (Request::routeIs('/'))
                 <script src="https://code.jquery.com/jquery-3.6.3.slim.min.js"
                     integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
             @endif
-
             {{-- PROD SCRIPTS --}}
-            {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
             <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"
                 integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ=="
                 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous" defer>
-            </script>
-
-            {{-- BUILD --}}
-            <script src="{{ asset('build/ajaxSearch.js') }}"></script>
+            </script> --}}
         @endif
 
-        <script>
+        {{-- <script>
             const loaderContainer = document.querySelector('.loader-container');
             document.addEventListener("DOMContentLoaded", function() {
                 loaderContainer.style.display = 'none';
             });
+        </script> --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const themeToggle = document.getElementById('themeToggle');
+                /* const themeIcon = document.getElementById('themeIcon'); */
+                const htmlElement = document.documentElement;
+
+                // Verificar preferencia del sistema o almacenamiento local
+                const savedTheme = localStorage.getItem('theme') ||
+                    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+                // Aplicar tema guardado o preferido
+                htmlElement.setAttribute('data-bs-theme', savedTheme);
+                /* updateIcon(savedTheme); */
+
+                // Alternar tema al hacer clic
+                themeToggle.addEventListener('click', function() {
+                    const currentTheme = htmlElement.getAttribute('data-bs-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                    // Cambiar tema
+                    htmlElement.setAttribute('data-bs-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    /* updateIcon(newTheme); */
+                });
+
+                // Actualizar icono según el tema
+                /* function updateIcon(theme) {
+                    themeIcon.textContent = theme === 'dark' ? '🌙' : '🌞';
+                } */
+
+                // Opcional: Escuchar cambios en la preferencia del sistema
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                    if (!localStorage.getItem('theme')) {
+                        const newTheme = e.matches ? 'dark' : 'light';
+                        htmlElement.setAttribute('data-bs-theme', newTheme);
+                        /*  updateIcon(newTheme); */
+                    }
+                });
+            });
         </script>
+
 
         @yield('script')
 
-        @include('layouts.footer')
+        @include('layouts.footer.footer')
     </div>
 
 </body>

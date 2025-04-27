@@ -20,74 +20,82 @@
     @if (Request::routeIs('user.list') || Request::routeIs('favorites'))
         @include('partials.user.banner')
     @endif
-    <div class="container d-flex flex-column text-light">
-        @if (Request::routeIs('themes'))
-            <div class="top-header color1 py-1">
-                <h2 class="text-light m-0">Search Themes</h2>
-            </div>
-        @endif
-        @if (Request::routeIs('favorites'))
-            <div class="top-header color1 py-1">
-                <h2 class="text-light m-0">My Favorites</h2>
-            </div>
-        @endif
-        @if (Request::routeIs('user.list') && isset($user))
-            <div class="top-header color1 py-1">
-                <h2 class="text-light m-0"><strong>{{ $user->name }}</strong> favorites</h2>
-            </div>
-        @endif
-        @if (Request::routeIs('artists.show'))
-            <div class="top-header color1 py-1">
-                <h2 class="text-light m-0">{{ $artist->name }}</h2>
-            </div>
-        @endif
-        {{-- SEARCH PANEL --}}
+    <div class="container d-flex flex-column ">
+        <!--HEADER-->
+        <div class="">
+            @if (Request::routeIs('animes'))
+                <h2>Search Animes</h2>
+            @endif
+            @if (Request::routeIs('themes'))
+                <h2>Search Themes</h2>
+            @endif
+            @if (Request::routeIs('favorites'))
+                <h2>My Favorites</h2>
+            @endif
+            @if (Request::routeIs('user.list') && isset($user))
+                <h2><strong>{{ $user->name }}</strong> favorites</h2>
+            @endif
+            @if (Request::routeIs('artists.show'))
+                <h2>{{ $artist->name }}</h2>
+            @endif
+            @if (Request::routeIs('artists.index'))
+                <h2>Artists</h2>
+            @endif
+        </div>
 
-        <section class="my-2">
+        <!--FILTER PANNEL-->
+        <section class="mb-3">
             @if (Request::routeIs('themes'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.variants.filter'),
+                    'apiEndpoint' => route('api.songs.filter'),
                     'method' => 'GET',
-                    'fields' => ['name', 'type', 'year', 'season', 'sort'], 
+                    'fields' => ['name', 'type', 'year', 'season', 'sort'],
                 ])
             @endif
             @if (Request::routeIs('user.list'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.users.list',$user->id),
+                    'apiEndpoint' => route('api.users.list', $user->id),
                     'method' => 'GET',
                     'fields' => ['name', 'type', 'year', 'season', 'sort', 'user-id'],
                 ])
             @endif
             @if (Request::routeIs('artists.show'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.artists.filter', $artist->id),
+                    'apiEndpoint' => route('api.artists.songs.filter', $artist->id),
                     'method' => 'GET',
-                    'fields' => ['name', 'type', 'year', 'season', 'sort'], 
+                    'fields' => ['name', 'type', 'year', 'season', 'sort', 'artist-id'],
                 ])
             @endif
             @if (Request::routeIs('animes'))
                 @include('components.filter.container', [
                     'apiEndpoint' => route('api.posts.animes'),
                     'method' => 'GET',
-                    'fields' => ['name', 'year', 'season'], 
+                    'fields' => ['name', 'year', 'season'],
                 ])
             @endif
             @if (Request::routeIs('favorites'))
                 @include('components.filter.container', [
                     'apiEndpoint' => route('api.users.favorites'),
                     'method' => 'post',
-                    'fields' => ['name', 'type', 'year', 'season', 'sort'], 
+                    'fields' => ['name', 'type', 'year', 'season', 'sort'],
+                ])
+            @endif
+            @if (Request::routeIs('artists.index'))
+                @include('components.filter.container', [
+                    'apiEndpoint' => route('api.artists.filter'),
+                    'method' => 'GET',
+                    'fields' => ['name'],
                 ])
             @endif
 
-
         </section>
 
-        {{-- POSTS --}}
-        <section class="text-light mb-3">
-            <div class="contenedor-tarjetas-filtro" id="data">
+        <!--DATA CONTAINER-->
+        <section class=" mb-3">
+            <div class="results" id="data">
                 {{--  @include('layouts.variant.cards') --}}
             </div>
+            <!--LOADER-->
             <div class="d-flex m-5 justify-content-center" id="loader">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Loading...</span>
@@ -97,45 +105,28 @@
 
     </div>
 @endsection
+
 @section('script')
     @if (Request::routeIs('favorites'))
-        @if (config('app.env') === 'local')
-            @vite(['resources/js/favorites_infinite_scroll.js'])
-        @else
-            <script src="{{ asset('build/favorites_infinite_scroll.js') }}"></script>
-        @endif
+        @vite(['resources/js/filter_favorites.js'])
     @endif
     @if (Request::routeIs('user.list'))
-        @if (config('app.env') === 'local')
-            @vite(['resources/js/favorites_infinite_scroll.js'])
-        @else
-            <script src="{{ asset('build/favorites_infinite_scroll.js') }}"></script>
-        @endif
+        @vite(['resources/js/filter_favorites.js'])
     @endif
 
     @if (Request::routeIs('themes'))
-        @if (config('app.env') === 'local')
-            @vite(['resources/js/themes_infinite_scroll.js'])
-        @else
-            <script src="{{ asset('build/themes_infinite_scroll.js') }}"></script>
-        @endif
+        @vite(['resources/js/filter_themes.js'])
     @endif
 
     @if (Request::routeIs('artists.show'))
-        @if (config('app.env') === 'local')
-            @vite(['resources/js/artists_infinite_scroll.js'])
-        @else
-            <script src="{{ asset('build/artists_infinite_scroll.js') }}"></script>
-        @endif
+        @vite(['resources/js/filter_artist_themes.js'])
+    @endif
+    @if (Request::routeIs('artists.index'))
+        @vite(['resources/js/filter_artists.js'])
     @endif
 
     {{-- ANIMES --}}
     @if (Request::routeIs('animes'))
-        {{-- INFINITE SCROLL --}}
-        @if (config('app.env') === 'local')
-            @vite(['resources/js/animes_infinite_scroll.js'])
-        @else
-            <script src="{{ asset('build/animes_infinite_scroll.js') }}"></script>
-        @endif
+        @vite(['resources/js/filter_animes.js'])
     @endif
 @endsection

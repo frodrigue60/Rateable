@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card bg-dark">
+            <div class="card ">
                 {{-- CARD HEADER --}}
                 <div class="card-header">
                     <a class="btn btn-primary btn-sm" href="{{ route('admin.users.create') }}" role="button">CREATE

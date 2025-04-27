@@ -19,7 +19,7 @@
     <article class="tarjeta">
         <a class="no-deco" href="{{ $variant->url }}" rel="noopener noreferrer">
             <div class="textos">
-                <div class="tarjeta-header text-light">
+                <div class="tarjeta-header ">
                     <h3 class="text-shadow text-uppercase post-titles">{{ $title }}</h3>
                 </div>
                 <div class="{{ $variant->song->type == '1' ? 'tag' : 'tag2' }}">
@@ -27,7 +27,7 @@
                 </div>
                 <img class="thumb" loading="lazy" src="{{ $thumbnail_url }}" alt="{{ $title }}"
                     title="{{ $title }}">
-                <div class="tarjeta-footer text-light">
+                <div class="tarjeta-footer ">
                     <span>{{ $variant->favoritesCount }} <i class="fa-solid fa-heart"></i></span>
                     <span>{{ $variant->viewsString }} <i class="fa-solid fa-eye"></i></span>
                     <span>{{ $variant->score }}

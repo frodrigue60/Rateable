@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card bg-dark text-light">
+            <div class="card  ">
                 <div class="card-header">
                     <h5 class="card-title">Edit Video {{$video->id}}</h5>
                 </div>
