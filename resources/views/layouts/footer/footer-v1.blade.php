@@ -1,6 +1,6 @@
 <footer class="mt-5 py-4">
     <div class="container m-auto row">
-        <div class="col-6 col-md-3 d-flex">
+        <div class="col-6 col-md-3 d-flex justify-content-center">
             <div class="d-flex justify-content-center align-items-center">
                 <img class="footer-logo" src="{{ asset('resources/images/logo-2-dark.svg') }}" alt="">
                 <a href="" class="fs-2">AniRank</a>

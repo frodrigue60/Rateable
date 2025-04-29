@@ -16,7 +16,7 @@
                         <input class="form-control me-2" type="text" name="q" placeholder="Search" required />
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form> --}}
-                    <table class="table table-dark">
+                    <table class="table ">
                         <thead>
                             <tr>
                                 {{-- <th scope="col">Song ID</th> --}}

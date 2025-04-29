@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('song_variant_id')->references('id')->on('song_variants')->onDelete('cascade');
+            $table->foreignId('song_id')->references('id')->on('songs')->onDelete('cascade');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('source');
             $table->string('title');
-            $table->text('content')->nullable();
+            $table->text('content');
             $table->enum('status', ['fixed', 'pending'])->default('pending');
             $table->timestamps();
         });

@@ -139,14 +139,14 @@
                     @auth
                         <!-- LIKES -->
                         <div>
-                            <button id="like-button" data-song="{{ $song->id }}" class="btn btn-primary rounded-pill"><i
+                            <button id="like-button" data-song-id="{{ $song->id }}" class="btn btn-primary rounded-pill"><i
                                     class="fa-regular fa-thumbs-up"></i>
                                 <span id="like-counter">{{ $song->likes()->count() }}</span>
                             </button>
                         </div>
                         <!-- DISLIKES -->
                         <div>
-                            <button id="dislike-button" class="btn btn-primary rounded-pill" data-song="{{ $song->id }}">
+                            <button id="dislike-button" data-song-id="{{ $song->id }}" class="btn btn-primary rounded-pill">
                                 <i class="fa-regular fa-thumbs-down"></i> <span
                                     id="dislike-counter">{{ $song->dislikes()->count() }}</span>
                             </button>
@@ -164,7 +164,7 @@
 
                         @endphp
                         <button class="btn {{ $class }} rounded-pill d-flex flex-row gap-2 align-items-center"
-                            data-bs-toggle="modal" data-bs-target="#rating-modal" id="rating-button">
+                            data-bs-toggle="modal" data-bs-target="#modal-rating" id="rating-button">
                             <i class="fa fa-star" aria-hidden="true"></i>
                             <span id="score-span" class="">{{ $song->formattedScore }}</span>
                         </button>
@@ -174,14 +174,14 @@
                     <!-- FAVORITE BUTTON -->
                     <button type="submit"
                         class="btn {{ $song->isFavorited() ? 'btn-danger' : 'btn-primary' }} rounded-pill d-flex flex-row gap-2 align-items-center"
-                        id="favorite-button" data-song="{{ $song->id }}"><i
+                        id="favorite-button" data-songid="{{ $song->id }}"><i
                             class="fa-{{ $song->isFavorited() ? 'solid' : 'regular' }} fa-heart" id="i-favorite"></i>
                         <span class="d-sm-block d-none ">
                             Favorite</span></button>
 
                     <!-- REPORT BUTTON -->
                     <button type="button" class="btn btn-primary rounded-pill d-flex flex-row gap-2 align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#report-modal">
+                        data-bs-toggle="modal" data-bs-target="#modal-report" id="btn-modal-report">
                         <i class="fa-solid fa-triangle-exclamation"></i> <span class="d-sm-block d-none ">Report</span>
                     </button>
                 </div>
@@ -224,224 +224,16 @@
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 
-    @vite([
-        'resources/js/api_get_video.js',
-        'resources/js/modules/comments/deleteComment.js'])
+    @vite(['resources/js/api_get_video.js'])
 
     @auth
-        <script type="module">
-            //const API = await import('{{ Vite::asset('resources/js/api/index.js') }}');
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-            const baseUrl = document.querySelector('meta[name="base-url"]').content;
-            const songId = document.querySelector('meta[name="song-id"]').content;
-            const token = localStorage.getItem('api_token');
-            const scoreFormat = document.querySelector('meta[name="score-format"]').content;
-            const ratingForm = document.querySelector('#rating-form');
-            const ratingBtn = document.querySelector('#rating-button');
-            const scoreSpan = document.querySelector('#score-span');
-
-            const commentForm = document.querySelector('#commnent-form');
-            const commentContainer = document.querySelector('#comments-container');
-
-            const likeBtn = document.querySelector('#like-button');
-            const likesSpan = document.querySelector('#like-counter');
-
-            const dislikeBtn = document.querySelector('#dislike-button');
-            const dislikesSpan = document.querySelector('#dislike-counter');
-
-            const favoriteBtn = document.querySelector('#favorite-button');
-            let headersData = {};
-
-            likeBtn.addEventListener("click", likeSong);
-            dislikeBtn.addEventListener("click", dislikeSong);
-            favoriteBtn.addEventListener("click", toggleFavorite);
-
-            //console.log(API);
-
-            function likeSong() {
-                try {
-                    fetch(baseUrl + "/api/songs/" + likeBtn.dataset.song + "/like", {
-                        headers: {
-                            'X-Request-With': 'XMLHttpRequest',
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Authorization': 'Bearer ' + token,
-                        },
-                        method: "POST",
-                        body: JSON.stringify({
-                            song_id: likeBtn.dataset.song,
-                        }),
-                    }).then(response => {
-                        return response.json()
-                    }).then((data) => {
-                        likesSpan.textContent = data.likesCount;
-                        dislikesSpan.textContent = data.dislikesCount;
-                    });
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-
-            function dislikeSong() {
-                try {
-                    fetch(baseUrl + "/api/songs/" + dislikeBtn.dataset.song + "/dislike", {
-                        headers: {
-                            'X-Request-With': 'XMLHttpRequest',
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Authorization': 'Bearer ' + token,
-                        },
-                        method: "POST",
-                        body: JSON.stringify({
-                            song_id: dislikeBtn.dataset.song,
-                        }),
-                    }).then(response => {
-                        return response.json()
-                    }).then((data) => {
-                        //console.log(data);
-                        likesSpan.textContent = data.likesCount;
-                        dislikesSpan.textContent = data.dislikesCount;
-                    });
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-
-            function toggleFavorite() {
-                try {
-                    fetch(baseUrl + "/api/songs/" + favoriteBtn.dataset.song + "/favorite", {
-                        headers: {
-                            'X-Request-With': 'XMLHttpRequest',
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Authorization': 'Bearer ' + token,
-                        },
-                        method: "POST",
-                        body: JSON.stringify({
-                            song_id: favoriteBtn.dataset.song,
-                        }),
-                    }).then(response => {
-                        return response.json()
-                    }).then((data) => {
-                        //console.log(data);
-                        //console.log(iFavorite.classList);
-                        let iFavorite = document.querySelector('#i-favorite');
-                        if (data.favorite == true) {
-                            iFavorite.classList.remove('fa-regular');
-                            iFavorite.classList.add('fa-solid');
-                            favoriteBtn.classList.remove('btn-primary');
-                            favoriteBtn.classList.add('btn-danger');
-                        } else {
-                            iFavorite.classList.remove('fa-solid');
-                            iFavorite.classList.add('fa-regular');
-                            favoriteBtn.classList.remove('btn-danger');
-                            favoriteBtn.classList.add('btn-primary');
-                        }
-                    });
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-
-            if (scoreFormat == 'POINT_5') {
-                let checkboxes = document.querySelectorAll('#rating-form input[name="score"]');
-                let userScore = 0;
-
-                function actualizarPuntuacionesSeleccionadas() {
-                    let checkedValue = Array.from(checkboxes)
-                        .filter(cb => cb.checked)
-                        .map(cb => cb.value);
-
-                    userScore = checkedValue.join();
-
-                    if ((checkedValue.join() > 0) && (checkedValue.join() <= 100)) {
-                        rate(userScore)
-                    }
-                }
-
-                checkboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', actualizarPuntuacionesSeleccionadas);
-                });
-            }
-
-            ratingForm.addEventListener("submit", function(event) {
-                event.preventDefault()
-                let userScore = document.querySelector('#scoreInput').value;
-
-                if ((userScore != '') && (userScore > 0) && (userScore <= 100)) {
-                    rate(userScore)
-                }
-
-                console.log(userScore);
-            });
-
-            function rate(userScore) {
-                try {
-                    fetch(baseUrl + "/api/songs/" + ratingForm.dataset.song + "/rate", {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Authorization': 'Bearer ' + token,
-                        },
-                        method: "POST",
-                        body: JSON.stringify({
-                            song_id: ratingForm.dataset.song,
-                            score: userScore,
-                        }),
-                    }).then(response => {
-                        return response.json()
-                    }).then((data) => {
-                        console.log(data);
-                        ratingBtn.classList.remove('btn-primary');
-                        ratingBtn.classList.add('btn-warning');
-                        scoreSpan.textContent = data.average;
-
-                    });
-                } catch (error) {
-                    //console.log(error)
-                }
-            }
-
-            commentForm.addEventListener("submit", function(event) {
-                event.preventDefault()
-                console.log('listen form submit');
-
-                let commentTextarea = document.querySelector('#comment-content');
-
-                if (commentTextarea.value != '') {
-                    makeComment(commentTextarea.value)
-                }
-
-                function makeComment(commentContent) {
-                    try {
-                        fetch(baseUrl + "/api/songs/comments", {
-                            headers: {
-                                'X-Request-With': 'XMLHttpRequest',
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken,
-                                'Authorization': 'Bearer ' + token,
-                            },
-                            method: "POST",
-                            body: JSON.stringify({
-                                content: commentContent,
-                                song_id: songId,
-                            }),
-                        }).then(response => {
-                            return response.json()
-                        }).then((data) => {
-                            console.log(data);
-                            commentTextarea.value = '';
-                            //commentContainer.innerHTML += data.comment;
-                            commentContainer.insertAdjacentHTML('afterbegin', data.comment);
-                        });
-                    } catch (error) {
-                        //console.log(error)
-                    }
-                }
-
-            });
-
-        </script>
+        @vite([
+            'resources/js/modules/songs/delete_comment.js',
+            'resources/js/modules/songs/make_comment.js',
+            'resources/js/modules/songs/like.js',
+            'resources/js/modules/songs/dislike.js',
+            'resources/js/modules/songs/toggle_favorite.js',
+            'resources/js/modules/songs/rate.js',
+            'resources/js/modules/songs/report.js',])
     @endauth
 @endsection

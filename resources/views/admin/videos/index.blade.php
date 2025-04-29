@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="table-responsive">
-            <table class="table table-dark">
+            <table class="table ">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>

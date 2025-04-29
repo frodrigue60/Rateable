@@ -13,7 +13,13 @@ const ENDPOINTS = {
     SONGS: {
         SEASONAL: `${API_BASE_URL}/songs/seasonal`,
         RANKING: `${API_BASE_URL}/songs/ranking`,
-        FILTER: `${API_BASE_URL}/songs/filter`
+        FILTER: `${API_BASE_URL}/songs/filter`,
+        LIKE: (song) => `${API_BASE_URL}/songs/${song}/like`,
+        DISLIKE: (song) => `${API_BASE_URL}/songs/${song}/dislike`,
+        FAVORITE: (song) => `${API_BASE_URL}/songs/${song}/favorite`,
+        COMMENTS: `${API_BASE_URL}/songs/comments`,
+        RATE: (song) => `${API_BASE_URL}/songs/${song}/rate`,
+        REPORTS: `${API_BASE_URL}/songs/reports`,
     },
     POSTS: {
         ANIMES: `${API_BASE_URL}/animes`,

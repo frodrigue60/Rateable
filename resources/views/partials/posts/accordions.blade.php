@@ -38,7 +38,7 @@
         </a>
         <div class="collapse mt-2" id="collapseExample{{ $post->id }}">
             <div class="">
-                <table class="table table-sm table-dark mb-0">
+                <table class="table table-sm  mb-0">
                     <thead>
                         <tr>
                             <th>Type</th>

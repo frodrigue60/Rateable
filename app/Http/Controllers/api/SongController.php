@@ -16,6 +16,7 @@ use App\Models\Reaction;
 use App\Models\Favorite;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Comment;
+use App\Models\Report;
 
 class SongController extends Controller
 {
@@ -95,24 +96,35 @@ class SongController extends Controller
         //
     }
 
-    public function like(Request $request)
+    public function like($song_id)
     {
-        $song = Song::find($request->song_id);
-        $this->handleReaction($song, 1); // 1 para like
-        $song->updateReactionCounters(); // Actualiza los contadores manualmente
+        //return response()->json(['request' => $request->all()]);
+        try {
+            $song = Song::findOrFail($song_id);
+            $this->handleReaction($song, 1); // 1 para like
+            $song->updateReactionCounters(); // Actualiza los contadores manualmente
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Liked',
-            'likesCount' => $song->likesCount,
-            'dislikesCount' => $song->dislikesCount,
-        ], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Song liked successfully',
+                'likesCount' => $song->likesCount,
+                'dislikesCount' => $song->dislikesCount,
+            ]);
+        } catch (\Exception $e) {
+            // Otro error general
+            //Log::error('Error al crear usuario: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Error interno del servidor',
+                'exception' => $e->getMessage()
+            ], 500); // 500 Internal Server Error
+        }
     }
 
     // Método para dislike
-    public function dislike(Request $request)
+    public function dislike($song_id)
     {
-        $song = Song::find($request->song_id);
+        $song = Song::findOrFail($song_id);
         $this->handleReaction($song, -1); // -1 para dislike
         $song->updateReactionCounters(); // Actualiza los contadores manualmente
 
@@ -126,7 +138,7 @@ class SongController extends Controller
     // Método privado para manejar la reacción
     private function handleReaction($song, $type)
     {
-        $user = Auth::user();
+        $user = Auth::check() ? Auth::user() : null;
 
         // Buscar si ya existe una reacción del usuario para este post
         $reaction = Reaction::where('user_id', $user->id)
@@ -152,11 +164,11 @@ class SongController extends Controller
             ]);
         }
     }
-    public function toggleFavorite(Request $request)
+    public function toggleFavorite($song_id)
     {
 
-        $song = Song::find($request->song_id);
-        $user = Auth::user();
+        $song = Song::find($song_id);
+        $user = Auth::check() ? Auth::user() : null;
 
         // Verificar si el post ya está en favoritos
         $favorite = Favorite::where('user_id', $user->id)
@@ -626,7 +638,52 @@ class SongController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Commented sucessfully',
-            'comment' => view('partials.songs.show.comments.comment', ['comment' => $comment])->render(),
+            /* 'comments' => $comment, */
+            'html' => view('partials.songs.show.comments.comment', ['comment' => $comment])->render(),
         ], 200);
+    }
+
+    public function comments($song_id)
+    {
+        $comments = Comment::where('commentable_type', Song::class)
+            ->where('commentable_id', $song_id)
+            ->paginate(5);
+
+
+
+        return response()->json([
+            'comments' => $comments,
+        ]);
+    }
+
+    public function storeReport(Request $request)
+    {
+        $user = Auth::check() ? Auth::user() : null;
+
+        $validator = Validator::make($request->all(), [
+            'song_id' => 'required|integer|exists:songs,id',
+            'title' => 'required|max:255|string',
+            'content' => 'string|required|max:500',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->getMessageBag(),
+            ]);
+        }
+
+        $report = new Report();
+        $report->song_id = $request->song_id;
+        $report->title = $request->title;
+        $report->content = $request->content;
+        $report->user_id = $user->id;
+        $report->source = $request->header('Referer');
+        $report->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Report stored successfully',
+        ]);
     }
 }

@@ -7,7 +7,7 @@
         <div class="mb-3">
             <a href="{{ route('admin.seasons.create') }}" class="btn btn-sm btn-primary">Create season</a>
         </div>
-        <table class="table table-dark">
+        <table class="table ">
             <thead>
                 <tr>
                     <th scope="col">ID</th>

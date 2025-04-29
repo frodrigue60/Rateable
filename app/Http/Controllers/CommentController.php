@@ -136,7 +136,7 @@ class CommentController extends Controller
         }
         return redirect()->route('/')->with('warning', 'Please login');
     }
-    // Método privado para manejar la reacción
+
     private function handleReaction($comment, $type)
     {
         $user = Auth::user();

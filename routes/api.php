@@ -64,11 +64,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('variants/{variant}/rate', [apiSongVariantController::class, 'rate'])->name('api.variants.rate');
 
     #SONGS
-    Route::post('songs/{song}/like', [apiSongController::class, 'like'])->name('api.songs.like');
-    Route::post('songs/{song}/dislike', [apiSongController::class, 'dislike'])->name('api.songs.dislike');
-    Route::post('songs/{song}/favorite', [apiSongController::class, 'toggleFavorite'])->name('api.songs.toggle.favorite');
+    Route::get('songs/{song}/like', [apiSongController::class, 'like'])->name('api.songs.like');
+    Route::get('songs/{song}/dislike', [apiSongController::class, 'dislike'])->name('api.songs.dislike');
+    Route::get('songs/{song}/favorite', [apiSongController::class, 'toggleFavorite'])->name('api.songs.toggle.favorite');
     Route::post('songs/{song}/rate', [apiSongController::class, 'rate'])->name('api.songs.rate');
     Route::post('songs/comments', [apiSongController::class, 'storeComment'])->name('api.songs.store.comment');
+    Route::get('songs/{song}/comments', [apiSongController::class, 'comments'])->name('api.songs.comments');
+    Route::post('songs/reports', [apiSongController::class, 'storeReport'])->name('api.songs.reports');
 
     #COMMENTS
     Route::resource('comments', apiCommentController::class, ['as' => 'api']);

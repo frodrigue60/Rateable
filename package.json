@@ -15,8 +15,6 @@
         "vite": "^6.3.2"
     },
     "dependencies": {
-        "@tailwindcss/vite": "^4.1.4",
-        "tailwindcss": "^4.1.4",
-        "vite-plugin-pwa": "^1.0.0"
+        "sweetalert": "^2.1.2"
     }
 }

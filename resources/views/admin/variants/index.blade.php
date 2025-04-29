@@ -6,7 +6,7 @@
             class="table-responsive"
         >
             <table
-                class="table table-dark"
+                class="table "
             >
                 <thead>
                     <tr>
@@ -29,5 +29,5 @@
                 </tbody>
             </table>
         </div>
-        
+
     @endsection

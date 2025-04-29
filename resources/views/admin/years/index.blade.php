@@ -5,7 +5,7 @@
         <div class="mb-3">
             <a href="{{ route('admin.years.create') }}" class="btn btn-sm btn-primary">Add year</a>
         </div>
-        <table class="table table-dark">
+        <table class="table ">
             <thead>
                 <tr>
                     <th scope="col">ID</th>

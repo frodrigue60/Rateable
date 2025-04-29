@@ -7,7 +7,7 @@
                 name="score" max="100" min="0" step="1" value="{{ $format_rating }}">
         </div>
         <div class="w-100">
-            <button type="submit" class="btn btn-primary w-100">
+            <button type="submit" class="btn btn-primary w-100" id="submit-score-btn">
                 Button
             </button>
         </div>

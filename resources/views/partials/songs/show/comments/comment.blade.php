@@ -52,11 +52,11 @@
 
                 </div>
             </div>
-            <div class="date">
+            <div class="">
                 <span>{{ \Carbon\Carbon::parse($comment->created_at)->format('d/m/Y') }}
                 </span>
             </div>
-            <div class="comment-content">
+            <div class="">
                 <span>{{ $comment->content }}</span>
             </div>
 
