@@ -132,6 +132,7 @@ Auth::routes();
 Route::resource('comments', CommentController::class);
 Route::post('/comments/{comment}/like', [CommentController::class, 'like'])->name('comments.like');
 Route::post('/comments/{comment}/dislike', [CommentController::class, 'dislike'])->name('comments.dislike');
+Route::post('/comments/{parentComment}/reply', [CommentController::class, 'reply'])->name('comments.reply');
 
 //REQUEST ROUTES
 Route::get('/requests/create', [App\Http\Controllers\UserRequestController::class, 'create'])->name('request.create');

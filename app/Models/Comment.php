@@ -18,6 +18,18 @@ class Comment extends Model
         return $this->morphTo();
     }
 
+    // Relación para respuestas (hijos)
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')->with('replies', 'user'); // Eager loading para anidar respuestas
+    }
+
+    // Relación para el comentario padre (opcional)
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

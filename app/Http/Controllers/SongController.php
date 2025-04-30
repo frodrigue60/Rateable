@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Song;
 use Illuminate\Support\Facades\Auth;
@@ -109,7 +110,14 @@ class SongController extends Controller
             return $song->songVariants;
         })->sortBy('version_number')->first();
         //dd($song);
-        $comments = $song->comments->sortByDesc('created_at');
+        //$comments = $song->comments->sortByDesc('created_at');
+
+        $comments = Comment::with('replies','user')
+        ->where('commentable_id', $song->id)
+        ->where('commentable_type', Song::class)
+        ->where('parent_id', null)
+        ->get()
+        ->sortByDesc('created_at');
 
         return view('public.songs.show', compact('song', 'post', 'userRating', 'firstVariant', 'comments'));
     }

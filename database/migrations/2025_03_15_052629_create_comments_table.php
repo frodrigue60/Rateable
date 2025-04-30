@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
             $table->morphs('commentable'); // Crea las columnas 'commentable_type' y 'commentable_id'
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('content');
