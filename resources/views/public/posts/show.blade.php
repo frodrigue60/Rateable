@@ -81,7 +81,7 @@
     <meta name="twitter:data2" content="2 minutos"> --}}
 @endsection
 @section('content')
-    <div class="container ">
+    <div class="col-8 mx-auto">
         {{-- <div class="banner-anime" style="background-image: url({{ $banner_url }});">
             <div class="gradient"></div>
             <div class="post-info">
@@ -97,7 +97,7 @@
             </div>
         </div> --}}
         <div>
-            <h1 class="section-header">{{ $post->title }}</h1>
+            <h1 class="section-header fs-4">{{ $post->title }}</h1>
         </div>
         <div class="row mx-auto">
             <!-- ANIME INFO -->

@@ -124,16 +124,27 @@ class SongController extends Controller
     // Método para dislike
     public function dislike($song_id)
     {
-        $song = Song::findOrFail($song_id);
-        $this->handleReaction($song, -1); // -1 para dislike
-        $song->updateReactionCounters(); // Actualiza los contadores manualmente
+        //return response()->json(['request' => $request->all()]);
+        try {
+            $song = Song::findOrFail($song_id);
+            $this->handleReaction($song, -1); // 1 para like
+            $song->updateReactionCounters(); // Actualiza los contadores manualmente
 
-        return response()->json([
-            'success' => true,
-            'message' => 'disliked',
-            'likesCount' => $song->likesCount,
-            'dislikesCount' => $song->dislikesCount,
-        ], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Song disliked successfully',
+                'likesCount' => $song->likesCount,
+                'dislikesCount' => $song->dislikesCount,
+            ]);
+        } catch (\Exception $e) {
+            // Otro error general
+            //Log::error('Error al crear usuario: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Error interno del servidor',
+                'exception' => $e->getMessage()
+            ], 500); // 500 Internal Server Error
+        }
     }
     // Método privado para manejar la reacción
     private function handleReaction($song, $type)

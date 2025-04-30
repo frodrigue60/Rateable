@@ -234,6 +234,8 @@
             'resources/js/modules/songs/dislike.js',
             'resources/js/modules/songs/toggle_favorite.js',
             'resources/js/modules/songs/rate.js',
-            'resources/js/modules/songs/report.js',])
+            'resources/js/modules/songs/report.js',
+            'resources/js/modules/comments/like.js',
+            'resources/js/modules/comments/dislike.js',])
     @endauth
 @endsection

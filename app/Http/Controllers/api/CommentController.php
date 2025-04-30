@@ -109,24 +109,40 @@ class CommentController extends Controller
 
     public function like($comment_id)
     {
-        if (Auth::check()) {
-            $comment = Comment::find($comment_id);
+        try {
+            $comment = Comment::findOrFail($comment_id);
             $this->handleReaction($comment, 1); // 1 para like
             $comment->updateReactionCounters(); // Actualiza los contadores manualmente
-            return redirect()->back(); // Redirige de vuelta a la página anterior
+
+            return response()->json([
+                'success' => true,
+                'comment' => $comment,
+                'likesCount' => $comment->likesCount,
+                'dislikesCount' => $comment->dislikesCount
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['success' => false, 'error' => $th]);
         }
-        return redirect()->route('/')->with('warning', 'Please login');
     }
 
     public function dislike($comment_id)
     {
-        if (Auth::check()) {
-            $comment = Comment::find($comment_id);
+        try {
+            $comment = Comment::findOrFail($comment_id);
             $this->handleReaction($comment, -1); // 1 para like
             $comment->updateReactionCounters(); // Actualiza los contadores manualmente
-            return redirect()->back(); // Redirige de vuelta a la página anterior
+
+            return response()->json([
+                'success' => true,
+                'comment' => $comment,
+                'likesCount' => $comment->likesCount,
+                'dislikesCount' => $comment->dislikesCount
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['success' => false, 'error' => $th]);
         }
-        return redirect()->route('/')->with('warning', 'Please login');
     }
 
     private function handleReaction($comment, $type)

@@ -109,7 +109,7 @@ class SongController extends Controller
             return $song->songVariants;
         })->sortBy('version_number')->first();
         //dd($song);
-        $comments = $song->comments;
+        $comments = $song->comments->sortByDesc('created_at');
 
         return view('public.songs.show', compact('song', 'post', 'userRating', 'firstVariant', 'comments'));
     }

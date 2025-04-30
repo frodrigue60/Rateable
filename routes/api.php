@@ -53,7 +53,7 @@ Route::get('artists/filter', [apiArtistController::class, 'artistsFilter'])->nam
 #USERS
 Route::get('users', [apiUserController::class, 'index'])->name('api.users');
 Route::get('users/{id}/list', [apiUserController::class, 'userList'])->name('api.users.list');
-Route::get('users/{id}', [apiUserController::class, 'show'])->name('api.users');
+Route::get('users/{id}', [apiUserController::class, 'show'])->name('api.users.show');
 
 #AUTH ROUTES
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -74,10 +74,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     #COMMENTS
     Route::resource('comments', apiCommentController::class, ['as' => 'api']);
+    Route::get('comments/{id}/like', [apiCommentController::class, 'like'])->name('api.comments.like');
+    Route::get('comments/{id}/dislike', [apiCommentController::class, 'dislike'])->name('api.comments.dislike');
 
     //Route::resource('users', apiUserController::class, ['as' => 'api']);
-    Route::post('users/profile', [apiUserController::class, 'uploadAvatar'])->name('api.users.upload.avatar');
+    Route::post('users/avatar', [apiUserController::class, 'uploadAvatar'])->name('api.users.upload.avatar');
     Route::post('users/banner', [apiUserController::class, 'uploadBanner'])->name('api.users.upload.banner');
-    Route::post('users/rating-system', [apiUserController::class, 'setRatingSystem'])->name('api.users.set.score');
+    Route::post('users/score-format', [apiUserController::class, 'setScoreFormat'])->name('api.users.score.format');
     Route::post('users/favorites', [apiUserController::class, 'favorites'])->name('api.users.favorites');
 });

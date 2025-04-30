@@ -119,12 +119,14 @@ class UserController extends Controller
             }
 
             return response()->json([
+                'success' => true,
                 'message' => 'Avatar actualizado correctamente',
                 'avatar_url' => asset("storage/" . $storedPath),
                 /* 'file_path' => $storedPath // Para depuración */
             ]);
         } catch (\Exception $e) {
             return response()->json([
+                'success' =>false,
                 'message' => 'Error al subir la imagen',
                 'error' => $e->getMessage()
             ], 500);
@@ -169,19 +171,21 @@ class UserController extends Controller
             }
 
             return response()->json([
+                'success' => true,
                 'message' => 'Avatar actualizado correctamente',
                 'banner_url' => asset("storage/" . $storedPath),
                 /* 'file_path' => $storedPath // Para depuración */
             ]);
         } catch (\Exception $e) {
             return response()->json([
+                'success' => false,
                 'message' => 'Error al subir la imagen',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function setRatingSystem(Request $request)
+    public function setScoreFormat(Request $request)
     {
         $validated = $request->validate([
             'score_format' => 'required|in:POINT_100,POINT_10_DECIMAL,POINT_10,POINT_5'
@@ -193,15 +197,12 @@ class UserController extends Controller
         $user->score_format = $request->score_format;
         $user->update();
 
-        $data = [
+        return response()->json([
+            'success' => true,
             'message' => 'User score format updated successfully',
-            'user' => $user,
-            'request' => $request->all()
-        ];
-
-        $status = 200;
-
-        return response()->json($data, $status);
+            /* 'user' => $user, */
+            /* 'request' => $request->all() */
+        ]);
     }
 
     public function userList(Request $request, $id)

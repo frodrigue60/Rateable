@@ -27,6 +27,11 @@ export default defineConfig({
                 'resources/js/modules/songs/toggle_favorite.js',
                 'resources/js/modules/songs/rate.js',
                 'resources/js/modules/songs/report.js',
+                'resources/js/modules/comments/like.js',
+                'resources/js/modules/comments/dislike.js',
+                'resources/js/modules/users/upload_avatar.js',
+                'resources/js/modules/users/upload_banner.js',
+                'resources/js/modules/users/set_score_format.js',
                 /* 'resources/js/sw-dev.js', */
                 'resources/css/app.css',
                 'resources/sass/app.scss',

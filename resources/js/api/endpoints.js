@@ -9,6 +9,9 @@ const ENDPOINTS = {
         BASE: `${API_BASE_URL}/users`,
         BY_ID: (id) => `${API_BASE_URL}/users/${id}`,
         FAVORITES: `${API_BASE_URL}/users/favorites`,
+        AVATAR: `${API_BASE_URL}/users/avatar`,
+        BANNER: `${API_BASE_URL}/users/banner`,
+        SCORE_FORMAT: `${API_BASE_URL}/users/score-format`,
     },
     SONGS: {
         SEASONAL: `${API_BASE_URL}/songs/seasonal`,
@@ -29,7 +32,9 @@ const ENDPOINTS = {
         SONGS: (id) => `${API_BASE_URL}/artists/${id}/filter`,
     },
     COMMENTS: {
-        DELETE: (id) => `${API_BASE_URL}/comments/${id}`
+        DELETE: (id) => `${API_BASE_URL}/comments/${id}`,
+        LIKE: (id) => `${API_BASE_URL}/comments/${id}/like`,
+        DISLIKE: (id) => `${API_BASE_URL}/comments/${id}/dislike`
     },
     VARIANTS: {
         GETVIDEOS: (id) => `${API_BASE_URL}/variants/${id}/get-videos`
