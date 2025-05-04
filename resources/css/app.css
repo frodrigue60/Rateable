@@ -2,6 +2,7 @@
 
 /* @import "tailwindcss"; */
 
+
 @keyframes spin-anim {
     0% {
         transform: rotate(0deg);
@@ -17,11 +18,11 @@
 }
 
 nav {
-    border-bottom: solid 1px #4C5766;
+    /* border-bottom: solid 1px #4C5766; */
 }
 
 footer {
-    border-top: solid 1px #4C5766;
+    /* border-top: solid 1px #4C5766; */
 }
 
 .logo-navbar {
@@ -30,13 +31,13 @@ footer {
 }
 
 /* FOOTER */
-footer ul li a {
+/* footer ul li a {
     color: inherit;
 }
 
 footer ul li a:hover {
     color: #3a78e2;
-}
+} */
 
 .footer-logo {
     height: 4rem;
@@ -48,9 +49,9 @@ a {
     outline: 0;
 }
 
-a:hover {
+/* a:hover {
     color: #097CEB;
-}
+} */
 
 .my-spinner {
     width: 64px;
@@ -126,15 +127,6 @@ a:hover {
     padding-left: 5px;
     margin-bottom: 5px;
 }
-
-#searchInput {
-    background-color: #0c2638;
-    border-color: #3877a3;
-    color: #a9dbff;
-    border-radius: 20px 20px;
-}
-
-
 
 .searchPanel {
     width: 100%;
@@ -792,6 +784,9 @@ img.card-2-bg {
     opacity: 0.7;
 }
 
+.comment {
+    transition: all ease-in-out 500ms;
+}
 
 @media screen and (max-width: 1920px) {
     .father-container {

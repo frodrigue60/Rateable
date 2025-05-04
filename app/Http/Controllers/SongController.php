@@ -119,6 +119,11 @@ class SongController extends Controller
         ->get()
         ->sortByDesc('created_at');
 
+
+
+        //dd($comments);
+
+
         return view('public.songs.show', compact('song', 'post', 'userRating', 'firstVariant', 'comments'));
     }
 

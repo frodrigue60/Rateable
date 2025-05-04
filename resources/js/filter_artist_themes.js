@@ -3,10 +3,15 @@ const dataDiv = document.querySelector("#data");
 const formFilter = document.querySelector('#form-filter');
 let page = 1;
 let lastPage = undefined;
-const inputName = document.querySelector('#input-name');
+const inputName = formFilter.querySelector('#input-name');
+const selectType = formFilter.querySelector('#select-type');
+const selectYear = formFilter.querySelector('#select-year');
+const selectSeason = formFilter.querySelector('#select-season');
+const selectSort = formFilter.querySelector('#select-sort');
+
 let loaderDiv = document.querySelector('#loader');
-const artistId = document.querySelector('#artist_id').value;
-let params = Object.fromEntries(new FormData(formFilter));
+const artistId = formFilter.querySelector('#artist-id').value;
+let params = {};
 let headersData = {};
 
 fetchData();
@@ -57,11 +62,16 @@ async function fetchData() {
             'Accept': 'application/json, text/html;q=0.9'
         }
 
-        params.page = page;
-        //console.log(params);
+        params = {
+            name: inputName.value,
+            type: selectType.value,
+            year_id: selectYear.value,
+            season_id: selectSeason.value,
+            sort: selectSort.value,
+            page: page
+        };
 
         const response = await API.get(API.ARTISTS.SONGS(artistId), headersData, params);
-        //console.log(response);
 
         if (!response.html || response.html === "") {
             console.log("No views received from backend");

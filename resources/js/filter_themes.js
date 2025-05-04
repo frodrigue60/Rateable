@@ -6,7 +6,7 @@ let page = 1;
 let lastPage = undefined;
 const inputName = document.querySelector('#input-name');
 const loaderDiv = document.querySelector('#loader');
-let params = Object.fromEntries(new FormData(formFilter));
+let params = {};
 let headersData = {};
 
 fetchData();
@@ -56,6 +56,7 @@ async function fetchData() {
             'Accept': 'application/json, text/html;q=0.9'
         }
 
+        params = Object.fromEntries(new FormData(formFilter));
         params.page = page;
 
         const response = await API.get(API.SONGS.FILTER, headersData, params);
@@ -65,13 +66,9 @@ async function fetchData() {
             console.log("No data received from backend");
             return;
         }
-        console.log(page);
-
-        console.log(response);
 
         lastPage = response.songs.last_page;
         dataDiv.innerHTML += response.html;
-        console.log(lastPage);
 
     } catch (error) {
         lastPage = 0;

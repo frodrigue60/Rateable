@@ -81,18 +81,18 @@ class PostController extends Controller
     public function animes(Request $request)
     {
         //return response()->json(['request' => $request->all()]);
-        $season = $request->season_id;
-        $year = $request->year_id;
+        $season_id = $request->season_id;
+        $year_id = $request->year_id;
         $name = $request->name;
 
         $status = true;
 
         $posts = Post::where('status', $status)
-            ->when($season, function ($query, $season) {
-                $query->where('season_id', $season);
+            ->when($season_id, function ($query, $season_id) {
+                $query->where('season_id', $season_id);
             })
-            ->when($year, function ($query, $year) {
-                $query->where('year_id', $year);
+            ->when($year_id, function ($query, $year_id) {
+                $query->where('year_id', $year_id);
             })
             ->when($name, function ($query, $name) {
                 $query->where('title', 'LIKE', '%' . $name . '%');

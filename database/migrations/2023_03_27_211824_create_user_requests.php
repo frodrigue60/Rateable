@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->text('content');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('attended_by')->references('id')->on('users')->onDelete('cascade')->default(null);
+            $table->foreignId('attended_by')->nullable()->references('id')->on('users')->onDelete('cascade');
             $table->enum('status', ['pending', 'attended'])->default('pending');
             $table->timestamps();
         });

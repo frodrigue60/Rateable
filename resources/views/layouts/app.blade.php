@@ -56,6 +56,10 @@
         'resources/sass/app.scss',
     ])
 
+    @auth
+        @vite(['resources/js/make_request.js'])
+    @endauth
+
     {{-- <script src="{{ asset('resources/js/pwa-script.js') }}"></script> --}}
 
     @if (config('app.env') === 'local')
@@ -89,6 +93,13 @@
             @yield('content')
             <!-- Modal Search -->
             @include('layouts.modal-search')
+
+            @auth
+                <!-- Request Modal -->
+                @auth
+                    @include('partials.user.modal-request')
+                @endauth
+            @endauth
         </main>
 
         @if (Request::routeIs('/'))

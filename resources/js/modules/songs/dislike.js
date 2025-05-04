@@ -1,5 +1,4 @@
 import { API, csrfToken, token } from '@/app.js';
-//console.log(API);
 
 let headersData = {};
 let params = {};
@@ -30,7 +29,6 @@ if (token) {
                 dislikesSpan.textContent = response.dislikesCount;
             }
         } catch (error) {
-            //console.log(error)
             throw new Error(error);
         }
         finally {

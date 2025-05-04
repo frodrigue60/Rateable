@@ -46,7 +46,7 @@
                     @endisset
                 </div>
                 <div class="d-flex align-items-end">
-                    <div class="badge rounded-pill  fw-medium">
+                    <div class="badge bg-dark rounded-pill  fw-medium">
                         <span id="score">{{ $song->scoreString }}</span>
                         <span>
                             @if ($song->userScore)

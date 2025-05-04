@@ -3,9 +3,9 @@ const dataDiv = document.querySelector("#data");
 const formFilter = document.querySelector('#form-filter');
 let page = 1;
 let lastPage = undefined;
-const inputName = document.querySelector('#input-name');
+const inputName = formFilter.querySelector('#input-name');
 let loaderDiv = document.querySelector('#loader');
-let params = Object.fromEntries(new FormData(formFilter));
+let params = {};
 let headersData = {};
 
 fetchData();
@@ -48,13 +48,12 @@ async function fetchData() {
             'Accept': 'application/json, text/html;q=0.9'
         }
 
-        params.page = page;
+        params = {
+            page: page,
+            name: inputName.value
+        };
 
         const response = await API.get(API.ARTISTS.FILTER, headersData, params);
-
-        //const data = await response.json();
-        console.log(response);
-
 
         if (!response.html || response.html === "") {
             console.log("No views received from backend");

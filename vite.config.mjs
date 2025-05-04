@@ -32,7 +32,9 @@ export default defineConfig({
                 'resources/js/modules/users/upload_avatar.js',
                 'resources/js/modules/users/upload_banner.js',
                 'resources/js/modules/users/set_score_format.js',
-                /* 'resources/js/sw-dev.js', */
+                'resources/js/modules/comments/reply.js',
+                'resources/js/modules/songs/get_comments.js',
+                'resources/js/make_request.js',
                 'resources/css/app.css',
                 'resources/sass/app.scss',
                 'resources/css/modalSearch.css',
@@ -52,22 +54,10 @@ export default defineConfig({
             '@modules': path.resolve(__dirname, './resources/js/modules'),
         }
     },
-    /* server: {
-        hmr: {
-            protocol: 'ws',
-            host: 'localhost',
-            port: 3000,
-        }
-    }, */
     build: {
-        /*  manifest: true, */
         emptyOutDir: true,
         rollupOptions: {
             output: {
-                /*  format: 'es', */
-                /*  entryFileNames: '[name].js',
-                 chunkFileNames: '[name].js',
-                 assetFileNames: '[name].[ext]', */
                 entryFileNames: `js/[name]-[hash].js`,
                 chunkFileNames: `js/[name]-[hash].js`,
                 assetFileNames: (assetInfo) => {

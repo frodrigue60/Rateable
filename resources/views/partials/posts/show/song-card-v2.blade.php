@@ -1,4 +1,4 @@
-<div class="d-flex flex-row gap-3 w-100 rounded-1 py-3 px-2 my-2" style="background-color: #4c5766bd">
+<div class="card d-flex flex-row gap-3 w-100 rounded-1 py-3 px-2 mb-3">
     <div class="d-flex align-items-center">
         <h3 class="fs-5">{{ $song->slug }}</h3>
     </div>
@@ -31,7 +31,7 @@
     </div>
     <div class="d-flex align-items-center">
         <a href="{{ $song->url }}" class="btn btn-sm btn-primary rounded-pill text-nowrap">
-            <i class="fa-solid fa-play"></i> {{ '720p' }}
+            <i class="fa-solid fa-play"></i> {{ 'Play' }}
         </a>
     </div>
 </div>

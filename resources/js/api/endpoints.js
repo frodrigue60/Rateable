@@ -23,6 +23,7 @@ const ENDPOINTS = {
         COMMENTS: `${API_BASE_URL}/songs/comments`,
         RATE: (song) => `${API_BASE_URL}/songs/${song}/rate`,
         REPORTS: `${API_BASE_URL}/songs/reports`,
+        GETCOMMENTS: (song) => `${API_BASE_URL}/songs/${song}/comments`,
     },
     POSTS: {
         ANIMES: `${API_BASE_URL}/animes`,
@@ -34,10 +35,14 @@ const ENDPOINTS = {
     COMMENTS: {
         DELETE: (id) => `${API_BASE_URL}/comments/${id}`,
         LIKE: (id) => `${API_BASE_URL}/comments/${id}/like`,
-        DISLIKE: (id) => `${API_BASE_URL}/comments/${id}/dislike`
+        DISLIKE: (id) => `${API_BASE_URL}/comments/${id}/dislike`,
+        REPLY: (id) => `${API_BASE_URL}/comments/${id}/reply`
     },
     VARIANTS: {
         GETVIDEOS: (id) => `${API_BASE_URL}/variants/${id}/get-videos`
+    },
+    REQUESTS: {
+        STORE:`${API_BASE_URL}/requests`,
     }
 };
 

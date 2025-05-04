@@ -35,8 +35,6 @@ async function sendReport() {
 
         const response = await API.post(API.SONGS.REPORTS, headersData, bodyData);
 
-        console.log(response);
-
         if (response.success == true) {
             reportTitle.value = '';
             reportTextarea.value = '';
@@ -49,8 +47,6 @@ async function sendReport() {
                     timer: 2000,
                 });
             }, 500)
-
-
         } else {
             if (response.message.content) {
                 response.message.content.forEach(message => {
@@ -59,8 +55,7 @@ async function sendReport() {
             }
         }
     } catch (error) {
-        console.log(error);
-
+        throw new Error(error);
     } finally {
         setTimeout(function () {
             reportTitle.toggleAttribute('disabled');

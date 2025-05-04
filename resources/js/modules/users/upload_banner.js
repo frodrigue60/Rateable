@@ -27,8 +27,6 @@ async function uploadBanner() {
 
         const response = await API.post(API.USERS.BANNER, headersData, bodyData);
 
-        /* return console.log(response); */
-
         if (response.success == true) {
             bannerDiv.style.backgroundImage = "url(" + response.banner_url + ")";
             document.getElementById('banner-file').value = '';

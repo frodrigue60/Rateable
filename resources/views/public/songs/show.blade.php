@@ -53,7 +53,7 @@
 @section('content')
     <div class="container">
         <!-- OPTIONS BUTTONS -->
-        <div class="d-flex mb-2 gap-3">
+        <div class="d-flex mb-2 gap-3 {{ $song->songVariants->count() > 1 ? '' : 'd-none' }}">
             @foreach ($song->songVariants as $variant)
                 <button class="btn btn-sm btn-primary btnVersion" data-variant-id="{{ $variant->id }}">Version
                     {{ $variant->version_number }}</button>
@@ -146,7 +146,8 @@
                         </div>
                         <!-- DISLIKES -->
                         <div>
-                            <button id="dislike-button" data-song-id="{{ $song->id }}" class="btn btn-primary rounded-pill">
+                            <button id="dislike-button" data-song-id="{{ $song->id }}"
+                                class="btn btn-primary rounded-pill">
                                 <i class="fa-regular fa-thumbs-down"></i> <span
                                     id="dislike-counter">{{ $song->dislikes()->count() }}</span>
                             </button>
@@ -203,20 +204,28 @@
         </div>
 
         {{-- All Coments Section --}}
-        @if (isset($comments))
-            <div class="">
-                <h4 class="">Recents comments</h4>
 
-                <div class="" id="comments-container">
-                    {{-- PARTIAL COMMENTS --}}
-                    @include('partials.songs.show.comments.comments')
+        <div class="">
+            <h4 class="">Recents comments</h4>
+            <div class="">
+                <div id="comments-container" data-song-id="{{ $song->id }}">
+                    {{-- @include('partials.songs.show.comments.comments') --}}
+                </div>
+
+                <div class="d-flex justify-content-center" id="loader-comments">
+                    <div class="spinner-border m-5" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" id="load-more-comments">
+                        Load More Comments
+                    </button>
                 </div>
             </div>
-        @else
-            <div>
-                <h4 class="">No comments</h4>
-            </div>
-        @endif
+
+        </div>
     </div>
 @endsection
 
@@ -224,25 +233,9 @@
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 
-    @vite(['resources/js/api_get_video.js'])
+    @vite(['resources/js/api_get_video.js', 'resources/js/modules/songs/get_comments.js'])
 
     @auth
-        @vite([
-            'resources/js/modules/songs/delete_comment.js',
-            'resources/js/modules/songs/make_comment.js',
-            'resources/js/modules/songs/like.js',
-            'resources/js/modules/songs/dislike.js',
-            'resources/js/modules/songs/toggle_favorite.js',
-            'resources/js/modules/songs/rate.js',
-            'resources/js/modules/songs/report.js',
-            'resources/js/modules/comments/like.js',
-            'resources/js/modules/comments/dislike.js',])
+        @vite(['resources/js/modules/songs/delete_comment.js', 'resources/js/modules/songs/make_comment.js', 'resources/js/modules/songs/like.js', 'resources/js/modules/songs/dislike.js', 'resources/js/modules/songs/toggle_favorite.js', 'resources/js/modules/songs/rate.js', 'resources/js/modules/songs/report.js', 'resources/js/modules/comments/like.js', 'resources/js/modules/comments/dislike.js', 'resources/js/modules/comments/reply.js'])
     @endauth
-
-    <script>
-        function toggleReplyForm(commentId) {
-        const form = document.getElementById(`reply-form-${commentId}`);
-        form.style.display = form.style.display === 'none' ? 'block' : 'none';
-    }
-    </script>
 @endsection

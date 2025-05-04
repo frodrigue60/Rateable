@@ -37,8 +37,6 @@ ratingForm.addEventListener("submit", function (event) {
     if ((userScore != '') && (userScore > 0) && (userScore <= 100)) {
         rate(userScore)
     }
-
-    console.log(userScore);
 });
 
 async function rate(userScore) {
@@ -65,7 +63,6 @@ async function rate(userScore) {
 
         const response = await API.post(API.SONGS.RATE(ratingForm.dataset.song), headersData, bodyData);
 
-        //console.log(response);
         if (response.success == true) {
             ratingBtn.classList.remove('btn-primary');
             ratingBtn.classList.add('btn-warning');

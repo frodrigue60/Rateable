@@ -11,8 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use App\Models\Season;
-use App\Models\Year;
+use Illuminate\Support\Facades\Validator;
 use App\Models\SongVariant;
 use App\Models\Song;
 
@@ -126,7 +125,7 @@ class UserController extends Controller
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'success' =>false,
+                'success' => false,
                 'message' => 'Error al subir la imagen',
                 'error' => $e->getMessage()
             ], 500);
@@ -187,22 +186,40 @@ class UserController extends Controller
 
     public function setScoreFormat(Request $request)
     {
-        $validated = $request->validate([
-            'score_format' => 'required|in:POINT_100,POINT_10_DECIMAL,POINT_10,POINT_5'
-        ]);
 
-        $user = Auth::check() ? Auth::User() : null;
+        //return response()->json([$request->json()->all()]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'score_format' => 'required|in:POINT_100,POINT_10_DECIMAL,POINT_10,POINT_5'
+            ]);
 
-        $user = User::find($user->id);
-        $user->score_format = $request->score_format;
-        $user->update();
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->getMessageBag()
+                ]);
+            }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'User score format updated successfully',
-            /* 'user' => $user, */
-            /* 'request' => $request->all() */
-        ]);
+            $user = Auth::check() ? Auth::User() : null;
+
+            $user = User::find($user->id);
+            $user->score_format = $request->score_format;
+            $user->update();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User score format updated successfully',
+                /* 'user' => $user, */
+                /* 'request' => $request->all() */
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage(),
+                /* 'user' => $user, */
+                /* 'request' => $request->all() */
+            ]);
+        }
     }
 
     public function userList(Request $request, $id)
@@ -267,7 +284,8 @@ class UserController extends Controller
 
     public function favorites(Request $request)
     {
-        //return response()->json([$request->all()]);
+        //return response()->json(['request' => $request->all()]);
+
         $user = Auth::check() ? Auth::user() : null;
 
         if (!$user) {
@@ -277,9 +295,10 @@ class UserController extends Controller
         }
 
         $status = true;
+        $perPage = 15;
 
-        $season = Season::where('id', $request->season_id)->first();
-        $year = Year::where('id', $request->year_id)->first();
+        $season_id = $request->season_id;
+        $year_id = $request->year_id;
         $type = $request->type;
         $sort = $request->sort;
         $name = $request->name;
@@ -290,29 +309,30 @@ class UserController extends Controller
                 $query->where('type', $type);
             })
             #POST QUERY
-            ->whereHas('post', function ($query) use ($name, $season, $year, $status) {
+            ->whereHas('post', function ($query) use ($name, $season_id, $year_id, $status) {
                 $query->where('status', $status)
                     ->when($name, function ($query, $name) {
                         $query->where('title', 'LIKE', '%' . $name . '%');
                     })
-                    ->when($season, function ($query, $season) {
-                        $query->where('season_id', $season->id);
+                    ->when($season_id, function ($query, $season_id) {
+                        $query->where('season_id', $season_id->id);
                     })
-                    ->when($year, function ($query, $year) {
-                        $query->where('year_id', $year->id);
+                    ->when($year_id, function ($query, $year_id) {
+                        $query->where('year_id', $year_id);
                     });
             })
             #SONG VARIANT QUERY
             ->whereLikedBy($user->id)
             ->get();
 
-        //$song_variants = $this->setScoreOnlyVariants($song_variants, $user);
-        //$song_variants = $this->sort_variants($sort, $song_variants);
-        $songs = $this->paginate($songs, 15);
+        $songs = $this->setScoreSongs($songs, $user);
+        $songs = $this->sortSongs($sort, $songs);
+        $songs = $this->paginate($songs, $perPage, $request->page);
 
         return response()->json([
             'html' => view('partials.songs.cards-v2', compact('songs'))->render(),
             'songs' => $songs,
+            /* 'request' => $request->all(), */
         ]);
     }
 
@@ -441,13 +461,121 @@ class UserController extends Controller
         }
     }
 
-    public function paginate($collection, $perPage = 18, $page = null, $options = [])
+    public function setScoreSongs($songs, $user = null)
+    {
+        $songs->each(function ($song) use ($user) {
+
+            #Inizialided attributes
+            $song->formattedScore = null;
+            $song->rawScore = null;
+            $song->scoreString = null;
+
+            $factor = 1;
+            $isDecimalFormat = false;
+            $denominator = 100; // Por defecto para POINT_100
+
+            if ($user) {
+                #Inizialided attributes
+                $song->formattedUserScore = null;
+                $song->rawUserScore = null;
+
+                switch ($user->score_format) {
+                    case 'POINT_100':
+                        $factor = 1;
+                        $denominator = 100;
+                        break;
+                    case 'POINT_10_DECIMAL':
+                        $factor = 0.1;
+                        $denominator = 10;
+                        $isDecimalFormat = true;
+                        break;
+                    case 'POINT_10':
+                        $factor = 1 / 10;
+                        $denominator = 10;
+                        break;
+                    case 'POINT_5':
+                        $factor = 1 / 20;
+                        $denominator = 5;
+                        $isDecimalFormat = true;
+                        break;
+                }
+
+                if ($userRating = $this->getUserRating($song->id, $user->id)) {
+                    $song->formattedUserScore = $isDecimalFormat
+                        ? round($userRating->rating * $factor, 1)
+                        : (int) round($userRating->rating * $factor);
+
+                    $song->rawUserScore = round($userRating->rating);
+                }
+            }
+
+            $song->rawScore = round($song->averageRating, 1);
+
+            $song->formattedScore = $isDecimalFormat
+                ? round($song->averageRating * $factor, 1)
+                : (int) round($song->averageRating * $factor);
+
+            // Agregar la propiedad scoreString formateada
+            $song->scoreString = $this->formatScoreString(
+                $song->formattedScore,
+                $user->score_format ?? 'POINT_100',
+                $denominator
+            );
+        });
+
+        return $songs;
+    }
+
+    public function paginate($songs, $perPage = 18, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();
         $options = ['path' => Paginator::resolveCurrentPath()];
-        $items = $collection instanceof Collection ? $collection : Collection::make($collection);
-        $collection = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-        return $collection;
+        $items = $songs instanceof Collection ? $songs : Collection::make($songs);
+        $songs = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return $songs;
+    }
+
+    public function sortSongs($sort, $songs)
+    {
+        switch ($sort) {
+            case 'title':
+
+                $songs = $songs->sortBy(function ($song) {
+                    return $song->post->title;
+                });
+                return $songs;
+                break;
+            case 'averageRating':
+                $songs = $songs->sortByDesc('averageRating');
+                return $songs;
+            case 'view_count':
+                $songs = $songs->sortByDesc('view_count');
+                return $songs;
+
+            case 'likeCount':
+                $songs = $songs->sortByDesc('likeCount');
+                return $songs;
+                break;
+            case 'recent':
+                $songs = $songs->sortByDesc('created_at');
+                return $songs;
+                break;
+
+            default:
+                $songs = $songs->sortBy(function ($song) {
+                    return $song->post->title;
+                });
+                return $songs;
+                break;
+        }
+    }
+    public function getUserRating($song_id, $user_id)
+    {
+        return DB::table('ratings')
+            ->where('rateable_type', Song::class)
+            ->where('rateable_id', $song_id)
+            ->where('user_id', $user_id)
+            ->first(['rating']);
     }
 
     protected function formatScoreString($score, $format, $denominator)
@@ -464,14 +592,5 @@ class UserController extends Controller
             default:
                 return $score . '/' . $denominator;
         }
-    }
-
-    public function getUserRating(int $song_variant_id, int $user_id)
-    {
-        return DB::table('ratings')
-            ->where('rateable_type', SongVariant::class)
-            ->where('rateable_id', $song_variant_id)
-            ->where('user_id', $user_id)
-            ->first(['rating']);
     }
 }

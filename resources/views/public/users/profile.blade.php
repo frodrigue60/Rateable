@@ -57,8 +57,8 @@
                             @method('post')
                             @csrf
                             <div class="mb-3">
-                                <label for="selectScoreFormat" class="form-label">Change score format</label>
-                                <select name="score_format" class="form-select" id="selectScoreFormat"
+                                <label for="select-score-format" class="form-label">Change score format</label>
+                                <select name="score_format" class="form-select" id="select-score-format"
                                     aria-label="Example select with button addon" required>
                                     <option value="">Select Scoring System</option>
                                     @foreach ($score_formats as $item)

@@ -56,7 +56,7 @@
         <!-- RECENTS ADDED SONGS -->
         <section class="mb-3">
             <section class="">
-                <h2 class=" section-header">Recently added</h2>
+                <h2 class=" section-header">Recently Added</h2>
                 <div class="owl-carousel gap-3">
                     @include('partials.songs.cards-v2', ['songs' => $recently])
                 </div>
@@ -66,26 +66,32 @@
 
         <!-- MOST POPULAR SONGS -->
         <section class="mb-3">
-
             <h2 class=" section-header">Most Pupular</h2>
-
             <div class="owl-carousel gap-3">
-                @include('partials.songs.cards-v2', ['songs' => $popular])
+                @include('partials.songs.cards-v2', ['songs' => $viewed])
             </div>
         </section>
         <hr class="">
         <!-- MOST VIEWED SONGS -->
-        <secttion class="mb-3">
-
+        {{-- <secttion class="mb-3">
             <h2 class=" section-header">Most Viewed</h2>
-
             <div class="owl-carousel gap-3">
                 @include('partials.songs.cards-v2', ['songs' => $viewed])
             </div>
+        </secttion> --}}
+
+        <!-- MOST VIEWED SONGS -->
+        <secttion class="mb-3">
+            <h2 class=" section-header">Recents Artists</h2>
+            <div class="owl-carousel gap-3">
+                @include('partials.artists.cards-v2', ['artists' => $artists])
+            </div>
         </secttion>
     </div>
-@endsection
 
-@section('script')
 
 @endsection
+
+{{-- @section('script')
+
+@endsection --}}

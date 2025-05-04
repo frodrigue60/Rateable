@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Season;
@@ -74,16 +75,18 @@ class PostController extends Controller
 
         //dd($openings[0]);
 
-        return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed'));
+        $artists = Artist::all()->sortByDesc('created_at')->take(20);
+        //dd($artists);
+
+        return view('index', compact('openings', 'endings', 'recently', 'popular', 'viewed', 'artists'));
     }
 
     public function animes(Request $request)
     {
         $seasons = Season::all();
-        $years = Year::all();
-        $types = $this->filterTypesSortChar()['types'];
+        $years = Year::all()->sortByDesc('name');
 
-        return view('public.filter', compact('types', 'seasons', 'years'));
+        return view('public.filter', compact('seasons', 'years'));
     }
 
 

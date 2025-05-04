@@ -45,9 +45,12 @@
 
     <div class="media-card">
         <div class="position-relative overflow-hidden">
-            <span class="badge rounded-pill text-bg-secondary position-absolute m-1"
-                style="z-index: 10;bottom: 0;
-    right: 0;">{{ $song->slug }}</span>
+            <div class="position-absolute bottom-0" style="z-index: 10">
+                <span class="badge rounded-pill text-bg-secondary m-1"
+                style="">{{ $song->slug }}</span>
+                <span class="badge rounded-pill text-bg-secondary m-1"
+                style="">{{ $song->scoreString }}</span>
+            </div>
             <a href="{{ $song->url }}" class="cover">
                 <img class="image loaded z-0" loading="lazy" src="{{ $thumbnailUrl }}" alt="{{ $song->post->title }}">
             </a>

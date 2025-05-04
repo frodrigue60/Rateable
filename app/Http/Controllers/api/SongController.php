@@ -358,6 +358,8 @@ class SongController extends Controller
 
         $validator = Validator::make($request->all(['ranking_type']), [
             'ranking_type' => 'nullable|integer|min:0|max:1',
+            'page_op' => 'nullable|integer|min:1',
+            'page_ed' => 'nullable|integer|min:1'
         ]);
 
         if ($validator->fails()) {
@@ -378,6 +380,8 @@ class SongController extends Controller
 
         $currentSeason = Season::where('current', true)->first();
         $currentYear = Year::where('current', true)->first();
+
+        $perPage = 10;
 
         switch ($rankingType) {
             #GLOBAL
@@ -477,25 +481,22 @@ class SongController extends Controller
                 break;
         }
 
-        //$openings = $this->paginate($openings, 5)->withQueryString();
-        //$endings = $this->paginate($endings, 5)->withQueryString();
         $openings = $this->setScoreSongs($openings, $user);
-        $openings = $this->paginate($openings, 10);
+        $openings = $this->paginate($openings, $perPage, 'page_op')->withQueryString();
         $openings = $this->setShowUrl($openings);
 
         $endings = $this->setScoreSongs($endings, $user);
-        $endings = $this->paginate($endings, 10);
+        $endings = $this->paginate($endings, $perPage, 'page_ed')->withQueryString();
         $endings = $this->setShowUrl($endings);
 
         return response()->json([
+            'success' => true,
             'html' => [
                 'openings' => view('partials.top.cards', ['items' => $openings])->render(),
                 'endings' => view('partials.top.cards', ['items' => $endings])->render(),
             ],
-            'data' => [
-                'openings' => $openings,
-                'endings' => $endings,
-            ],
+            'openings' => $openings,
+            'endings' => $endings,
             'currentSeason' => $currentSeason,
             'currentYear' => $currentYear
         ]);
@@ -605,13 +606,40 @@ class SongController extends Controller
         }
     }
 
-    public function paginate($collection, $perPage = 18, $page = null, $options = [])
+    /* ORIGINAL */
+    /* public function paginate($collection, $perPage = 18, $page = null, $options = [])
     {
         $page = Paginator::resolveCurrentPage();
         $options = ['path' => Paginator::resolveCurrentPath()];
         $items = $collection instanceof Collection ? $collection : Collection::make($collection);
         $collection = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
         return $collection;
+    } */
+
+    /* NEW */
+    public function paginate($collection, $perPage = 18, $pageParam = 'page', $options = [])
+    {
+        // Obtiene el número de página desde el request usando el nombre personalizado
+        $page = request()->input($pageParam, 1);
+
+        // Define la ruta base sin parámetros de paginación
+        $path = url()->current();
+
+        // Opciones personalizadas para el paginador
+        $options = array_merge([
+            'path' => $path,
+            'pageName' => $pageParam, // Nombre del parámetro de página
+        ], $options);
+
+        $items = $collection instanceof Collection ? $collection : Collection::make($collection);
+
+        return new LengthAwarePaginator(
+            $items->forPage($page, $perPage),
+            $items->count(),
+            $perPage,
+            $page,
+            $options
+        );
     }
 
     protected function formatScoreString($score, $format, $denominator)
@@ -656,14 +684,18 @@ class SongController extends Controller
 
     public function comments($song_id)
     {
-        $comments = Comment::where('commentable_type', Song::class)
-            ->where('commentable_id', $song_id)
-            ->paginate(5);
+        $comments = Comment::with('replies','user')
+        ->where('commentable_id', $song_id)
+        ->where('commentable_type', Song::class)
+        ->where('parent_id', null)
+        ->get()
+        ->sortByDesc('created_at');
 
-
+        $comments = $this->paginate($comments,3)->withQueryString();
 
         return response()->json([
             'comments' => $comments,
+            'html' => view('partials.songs.show.comments.comments',['comments' => $comments])->render()
         ]);
     }
 

@@ -37,8 +37,8 @@ class ArtistController extends Controller
      */
     public function show($slug)
     {
-        $years = Year::all();
-        $seasons = Season::all();
+        $years = Year::all()->sortByDesc('name');
+        $seasons = Season::all()->sortByDesc('name');
 
         $types = [
             ['name' => 'Opening', 'value' => 'OP'],
@@ -55,8 +55,10 @@ class ArtistController extends Controller
             ['name' => 'Popular', 'value' => 'likeCount']
         ];
 
-        $artist = Artist::where('slug', $slug)->first();
+        $artist = Artist::with('songs')->where('slug', $slug)->first();
+        //$songs = $artist->songs;
 
+        //return view('public.artists.show', compact('artist', 'seasons', 'years', 'sortMethods', 'types', 'songs'));
         return view('public.filter', compact('artist', 'seasons', 'years', 'sortMethods', 'types'));
     }
 }

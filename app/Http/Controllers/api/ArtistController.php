@@ -103,17 +103,17 @@ class ArtistController extends Controller
         $type = $request->type;
         $sort = $request->sort;
         $name = $request->name;
-        $year = $request->year; //this receive an ID, not a name
-        $season = $request->season; //this receive an ID, not a name
+        $year_id = $request->year_id; //this receive an ID, not a name
+        $season_id = $request->season_id; //this receive an ID, not a name
 
         $songs = Song::whereHas('artists', function ($query) use ($artist) {
             $query->where('artists.id', $artist->id);
         })
-            ->when($year, function ($query) use ($year) {
-                $query->where('year_id', $year);
+            ->when($year_id, function ($query) use ($year_id) {
+                $query->where('year_id', $year_id);
             })
-            ->when($season, function ($query) use ($season) {
-                $query->where('season_id', $season);
+            ->when($season_id, function ($query) use ($season_id) {
+                $query->where('season_id', $season_id);
             })
             ->whereHas('post', function ($query) use ($name, $status) {
                 $query->where('status', $status)
@@ -126,8 +126,8 @@ class ArtistController extends Controller
             })
             ->get();
 
-        //$song_variants = $this->setScoreOnlyVariants($song_variants, $user);
-        //$song_variants = $this->sort_variants($sort, $song_variants);
+        $songs = $this->setScoreSongs($songs, $user);
+        $songs = $this->sortSongs($sort, $songs);
         $songs = $this->paginate($songs, 15);
 
         return response()->json([
@@ -153,7 +153,6 @@ class ArtistController extends Controller
         return response()->json([
             'artists' => $artists,
             'html' => view('partials.artists.cards-v2', compact('artists'))->render(),
-
         ]);
     }
 
@@ -281,5 +280,105 @@ class ArtistController extends Controller
             default:
                 return $score . '/' . $denominator;
         }
+    }
+
+    public function sortSongs($sort, $songs)
+    {
+        switch ($sort) {
+            case 'title':
+
+                $songs = $songs->sortBy(function ($song) {
+                    return $song->post->title;
+                });
+                return $songs;
+                break;
+            case 'averageRating':
+                $songs = $songs->sortByDesc('averageRating');
+                return $songs;
+            case 'view_count':
+                $songs = $songs->sortByDesc('view_count');
+                return $songs;
+
+            case 'likeCount':
+                $songs = $songs->sortByDesc('likeCount');
+                return $songs;
+                break;
+            case 'recent':
+                $songs = $songs->sortByDesc('created_at');
+                return $songs;
+                break;
+
+            default:
+                $songs = $songs->sortBy(function ($song) {
+                    return $song->post->title;
+                });
+                return $songs;
+                break;
+        }
+    }
+
+    public function setScoreSongs($songs, $user = null)
+    {
+        $songs->each(function ($song) use ($user) {
+
+            #Inizialided attributes
+            $song->formattedScore = null;
+            $song->rawScore = null;
+            $song->scoreString = null;
+
+            $factor = 1;
+            $isDecimalFormat = false;
+            $denominator = 100; // Por defecto para POINT_100
+
+            if ($user) {
+                #Inizialided attributes
+                $song->formattedUserScore = null;
+                $song->rawUserScore = null;
+
+                switch ($user->score_format) {
+                    case 'POINT_100':
+                        $factor = 1;
+                        $denominator = 100;
+                        break;
+                    case 'POINT_10_DECIMAL':
+                        $factor = 0.1;
+                        $denominator = 10;
+                        $isDecimalFormat = true;
+                        break;
+                    case 'POINT_10':
+                        $factor = 1 / 10;
+                        $denominator = 10;
+                        break;
+                    case 'POINT_5':
+                        $factor = 1 / 20;
+                        $denominator = 5;
+                        $isDecimalFormat = true;
+                        break;
+                }
+
+                if ($userRating = $this->getUserRating($song->id, $user->id)) {
+                    $song->formattedUserScore = $isDecimalFormat
+                        ? round($userRating->rating * $factor, 1)
+                        : (int) round($userRating->rating * $factor);
+
+                    $song->rawUserScore = round($userRating->rating);
+                }
+            }
+
+            $song->rawScore = round($song->averageRating, 1);
+
+            $song->formattedScore = $isDecimalFormat
+                ? round($song->averageRating * $factor, 1)
+                : (int) round($song->averageRating * $factor);
+
+            // Agregar la propiedad scoreString formateada
+            $song->scoreString = $this->formatScoreString(
+                $song->formattedScore,
+                $user->score_format ?? 'POINT_100',
+                $denominator
+            );
+        });
+
+        return $songs;
     }
 }

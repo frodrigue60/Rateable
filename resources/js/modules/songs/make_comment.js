@@ -10,7 +10,6 @@ let bodyData = {};
 
 commentForm.addEventListener("submit", function (event) {
     event.preventDefault()
-    //console.log('listen form submit');
     if (commentTextarea.value != '') {
         makeComment(commentTextarea.value, songId);
     }
@@ -34,7 +33,7 @@ async function makeComment(commentContent, songId) {
 
         const response = await API.post(API.SONGS.COMMENTS, headersData, bodyData);
 
-        console.log(response);
+
         commentTextarea.value = '';
         /* commentContainer.innerHTML += data.comment; */
         commentContainer.insertAdjacentHTML('afterbegin', response.html);

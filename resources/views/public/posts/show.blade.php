@@ -133,12 +133,10 @@
             <div class="col-sm-12 col-md-8 col-lg-9 p-2">
                 <!-- DESCRIPTION -->
                 <h2 class="fs-4">Synopsis</h2>
-                <div class=" rounded-1 position-relative cursor-pointer mb-3">
-                    <div class="p-2 overflow-hidden description-container">
+                <div class=" rounded-1 mb-3">
                         <div class="description">
                             {!! $post->description !!}
                         </div>
-                    </div>
                 </div>
                 <!--OPENINGS-->
                 <div class="col mb-2">
@@ -196,17 +194,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-
-@section('script')
-    <script>
-        const descriptionDiv = document.querySelector('.description');
-        console.log(descriptionDiv);
-
-        descriptionDiv.addEventListener('click', function() {
-            descriptionDiv.classList.toggle('description-open')
-            console.log('clicked ', descriptionDiv.classList);
-        });
-    </script>
 @endsection

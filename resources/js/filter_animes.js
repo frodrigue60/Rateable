@@ -3,13 +3,13 @@ import API from '@api/index.js';
 const dataDiv = document.querySelector("#data");
 let page = 1;
 let lastPage = undefined;
-const inputName = document.querySelector('#input-name');
-const selectYear = document.querySelector('#select-year');
-const selectSeason = document.querySelector('#select-season');
-const loaderDiv = document.querySelector('#loader');
 const formFilter = document.querySelector('#form-filter');
+const inputName = formFilter.querySelector('#input-name');
+const selectYear = formFilter.querySelector('#select-year');
+const selectSeason = formFilter.querySelector('#select-season');
+const loaderDiv = document.querySelector('#loader');
 
-let params = Object.fromEntries(new FormData(formFilter));
+let params = {};
 let headersData = {};
 
 fetchData();
@@ -62,10 +62,12 @@ async function fetchData() {
             'Accept': 'application/json, text/html;q=0.9'
         }
 
-        params.page = page;
-
-        console.log(params);
-
+        params = {
+            page: page,
+            season_id: selectSeason.value,
+            year_id: selectYear.value,
+            name: inputName.value
+        }
 
         const response = await API.get(API.POSTS.ANIMES, headersData, params);
 

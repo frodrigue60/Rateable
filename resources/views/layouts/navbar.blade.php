@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img class="logo-navbar" src="{{ asset('resources/images/logo-2-dark.svg') }}" alt="Anirank Logo" title="Anirank Logo">
+            <img class="logo-navbar" src="{{ asset('resources/images/logo-2-dark.svg') }}" alt="Anirank Logo"
+                title="Anirank Logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ 'Toggle navigation' }}">
@@ -64,15 +65,15 @@
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto gap-2">
-                <li class="d-flex justify-content-center">
+                {{-- <li class="d-flex justify-content-center">
                     <button class="btn btn-sm btn-primary" id="themeToggle">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-                </li>
+                </li> --}}
                 <li class="d-flex">
                     {{-- <input id="searchInput" type="text" name="search" class="form-control" placeholder="Search..."> --}}
-                    <button type="button" class="bg-transparent rounded-pill m-auto border-0 fs-5 "
-                        aria-label="search" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="bg-transparent rounded-pill m-auto border-0 fs-5 " aria-label="search"
+                        data-bs-toggle="modal" data-bs-target="#exampleModal">
                         <i class="fa-solid fa-search"></i>
                     </button>
                 </li>
@@ -97,7 +98,7 @@
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            @if ((Auth::user()->image) && (Storage::disk('public')->exists(Auth::user()->image)))
+                            @if (Auth::user()->image && Storage::disk('public')->exists(Auth::user()->image))
                                 <img src="{{ Storage::url(Auth::user()->image) }}" alt="profile pic" height="40px"
                                     title="profile pic" class="rounded-circle">
                             @else
@@ -122,8 +123,11 @@
                                 Favorites
                             </a>
 
-                            <a class="dropdown-item" href="{{ route('request.create') }}">
-                                <i class="fa-solid fa-pen"></i> Request</a>
+                            {{-- <a class="dropdown-item" href="{{ route('request.create') }}">
+                                <i class="fa-solid fa-pen"></i> Request</a> --}}
+
+                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#requestModal"><i
+                                    class="fa-solid fa-pen"></i> Request</a></button>
 
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();localStorage.removeItem('api_token');document.getElementById('logout-form').submit();"><i

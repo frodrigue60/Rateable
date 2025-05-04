@@ -8,7 +8,7 @@ use App\Http\Controllers\api\CommentController as apiCommentController;
 use App\Http\Controllers\api\UserController as apiUserController;
 use App\Http\Controllers\api\ArtistController as apiArtistController;
 use App\Http\Controllers\api\SongController as apiSongController;
-
+use App\Http\Controllers\api\UserRequestController as apiUserRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +55,9 @@ Route::get('users', [apiUserController::class, 'index'])->name('api.users');
 Route::get('users/{id}/list', [apiUserController::class, 'userList'])->name('api.users.list');
 Route::get('users/{id}', [apiUserController::class, 'show'])->name('api.users.show');
 
+#COMMENTS
+Route::get('songs/{song}/comments', [apiSongController::class, 'comments'])->name('api.songs.comments');
+
 #AUTH ROUTES
 Route::middleware(['auth:sanctum'])->group(function () {
     #VARIANTS
@@ -69,13 +72,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('songs/{song}/favorite', [apiSongController::class, 'toggleFavorite'])->name('api.songs.toggle.favorite');
     Route::post('songs/{song}/rate', [apiSongController::class, 'rate'])->name('api.songs.rate');
     Route::post('songs/comments', [apiSongController::class, 'storeComment'])->name('api.songs.store.comment');
-    Route::get('songs/{song}/comments', [apiSongController::class, 'comments'])->name('api.songs.comments');
     Route::post('songs/reports', [apiSongController::class, 'storeReport'])->name('api.songs.reports');
 
     #COMMENTS
     Route::resource('comments', apiCommentController::class, ['as' => 'api']);
     Route::get('comments/{id}/like', [apiCommentController::class, 'like'])->name('api.comments.like');
     Route::get('comments/{id}/dislike', [apiCommentController::class, 'dislike'])->name('api.comments.dislike');
+    Route::post('comments/{parentComment}/reply', [apiCommentController::class, 'reply'])->name('comments.reply');
+
+    #USER REQUESTS
+    Route::resource('requests', apiUserRequestController::class, ['as' => 'api']);
 
     //Route::resource('users', apiUserController::class, ['as' => 'api']);
     Route::post('users/avatar', [apiUserController::class, 'uploadAvatar'])->name('api.users.upload.avatar');

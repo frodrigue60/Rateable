@@ -17,21 +17,19 @@ async function toggleFavorite() {
         }
 
         const response = await API.get(API.SONGS.FAVORITE(favoriteBtn.dataset.songid), headersData, params);
-        //console.log(data);
-        //console.log(iFavorite.classList);
 
         if (response.favorite == true) {
             iFavorite.classList.replace('fa-regular', 'fa-solid');
             favoriteBtn.classList.replace('btn-primary', 'btn-danger');
-            swal('Nice!', 'Added to favorites!', 'success', {
+            /* swal('Nice!', 'Added to favorites!', 'success', {
                 buttons: false,
                 timer: 2000,
-            });
+            }); */
         } else {
-            swal('Really?', 'Removed from favorites!', 'success', {
+           /*  swal('Really?', 'Removed from favorites!', 'success', {
                 buttons: false,
                 timer: 2000,
-            });
+            }); */
             iFavorite.classList.replace('fa-solid', 'fa-regular');
             favoriteBtn.classList.replace('btn-danger', 'btn-primary');
         }

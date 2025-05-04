@@ -173,4 +173,32 @@ class CommentController extends Controller
             ]);
         }
     }
+
+    public function reply(Request $request, Comment $parentComment)
+    {
+        try {
+            $request->validate(['content' => 'required|string']);
+
+            $reply = new Comment();
+            $reply->content = $request->content;
+            $reply->user_id = Auth::User()->id;
+            $reply->parent_id = $parentComment->id; // Asignar el padre
+            $reply->commentable_type = $parentComment->commentable_type; // Heredar el tipo polimórfico
+            $reply->commentable_id = $parentComment->commentable_id; // Heredar el ID polimórfico
+
+            //dd($parentComment, $reply);
+            $reply->save();
+
+            return response()->json([
+                'success' => true,
+                'html' => view('partials.songs.show.comments.comment', ['comment' => $reply])->render(),
+                'parentComment' => $reply->parent_id
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => $th->getMessage(),
+                'request' => $request->all()
+            ]);
+        }
+    }
 }

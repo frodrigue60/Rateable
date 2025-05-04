@@ -61,7 +61,7 @@
             </div>
         </div> --}}
 
-        <div class="m-1 d-flex flex-row gap-2 rounded-1 w-100 overflow-hidden" style="background-color: #4C5766;">
+        <div class="card m-1 d-flex flex-row gap-2 rounded-1 w-100 overflow-hidden">
             <div>
                 <img class="" style="width: 70px;height:auto" src="{{ $img_url }}" alt="{{ $song->post->title }}">
             </div>
@@ -92,7 +92,7 @@
 
                 </div>
                 <div class="d-flex align-items-end">
-                    <div class="badge rounded-pill  fw-medium">
+                    <div class="badge bg-secondary rounded-pill  fw-medium">
                         <span id="score">{{ round($song->averageRating) }}</span>
                         <span><i class="fa-solid fa-star"></i></span>
                     </div>

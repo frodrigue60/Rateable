@@ -6,8 +6,6 @@ document.body.addEventListener('click', (event) => {
     const button = event.target.closest('.btn-del-comment');
 
     if (button) {
-        console.log('Click en botón o sus hijos');
-        console.log(button.dataset.commentId);
         deleteComment(button.dataset.commentId);
     }
 });
@@ -17,7 +15,7 @@ async function deleteComment(commentId) {
     const commentElement = document.querySelector(`.comment[data-id="${commentId}"]`);
 
     if (!commentElement) {
-        return console.log('no comment');
+        throw new Error("No comment element");
     };
 
     try {
@@ -32,8 +30,6 @@ async function deleteComment(commentId) {
         if (response.success == true) {
             await deleteCommentWithAnimation(commentElement);
         }
-
-        //console.log(response);
 
     } catch (error) {
         error.message = `UserService: ${error.message}`;

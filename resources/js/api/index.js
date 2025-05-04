@@ -18,7 +18,7 @@ const API = {
         url = newUrl.toString();
 
         try {
-            console.log('GET: ' + url);
+            //console.log(url);
 
             const response = await fetch(url, {
                 method: 'GET',
@@ -29,25 +29,26 @@ const API = {
             if (response.status === 404) throw new Error('Not Found');
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
+            //console.log(response);
+
             return response.json();
         } catch (error) {
-            // Log técnica (Sentry, console, etc.)
-            logErrorToService(error);
 
-            // Normaliza errores
             if (error.name === 'TypeError') {
                 throw new Error('Network connection failed');
             }
 
-            throw error;
+            throw new Error(error);
         }
     },
     post: async (url, headersData, bodyData) => {
-        console.log(url, bodyData, headersData);
+        //console.log(url);
+        //console.log(bodyData);
+        //console.log(headersData);
+
         const validation = validateRequest({ bodyData, headersData });
-        if (validation !== true) {
-            throw new Error(`Validación fallida: ${validation}`);
-        }
+
+        if (validation !== true) { throw new Error(`Validación fallida: ${validation}`); }
 
         try {
             const response = await fetch(url, {
@@ -64,19 +65,18 @@ const API = {
 
             return response.json();
         } catch (error) {
-            // Log técnica (Sentry, console, etc.)
-            logErrorToService(error);
 
-            // Normaliza errores
             if (error.name === 'TypeError') {
                 throw new Error('Network connection failed');
             }
 
-            throw error;
+            throw new Error(error);
         }
     },
     delete: async (url, headersData) => {
-        console.log(url, headersData);
+        //console.log(url);
+        //console.log(headersData);
+
         const validation = validateRequest({ headersData });
         if (validation !== true) {
             throw new Error(`Validación fallida: ${validation}`);
@@ -96,15 +96,12 @@ const API = {
 
             return response.json();
         } catch (error) {
-            // Log técnica (Sentry, console, etc.)
-            //logErrorToService(error);
-
-            // Normaliza errores
             if (error.name === 'TypeError') {
                 throw new Error('Network connection failed');
             }
 
-            throw error;
+            throw new Error(error);
+
         }
     }
 };

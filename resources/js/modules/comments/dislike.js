@@ -1,6 +1,4 @@
 import { token, API, csrfToken } from '@/app.js'
-console.log('dislike-comment.js loaded');
-
 
 let headersData = {};
 let params = {};
@@ -9,8 +7,6 @@ document.body.addEventListener('click', (event) => {
     const button = event.target.closest('button.btn-dislike-comment');
 
     if (button) {
-        console.log('Click en botón o sus hijos');
-        console.log(button.dataset.commentId);
         likeComment(button.dataset.commentId, button);
     }
 });
@@ -25,14 +21,13 @@ async function likeComment(commentId, button) {
         }
 
         const response = await API.get(API.COMMENTS.DISLIKE(commentId), headersData, params);
-        console.log(response);
+
         if (response.success == true) {
             let likesSpan = document.querySelector(`#likes-span-${commentId}`);
             let dislikesSpan = document.querySelector(`#dislikes-span-${commentId}`);
 
             likesSpan.textContent = response.likesCount;
             dislikesSpan.textContent = response.dislikesCount;
-            //console.log(likesSpan, '#likes-span-'+commentId);
 
            /*  swal('Ok!', 'Comment disliked!', 'success', {
                 buttons: false,

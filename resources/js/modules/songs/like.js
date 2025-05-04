@@ -1,5 +1,4 @@
 import { API, csrfToken, token } from '@/app.js';
-//console.log(API);
 
 let headersData = {};
 let params = {};
@@ -30,7 +29,6 @@ if (token) {
                 dislikesSpan.textContent = response.dislikesCount;
             }
         } catch (error) {
-            //console.log(error)
             throw new Error(error);
         } finally {
             likeBtn.removeAttribute('disabled');
@@ -41,6 +39,5 @@ if (token) {
 
 /* onDomReady(function() {
     // Tu código aquí
-    console.log('DOM está listo');
     // puedes inicializar eventos, etc.
 }); */

@@ -68,8 +68,8 @@
             @endif
             @if (Request::routeIs('animes'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.posts.animes'),
-                    'method' => 'GET',
+                    'apiEndpoint' => '',
+                    'method' => '',
                     'fields' => ['name', 'year', 'season'],
                 ])
             @endif
