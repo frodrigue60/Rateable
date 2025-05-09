@@ -1,15 +1,18 @@
-const myModal = document.querySelector('#exampleModal');
+import { API, csrfToken } from '@/app.js';
+
+const formSearch = document.querySelector('#form-search');
+const modalSearch = document.querySelector('#modal-search');
 const postsDiv = document.querySelector("#posts");
 const artistsDiv = document.querySelector("#artists");
 const usersDiv = document.querySelector("#users");
-const input = document.querySelector('#searchInputModal');
-const token = document.querySelector('meta[name="csrf-token"]').content;
-const titles = document.querySelectorAll('.post-titles');
+const input = formSearch.querySelector('#searchInputModal');
 //const loaderContainer = document.querySelector('.loader-container');
 //const siteBody = document.querySelector('body');
 const modalBody = document.querySelector('#modalBody');
 const resDiv = document.querySelector('.res');
-const baseUrl = document.querySelector('meta[name="base-url"]').content;
+let headersData = {};
+let params = {};
+const baseUrl = formSearch.dataset.urlBase;
 
 let typingTimer;
 const delay = 250;
@@ -17,16 +20,17 @@ const delay = 250;
 //loaderContainer.style.display = 'none';
 //siteBody.removeAttribute('hidden');
 nullValueInput();
-cutTitles();
 
-myModal.addEventListener('shown.bs.modal', function () {
+modalSearch.addEventListener('shown.bs.modal', function () {
     input.focus();
-    input.addEventListener('keyup', () => {
+    input.addEventListener('input', () => {
         resetDivs();
         insertLoader();
-        clearTimeout(typingTimer);
+
         if (input.value.length >= 1) {
-            typingTimer = setTimeout(apiSearch, 250);
+            setTimeout(function(){
+                apiSearch();
+            },300)
         } else {
             resetDivs();
             nullValueInput();
@@ -34,73 +38,68 @@ myModal.addEventListener('shown.bs.modal', function () {
 
     })
 
-    function apiSearch() {
+    async function apiSearch() {
         try {
-            fetch(baseUrl + '/api/posts/search', {
-                headers: {
-                    'X-Request-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': token,
-                },
-                method: "POST",
-                body: JSON.stringify({ q: input.value }),
-            }).then(response => {
-                return response.json()
-            }).then((data) => {
-                resetDivs();
+            headersData = {
+                'Accept': 'application/json, text/html;q=0.9',
+                'X-CSRF-TOKEN': csrfToken,
+            }
 
-                data.posts.forEach(element => {
-                    let url = baseUrl + "/anime/" + element.slug;
+            let q = input.value;
 
-                    let resultDiv = document.createElement('div');
-                    resultDiv.classList.add('result');
+            const response = await API.get(API.POSTS.SEARCH(q), headersData, params);
 
-                    let a = document.createElement('a');
-                    a.href = url;
-                    /* a.target = '_blank'; */
-                    /* a.rel = 'nofollow noopener noreferrer'; */
-                    a.textContent = element.title;
+            //return console.log(response);
 
-                    resultDiv.appendChild(a);
-                    postsDiv.appendChild(resultDiv);
-                });
+            resetDivs();
 
-                data.artists.forEach(element => {
-                    let url = baseUrl + "/artists/" + element.slug;
+            response.posts.forEach(post => {
+                let url = baseUrl + "/anime/" + post.slug;
 
-                    let resultDiv = document.createElement('div');
-                    resultDiv.classList.add('result');
+                let resultDiv = document.createElement('div');
+                resultDiv.classList.add('result', 'text-truncate');
 
-                    let a = document.createElement('a');
-                    a.href = url;
-                    /* a.target = '_blank'; */
-                    /* a.rel = 'nofollow noopener noreferrer'; */
-                    a.textContent = element.name;
+                let a = document.createElement('a');
+                a.href = url;
+                a.textContent = post.title;
 
-                    resultDiv.appendChild(a);
-                    artistsDiv.appendChild(resultDiv);
-                });
-
-                data.users.forEach(element => {
-
-                    let url = baseUrl + "/users/" + element.slug;
-
-                    let resultDiv = document.createElement('div');
-                    resultDiv.classList.add('result');
-
-                    let a = document.createElement('a');
-                    a.href = url;
-                   /*  a.target = '_blank'; */
-                    /* a.rel = 'nofollow noopener noreferrer'; */
-                    a.textContent = element.name;
-
-                    resultDiv.appendChild(a);
-                    usersDiv.appendChild(resultDiv);
-                });
-                resDiv.classList.remove('hidden');
+                resultDiv.appendChild(a);
+                postsDiv.appendChild(resultDiv);
             });
+
+            response.artists.forEach(artist => {
+                let url = baseUrl + "/artists/" + artist.slug;
+
+                let resultDiv = document.createElement('div');
+                resultDiv.classList.add('result', 'text-truncate');
+
+                let a = document.createElement('a');
+                a.href = url;
+                a.textContent = artist.name;
+
+                resultDiv.appendChild(a);
+                artistsDiv.appendChild(resultDiv);
+            });
+
+            response.users.forEach(user => {
+
+                let url = baseUrl + "/users/" + user.slug;
+
+                let resultDiv = document.createElement('div');
+                resultDiv.classList.add('result', 'text-truncate');
+
+                let a = document.createElement('a');
+                a.href = url;
+                a.textContent = user.name;
+
+                resultDiv.appendChild(a);
+                usersDiv.appendChild(resultDiv);
+            });
+
+            resDiv.classList.remove('hidden');
+
         } catch (error) {
-           throw new Error(error);
+            throw new Error(error);
         }
     }
 });
@@ -114,13 +113,7 @@ function nullValueInput() {
     artistsDiv.appendChild(createResultDiv('artists'));
     usersDiv.appendChild(createResultDiv('users'));
 }
-function cutTitles() {
-    titles.forEach(title => {
-        if (title.textContent.length > 25) {
-            title.textContent = title.textContent.substr(0, 25) + "...";
-        }
-    });
-}
+
 function createResultDiv(element_id) {
     let div = document.createElement('div');
     div.className = 'result';

@@ -94,8 +94,7 @@ Route::group(['middleware' => 'staff'], function () {
         //POSTS
         Route::resource('posts', AdminPostController::class, ['as' => 'admin']);
         Route::post('/posts/search', [AdminPostController::class, 'search'])->name('admin.posts.search');
-        Route::post('/posts/{post}/approve', [AdminPostController::class, 'approve'])->name('admin.posts.approve');
-        Route::post('/posts/{post}/unapprove', [AdminPostController::class, 'unapprove'])->name('admin.posts.unapprove');
+        Route::post('/posts/{post}/toggle-status', [AdminPostController::class, 'toggleStatus'])->name('admin.posts.toggle.status');
         Route::get('/posts/{post}/songs/add', [AdminPostController::class, 'addSong'])->name('admin.posts.songs.add');
         Route::get('/posts/{post}/songs', [AdminPostController::class, 'songs'])->name('admin.posts.songs');
         Route::post('/posts/search-animes', [AdminPostController::class, 'searchAnimes'])->name('admin.search.animes');

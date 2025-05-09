@@ -61,9 +61,9 @@
             </div>
         </div> --}}
 
-        <div class="card m-1 d-flex flex-row gap-2 rounded-1 w-100 overflow-hidden">
+        <div class="card d-flex flex-row gap-2 rounded-1 w-100 overflow-hidden">
             <div>
-                <img class="" style="width: 70px;height:auto" src="{{ $img_url }}" alt="{{ $song->post->title }}">
+                <img class="" style="width: auto;height:100px;" src="{{ $img_url }}" alt="{{ $song->post->title }}">
             </div>
             <div class="d-flex w-100 overflow-hidden p-2 gap-2">
                 <div class="d-flex flex-column justify-content-center me-auto overflow-hidden">

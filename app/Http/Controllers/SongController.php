@@ -52,9 +52,15 @@ class SongController extends Controller
      */
     public function show($anime_slug, $song_slug)
     {
-        $user = Auth::check() ? Auth::User() : null;
+
 
         $post = Post::with(['songs'])->where('slug', $anime_slug)->first();
+
+        if ($post->status == false) {
+            return redirect('/')->with('error', 'Post status: private');
+        }
+
+        $user = Auth::check() ? Auth::User() : null;
 
         $song = Song::with(['songVariants.video', 'comments.user'])
             ->where('slug', $song_slug)

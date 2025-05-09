@@ -1,4 +1,11 @@
-<form class="d-flex gap-3 flex-wrap" id="form-filter" data-api-url="{{ $apiEndpoint }}" method="{{ $method }}">
+@php
+    $userSlug = null;
+
+    if (isset($user)) {
+        $userSlug = $user->slug;
+    }
+@endphp
+<form class="d-flex gap-3 flex-wrap" id="form-filter" data-api-url="{{ $apiEndpoint }}" method="{{ $method }}" data-user-slug="{{ $userSlug }}">
     <!-- Campos dinámicos -->
     @isset($fields)
         @foreach ($fields as $field)

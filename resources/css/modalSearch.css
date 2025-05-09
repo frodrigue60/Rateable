@@ -12,33 +12,7 @@
     border-top: none;
 }
 
-.catTitle {
-    color: #3a78e2;
-}
 
-.result {
-    border-radius: 3px;
-    transform: scale(1);
-    transition: all .25s ease-out;
-}
-
-.result a {
-    text-decoration: none;
-    color: #a7c7ff;
-}
-
-.result a:hover {
-
-    transform: scale(1.01);
-    transition: .1s ease-in;
-}
-
-#searchInputModal {
-    background-color: #0c2638;
-    border: none;
-    color: #a9dbff;
-    border-radius: 20px 20px;
-}
 
 @media screen and (max-width: 1920px) {}
 

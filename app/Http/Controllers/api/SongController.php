@@ -492,8 +492,8 @@ class SongController extends Controller
         return response()->json([
             'success' => true,
             'html' => [
-                'openings' => view('partials.top.cards', ['items' => $openings])->render(),
-                'endings' => view('partials.top.cards', ['items' => $endings])->render(),
+                'openings' => view('partials.top.cards-v2', ['items' => $openings])->render(),
+                'endings' => view('partials.top.cards-v2', ['items' => $endings])->render(),
             ],
             'openings' => $openings,
             'endings' => $endings,

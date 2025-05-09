@@ -111,7 +111,7 @@
         @vite(['resources/js/filter_favorites.js'])
     @endif
     @if (Request::routeIs('user.list'))
-        @vite(['resources/js/filter_favorites.js'])
+        @vite(['resources/js/filter_user_list.js'])
     @endif
 
     @if (Request::routeIs('themes'))

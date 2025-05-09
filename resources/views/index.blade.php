@@ -30,7 +30,7 @@
 @section('content')
     <div class="container">
         <!-- TOP -->
-        <div class="d-flex flex-column flex-md-row gap-2 ">
+        <div class="d-flex flex-column flex-md-row gap-2 mb-3">
             <section class="col col-md-6">
                 <div class="d-flex">
                     <h5 class="section-header  me-auto">Top Openings</h5>
@@ -66,7 +66,7 @@
 
         <!-- MOST POPULAR SONGS -->
         <section class="mb-3">
-            <h2 class=" section-header">Most Pupular</h2>
+            <h2 class=" section-header">Most Popular</h2>
             <div class="owl-carousel gap-3">
                 @include('partials.songs.cards-v2', ['songs' => $viewed])
             </div>

@@ -125,23 +125,12 @@
                                     @endif
                                     @if (Auth::User()->isAdmin() || Auth::User()->isEditor())
                                         <td>
-                                            @if ($post->status == true)
-                                                <form action="{{ route('admin.posts.unapprove', $post->id) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    <button class="btn btn-primary btn-sm"> <i
-                                                            class="fa-solid fa-toggle-on"></i></button>
-                                                </form>
-                                            @else
-                                                @if ($post->status == false)
-                                                    <form action="{{ route('admin.posts.approve', $post->id) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        <button class="btn btn-warning btn-sm"><i
-                                                                class="fa-solid fa-toggle-off"></i></button>
-                                                    </form>
-                                                @endif
-                                            @endif
+                                            <form action="{{ route('admin.posts.toggle.status', $post->id) }}" method="post">
+                                                @csrf
+                                                @method('POST')
+                                                <button class="btn btn-{{ $post->status == true ? 'success' : 'warning' }} btn-sm" type="submit"><i
+                                                    class="fa-solid fa-toggle-off"></i></button>
+                                            </form>
                                         </td>
                                         <td class="d-flex gap-1">
                                             <a href="{{ route('admin.posts.edit', $post->id) }}"

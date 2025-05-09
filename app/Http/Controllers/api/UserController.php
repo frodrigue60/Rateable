@@ -222,12 +222,13 @@ class UserController extends Controller
         }
     }
 
-    public function userList(Request $request, $id)
+    /* public function userList(Request $request, $slug)
     {
-        $user = User::where('id', $id)->select('id', 'score_format', 'image', 'banner', 'name')->first();
+        $user = User::where('slug', $slug)->select('id', 'score_format', 'image', 'banner', 'name')->first();
 
         if (!$user) {
             return response()->json([
+                'success' => false,
                 'message' => 'Invalid user',
             ]);
         }
@@ -279,6 +280,56 @@ class UserController extends Controller
             'html' => view('partials.variants.cards', compact('song_variants'))->render(),
             "lastPage" => $song_variants->lastPage(),
             'request' => $request->all()
+        ]);
+    } */
+
+    public function userList(Request $request, $id)
+    {
+        //return response()->json(['request' => $request->all()]);
+
+        $user = User::where('id', $id)->select('id','slug', 'score_format', 'image', 'banner', 'name')->first();
+
+        //return response()->json(['user' => $user]);
+
+        $status = true;
+        $perPage = 15;
+
+        $season_id = $request->season_id;
+        $year_id = $request->year_id;
+        $type = $request->type;
+        $sort = $request->sort;
+        $name = $request->name;
+
+        $songs = Song::with(['post'])
+            #SONG QUERY
+            ->when($type, function ($query, $type) {
+                $query->where('type', $type);
+            })
+            #POST QUERY
+            ->whereHas('post', function ($query) use ($name, $season_id, $year_id, $status) {
+                $query->where('status', $status)
+                    ->when($name, function ($query, $name) {
+                        $query->where('title', 'LIKE', '%' . $name . '%');
+                    })
+                    ->when($season_id, function ($query, $season_id) {
+                        $query->where('season_id', $season_id->id);
+                    })
+                    ->when($year_id, function ($query, $year_id) {
+                        $query->where('year_id', $year_id);
+                    });
+            })
+            #SONG VARIANT QUERY
+            ->whereLikedBy($user->id)
+            ->get();
+
+        $songs = $this->setScoreSongs($songs, $user);
+        $songs = $this->sortSongs($sort, $songs);
+        $songs = $this->paginate($songs, $perPage, $request->page);
+
+        return response()->json([
+            'html' => view('partials.songs.cards-v2', compact('songs'))->render(),
+            'songs' => $songs,
+            /* 'request' => $request->all(), */
         ]);
     }
 

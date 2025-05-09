@@ -72,7 +72,7 @@ class PostController extends Controller
             ],
         ]);
 
-        return view('admin.posts.create', compact('years','seasons','types', 'artists', 'postStatus', 'breadcrumb'));
+        return view('admin.posts.create', compact('years', 'seasons', 'types', 'artists', 'postStatus', 'breadcrumb'));
     }
 
     /**
@@ -278,30 +278,23 @@ class PostController extends Controller
     public function search(Request $request)
     {
         $posts = Post::query()
-            ->where('title', 'LIKE', '%'.$request->input('q').'%')
+            ->where('title', 'LIKE', '%' . $request->input('q') . '%')
             ->paginate(10);
         //dd($posts);
         return view('admin.posts.index', compact('posts'));
     }
-    public function approve($id)
+
+    public function toggleStatus(Post $post)
     {
-        if (Auth::check()) {
-            $post = Post::find($id);
-            $post->status = true;
-            $post->update();
-            return Redirect::back()->with('success', 'Post ' . $post->id . ' Approved successfully!');
+        try {
+            $post->update([
+                'status' => !$post->status
+            ]);
+
+            return redirect(route('admin.posts.index'))->with('success', 'Post status updated: ' . $post->id);
+        } catch (\Throwable $th) {
+            return redirect(route('admin.posts.index'))->with('error', $th->getMessage());
         }
-        return redirect()->route('/')->with('warning', 'Please login');
-    }
-    public function unapprove($id)
-    {
-        if (Auth::check()) {
-            $post = Post::find($id);
-            $post->status = false;
-            $post->update();
-            return Redirect::back()->with('warning', 'Post ' . $post->id . ' Unapproved successfully!');
-        }
-        return redirect()->route('/')->with('warning', 'Please login');
     }
 
     public function searchAnimes(Request $request)
@@ -309,7 +302,7 @@ class PostController extends Controller
         //dd($request->all());
         $q = $request->q;
         $arr_types = $request->types;
-        
+
 
         $variables = [
             'search' => $q,
@@ -334,7 +327,7 @@ class PostController extends Controller
         foreach ($data as $item) {
             array_push($posts, $item);
         }
-        //dd($posts);
+        dd($posts);
         return view('admin.posts.select', compact('posts'));
     }
     public function getById($anilist_id)
@@ -535,6 +528,13 @@ class PostController extends Controller
                             extraLarge
                         }
                         bannerImage
+                        format
+                        externalLinks {
+                            icon
+                            type
+                            site
+                            url
+                        }
                     }
                 }
             }
@@ -580,6 +580,13 @@ class PostController extends Controller
                             site
                             thumbnail
                         }
+                        format
+                        externalLinks {
+                            icon
+                            type
+                            site
+                            url
+                        }
                     }
                 }
             }';
@@ -618,12 +625,19 @@ class PostController extends Controller
                     site
                     thumbnail
                 }
+                format
+                externalLinks {
+                    icon
+                    type
+                    site
+                    url
+                }
             }
         }
         ';
         return $query;
     }
-    /* Used by generateMassive Method 
+    /* Used by generateMassive Method
      *
      */
     function saveAnimeThumbnail($item, $post)
@@ -646,7 +660,7 @@ class PostController extends Controller
         }
         return $post;
     }
-    /* Used by generateMassive Method 
+    /* Used by generateMassive Method
      *
      */
     function saveAnimeBanner($item, $post)
@@ -671,7 +685,7 @@ class PostController extends Controller
         return $post;
     }
 
-    /* Used by Store and Update Method 
+    /* Used by Store and Update Method
      *
      */
     public function storePostImages($post, $request)
@@ -817,7 +831,7 @@ class PostController extends Controller
         $artists = Artist::all();
 
 
-        return view('admin.songs.create', compact('artists', 'types', 'post', 'seasons','years'));
+        return view('admin.songs.create', compact('artists', 'types', 'post', 'seasons', 'years'));
     }
 
     public function songs($post_id)
@@ -840,7 +854,8 @@ class PostController extends Controller
         return view('admin.songs.manage', compact('post', 'breadcrumb'));
     }
 
-    public function dashboard(){
+    public function dashboard()
+    {
         return view('admin.dashboard');
     }
 }

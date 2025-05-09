@@ -1,6 +1,6 @@
-@php
+{{-- @php
     $j = 1;
-@endphp
+@endphp --}}
 @foreach ($items as $song)
     @isset($song->post)
         @php
@@ -18,12 +18,12 @@
         <div class="card-2 mb-2">
             <img class="card-2-bg" src="{{ $img_url }}" alt="{{ $song->post->title }}">
             <div class="gradient-1">
-                <div class="m-2 fs-5">
-                    {{-- <span><i class="fa-solid fa-award"></i></span> --}}
+                {{-- <div class="m-2 fs-5">
+                    <span><i class="fa-solid fa-award"></i></span>
                     <span class="">
                         # {{ $j++ }}
                     </span>
-                </div>
+                </div> --}}
             </div>
             <div class="card-2-data p-2 d-flex flex-row justify-content-between w-100 gap-2">
                 <div class="d-flex flex-column overflow-hidden">

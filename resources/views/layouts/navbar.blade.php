@@ -65,15 +65,15 @@
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto gap-2">
-                {{-- <li class="d-flex justify-content-center">
+                <li class="d-flex justify-content-center">
                     <button class="btn btn-sm btn-primary" id="themeToggle">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-                </li> --}}
+                </li>
                 <li class="d-flex">
                     {{-- <input id="searchInput" type="text" name="search" class="form-control" placeholder="Search..."> --}}
                     <button type="button" class="bg-transparent rounded-pill m-auto border-0 fs-5 " aria-label="search"
-                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        data-bs-toggle="modal" data-bs-target="#modal-search">
                         <i class="fa-solid fa-search"></i>
                     </button>
                 </li>

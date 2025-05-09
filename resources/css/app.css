@@ -788,6 +788,10 @@ img.card-2-bg {
     transition: all ease-in-out 500ms;
 }
 
+.catTitle {
+    color: #3a78e2;
+}
+
 @media screen and (max-width: 1920px) {
     .father-container {
         max-width: 1100px;

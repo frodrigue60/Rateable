@@ -1,7 +1,7 @@
 import API from '@api/index.js';
 import * as bootstrap from 'bootstrap';
 import swal from 'sweetalert';
-import registerServiceWorker from './sw-register';
+//import registerServiceWorker from './sw-register';
 
 
 // Opcional: Inicializa componentes que necesiten JS

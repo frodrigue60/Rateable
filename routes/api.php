@@ -27,7 +27,7 @@ use App\Http\Controllers\api\UserRequestController as apiUserRequestController;
 
 #POSTS
 //Route::resource('posts', apiPostController::class);
-Route::post('posts/search', [apiPostController::class, 'search'])->name('api.posts.search');
+Route::get('search/{q}', [apiPostController::class, 'search'])->name('api.posts.search');
 Route::get('animes', [apiPostController::class, 'animes'])->name('api.posts.animes');
 
 #SONGS

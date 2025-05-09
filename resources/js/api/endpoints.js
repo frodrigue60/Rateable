@@ -7,7 +7,7 @@ const ENDPOINTS = {
     },
     USERS: {
         BASE: `${API_BASE_URL}/users`,
-        BY_ID: (id) => `${API_BASE_URL}/users/${id}`,
+        USER_LIST: (id) => `${API_BASE_URL}/users/${id}/list`,
         FAVORITES: `${API_BASE_URL}/users/favorites`,
         AVATAR: `${API_BASE_URL}/users/avatar`,
         BANNER: `${API_BASE_URL}/users/banner`,
@@ -27,6 +27,7 @@ const ENDPOINTS = {
     },
     POSTS: {
         ANIMES: `${API_BASE_URL}/animes`,
+        SEARCH: (q) => `${API_BASE_URL}/search/${q}`,
     },
     ARTISTS: {
         FILTER: `${API_BASE_URL}/artists/filter`,

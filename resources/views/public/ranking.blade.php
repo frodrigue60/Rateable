@@ -16,13 +16,13 @@
         <div class="d-flex gap-2 d-md-none">
             <div class="col-6 py-2">
                 <button type="button" class="btn btn-primary w-100 tab-btn" data-tab="openings">
-                    Button
+                    Openings
                 </button>
 
             </div>
             <div class="col-6 py-2">
                 <button type="button" class="btn btn-primary w-100 tab-btn" data-tab="endings">
-                    Button
+                    Endings
                 </button>
 
             </div>

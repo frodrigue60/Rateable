@@ -92,10 +92,10 @@ class UserController extends Controller
      */
     public function destroy($id) {}
 
-    public function userList(Request $request, $slug)
+    public function userList($slug)
     {
         //dd($userId);
-        $user = User::where('slug', $slug)->select('id', 'score_format', 'image', 'banner', 'name')->first();
+        $user = User::where('slug', $slug)->select('id','slug', 'score_format', 'image', 'banner', 'name')->first();
 
         if (!$user) {
             return redirect('/')->with('warning', 'Invalid user');

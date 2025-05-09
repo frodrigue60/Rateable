@@ -59,9 +59,9 @@ class PostController extends Controller
      */
     public function destroy($id) {}
 
-    public function search(Request $request)
+    public function search($q)
     {
-        $q = $request->input('q');
+        //$q = $request->input('q');
 
         $posts = Post::where('title', 'LIKE', '%' . $q . '%')->limit(5)->get(['title', 'slug']);
 
@@ -69,13 +69,11 @@ class PostController extends Controller
 
         $users = User::where('name', 'LIKE', '%' . $q . '%')->limit(5)->get(['name', 'slug']);
 
-        $data = [
+        return response()->json([
             "posts" => $posts,
             "artists" => $artists,
             "users" => $users
-        ];
-
-        return response()->json($data);
+        ]);
     }
 
     public function animes(Request $request)
