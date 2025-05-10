@@ -115,6 +115,7 @@
         @yield('script')
 
         @include('layouts.footer.footer-v1')
+        {{-- @include('layouts.footer.mobile') --}}
     </div>
 
 </body>

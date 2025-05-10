@@ -1,21 +1,12 @@
 import API from '@api/index.js';
 import * as bootstrap from 'bootstrap';
 import swal from 'sweetalert';
-//import registerServiceWorker from './sw-register';
 
-
-// Opcional: Inicializa componentes que necesiten JS
 const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl);
 });
 
-// Tu código JavaScript
-//import './bootstrap';  // Si usas el archivo bootstrap.js de Laravel
-
-//console.log('Bootstrap cargado correctamente');
-
-// Selecciona el elemento que contiene el texto
 let headers = document.querySelectorAll('.section-header');
 
 headers.forEach(header => {
@@ -34,10 +25,6 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
     }
 } */
 
-/* PWA */
-// Ejecutamos la función de registro
-//registerServiceWorker();
-/* PWA */
 
 function hideModal(modalId) {
     try {
@@ -64,5 +51,3 @@ function hideModal(modalId) {
 }
 
 export { API, token, csrfToken, hideModal, swal };
-
-//console.log('API loaded successfully');

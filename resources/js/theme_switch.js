@@ -1,36 +1,38 @@
-const themeToggle = document.getElementById('themeToggle');
-/* const themeIcon = document.getElementById('themeIcon'); */
+const btnToggleTheme = document.getElementById('themeToggle');
+const _themeIcon = document.getElementById('themeIcon');
 const htmlElement = document.documentElement;
 
-// Verificar preferencia del sistema o almacenamiento local
-const savedTheme = localStorage.getItem('theme') ||
-    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+let lightThemeIcon = document.createElement("i");
+lightThemeIcon.classList.add('fa-solid', 'fa-sun');
+let darkThemeIcon = document.createElement("i");
+darkThemeIcon.classList.add('fa-solid', 'fa-moon');
 
-// Aplicar tema guardado o preferido
+console.log(lightThemeIcon);
+
+
+const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
 htmlElement.setAttribute('data-bs-theme', savedTheme);
-/* updateIcon(savedTheme); */
+updateIcon(savedTheme);
 
-// Alternar tema al hacer clic
-themeToggle.addEventListener('click', function () {
+btnToggleTheme.addEventListener('click', function () {
     const currentTheme = htmlElement.getAttribute('data-bs-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-    // Cambiar tema
     htmlElement.setAttribute('data-bs-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    /* updateIcon(newTheme); */
+    updateIcon(newTheme);
 });
 
-// Actualizar icono según el tema
-/* function updateIcon(theme) {
-    themeIcon.textContent = theme === 'dark' ? '🌙' : '🌞';
-} */
+function updateIcon(theme) {
+    btnToggleTheme.innerHTML = '';
+    btnToggleTheme.appendChild(theme === 'dark' ? darkThemeIcon : lightThemeIcon);
+}
 
-// Opcional: Escuchar cambios en la preferencia del sistema
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
     if (!localStorage.getItem('theme')) {
         const newTheme = e.matches ? 'dark' : 'light';
         htmlElement.setAttribute('data-bs-theme', newTheme);
-        /*  updateIcon(newTheme); */
+        updateIcon(newTheme);
     }
 });

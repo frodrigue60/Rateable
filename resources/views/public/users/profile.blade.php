@@ -21,14 +21,13 @@
                             id="upload-avatar-form">
                             @method('post')
                             @csrf
-                            <div class="mb-3">
-                                <label for="profile-file" class="form-label">Upload profile pic</label>
-                                <input class="form-control" type="file" id="profile-file" name="image"
+                            <label for="profile-file" class="form-label">Upload profile pic</label>
+                            <div class="input-group">
+
+                                <input type="file" class="form-control" id="profile-file"
+                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="image"
                                     accept="image/jpg, image/jpeg, image/png, image/webp" required>
-                            </div>
-                            <div class="d-flex">
-                                <button class="btn btn-primary w-100" type="submit"
-                                    id="submit-avatar-form-btn">Save</button>
+                                <button class="btn btn-primary" type="submit" id="submit-avatar-form-btn">Save</button>
                             </div>
                         </form>
                     </div>
@@ -38,14 +37,12 @@
                             id="upload-banner-form">
                             @method('post')
                             @csrf
-                            <div class="mb-3">
-                                <label for="banner-file" class="form-label">Default file input example</label>
-                                <input class="form-control" type="file" id="banner-file" name="banner"
+                            <label for="banner-file" class="form-label">Upload profile pic</label>
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="banner-file"
+                                    aria-describedby="inputGroupFileAddon04" aria-label="Upload" name="banner"
                                     accept="image/jpg, image/jpeg, image/png, image/webp" required>
-                            </div>
-                            <div class="d-flex">
-                                <button class="btn btn-primary w-100" type="submit"
-                                    id="submit-banner-form-btn">Save</button>
+                                <button class="btn btn-primary" type="submit" id="submit-banner-form-btn">Save</button>
                             </div>
                         </form>
                     </div>
@@ -56,10 +53,9 @@
                             id="score-format-form">
                             @method('post')
                             @csrf
-                            <div class="mb-3">
-                                <label for="select-score-format" class="form-label">Change score format</label>
-                                <select name="score_format" class="form-select" id="select-score-format"
-                                    aria-label="Example select with button addon" required>
+                            <label for="select-score-format" class="form-label">Change score format</label>
+                            <div class="input-group">
+                                <select class="form-select" id="select-score-format" aria-label="Change score format" name="score_format" required>
                                     <option value="">Select Scoring System</option>
                                     @foreach ($score_formats as $item)
                                         <option value="{{ $item['value'] }}"
@@ -67,11 +63,7 @@
                                             {{ $item['name'] }}</option>
                                     @endforeach
                                 </select>
-
-                            </div>
-                            <div class="d-flex">
-                                <button type="submit" class="btn btn-primary w-100"
-                                    id="score-format-form-btn">Save</button>
+                                <button class="btn btn-primary" type="submit" id="score-format-form-btn">Save</button>
                             </div>
                         </form>
                     </div>

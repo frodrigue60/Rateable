@@ -708,14 +708,14 @@ img.card-2-bg {
     grid-template-rows: min-content auto;
     position: relative;
     width: 150px;
+
+    &:hover .title {
+        color: #5482ad;
+    }
 }
 
 .media-card:hover .image {
     transform: scale(1.2);
-}
-
-.media-card:hover .title {
-    /* color: #5482ad; */
 }
 
 .cover {

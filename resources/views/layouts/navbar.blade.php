@@ -66,8 +66,9 @@
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto gap-2">
                 <li class="d-flex justify-content-center">
-                    <button class="btn btn-sm btn-primary" id="themeToggle">
-                        <i class="fa-solid fa-moon"></i>
+                    <button class="btn" id="themeToggle">
+                        {{-- <i class="fa-solid fa-moon"></i> --}}
+                        {{-- <span id="themeIcon"></span> --}}
                     </button>
                 </li>
                 <li class="d-flex">
