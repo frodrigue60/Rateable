@@ -9,6 +9,7 @@
                 <div class="card-header">
                     <a class="btn btn-sm btn-primary" href="{{ route('admin.posts.create') }}">CREATE POST</a>
                     <a class="btn btn-sm btn-primary" href="{{ route('posts.wipe') }}">WIPE ALL POSTS</a>
+                    {{-- <a class="btn btn-sm btn-primary" href="{{ route('admin.posts.force.update') }}">FORCE UPDATE</a> --}}
                 </div>
                 {{-- CARD BODY --}}
                 <div class="card-body">
@@ -30,7 +31,7 @@
                                             @csrf
                                             <input class="form-control" type="text" name="q" placeholder="Search"
                                                 required />
-                                            <select class="form-select" aria-label="Default select example" name="types">
+                                            <select class="form-select" aria-label="Default select example" name="type">
                                                 <option selected value="TV">TV</option>
                                                 <option value="TV_SHORT">TV SHORT</option>
                                                 <option value="MOVIE">MOVIE</option>
@@ -53,7 +54,7 @@
                                                 <option value="SUMMER">SUMMER</option>
                                                 <option value="FALL">FALL</option>
                                             </select>
-                                            <select class="form-select" aria-label="Default select example" name="types">
+                                            <select class="form-select" aria-label="Default select example" name="type">
                                                 <option selected value="TV">TV</option>
                                                 <option value="TV_SHORT">TV SHORT</option>
                                                 <option value="MOVIE">MOVIE</option>

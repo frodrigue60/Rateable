@@ -82,6 +82,7 @@ class PostController extends Controller
         $season_id = $request->season_id;
         $year_id = $request->year_id;
         $name = $request->name;
+        $format_id = $request->format_id;
 
         $status = true;
 
@@ -94,6 +95,12 @@ class PostController extends Controller
             })
             ->when($name, function ($query, $name) {
                 $query->where('title', 'LIKE', '%' . $name . '%');
+            })
+            ->when($name, function ($query, $name) {
+                $query->where('title', 'LIKE', '%' . $name . '%');
+            })
+            ->when($format_id, function ($query, $format_id) {
+                $query->where('format_id', $format_id);
             })
             ->get();
 

@@ -52,15 +52,23 @@ class SongController extends Controller
      */
     public function show($anime_slug, $song_slug)
     {
-
+        //dd($anime_slug);
 
         $post = Post::with(['songs'])->where('slug', $anime_slug)->first();
-
-        if ($post->status == false) {
-            return redirect('/')->with('error', 'Post status: private');
-        }
-
         $user = Auth::check() ? Auth::User() : null;
+
+        if (!$post) {
+            return redirect(route('/'))->with('warning', 'Post not exist!');
+        }
+        if (!$post->status) {
+            if ($user) {
+                if (!$user->isAdmin()) {
+                    return redirect('/')->with('danger', 'User not autorized!');
+                }
+            } else {
+                return redirect('/')->with('danger', 'Post status: Private');
+            }
+        }
 
         $song = Song::with(['songVariants.video', 'comments.user'])
             ->where('slug', $song_slug)
@@ -118,12 +126,12 @@ class SongController extends Controller
         //dd($song);
         //$comments = $song->comments->sortByDesc('created_at');
 
-        $comments = Comment::with('replies','user')
-        ->where('commentable_id', $song->id)
-        ->where('commentable_type', Song::class)
-        ->where('parent_id', null)
-        ->get()
-        ->sortByDesc('created_at');
+        $comments = Comment::with('replies', 'user')
+            ->where('commentable_id', $song->id)
+            ->where('commentable_type', Song::class)
+            ->where('parent_id', null)
+            ->get()
+            ->sortByDesc('created_at');
 
 
 

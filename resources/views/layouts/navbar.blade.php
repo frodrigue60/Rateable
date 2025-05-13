@@ -12,21 +12,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             {{-- LINKS NAVBAR --}}
             <ul class="navbar-nav mx-auto gap-2">
-                {{--  <li><a class="nav-link {{ Request::is('openings') ? 'active' : '' }}"
-                        href="{{ route('openings') }}">Openings</a></li>
-                <li><a class="nav-link {{ Request::is('endings') ? 'active' : '' }}"
-                        href="{{ route('endings') }}">Endings</a></li> --}}
-
                 <li><a class="nav-link {{ Request::is('seasonal') ? 'active' : '' }}"
                         href="{{ route('seasonal') }}">Seasonal</a></li>
 
                 <li><a class="nav-link {{ Request::is('ranking') ? 'active' : '' }}"
                         href="{{ route('ranking') }}">Top</a></li>
-                {{-- <li><a class="nav-link {{ Request::is('animes') ? 'active' : '' }}"
-                        href="{{ route('animes') }}">Animes</a></li>
-                <li><a class="nav-link {{ Request::is('artists.index') ? 'active' : '' }}"
-                        href="{{ route('artists.index') }}">Artists</a></li> --}}
-
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button"
                         data-bs-toggle="dropdown"aria-expanded="false">Filter</a>
@@ -34,45 +24,18 @@
                         <li><a class="dropdown-item" href="{{ route('animes') }}">Animes</a></li>
                         <li><a class="dropdown-item" href="{{ route('themes') }}">Openings & Endings</a></li>
                         <li><a class="dropdown-item" href="{{ route('artists.index') }}">Artists</a></li>
+                        <li><a class="dropdown-item" href="{{ route('studios.index') }}">Studios</a></li>
                     </ul>
                 </li>
-                {{-- @auth
-                    <li><a class="nav-link {{ Request::is('favorites') ? 'active' : '' }}"
-                            href="{{ route('favorites') }}">My Favorites</a></li>
-                @endauth --}}
-                {{-- @if (Auth::check() && Auth::user()->isStaff())
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button"
-                            data-bs-toggle="dropdown"aria-expanded="false">ADMIN</a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('admin.posts.index') }}">Post index</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.artists.index') }}">Artist index</a>
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('admin.years.index') }}">Years index</a></li>
-                            <li><a class="dropdown-item" href="{{ route('admin.seasons.index') }}">Seasons index</a>
-                            </li>
-                            @if (Auth::User()->isAdmin())
-                                <li> <a class="dropdown-item" href="{{ route('admin.users.index') }}">Users index</a>
-                                </li>
-                            @endif
-                            <li><a class="dropdown-item" href="{{ route('admin.reports.index') }}">Reports index</a>
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('admin.requests.index') }}">Requests index</a>
-                            </li>
-                        </ul>
-                    </li>
-                @endif --}}
+
             </ul>
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto gap-2">
                 <li class="d-flex justify-content-center">
                     <button class="btn" id="themeToggle">
-                        {{-- <i class="fa-solid fa-moon"></i> --}}
-                        {{-- <span id="themeIcon"></span> --}}
                     </button>
                 </li>
                 <li class="d-flex">
-                    {{-- <input id="searchInput" type="text" name="search" class="form-control" placeholder="Search..."> --}}
                     <button type="button" class="bg-transparent rounded-pill m-auto border-0 fs-5 " aria-label="search"
                         data-bs-toggle="modal" data-bs-target="#modal-search">
                         <i class="fa-solid fa-search"></i>

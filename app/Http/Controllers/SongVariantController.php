@@ -58,9 +58,22 @@ class SongVariantController extends Controller
      */
     public function show($anime_slug, $song_slug, $variant_slug)
     {
+        //dd($anime_slug);
         $user = Auth::check() ? Auth::User() : null;
+        $post = Post::where('slug', $anime_slug)->first();
 
-        $post = Post::where('slug', $anime_slug)->firstOrFail();
+        if (!$post) {
+            return redirect(route('/'))->with('warning', 'Post not exist!');
+        }
+        if (!$post->status) {
+            if ($user) {
+                if (!$user->isAdmin()) {
+                    return redirect('/')->with('danger', 'User not autorized!');
+                }
+            } else {
+                return redirect('/')->with('danger', 'Post status: Private');
+            }
+        }
 
         $song = Song::where('slug', $song_slug)
             ->where('post_id', $post->id)
@@ -73,7 +86,7 @@ class SongVariantController extends Controller
 
         //dd($song_variant);
 
-        if ($song_variant == null) {
+        if (!$song_variant) {
             return redirect(route('/'))->with('warning', 'Item no exist!');
         }
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\api\UserController as apiUserController;
 use App\Http\Controllers\api\ArtistController as apiArtistController;
 use App\Http\Controllers\api\SongController as apiSongController;
 use App\Http\Controllers\api\UserRequestController as apiUserRequestController;
+use App\Http\Controllers\Api\StudioController as apiStudioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,11 @@ Route::get('users/{id}', [apiUserController::class, 'show'])->name('api.users.sh
 #COMMENTS
 Route::get('songs/{song}/comments', [apiSongController::class, 'comments'])->name('api.songs.comments');
 
+#STUDIOS
+Route::get('studios/filter', [apiStudioController::class, 'filter'])->name('api.studios.filter');
+Route::get('studios/{studio}/songs', [apiStudioController::class, 'songsFilter'])->name('api.studios.songs');
+Route::get('studios/{studio}/animes', [apiStudioController::class, 'postsFilter'])->name('api.studios.posts');
+
 #AUTH ROUTES
 Route::middleware(['auth:sanctum'])->group(function () {
     #VARIANTS
@@ -75,14 +81,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('songs/reports', [apiSongController::class, 'storeReport'])->name('api.songs.reports');
 
     #COMMENTS
-    Route::resource('comments', apiCommentController::class, ['as' => 'api']);
     Route::get('comments/{id}/like', [apiCommentController::class, 'like'])->name('api.comments.like');
     Route::get('comments/{id}/dislike', [apiCommentController::class, 'dislike'])->name('api.comments.dislike');
     Route::post('comments/{parentComment}/reply', [apiCommentController::class, 'reply'])->name('comments.reply');
+    Route::resource('comments', apiCommentController::class, ['as' => 'api']);
 
     #USER REQUESTS
     Route::resource('requests', apiUserRequestController::class, ['as' => 'api']);
 
+    #USER
     //Route::resource('users', apiUserController::class, ['as' => 'api']);
     Route::post('users/avatar', [apiUserController::class, 'uploadAvatar'])->name('api.users.upload.avatar');
     Route::post('users/banner', [apiUserController::class, 'uploadBanner'])->name('api.users.upload.banner');

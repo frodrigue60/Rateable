@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Post;
 use App\Models\Artist;
 use App\Http\Controllers\Controller;
+use App\Models\ExternalLink;
+use App\Models\Format;
+use App\Models\Producer;
 use App\Models\Season;
+use App\Models\Studio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -291,22 +295,21 @@ class PostController extends Controller
                 'status' => !$post->status
             ]);
 
-            return redirect(route('admin.posts.index'))->with('success', 'Post status updated: ' . $post->id);
+            return redirect()->back()->with('success', 'Post status updated: ' . $post->id);
         } catch (\Throwable $th) {
             return redirect(route('admin.posts.index'))->with('error', $th->getMessage());
         }
     }
 
-    public function searchAnimes(Request $request)
+    public function searchInAnilist(Request $request)
     {
-        //dd($request->all());
         $q = $request->q;
-        $arr_types = $request->types;
+        $type = $request->type;
 
 
         $variables = [
             'search' => $q,
-            'format_in' => $arr_types,
+            'format_in' => $type,
         ];
 
         $query = $this->buildGraphQLQuerySearch();
@@ -327,44 +330,19 @@ class PostController extends Controller
         foreach ($data as $item) {
             array_push($posts, $item);
         }
-        dd($posts);
+
         return view('admin.posts.select', compact('posts'));
     }
     public function getById($anilist_id)
     {
-        //dd($id);
-        // Here we define our query as a multi-line string
-        $query = '
-        query ($id: Int) { # Define which variables will be used in the query (id)
-            Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
-                id
-                title {
-                romaji
-                english
-                native
-                }
-                description
-                season
-                seasonYear
-                averageScore
-                coverImage {
-                    large
-                    extraLarge
-                }
-                bannerImage
-            }
-        }
-        ';
-
         $variables = [
             "id" => $anilist_id
         ];
-        //dd($variables);
 
         $client = new \GuzzleHttp\Client;
         $response = $client->post('https://graphql.anilist.co', [
             'json' => [
-                'query' => $query,
+                'query' => $this->buildGraphQLQueryId(),
                 'variables' => $variables,
             ]
         ]);
@@ -372,7 +350,7 @@ class PostController extends Controller
         $json = json_decode($body);
 
         $data[] = $json->data->Media;
-        //dd($data);
+        dd($data);
         $this->generateMassive($data);
         $success = 'Single post created successfully';
         return redirect(route('admin.posts.index'))->with('success', $success);
@@ -380,13 +358,13 @@ class PostController extends Controller
     public function getSeasonalAnimes(Request $request)
     {
 
-        //dd($request->all());
         $year = $request->year;
         $season = Str::upper($request->season);
-        $arr_types = $request->types;
+        $type = $request->type;
 
         $validator = Validator::make($request->all(), [
             'year' => 'required|integer|min_digits:4|max_digits:4',
+            'season' => 'required|in:WINTER,SPRING,SUMMER,FALL'
         ]);
 
         if ($validator->fails()) {
@@ -395,19 +373,12 @@ class PostController extends Controller
         }
 
         $client = new Client();
-
-        if ($season != null) {
-            $query = $this->buildGraphQLQuerySeasonal();
-        } else {
-            dd('error');
-        }
-
         $variables = [
             'year' => $year,
             'season' => $season,
             'page' => 1,
             'perPage' => 50,
-            'format_in' => $arr_types,
+            'format_in' => $type,
         ];
 
         $hasNextPage = true;
@@ -416,7 +387,7 @@ class PostController extends Controller
         while ($hasNextPage) {
             $response = $client->post('https://graphql.anilist.co', [
                 'json' => [
-                    'query' => $query,
+                    'query' => $this->buildGraphQLQuerySeasonal(),
                     'variables' => $variables,
                 ]
             ]);
@@ -443,6 +414,7 @@ class PostController extends Controller
     {
         //dd($data);
         foreach ($data as $item) {
+
             $post_exist = Post::where('title', $item->title->romaji)->first();
 
             if ($post_exist) {
@@ -458,38 +430,210 @@ class PostController extends Controller
             $post->season_id = null;
             $post->year_id = null;
 
+            $externalLinks = $item->externalLinks;
+            $studios = $item->studios->nodes;
+            $idStudios = [];
+            $idProducers = [];
+            $idLinks = [];
+            $format_name = $item->format;
+
+
+            foreach ($studios as $key => $value) {
+                $studio = Studio::firstOrCreate(
+                    [
+                        'slug' => Str::slug($value->name),
+                    ],
+                    [
+                        'name' =>  $value->name,
+                        'slug' => Str::slug($value->name)
+                    ]
+                );
+
+                array_push($idStudios, $studio->id);
+
+                if ($value->isAnimationStudio) {
+                    array_push($idProducers, $studio->id);
+                }
+            }
+
+            foreach ($externalLinks as $key => $value) {
+                $externalLink = ExternalLink::firstOrCreate(
+                    [
+                        'url' => $value->url,
+                    ],
+                    [
+                        'icon' => $value->icon,
+                        'name' =>  $value->site,
+                        'type' => $value->type,
+                        'url' => $value->url
+                    ]
+                );
+                array_push($idLinks, $externalLink->id);
+            }
+
+            $format = Format::firstOrCreate(
+                [
+                    'slug' => Str::slug($format_name),
+                ],
+                [
+                    'name' =>  $format_name,
+                    'slug' => Str::slug($format_name)
+                ]
+            );
+
+            $post->format()->associate($format);
+
             $this->saveAnimeBanner($item, $post);
             $this->saveAnimeThumbnail($item, $post);
 
             //dd($item);
 
-            if (!empty($item->season)) {
+            if (!empty($item->season) && !empty($item->seasonYear)) {
                 $season = Season::firstOrCreate([
                     'name' =>  $item->season,
                 ]);
 
                 $post->season_id = $season->id;
-            }
 
-            if (!empty($item->seasonYear)) {
                 $year = Year::firstOrCreate([
                     'name' =>  $item->seasonYear,
                 ]);
 
                 $post->year_id = $year->id;
+            } else {
+                if (!$item->season and !$item->seasonYear) {
+                    $month_al = $item->startDate->month;
+                    $year_al = $item->startDate->year;
+
+                    $season = Season::firstOrCreate([
+                        'name' =>  $this->assignSeason($month_al),
+                    ]);
+                    $post->season_id = $season->id;
+
+                    $year = Year::firstOrCreate([
+                        'name' =>  $year_al,
+                    ]);
+
+                    $post->year_id = $year->id;
+                }
             }
 
-            $post->save();
+
+
+            if ($post->save()) {
+                $post->studios()->sync($idStudios);
+                $post->producers()->sync($idProducers);
+                $post->externalLinks()->sync($idLinks);
+            }
         }
     }
 
-    public function forceUpdate()
+    public function forceUpdate($id)
     {
-        return redirect(route('admin.posts.index'))->with('warning', 'force update');
+        $post = Post::find($id);
+
+        try {
+            $variables = [
+                "id" => $post->anilist_id
+            ];
+
+            $client = new \GuzzleHttp\Client;
+            $response = $client->post('https://graphql.anilist.co', [
+                'json' => [
+                    'query' => $this->buildGraphQLQueryId(),
+                    'variables' => $variables,
+                ]
+            ]);
+            $body = $response->getBody()->__toString();
+            $json = json_decode($body);
+
+            $data[] = $json->data->Media;
+
+            $post_anilist = $data[0];
+            $externalLinks = $post_anilist->externalLinks;
+            $studios = $post_anilist->studios->nodes;
+            $idStudios = [];
+            $idProducers = [];
+            $idLinks = [];
+            $format_name = $post_anilist->format;
+            //dd($post_anilist);
+
+            if (!$post_anilist->season and !$post_anilist->seasonYear) {
+                $month_al = $post_anilist->startDate->month;
+                $year_al = $post_anilist->startDate->year;
+
+                $season = Season::firstOrCreate([
+                    'name' =>  $this->assignSeason($month_al),
+                ]);
+                $post->season_id = $season->id;
+
+                $year = Year::firstOrCreate([
+                    'name' =>  $year_al,
+                ]);
+
+                $post->year_id = $year->id;
+            }
+
+            foreach ($studios as $key => $value) {
+
+                $studio = Studio::firstOrCreate(
+                    [
+                        'slug' => Str::slug($value->name),
+                    ],
+                    [
+                        'name' =>  $value->name,
+                        'slug' => Str::slug($value->name)
+                    ]
+                );
+
+                array_push($idStudios, $studio->id);
+
+                if ($value->isAnimationStudio) {
+                    array_push($idProducers, $studio->id);
+                }
+            }
+
+            foreach ($externalLinks as $key => $value) {
+                $externalLink = ExternalLink::firstOrCreate(
+                    [
+                        'url' => $value->url,
+                    ],
+                    [
+                        'icon' => $value->icon,
+                        'name' =>  $value->site,
+                        'type' => $value->type,
+                        'url' => $value->url
+                    ]
+                );
+                array_push($idLinks, $externalLink->id);
+            }
+
+            $format = Format::firstOrCreate(
+                [
+                    'slug' => Str::slug($format_name),
+                ],
+                [
+                    'name' =>  $format_name,
+                    'slug' => Str::slug($format_name)
+                ]
+            );
+
+            $post->studios()->sync($idStudios);
+            $post->producers()->sync($idProducers);
+            $post->externalLinks()->sync($idLinks);
+            $post->format()->associate($format);
+            $post->save();
+
+            return redirect(route('post.show', $post->slug))->with('sucess', 'Post updated');
+        } catch (\Throwable $th) {
+            //dd($th);
+            return redirect(route('post.show', $post->slug))->with('error', $th->getMessage());
+        }
     }
     public function wipePosts()
     {
         $posts = Post::all();
+
         foreach ($posts as $post) {
             $post->delete();
         }
@@ -515,26 +659,10 @@ class PostController extends Controller
                             english
                             native
                         }
-                        description
-                        season
-                        seasonYear
-                        averageScore
-                        studios {
-                            nodes {
-                                name
-                            }
-                        }
                         coverImage {
                             extraLarge
                         }
                         bannerImage
-                        format
-                        externalLinks {
-                            icon
-                            type
-                            site
-                            url
-                        }
                     }
                 }
             }
@@ -553,7 +681,13 @@ class PostController extends Controller
                         lastPage
                         hasNextPage
                     }
-                    media (seasonYear: $year, season: $season, type: ANIME,format_in: $format_in, isAdult:false) {
+                    media (
+                            seasonYear: $year,
+                            season: $season,
+                            type: ANIME,
+                            format_in: $format_in,
+                            isAdult:false
+                        ) {
                         id
                         title {
                             romaji
@@ -569,9 +703,11 @@ class PostController extends Controller
                         studios {
                             nodes {
                                 name
+                                isAnimationStudio
                             }
                         }
                         coverImage {
+                            large
                             extraLarge
                         }
                         bannerImage
@@ -587,8 +723,13 @@ class PostController extends Controller
                             site
                             url
                         }
-                    }
-                }
+                        startDate {
+                            month
+                            year
+                        }
+                        synonyms
+                            }
+                        }
             }';
         return $query;
     }
@@ -599,9 +740,9 @@ class PostController extends Controller
             Media (id: $id, type: ANIME) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
                 id
                 title {
-                romaji
-                english
-                native
+                    romaji
+                    english
+                    native
                 }
                 description
                 season
@@ -612,6 +753,7 @@ class PostController extends Controller
                 studios {
                     nodes {
                         name
+                        isAnimationStudio
                     }
                 }
                 coverImage {
@@ -632,6 +774,11 @@ class PostController extends Controller
                     site
                     url
                 }
+                startDate {
+                    month
+                    year
+                }
+                synonyms
             }
         }
         ';
@@ -857,5 +1004,22 @@ class PostController extends Controller
     public function dashboard()
     {
         return view('admin.dashboard');
+    }
+
+    private function assignSeason(int $month)
+    {
+        if ($month == 12 || $month == 1 || $month == 2) {
+            return 'WINTER';
+        } else {
+            if ($month == 3 || $month == 4 || $month == 5) {
+                return 'SPRING';
+            } else {
+                if ($month == 6 || $month == 7 || $month == 8) {
+                    return 'SUMMER';
+                } else {
+                    return 'FALL';
+                }
+            }
+        }
     }
 }

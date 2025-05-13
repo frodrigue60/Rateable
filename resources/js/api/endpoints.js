@@ -43,7 +43,12 @@ const ENDPOINTS = {
         GETVIDEOS: (id) => `${API_BASE_URL}/variants/${id}/get-videos`
     },
     REQUESTS: {
-        STORE:`${API_BASE_URL}/requests`,
+        STORE: `${API_BASE_URL}/requests`,
+    },
+    STUDIOS: {
+        SONGS: (id) => `${API_BASE_URL}/studios/${id}/songs`,
+        ANIMES: (id) => `${API_BASE_URL}/studios/${id}/animes`,
+        FILTER: `${API_BASE_URL}/studios/filter`,
     }
 };
 

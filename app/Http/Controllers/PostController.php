@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
+use App\Models\Format;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Season;
@@ -27,12 +28,12 @@ class PostController extends Controller
         $status = true;
 
         $recently = Song::with(['post'])
-        ->whereHas('post', function ($query) use ($status) {
-            $query->where('status', $status);
-        })
-        ->get()
-        ->sortByDesc('created_at')
-        ->take(25);
+            ->whereHas('post', function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->get()
+            ->sortByDesc('created_at')
+            ->take(25);
 
         $popular = Song::with(['post'])
             ->whereHas('post', function ($query) use ($status) {
@@ -85,8 +86,9 @@ class PostController extends Controller
     {
         $seasons = Season::all();
         $years = Year::all()->sortByDesc('name');
+        $formats = Format::all();
 
-        return view('public.filter', compact('seasons', 'years'));
+        return view('public.filter', compact('seasons', 'years', 'formats'));
     }
 
 
@@ -99,24 +101,29 @@ class PostController extends Controller
     public function show($slug)
     {
         $post = Post::with('songs.songVariants')->where('slug', $slug)->first();
-
         $user = Auth::check() ? Auth::User() : null;
 
-        if ($post == null) {
-            return redirect(route('/'))->with('warning', 'Item do not exist!');
+        if (!$post) {
+            return redirect(route('/'))->with('warning', 'Post not exist!');
         }
+        if (!$post->status) {
+            if ($user) {
+                if (!$user->isAdmin()) {
+                    return redirect('/')->with('danger', 'User not autorized!');
+                }
+            } else {
+                return redirect('/')->with('danger', 'Post status: Private');
+            }
+        }
+
 
         $openings = $post->songs->filter(function ($song) {
             return $song->type === 'OP';
         });
 
-        //$openings = $this->setScoreToSongVariants($openings, $user);
-
         $endings = $post->songs->filter(function ($song) {
             return $song->type === 'ED';
         });
-
-        //$endings = $this->setScoreToSongVariants($endings, $user);
 
         return view('public.posts.show', compact('post', 'openings', 'endings'));
     }
@@ -132,7 +139,7 @@ class PostController extends Controller
     public function themes(Request $request)
     {
 
-        $years = Year::all()->sortBy('name',null,true);
+        $years = Year::all()->sortBy('name', null, true);
         $seasons = Season::all();
         $types = $this->filterTypesSortChar()['types'];
         $sortMethods = $this->filterTypesSortChar()['sortMethods'];

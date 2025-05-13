@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
@@ -16,6 +17,7 @@ class Post extends Model
         'type',
         'thumbnail',
         'status',
+        'format'
     ];
 
     protected static function boot()
@@ -80,5 +82,22 @@ class Post extends Model
 
     public function getOpeningsAttribute(){
         return Song::with('songVariants')->where('type', 'OP')->where('post_id', $this->id)->get();
+    }
+
+    public function studios(){
+        return $this->belongsToMany(Studio::class);
+    }
+
+    public function producers(){
+        return $this->belongsToMany(Studio::class,'post_producer','post_id','studio_id');
+    }
+
+    public function format()
+    {
+        return $this->belongsTo(Format::class);
+    }
+
+    public function externalLinks(){
+        return $this->belongsToMany(ExternalLink::class);
     }
 }

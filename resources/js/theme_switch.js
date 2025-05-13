@@ -7,9 +7,6 @@ lightThemeIcon.classList.add('fa-solid', 'fa-sun');
 let darkThemeIcon = document.createElement("i");
 darkThemeIcon.classList.add('fa-solid', 'fa-moon');
 
-console.log(lightThemeIcon);
-
-
 const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 
 htmlElement.setAttribute('data-bs-theme', savedTheme);

@@ -38,6 +38,12 @@
             @if (Request::routeIs('artists.show'))
                 <h2>{{ $artist->name }}</h2>
             @endif
+            @if (Request::routeIs('studios.index'))
+                <h2>Studios</h2>
+            @endif
+            @if (Request::routeIs('studios.show'))
+                <h2>Studio {{ $studio->name }}</h2>
+            @endif
             @if (Request::routeIs('artists.index'))
                 <h2>Artists</h2>
             @endif
@@ -47,42 +53,56 @@
         <section class="mb-3">
             @if (Request::routeIs('themes'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.songs.filter'),
+                    'apiEndpoint' => '',
                     'method' => 'GET',
                     'fields' => ['name', 'type', 'year', 'season', 'sort'],
                 ])
             @endif
             @if (Request::routeIs('user.list'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.users.list', $user->id),
+                    'apiEndpoint' => '',
                     'method' => 'GET',
                     'fields' => ['name', 'type', 'year', 'season', 'sort', 'user-id'],
                 ])
             @endif
             @if (Request::routeIs('artists.show'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.artists.songs.filter', $artist->id),
+                    'apiEndpoint' => '',
                     'method' => 'GET',
                     'fields' => ['name', 'type', 'year', 'season', 'sort', 'artist-id'],
+                ])
+            @endif
+            @if (Request::routeIs('studios.show'))
+                @include('components.filter.container', [
+                    'apiEndpoint' => '',
+                    'method' => 'GET',
+                    'fields' => ['name', 'anime-type', 'year', 'season', 'studio-id'],
                 ])
             @endif
             @if (Request::routeIs('animes'))
                 @include('components.filter.container', [
                     'apiEndpoint' => '',
                     'method' => '',
-                    'fields' => ['name', 'year', 'season'],
+                    'fields' => ['name', 'year', 'season', 'anime-type'],
                 ])
             @endif
             @if (Request::routeIs('favorites'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.users.favorites'),
+                    'apiEndpoint' => '',
                     'method' => 'post',
                     'fields' => ['name', 'type', 'year', 'season', 'sort'],
                 ])
             @endif
             @if (Request::routeIs('artists.index'))
                 @include('components.filter.container', [
-                    'apiEndpoint' => route('api.artists.filter'),
+                    'apiEndpoint' => '',
+                    'method' => 'GET',
+                    'fields' => ['name'],
+                ])
+            @endif
+            @if (Request::routeIs('studios.index'))
+                @include('components.filter.container', [
+                    'apiEndpoint' => '',
                     'method' => 'GET',
                     'fields' => ['name'],
                 ])
@@ -121,8 +141,16 @@
     @if (Request::routeIs('artists.show'))
         @vite(['resources/js/filter_artist_themes.js'])
     @endif
+    @if (Request::routeIs('studios.show'))
+        @vite(['resources/js/filter_studio_animes.js'])
+    @endif
+
     @if (Request::routeIs('artists.index'))
         @vite(['resources/js/filter_artists.js'])
+    @endif
+
+    @if (Request::routeIs('studios.index'))
+        @vite(['resources/js/filter_studios.js'])
     @endif
 
     {{-- ANIMES --}}

@@ -81,6 +81,25 @@
     <meta name="twitter:data2" content="2 minutos"> --}}
 @endsection
 @section('content')
+    @auth
+        @if (Auth::User()->isStaff())
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ route('admin.posts.edit', $post->id) }}" class="btn btn-success btn-sm"><i
+                        class="fa-solid fa-pencil"></i> Edit</a>
+                <form class="d-flex" action="{{ route('admin.posts.destroy', $post->id) }}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i>
+                        Delete</button>
+                </form>
+                <a class="btn btn-sm btn-primary" href="{{ route('admin.posts.songs', $post->id) }}"><i
+                        class="fa-solid fa-list"></i> Songs</a>
+                <a class="btn btn-sm btn-secondary" href="{{ route('admin.posts.force.update', $post->id) }}"><i
+                        class="fa-solid fa-rotate"></i> F Update</a>
+            </div>
+            <hr>
+        @endif
+    @endauth
     <div class="col-8 mx-auto">
         {{-- <div class="banner-anime" style="background-image: url({{ $banner_url }});">
             <div class="gradient"></div>
@@ -111,32 +130,56 @@
                 </div>
                 <div>
                     <h5 class="fw-bold">Release</h5>
-                    <span>{{ $post->season->name }}</span> <span>{{ $post->year->name }}</span>
+                    @if (isset($post->season->name) and isset($post->year->name))
+                        <span>{{ $post->season->name }}</span> <span>{{ $post->year->name }}</span>
+                    @else
+                        <span>N/A</span>
+                    @endif
                 </div>
-                <div>
-                    <h5 class="fw-bold">Format</h5>
-                    <span>{{ 'format' }}</span>
-                </div>
-                <div>
-                    <h5 class="fw-bold">Studios</h5>
-                    <span>{{ 'studios' }}</span>
-                </div>
-                <div>
-                    <h5 class="fw-bold">External Links</h5>
-                    <ul class="list-unstyled">
-                        @for ($i = 0; $i < 8; $i++)
-                            <li>Link {{ $i }}</li>
-                        @endfor
-                    </ul>
-                </div>
+                @isset($post->format)
+                    <div>
+                        <h5 class="fw-bold">Format</h5>
+                        <span>{{ $post->format->name }}</span>
+                    </div>
+                @endisset
+                @isset($post->producers)
+                    <div>
+                        <h5 class="fw-bold">Producers</h5>
+                        <ul class="list-unstyled">
+                            @foreach ($post->producers as $item)
+                                <li><a href="{{ route('studios.show', $item->slug) }}">{{ $item->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endisset
+                @isset($post->studios)
+                    <div>
+                        <h5 class="fw-bold">Studios</h5>
+                        <ul class="list-unstyled">
+                            @foreach ($post->studios as $item)
+                                <li><a href="{{ route('studios.show', $item->slug) }}">{{ $item->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endisset
+                @isset($post->externalLinks)
+                    <div>
+                        <h5 class="fw-bold">External Links</h5>
+                        <ul class="list-unstyled">
+                            @foreach ($post->externalLinks as $item)
+                                <li><a href="{{ $item->url }}">{{ $item->name }}</a></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endisset
             </div>
             <div class="col-sm-12 col-md-8 col-lg-9 p-2">
                 <!-- DESCRIPTION -->
                 <h2 class="fs-4">Synopsis</h2>
                 <div class=" rounded-1 mb-3">
-                        <div class="description">
-                            {!! $post->description !!}
-                        </div>
+                    <div class="description">
+                        {!! $post->description !!}
+                    </div>
                 </div>
                 <!--OPENINGS-->
                 <div class="col mb-2">

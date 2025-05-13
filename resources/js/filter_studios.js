@@ -1,15 +1,10 @@
 import API from '@api/index.js';
-
 const dataDiv = document.querySelector("#data");
+const formFilter = document.querySelector('#form-filter');
 let page = 1;
 let lastPage = undefined;
-const formFilter = document.querySelector('#form-filter');
 const inputName = formFilter.querySelector('#input-name');
-const selectYear = formFilter.querySelector('#select-year');
-const selectSeason = formFilter.querySelector('#select-season');
-const selectFormat = formFilter.querySelector('#select-format');
-const loaderDiv = document.querySelector('#loader');
-
+let loaderDiv = document.querySelector('#loader');
 let params = {};
 let headersData = {};
 
@@ -31,14 +26,6 @@ const handleFilterChange = debounce(() => {
 
 inputName.addEventListener('input', debounce(handleFilterChange));
 
-const otherFilterElements = formFilter.querySelectorAll(
-    'select, input[type="checkbox"], input[type="radio"]'
-);
-
-otherFilterElements.forEach(el => {
-    el.addEventListener('change', handleFilterChange);
-});
-
 window.addEventListener("scroll", function () {
     if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
         if (lastPage == undefined) {
@@ -54,41 +41,36 @@ window.addEventListener("scroll", function () {
 });
 
 async function fetchData() {
-    loaderDiv.style.removeProperty("display");
-    selectYear.disabled = true;
-    selectSeason.disabled = true;
-
     try {
+        loaderDiv.style.removeProperty("display");
+
         headersData = {
             'Accept': 'application/json, text/html;q=0.9'
         }
 
         params = {
             page: page,
-            season_id: selectSeason.value,
-            year_id: selectYear.value,
-            format_id: selectFormat.value,
             name: inputName.value
-        }
+        };
 
-        const response = await API.get(API.POSTS.ANIMES, headersData, params);
+        const response = await API.get(API.STUDIOS.FILTER, headersData, params);
+
+        console.log(response);
 
         if (!response.html || response.html === "") {
-            lastPage = 0;
-            //console.log("No data received from backend");
+            console.log("No views received from backend");
             return;
+        } else {
+            lastPage = response.studios.last_page;
+            dataDiv.innerHTML += response.html;
+
+            loaderDiv.style.setProperty("display", "none", "important");
         }
-
-        lastPage = response.posts.last_page;
-        dataDiv.innerHTML += response.html;
-
     } catch (error) {
         lastPage = 0;
         error.message = `UserService: ${error.message}`;
         throw error;
     } finally {
-        selectYear.disabled = false;
-        selectSeason.disabled = false;
         loaderDiv.style.setProperty("display", "none", "important");
     }
 }
@@ -96,3 +78,5 @@ async function fetchData() {
 function clearDataDiv() {
     dataDiv.innerHTML = "";
 }
+
+
